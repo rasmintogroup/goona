@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goona - Pusat Jasa Kepulauan Riau</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --goona-blue: #2c0ce6;
+            --goona-gold: #D4AF37;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-goona { font-family: 'Montserrat', sans-serif; }
+
+        /* Navigasi Sticky & Shrink */
+        nav { transition: all 0.4s ease; }
+        nav.shrink { height: 60px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        nav.shrink .logo-nav { font-size: 1.25rem; }
+
+        /* Animasi Heartbeat Kaca Pembesar */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .heartbeat-icon { animation: heartbeat 1.5s ease-in-out infinite; }
+
+        /* Animasi Asap Kopi */
+        @keyframes steam {
+            0% { transform: translateY(0) scale(1); opacity: 0.5; }
+            100% { transform: translateY(-10px) scale(1.5); opacity: 0; }
+        }
+        .steam { animation: steam 2s infinite; }
+
+        /* Animasi Muncul dari Samping */
+        .reveal { opacity: 0; transform: translateX(-50px); transition: 1s all ease; }
+        .reveal.active { opacity: 1; transform: translateX(0); }
+
+        .dropdown:hover .dropdown-menu { display: block; }
+        /* Warna Navy Deep & Animasi Tombol */
+.bg-navy-goona {
+    background-color: #1a365d; /* Biru Navy yang lebih berani */
+}
+
+.bg-navy-goona:hover {
+    background-color: #102a43; /* Lebih gelap saat disentuh */
+}
+
+/* Animasi Berdenyut (Pulsate) */
+@keyframes pulsate-button {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26, 54, 93, 0.4); }
+    70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(26, 54, 93, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26, 54, 93, 0); }
+}
+
+.animate-pulse-goona {
+    animation: pulsate-button 2s infinite;
+}
+        
+        /* Sosmed Colors */
+        .btn-wa { background-color: #25D366; }
+        .icon-fb { color: #1877F2; }
+        .icon-ig { color: #E4405F; }
+        .icon-tt { color: #000000; }
+        .dropdown-menu::before {
+        content: "";
+        position: absolute;
+        top: -20px;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: transparent;
+    }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 overflow-x-hidden">
+
+    <nav id="mainNav" class="bg-white fixed w-full top-0 z-50 h-20 flex items-center border-b border-gray-100">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="logo-nav font-black text-2xl transition-all duration-300">
+                <span class="text-[#007BFF]">G</span>OONA
+            </div>
+            
+            <div class="flex space-x-8 text-[11px] font-bold uppercase tracking-widest items-center">
+                <a href="index.html" class="hover:text-[#007BFF]">Beranda</a>
+                <a href="#" class="hover:text-[#007BFF]">Jual Beli</a>
+                
+                <div class="relative dropdown">
+                    <button class="text-amber-600 hover:text-amber-700 flex items-center gap-1">PRIORITAS <i class="fas fa-chevron-down text-[8px]"></i></button>
+                    <div class="dropdown-menu hidden absolute top-full left-0 bg-white shadow-xl border w-56 py-3 rounded-xl pt-4">
+                        <a href="daftar-jasa.html" class="block px-6 py-2 hover:bg-gray-50">Pendaftaran Jasa</a>
+                        <a href="daftar-jual-beli.html" class="block px-6 py-2 hover:bg-gray-50">Pendaftaran Jual Beli</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50">Goona Prioritas</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50">Goona Eksklusif</a>
+                    </div>
+                </div>
+
+                <div class="relative dropdown">
+                    <button class="hover:text-[#007BFF] flex items-center gap-1 text-gray-600">TENTANG <i class="fas fa-chevron-down text-[8px]"></i></button>
+                    <div class="dropdown-menu hidden absolute top-full right-0 bg-white shadow-xl border w-56 py-3 rounded-xl mt-2">
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Goona</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Kebijakan Privasi</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Syarat & Ketentuan</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Pengembalian Dana</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Bantuan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="mt-32 text-center px-4">
+<h1 class="text-7xl font-black tracking-tighter" style="color: #1a237e;">GOONA</h1>
+        <p class="text-sm md:text-base font-bold text-gray-700 mt-2">
+  "Beragam Pilihan Jasa Di Kepulauan Riau"
+</p>
+    </section>
+
+    <section class="max-w-5xl mx-auto mt-12 px-4 mb-24">
+        <div class="bg-white p-4 md:p-6 rounded-[2.5rem] shadow-2xl border border-gray-100">
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="relative flex-grow">
+                    <i class="fas fa-search absolute left-6 top-5 text-[#007BFF] heartbeat-icon"></i>
+                    <input type="text" id="input-cari" class="w-full h-14 pl-14 pr-6 rounded-2xl border-2 border-gray-100 focus:border-[#007BFF] outline-none transition-all text-sm" placeholder="Ketik Disini, Jasa apa yang kamu butuhkan?">
+                </div>
+<div class="md:w-1/3">
+    <select id="filter-kota" class="w-full h-14 px-4 rounded-2xl border border-gray-100 focus:outline-none focus:border-[#007BFF]">
+        <option value="">-- Pilih Kota/Kabupaten --</option>
+        <option value="Kota Batam">Kota Batam</option>
+        <option value="Kota Tanjungpinang">Kota Tanjungpinang</option>
+        <option value="Kabupaten Bintan">Kabupaten Bintan</option>
+        <option value="Kabupaten Karimun">Kabupaten Karimun</option>
+        <option value="Kabupaten Lingga">Kabupaten Lingga</option>
+        <option value="Kabupaten Natuna">Kabupaten Natuna</option>
+        <option value="Kabupaten Kepulauan Anambas">Kabupaten Kepulauan Anambas</option>
+    </select>
+</div>
+            </div>
+
+            <div id="loadingCoffee" class="hidden mt-10 text-center animate-fade-in">
+                <div class="relative inline-block">
+                    <i class="fas fa-coffee text-amber-700 text-4xl"></i>
+                    <i class="fas fa-wind absolute -top-5 left-3 text-gray-300 text-sm steam"></i>
+                </div>
+                <p class="text-[#007BFF] font-bold italic mt-3 text-sm">Sedang mencari Layanan Jasa Terbaik<span id="dots"></span></p>
+            </div>
+
+            <div id="notFound" class="hidden mt-10 text-center p-6 bg-red-50 rounded-2xl">
+                <p class="text-red-600 font-bold">Layanan Jasa belum tersedia</p>
+                <p class="text-gray-500 text-xs mt-1">Mungkin Anda tertarik dengan jasa serupa di bawah ini:</p>
+            </div>
+        </div>
+    </section>
+
+<section class="container mx-auto px-6 mb-24 reveal">
+    <h2 class="text-xl font-black text-[#003067] uppercase italic mb-8 border-l-8 border-amber-500 pl-4">
+        GOONA PRIORITAS
+    </h2>
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6" id="prioritasContainer">
+        <p class="text-gray-400 animate-pulse text-xs">Mencari jasa prioritas terbaik...</p>
+    </div>
+</section>
+    </div>
+    <section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-black text-[#1a237e] mb-8 uppercase tracking-wide border-l-4 border-yellow-500 pl-4">
+            Jasa Terbaru
+        </h2>
+        
+        <div id="container-jasa-terbaru" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <p class="text-gray-400 animate-pulse">Sedang mengambil data jasa terbaru...</p>
+        </div>
+</section>
+<section id="section-hasil-pencarian" class="py-12 bg-gray-50 border-t-2 border-dashed border-gray-200 hidden">
+    <div class="container mx-auto px-4">
+        <h2 class="text-xl font-black text-[#1a237e] mb-6 uppercase">HASIL PENCARIAN UNTUK ANDA</h2>
+        
+        <div id="loading-kopi" class="hidden text-center py-10">
+            <div class="inline-block animate-bounce mb-4 text-4xl">☕</div>
+            <p class="text-blue-600 font-bold italic">Sedang mencari layanan terbaik...</p>
+        </div>
+
+        <div id="pesan-kosong" class="hidden text-center py-10">
+            <p class="text-red-500 font-bold">Layanan Jasa belum tersedia</p>
+        </div>
+
+        <div id="grid-semua-jasa" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+    </div>
+</section>
+<section class="mb-24 reveal">
+    <h2 id="judul-jasa" class="text-xl font-black text-blue-900 uppercase mb-8 border-l-8 border-green-500 pl-4">
+        Semua Jasa Terdaftar
+    </h2>
+    
+    <div id="pesan-kosong" class="hidden text-center py-16 bg-white rounded-[2rem] border-2 border-dashed border-gray-100">
+        <p class="text-red-500 font-black italic">Maaf kawan, layanan jasa belum tersedia.</p>
+    </div>
+
+    <div id="grid-semua-jasa" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        </div>
+</section>
+</main>
+<footer class="bg-[#001f42] text-white pt-20 pb-10">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-white/10 pb-16">
+            <div>
+                <h2 class="text-3xl font-black text-[#007BFF] mb-6">GOONA</h2>
+                <p class="text-xs opacity-60 leading-loose">Pusat Direktori Jasa Terlengkap di Kepulauan Riau. Menghubungkan penyedia jasa profesional dengan pelanggan di seluruh wilayah Kepri.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 uppercase text-sm tracking-widest">Alamat Kami</h4>
+                <p class="text-xs opacity-60 leading-loose">
+                    Gedung Digital Center Kepri<br>
+                    Jl. Engku Putri, Batam Centre<br>
+                    Kepulauan Riau, Indonesia
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 uppercase text-sm tracking-widest">Ikuti Kami</h4>
+                <div class="flex space-x-6 text-xl">
+                    <a href="#" class="hover:text-[#E4405F]"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-[#1877F2]"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" class="hover:text-[#25D366]"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="text-center text-[10px] opacity-30 mt-10 tracking-[0.3em] uppercase">© 2026 PT Goona Solusi Digital</p>
+    </footer>
+
+    <script>
+        // Animasi Sticky Nav
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 50) nav.classList.add('shrink');
+            else nav.classList.remove('shrink');
+        });
+
+        // Animasi Muncul dari Samping
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 50) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+// Logika Hitung Karakter 100 Batas Maksimal
+    const descInput = document.getElementById('descInput');
+    const charCount = document.getElementById('charCount');
+
+    if(descInput) {
+        descInput.addEventListener('input', function() {
+            const length = this.value.length;
+            charCount.innerText = `${length}/100`;
+            
+            // Beri warna merah jika sudah penuh
+            if(length >= 100) charCount.style.color = "red";
+            else charCount.style.color = "#9CA3AF";
+        });
+    }
+        window.addEventListener("scroll", reveal);
+
+        // Simulasi Pencarian & Loading Kopi
+        const searchInput = document.getElementById('input-cari');
+        const loadingCoffee = document.getElementById('loadingCoffee');
+        const dots = document.getElementById('dots');
+        
+        let dotCount = 0;
+        setInterval(() => {
+            dotCount = (dotCount + 1) % 4;
+            dots.innerText = ".".repeat(dotCount);
+        }, 500);
+    </script>
+    <script>
+  let dataWilayahGlobal = [];
+
+// window.addEventListener('load', function() {
+//   google.script.run.withSuccessHandler(function(data) {
+//     dataWilayahGlobal = data;
+//   }).getWilayahData();
+// });
+
+// 2. Fungsi untuk update kecamatan otomatis saat Kota dipilih
+function updateKecamatan() {
+    const kotaTerpilih = document.getElementById("select-kota").value; // Pastikan ID ini ada di baris 176
+    const selectKec = document.getElementById("select-kecamatan"); // Pastikan ID ini ada di baris 187
+
+    // 1. Bersihkan dulu isi kecamatan lama
+    selectKec.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+    
+    // 2. Jika kotak Kota kosong, matikan dropdown kecamatan
+    if (kotaTerpilih === "") {
+        selectKec.disabled = true;
+        selectKec.classList.add('bg-gray-50');
+        return;
+    }
+
+    // 3. Gudang Data (Data dari Spreadsheet Referensi_Wilayah)
+    const dataKecamatan = {
+        "Kota Batam": ["Batam Kota", "Batu Ampar", "Bengkong", "Bulang", "Galang", "Lubuk Baja", "Nongsa", "Sagulung", "Sei Beduk", "Sekupang", "Batu Aji", "Belakang Padang"],
+        "Kota Tanjungpinang": ["Bukit Bestari", "Tanjungpinang Barat", "Tanjungpinang Kota", "Tanjungpinang Timur"],
+        "Kabupaten Bintan": ["Bintan Pesisir", "Bintan Timur", "Bintan Utara", "Gunung Kijang", "Mantang", "Teluk Bintan", "Teluk Sebong", "Toapaya"],
+        "Kabupaten Karimun": ["Buru", "Karimun", "Meral", "Meral Barat", "Tebing", "Kundur", "Kundur Barat", "Kundur Utara", "Moro", "Durai", "Belat", "Ungar"],
+        "Kabupaten Lingga": ["Lingga", "Lingga Timur", "Lingga Utara", "Selayar", "Senayang", "Singkep", "Singkep Barat", "Singkep Pesisir", "Singkep Selatan"],
+        "Kabupaten Natuna": ["Bunguran Barat", "Bunguran Batubi", "Bunguran Selatan", "Bunguran Tengah", "Bunguran Timur", "Bunguran Timur Laut", "Bunguran Utara", "Midai", "Pulau Laut", "Pulau Tiga", "Serasan", "Subi"],
+        "Kabupaten Kepulauan Anambas": ["Siantan", "Siantan Selatan", "Siantan Timur", "Siantan Tengah", "Palmatak", "Jemaja", "Jemaja Timur"]
+    };
+
+    // 4. Masukkan data jika kota cocok dengan gudang data
+    if (dataKecamatan[kotaTerpilih]) {
+        selectKec.disabled = false; // Aktifkan kembali
+        selectKec.classList.remove('bg-gray-50');
+
+        dataKecamatan[kotaTerpilih].sort().forEach(kec => {
+            const opt = document.createElement('option');
+            opt.value = kec;
+            opt.text = kec;
+            selectKec.add(opt); // Memasukkan pilihan ke dalam dropdown
+        });
+    }
+}
+</script>
+<script>
+// GANTI URL DI BAWAH INI DENGAN URL WEB APP KAWAN YANG BARU
+const URL_GOONA = 'https://script.google.com/macros/s/AKfycbwvRhc64JAXSqjXX1UgvGK7fYKSzVLEuqMQvszipChavWXYLHMnSd_gwiZ-XG09gFvx/exec?action=getData';
+
+async function ambilJasaTerbaru() {
+    try {
+        const response = await fetch(URL_GOONA);
+        const data = await response.json();
+        const container = document.getElementById('container-jasa-terbaru');
+        
+        container.innerHTML = ''; // Hapus tulisan "Sedang memuat..."
+
+        // Ambil 6 jasa terbaru saja
+        const listJasa = data.slice(0, 3);
+
+        listJasa.forEach(jasa => {
+            // Potong deskripsi jika terlalu panjang agar kartu rapi
+            const ringkasan = jasa.deskripsi && jasa.deskripsi.length > 70 
+                ? jasa.deskripsi.substring(0, 70) + '...' 
+                : (jasa.deskripsi || 'Tidak ada deskripsi.');
+
+            const card = `
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-full hover:shadow-md transition-all">
+                    <div class="flex-grow">
+                        <span class="text-[9px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full uppercase">${jasa.kategori}</span>
+                        <h3 class="text-md font-black text-[#1a237e] mt-2">${jasa.namaUsaha}</h3>
+                        <p class="text-[10px] text-gray-400 mb-2"><i class="fas fa-map-marker-alt"></i> ${jasa.wilayah}</p>
+                        <p class="text-[11px] text-gray-600 leading-relaxed mb-4">${ringkasan}</p>
+                    </div>
+                    <a href="https://wa.me/${jasa.whatsapp}" target="_blank" class="block text-center bg-[#25D366] text-white font-bold py-2 rounded-xl text-[11px]">
+                        <i class="fab fa-whatsapp mr-1"></i> HUBUNGI SEKARANG
+                    </a>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+    } catch (eror) {
+        console.error('Gagal ambil data:', eror);
+    }
+}
+
+// Jalankan fungsi saat halaman terbuka
+ambilJasaTerbaru();
+</script>
+<script>
+// 1. URL HARUS BENAR KAWAN
+const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwvRhc64JAXSqjXX1UgvGK7fYKSzVLEuqMQvszipChavWXYLHMnSd_gwiZ-XG09gFvx/exec";
+// 1. FUNGSI TEMPLATE KARTU (Penting agar tidak error "not defined")
+function buatKartu(item) {
+    return `
+        <div class="bg-white p-6 rounded-[2rem] border border-gray-100 flex flex-col h-full shadow-sm hover:shadow-md transition-all">
+            <div class="flex-grow">
+                <span class="text-[9px] font-black text-blue-500 uppercase tracking-widest">${item.kategori || ''}</span>
+                <h3 class="text-md font-black text-blue-950 mt-2 uppercase leading-tight">${item.namaUsaha || ''}</h3>
+                <p class="text-[10px] text-gray-400 mt-1 mb-4 font-bold italic"><i class="fas fa-map-marker-alt mr-1"></i>${item.wilayah || ''}</p>
+                <p class="text-[11px] text-gray-500 line-clamp-3 leading-relaxed mb-6">${item.deskripsi || ''}</p>
+            </div>
+            <a href="https://wa.me/${item.whatsapp}" target="_blank" class="block w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl text-[10px] font-black uppercase text-center tracking-widest transition-all">
+                Hubungi
+            </a>
+        </div>`;
+}
+// =========================================
+// Fungsi Pencarian Paling Mantap kawan
+// =========================================
+async function jalankanPencarian() {
+    // Gunakan 'input-cari' karena di baris 128 kawan sudah pakai ID ini
+    const kataKunci = document.getElementById('input-cari').value.toLowerCase();
+    
+    // Pastikan ID dropdown kota adalah 'filter-kota' sesuai baris 131 kawan
+    const wilayahPilihan = document.getElementById('filter-kota').value;
+    
+    // Ambil semua kamar di HTML tadi
+    const section = document.getElementById('section-hasil-pencarian');
+    const loadingKopi = document.getElementById('loading-kopi');
+    const pesanKosong = document.getElementById('pesan-kosong');
+    const gridJasa = document.getElementById('grid-hasil-jasa');
+
+    if (!section || !gridJasa) return; // Keamanan kawan
+
+    // PERINTAH 1: Jika kolom kosong, sembunyikan semua kawan
+    if (kataKunci.trim() === "" && wilayahPilihan === "") {
+        section.classList.add('hidden');
+        return;
+    }
+
+    // PERINTAH 2: Mulai mencari. Munculkan kopi, sembunyikan yang lain.
+    section.classList.remove('hidden');
+    loadingKopi.classList.remove('hidden');
+    gridJasa.classList.add('hidden');
+    pesanKosong.classList.add('hidden');
+    gridJasa.innerHTML = ''; // Bersihkan kartu lama
+
+    try {
+        const res = await fetch(URL_APPS_SCRIPT + '?action=getData');
+        const semuaData = await res.json();
+
+        // LOGIKA FILTER: Cari yang cocok dan Status Aktif kawan
+        const hasilFilter = semuaData.filter(item => {
+            const cocokKata = (item.namaUsaha + item.kategori + item.deskripsi).toLowerCase().includes(kataKunci);
+            const cocokWilayah = wilayahPilihan === "" || item.wilayah === wilayahPilihan;
+            return cocokKata && cocokWilayah && item.status === 'Aktif';
+        });
+
+        // PERINTAH 3: Selesai mengambil data. Sembunyikan kopi kawan.
+        loadingKopi.classList.add('hidden');
+
+        if (hasilFilter.length === 0) {
+            // Jika kosong, munculkan pesan sedih kawan
+            pesanKosong.classList.remove('hidden');
+            return;
+        }
+
+        // PERINTAH 4: Jika ada data, munculkan grid dan isi kartunya kawan!
+        gridJasa.classList.remove('hidden');
+        
+        hasilFilter.forEach(item => {
+            const isVIP = item.paket === 'Eksklusif';
+            gridJasa.innerHTML += `
+                <div class="relative p-6 rounded-[2rem] shadow-sm flex flex-col h-full ${isVIP ? 'bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200' : 'bg-white border border-gray-100'}">
+                    ${isVIP ? '<span class="absolute -top-3 right-6 bg-amber-400 text-white text-[8px] font-black px-3 py-1 rounded-full shadow-sm">EKSKLUSIF</span>' : ''}
+                    <div class="flex-grow">
+                        <span class="text-[9px] font-black text-blue-600 uppercase tracking-widest">${item.kategori}</span>
+                        <h3 class="text-lg font-black text-[#1a237e] mt-1 uppercase leading-tight">${item.namaUsaha}</h3>
+                        <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase"><i class="fas fa-map-marker-alt mr-1"></i>${item.wilayah}</p>
+                        <p class="text-xs text-gray-600 line-clamp-3 leading-relaxed">${item.deskripsi}</p>
+                    </div>
+                    <a href="https://wa.me/${item.whatsapp}" class="mt-5 block text-center py-3 rounded-2xl font-black text-[10px] transition-all ${isVIP ? 'bg-amber-500 text-white shadow-lg shadow-amber-200' : 'bg-[#25D366] text-white'} uppercase">
+                        <i class="fab fa-whatsapp mr-1 text-sm"></i> HUBUNGI SEKARANG
+                    </a>
+                </div>
+            `;
+        });
+        
+        // Bonus: Scroll otomatis biar user tahu ada data baru kawan
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (e) {
+        // Jika error koneksi kawan
+        loadingKopi.classList.add('hidden');
+        pesanKosong.classList.remove('hidden');
+        pesanKosong.innerHTML = '<span class="text-red-500">Error: Gagal koneksi ke database kawan.</span>';
+    }
+}
+async function tampilkanPrioritas() {
+    const container = document.getElementById('prioritasContainer');
+    if (!container) return;
+
+    try {
+        const res = await fetch(URL_APPS_SCRIPT + '?action=getData');
+        const semuaData = await res.json();
+
+        // Ambil data yang paketnya 'Prioritas' dan statusnya 'Aktif'
+        const dataPrioritas = semuaData.filter(item => 
+            item.paket === 'Prioritas' && item.status === 'Aktif'
+        );
+
+        container.innerHTML = ''; 
+
+        dataPrioritas.forEach(item => {
+            container.innerHTML += `
+                <div class="bg-white rounded-[2rem] p-5 shadow-lg border border-amber-100 relative flex flex-col h-full">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-amber-400"></div>
+                    <div class="flex-grow">
+                        <h4 class="font-black text-lg text-[#003067] uppercase">${item.namaUsaha}</h4>
+                        <p class="text-[10px] font-bold text-amber-600 mb-2">${item.kategori}</p>
+                        <p class="text-xs text-gray-500 line-clamp-3">${item.deskripsi}</p>
+                    </div>
+                    <a href="https://wa.me/${item.whatsapp}" class="mt-4 bg-[#25D366] text-white text-center py-2 rounded-xl text-[10px] font-black uppercase">
+                        HUBUNGI
+                    </a>
+                </div>`;
+        });
+    } catch (e) {
+        console.log("Error Prioritas:", e);
+    }
+}
+window.onload = () => {
+    // Kita panggil fungsi yang sudah pasti ada saja kawan
+    jalankanPencarian(); 
+    tampilkanPrioritas();
+};
+// Fungsi untuk menampilkan semua jasa tanpa filter awal
+async function tampilkanSemuaJasa() {
+    const gridJasa = document.getElementById('grid-semua-jasa');
+    const pesanKosong = document.getElementById('pesan-kosong');
+    
+    try {
+        const response = await fetch(URL_APPS_SCRIPT + '?action=getData');
+        const semuaData = await response.json();
+
+        // Bersihkan grid sebelum mengisi data baru
+        gridJasa.innerHTML = '';
+
+        // Filter hanya yang statusnya 'Aktif' (Sesuai logika kawan)
+        const dataAktif = semuaData.filter(item => item.status === 'Aktif');
+
+        if (dataAktif.length === 0) {
+            pesanKosong.classList.remove('hidden');
+        } else {
+            pesanKosong.classList.add('hidden');
+            dataAktif.forEach(item => {
+                // Gunakan fungsi buatKartu() yang sudah kawan miliki di kode asli
+                gridJasa.innerHTML += buatKartu(item);
+            });
+        }
+    } catch (error) {
+        console.error("Gagal memuat data kawan:", error);
+    }
+}
+
+// Panggil fungsi ini saat halaman baru terbuka
+window.addEventListener('load', () => {
+    tampilkanSemuaJasa();
+});
+</script>
+</body>
+</html>

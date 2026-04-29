@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goona - Pusat Jasa Kepulauan Riau</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --goona-blue: #2c0ce6;
+            --goona-gold: #D4AF37;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-goona { font-family: 'Montserrat', sans-serif; }
+
+        /* Navigasi Sticky & Shrink */
+        nav { transition: all 0.4s ease; }
+        nav.shrink { height: 60px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        nav.shrink .logo-nav { font-size: 1.25rem; }
+
+        /* Animasi Heartbeat Kaca Pembesar */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .heartbeat-icon { animation: heartbeat 1.5s ease-in-out infinite; }
+
+        /* Animasi Asap Kopi */
+        @keyframes steam {
+            0% { transform: translateY(0) scale(1); opacity: 0.5; }
+            100% { transform: translateY(-10px) scale(1.5); opacity: 0; }
+        }
+        .steam { animation: steam 2s infinite; }
+
+        /* Animasi Muncul dari Samping */
+        .reveal { opacity: 0; transform: translateX(-50px); transition: 1s all ease; }
+        .reveal.active { opacity: 1; transform: translateX(0); }
+
+        .dropdown:hover .dropdown-menu { display: block; }
+        /* Warna Navy Deep & Animasi Tombol */
+.bg-navy-goona {
+    background-color: #1a365d; /* Biru Navy yang lebih berani */
+}
+
+.bg-navy-goona:hover {
+    background-color: #102a43; /* Lebih gelap saat disentuh */
+}
+
+/* Animasi Berdenyut (Pulsate) */
+@keyframes pulsate-button {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26, 54, 93, 0.4); }
+    70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(26, 54, 93, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26, 54, 93, 0); }
+}
+
+.animate-pulse-goona {
+    animation: pulsate-button 2s infinite;
+}
+        
+        /* Sosmed Colors */
+        .btn-wa { background-color: #25D366; }
+        .icon-fb { color: #1877F2; }
+        .icon-ig { color: #E4405F; }
+        .icon-tt { color: #000000; }
+        .dropdown-menu::before {
+        content: "";
+        position: absolute;
+        top: -20px;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: transparent;
+    }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 overflow-x-hidden">
+
+    <nav id="mainNav" class="bg-white fixed w-full top-0 z-50 h-20 flex items-center border-b border-gray-100">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="logo-nav font-black text-2xl transition-all duration-300">
+                <span class="text-[#007BFF]">G</span>OONA
+            </div>
+            
+            <div class="flex space-x-8 text-[11px] font-bold uppercase tracking-widest items-center">
+                <a href="index.html" class="hover:text-[#007BFF]">Beranda</a>
+                <a href="#" class="hover:text-[#007BFF]">Jual Beli</a>
+                
+                <div class="relative dropdown">
+                    <button class="text-amber-600 hover:text-amber-700 flex items-center gap-1">PRIORITAS <i class="fas fa-chevron-down text-[8px]"></i></button>
+                    <div class="dropdown-menu hidden absolute top-full left-0 bg-white shadow-xl border w-56 py-3 rounded-xl pt-4">
+                        <a href="daftar-jasa.html" class="block px-6 py-2 hover:bg-gray-50">Pendaftaran Jasa</a>
+                        <a href="daftar-jual-beli.html class="block px-6 py-2 hover:bg-gray-50">Pendaftaran Jual Beli</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50">Goona Prioritas</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50">Goona Eksklusif</a>
+                    </div>
+                </div>
+
+                <div class="relative dropdown">
+                    <button class="hover:text-[#007BFF] flex items-center gap-1 text-gray-600">TENTANG <i class="fas fa-chevron-down text-[8px]"></i></button>
+                    <div class="dropdown-menu hidden absolute top-full right-0 bg-white shadow-xl border w-56 py-3 rounded-xl mt-2">
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Goona</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Kebijakan Privasi</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Syarat & Ketentuan</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Pengembalian Dana</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Bantuan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+            </div>
+
+            <div id="loadingCoffee" class="hidden mt-10 text-center animate-fade-in">
+                <div class="relative inline-block">
+                    <i class="fas fa-coffee text-amber-700 text-4xl"></i>
+                    <i class="fas fa-wind absolute -top-5 left-3 text-gray-300 text-sm steam"></i>
+                </div>
+                <p class="text-[#007BFF] font-bold italic mt-3 text-sm">Sedang mencari Layanan Jasa Terbaik<span id="dots"></span></p>
+            </div>
+
+            <div id="notFound" class="hidden mt-10 text-center p-6 bg-red-50 rounded-2xl">
+                <p class="text-red-600 font-bold">Layanan Jasa belum tersedia</p>
+                <p class="text-gray-500 text-xs mt-1">Mungkin Anda tertarik dengan jasa serupa di bawah ini:</p>
+            </div>
+            </div>
+            </div>
+<section id="formPendaftaran" class="container mx-auto px-6 pt-28 pb-20">
+    <div class="max-w-3xl mx-auto bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden">
+        <div class="bg-navy-goona p-8 text-center text-white rounded-t-3xl shadow-inner">
+  <h2 class="text-3xl font-extrabold tracking-tighter uppercase">Daftar Jasa Baru</h3>
+  <p class="text-blue-200 mt-2 italic text-xs tracking-wide">Gabung bersama pusat jasa terbesar di Kepulauan Riau</p>
+</div>
+        
+        <form id="pendaftaranForm" action="https://script.google.com/macros/s/AKfycbwvRhc64JAXSqjXX1UgvGK7fYKSzVLEuqMQvszipChavWXYLHMnSd_gwiZ-XG09gFvx/exec" method="POST" class="p-10 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-1.5">
+  <label class="text-[9px] font-black uppercase tracking-widest text-gray-400">Nama Usaha Jasa</label>
+  <input type="text" name="namaUsaha" required 
+         class="w-full h-10 px-4 rounded-xl border border-gray-200 focus:border-navy-goona focus:ring-1 focus:ring-navy-goona outline-none text-sm transition-all" 
+         placeholder="Nama Usaha Anda">
+</div>
+
+<div class="space-y-1.5">
+  <label class="text-[9px] font-black uppercase tracking-widest text-gray-400">Kategori Usaha</label>
+  <select name="kategori" id="select-kategori" required 
+          class="w-full h-10 px-4 rounded-xl border border-gray-200 focus:border-navy-goona focus:ring-1 focus:ring-navy-goona outline-none text-sm transition-all bg-white">
+    <option value="" disabled selected>-- Pilih Kategori Jasa --</option>
+    <option value="Perbaikan Barang & Elektronik">Perbaikan Barang & Elektronik (HP, Laptop, AC, dll)</option>
+    <option value="Servis Kendaraan (Otomotif)">Servis Kendaraan (Motor, Mobil, Cuci, dll)</option>
+    <option value="Persewaan & Rental">Persewaan & Rental (Mobil, Alat Pesta, Kamera, dll)</option>
+    <option value="Kesehatan & Pijat">Kesehatan & Pijat (Refleksi, Urut, Bekam, dll)</option>
+    <option value="Kecantikan & Perawatan">Kecantikan & Perawatan (Barber, Salon, MUA, dll)</option>
+    <option value="Pendidikan & Les Privat">Pendidikan & Les Privat (Ngaji, Mapel, Kursus, dll)</option>
+    <option value="Kuliner & Jasa Masak">Kuliner & Jasa Masak (Catering, Aqiqah, Kue, dll)</option>
+    <option value="Kebersihan & Laundry">Kebersihan & Laundry (Laundry, Sedot WC, Cleaning, dll)</option>
+    <option value="Konstruksi & Tukang">Konstruksi & Tukang (Cat, Las, Listrik, Bangunan, dll)</option>
+    <option value="Logistik & Pengantaran">Logistik & Pengantaran (Kurir, Pindahan, Travel, dll)</option>
+    <option value="Fotografi & Kreatif">Fotografi & Kreatif (Foto, Video, Desain, Sosmed, dll)</option>
+    <option value="Acara & Hiburan">Acara & Hiburan (Organ Tunggal, Sound, MC, Dekor, dll)</option>
+    <option value="Jasa Dokumen & Legal">Jasa Dokumen & Legal (Paspor, STNK, Notaris, dll)</option>
+    <option value="Jasa Rumah Tangga & Anak">Jasa Rumah Tangga & Anak (Baby Sitter, ART, Penjaga, dll)</option>
+    <option value="Jasa Umum & Lainnya">Jasa Umum & Lainnya (Sol Sepatu, Jahit, Potong Rumput, dll)</option>
+  </select>
+</div>
+            </div>
+
+<div class="space-y-2">
+  <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Wilayah Operasional</label>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <select id="select-kota" name="wilayah" onchange="updateKecamatan()" required class="w-full h-12 px-4 rounded-xl border-2 border-gray-50 focus:border-[#007BFF] outline-none text-sm">
+      <option value="">-- Pilih Kota/Kab --</option>
+      <option value="Kota Batam">Kota Batam</option>
+      <option value="Kota Tanjungpinang">Kota Tanjungpinang</option>
+      <option value="Kabupaten Bintan">Kabupaten Bintan</option>
+      <option value="Kabupaten Karimun">Kabupaten Karimun</option>
+      <option value="Kabupaten Lingga">Kabupaten Lingga</option>
+      <option value="Kabupaten Natuna">Kabupaten Natuna</option>
+      <option value="Kabupaten Kepulauan Anambas">Kabupaten Kepulauan Anambas</option>
+    </select>
+
+    <select id="select-kecamatan" name="kecamatan" required class="w-full h-12 px-4 rounded-xl border-2 border-gray-50 bg-gray-50 focus:border-[#007BFF] outline-none text-sm">
+    <option value="">-- Pilih Kecamatan --</option>
+</select>
+  </div>
+</div>
+
+            <div class="space-y-1.5">
+  <div class="flex justify-between items-center">
+    <label class="text-[9px] font-black uppercase tracking-widest text-gray-400">Deskripsi Singkat</label>
+    <span id="charCount" class="text-sm text-gray-400">0/100</span>
+  </div>
+  <textarea name="deskripsi" rows="3" required 
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-navy-goona focus:ring-1 focus:ring-navy-goona outline-none text-sm transition-all resize-none bg-white" 
+            placeholder="Jelaskan jasa Anda dengan singkat..."></textarea>
+</div>
+<div class="space-y-1.5">
+    <label class="text-[9px] font-black uppercase tracking-widest text-gray-400">Pilih Paket Layanan</label>
+    <select name="paket" required class="w-full h-12 px-4 rounded-xl border-2 border-gray-200 focus:border-blue-600 outline-none text-sm">
+        <option value="Gratis">Paket Gratis</option>
+        <option value="Prioritas">Paket Prioritas (Muncul di Depan)</option>
+        <option value="Eksklusif">Paket Eksklusif (VIP Hasil Cari)</option>
+    </select>
+</div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="space-y-1.5">
+    <label class="text-[9px] font-black uppercase tracking-widest text-gray-400">
+      <i class="fab fa-whatsapp mr-1 text-green-500"></i> No. WhatsApp (Gunakan 62)
+    </label>
+    <input type="text" name="whatsapp" placeholder="62812345678" 
+       class="w-full h-10 px-4 rounded-xl border border-gray-200 focus:border-navy-goona focus:ring-1 focus:ring-navy-goona outline-none text-sm transition-all bg-white">
+  </div>
+  
+  <div class="space-y-1.5">
+    <label class="text-[9px] font-black uppercase tracking-widest text-gray-400">
+      <i class="fab fa-instagram mr-1 text-pink-500"></i> Username Instagram
+    </label>
+    <input type="text" name="ig" placeholder="@username" 
+           class="w-full h-10 px-4 rounded-xl border border-gray-200 focus:border-navy-goona focus:ring-1 focus:ring-navy-goona outline-none text-sm transition-all bg-white">
+           <p class="text-xs text-gray-400 mt-1">*Isi tanda minus (-) jika tidak ada</p>
+  </div>
+</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="space-y-1.5">
+    <label class="text-[9px] font-black uppercase tracking-widest text-gray-400">
+      <i class="fa-brands fa-tiktok mr-1" style="color: #000000;"></i> Username TikTok
+    </label>
+    <input type="text" name="tiktok" placeholder="@username" 
+           class="w-full h-10 px-4 rounded-xl border border-gray-200 focus:border-navy-goona focus:ring-1 focus:ring-navy-goona outline-none text-sm transition-all">
+           <p class="text-xs text-gray-400 mt-1">*Isi tanda minus (-) jika tidak ada</p>
+  </div>
+  
+  <div class="space-y-1.5">
+    <label class="text-[9px] font-black uppercase tracking-widest text-gray-400">
+      <i class="fa-brands fa-facebook mr-1" style="color: #1877F2;"></i> Nama Facebook
+    </label>
+    <input type="text" name="facebook" placeholder="Nama Profil/Halaman" 
+           class="w-full h-10 px-4 rounded-xl border border-gray-200 focus:border-navy-goona focus:ring-1 focus:ring-navy-goona outline-none text-sm transition-all">
+           <p class="text-xs text-gray-400 mt-1">*Isi tanda minus (-) jika tidak ada</p>
+  </div>
+</div>
+
+<div class="flex items-start mb-6 px-2">
+    <div class="flex items-center h-5">
+        <input id="setuju" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" required>
+    </div>
+    <label for="setuju" class="ml-2 text-sm font-medium text-gray-500">
+        Saya setuju dengan <a href="#" class="text-blue-600 hover:underline">Syarat dan Ketentuan</a> yang berlaku di Goona Solusi Digital.
+    </label>
+</div>
+
+<button type="submit" id="btnDaftar" class="w-full bg-[#1a237e] text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition-all duration-300">
+    DAFTARKAN SEKARANG
+</button>
+</div>
+</section>    </section>
+
+    <footer class="bg-[#001f42] text-white pt-20 pb-10">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-white/10 pb-16">
+            <div>
+                <h2 class="text-3xl font-black text-[#007BFF] mb-6">GOONA</h2>
+                <p class="text-xs opacity-60 leading-loose">Pusat Direktori Jasa Terlengkap di Kepulauan Riau. Menghubungkan penyedia jasa profesional dengan pelanggan di seluruh wilayah Kepri.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 uppercase text-sm tracking-widest">Alamat Kami</h4>
+                <p class="text-xs opacity-60 leading-loose">
+                    Gedung Digital Center Kepri<br>
+                    Jl. Engku Putri, Batam Centre<br>
+                    Kepulauan Riau, Indonesia
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 uppercase text-sm tracking-widest">Ikuti Kami</h4>
+                <div class="flex space-x-6 text-xl">
+                    <a href="#" class="hover:text-[#E4405F]"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-[#1877F2]"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" class="hover:text-[#25D366]"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="text-center text-[10px] opacity-30 mt-10 tracking-[0.3em] uppercase">© 2026 PT Goona Solusi Digital</p>
+    </footer>
+
+    <script>
+        // Animasi Sticky Nav
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 50) nav.classList.add('shrink');
+            else nav.classList.remove('shrink');
+        });
+
+        // Animasi Muncul dari Samping
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 50) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+// Logika Hitung Karakter 100 Batas Maksimal
+    const descInput = document.getElementById('descInput');
+    const charCount = document.getElementById('charCount');
+
+    if(descInput) {
+        descInput.addEventListener('input', function() {
+            const length = this.value.length;
+            charCount.innerText = `${length}/100`;
+            
+            // Beri warna merah jika sudah penuh
+            if(length >= 100) charCount.style.color = "red";
+            else charCount.style.color = "#9CA3AF";
+        });
+    }
+        window.addEventListener("scroll", reveal);
+
+        // Simulasi Pencarian & Loading Kopi
+        const searchInput = document.getElementById('searchInput');
+        const loadingCoffee = document.getElementById('loadingCoffee');
+        const dots = document.getElementById('dots');
+        
+        let dotCount = 0;
+        setInterval(() => {
+            dotCount = (dotCount + 1) % 4;
+            dots.innerText = ".".repeat(dotCount);
+        }, 500);
+
+        searchInput.addEventListener('input', function() {
+            if (this.value.length > 0) {
+                loadingCoffee.classList.remove('hidden');
+                // Simulasi logika tidak ditemukan (Misal ketik "xyz")
+                if (this.value === "xyz") {
+                    document.getElementById('notFound').classList.remove('hidden');
+                } else {
+                    document.getElementById('notFound').classList.add('hidden');
+                }
+            } else {
+                loadingCoffee.classList.add('hidden');
+                document.getElementById('notFound').classList.add('hidden');
+            }
+        });
+    </script>
+    <script>
+  let dataWilayahGlobal = [];
+
+  // 1. Fungsi untuk mengambil data dari Google Sheets saat web dibuka
+  window.addEventListener('load', function() {
+    google.script.run.withSuccessHandler(function(data) {
+      dataWilayahGlobal = data;
+      console.log("Data wilayah berhasil dimuat kawan!");
+    }).getWilayahData();
+  });
+
+// 2. Fungsi untuk update kecamatan otomatis saat Kota dipilih
+function updateKecamatan() {
+    const kotaTerpilih = document.getElementById("select-kota").value; // Pastikan ID ini ada di baris 176
+    const selectKec = document.getElementById("select-kecamatan"); // Pastikan ID ini ada di baris 187
+
+    // 1. Bersihkan dulu isi kecamatan lama
+    selectKec.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+    
+    // 2. Jika kotak Kota kosong, matikan dropdown kecamatan
+    if (kotaTerpilih === "") {
+        selectKec.disabled = true;
+        selectKec.classList.add('bg-gray-50');
+        return;
+    }
+
+    // 3. Gudang Data (Data dari Spreadsheet Referensi_Wilayah)
+    const dataKecamatan = {
+        "Kota Batam": ["Batam Kota", "Batu Ampar", "Bengkong", "Bulang", "Galang", "Lubuk Baja", "Nongsa", "Sagulung", "Sei Beduk", "Sekupang", "Batu Aji", "Belakang Padang"],
+        "Kota Tanjungpinang": ["Bukit Bestari", "Tanjungpinang Barat", "Tanjungpinang Kota", "Tanjungpinang Timur"],
+        "Kabupaten Bintan": ["Bintan Pesisir", "Bintan Timur", "Bintan Utara", "Gunung Kijang", "Mantang", "Teluk Bintan", "Teluk Sebong", "Toapaya"],
+        "Kabupaten Karimun": ["Buru", "Karimun", "Meral", "Meral Barat", "Tebing", "Kundur", "Kundur Barat", "Kundur Utara", "Moro", "Durai", "Belat", "Ungar"],
+        "Kabupaten Lingga": ["Lingga", "Lingga Timur", "Lingga Utara", "Selayar", "Senayang", "Singkep", "Singkep Barat", "Singkep Pesisir", "Singkep Selatan"],
+        "Kabupaten Natuna": ["Bunguran Barat", "Bunguran Batubi", "Bunguran Selatan", "Bunguran Tengah", "Bunguran Timur", "Bunguran Timur Laut", "Bunguran Utara", "Midai", "Pulau Laut", "Pulau Tiga", "Serasan", "Subi"],
+        "Kabupaten Kepulauan Anambas": ["Siantan", "Siantan Selatan", "Siantan Timur", "Siantan Tengah", "Palmatak", "Jemaja", "Jemaja Timur"]
+    };
+
+    // 4. Masukkan data jika kota cocok dengan gudang data
+    if (dataKecamatan[kotaTerpilih]) {
+        selectKec.disabled = false; // Aktifkan kembali
+        selectKec.classList.remove('bg-gray-50');
+
+        dataKecamatan[kotaTerpilih].sort().forEach(kec => {
+            const opt = document.createElement('option');
+            opt.value = kec;
+            opt.text = kec;
+            selectKec.add(opt); // Memasukkan pilihan ke dalam dropdown
+        });
+    }
+}
+</script>
+<script>
+    const form = document.querySelector('form'); // Pastikan form kawan pakai tag <form>
+    const checkbox = document.getElementById('setuju');
+    const btnDaftar = document.getElementById('btnDaftar');
+    const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+
+// --- 2. LOGIKA PENGHITUNG KARAKTER DESKRIPSI ---
+const kolomDeskripsi = document.querySelector('[name="deskripsi"]');
+const angkaCounter = document.getElementById('charCount'); // Pastikan di HTML ada id="charCount"
+
+if (kolomDeskripsi && angkaCounter) {
+    kolomDeskripsi.addEventListener('input', function() {
+        const panjang = this.value.length;
+        angkaCounter.innerText = panjang + "/100";
+        
+        if (panjang > 100) {
+            angkaCounter.style.color = "red";
+        } else {
+            angkaCounter.style.color = "#9ca3af";
+        }
+    });
+}
+
+// Jalankan pantauan otomatis
+document.addEventListener('input', jalankanValidasiGoona);
+document.addEventListener('change', jalankanValidasiGoona);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.getElementById('pendaftaranForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Mencegah pindah halaman ke Google
+    
+    // Tampilkan loading agar user tahu sedang diproses
+    Swal.fire({
+        title: 'Sedang Memproses...',
+        text: 'Mohon tunggu sebentar kawan kawan...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading() }
+    });
+
+    const form = e.target;
+    const data = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: data,
+        mode: 'no-cors' // Penting agar tidak eror lintas domain
+    })
+    .then(() => {
+        // TAMPILAN SUKSES SEPERTI YANG KAWAN MAU
+        Swal.fire({
+            icon: 'success',
+            title: 'Pendaftaran Berhasil!',
+            html: 'Selamat kawan, data jasa Anda sudah kami terima.<br>Mohon menunggu, admin Goona akan melakukan validasi segera.',
+            confirmButtonText: 'KEMBALI KE BERANDA',
+            confirmButtonColor: '#1a237e',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'index.html'; // Balik ke index.html di vscode kawan
+            }
+        });
+        form.reset(); // Kosongkan form kembali
+    })
+    .catch(error => {
+        Swal.fire('Eror kawan!', 'Gagal mengirim data, coba lagi ya.', 'error');
+    });
+});
+</script>
+</body>
+</html>

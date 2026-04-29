@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goona - Pusat Jasa Kepulauan Riau</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --goona-blue: #2c0ce6;
+            --goona-gold: #D4AF37;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-goona { font-family: 'Montserrat', sans-serif; }
+
+        /* Navigasi Sticky & Shrink */
+        nav { transition: all 0.4s ease; }
+        nav.shrink { height: 60px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        nav.shrink .logo-nav { font-size: 1.25rem; }
+
+        /* Animasi Heartbeat Kaca Pembesar */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .heartbeat-icon { animation: heartbeat 1.5s ease-in-out infinite; }
+
+        /* Animasi Asap Kopi */
+        @keyframes steam {
+            0% { transform: translateY(0) scale(1); opacity: 0.5; }
+            100% { transform: translateY(-10px) scale(1.5); opacity: 0; }
+        }
+        .steam { animation: steam 2s infinite; }
+
+        /* Animasi Muncul dari Samping */
+        .reveal { opacity: 0; transform: translateX(-50px); transition: 1s all ease; }
+        .reveal.active { opacity: 1; transform: translateX(0); }
+
+        .dropdown:hover .dropdown-menu { display: block; }
+        /* Warna Navy Deep & Animasi Tombol */
+.bg-navy-goona {
+    background-color: #1a365d; /* Biru Navy yang lebih berani */
+}
+
+.bg-navy-goona:hover {
+    background-color: #102a43; /* Lebih gelap saat disentuh */
+}
+
+/* Animasi Berdenyut (Pulsate) */
+@keyframes pulsate-button {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26, 54, 93, 0.4); }
+    70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(26, 54, 93, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26, 54, 93, 0); }
+}
+
+.animate-pulse-goona {
+    animation: pulsate-button 2s infinite;
+}
+        
+        /* Sosmed Colors */
+        .btn-wa { background-color: #25D366; }
+        .icon-fb { color: #1877F2; }
+        .icon-ig { color: #E4405F; }
+        .icon-tt { color: #000000; }
+        .dropdown-menu::before {
+        content: "";
+        position: absolute;
+        top: -20px;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: transparent;
+    }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 overflow-x-hidden">
+
+    <nav id="mainNav" class="bg-white fixed w-full top-0 z-50 h-20 flex items-center border-b border-gray-100">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="logo-nav font-black text-2xl transition-all duration-300">
+                <span class="text-[#007BFF]">G</span>OONA
+            </div>
+            
+            <div class="flex space-x-8 text-[11px] font-bold uppercase tracking-widest items-center">
+                <a href="index.html" class="hover:text-[#007BFF]">Beranda</a>
+                <a href="#" class="hover:text-[#007BFF]">Jual Beli</a>
+                
+                <div class="relative dropdown">
+                    <button class="text-amber-600 hover:text-amber-700 flex items-center gap-1">PRIORITAS <i class="fas fa-chevron-down text-[8px]"></i></button>
+                    <div class="dropdown-menu hidden absolute top-full left-0 bg-white shadow-xl border w-56 py-3 rounded-xl pt-4">
+                        <a href="daftar-jasa.html" class="block px-6 py-2 hover:bg-gray-50">Pendaftaran Jasa</a>
+                        <a href="jual-beli.html" class="block px-6 py-2 hover:bg-gray-50">Pendaftaran Jual Beli</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50">Goona Prioritas</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50">Goona Eksklusif</a>
+                    </div>
+                </div>
+
+                <div class="relative dropdown">
+                    <button class="hover:text-[#007BFF] flex items-center gap-1 text-gray-600">TENTANG <i class="fas fa-chevron-down text-[8px]"></i></button>
+                    <div class="dropdown-menu hidden absolute top-full right-0 bg-white shadow-xl border w-56 py-3 rounded-xl mt-2">
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Goona</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Kebijakan Privasi</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Syarat & Ketentuan</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Pengembalian Dana</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-gray-50 uppercase">Bantuan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow mt-10 py-16 px-4">
+        <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+            <div class="bg-[#1a237e] p-10 text-white text-center">
+                <h1 class="text-3xl font-extrabold mb-2 uppercase tracking-wide">Pasarkan Produk Anda</h1>
+                <p class="opacity-80">Lengkapi data barang untuk menarik pembeli kawan</p>
+            </div>
+
+           <form id="formJualBeli" action="URL_SCRIPT_KAWAN_DI_SINI" method="POST" class="p-8 md:p-12 space-y-8">
+                
+                <div>
+                    <label class="block text-xs font-black text-[#1a237e] mb-2 uppercase">Nama Barang / Produk</label>
+                    <input type="text" name="namaBarang" required placeholder="Contoh: Sepatu Sneakers Bekas Mulus" 
+                        class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#1a237e] outline-none transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-[#1a237e] mb-2 uppercase">Kategori Barang</label>
+                    <select name="kategori" required class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#1a237e] outline-none appearance-none">
+    <option value="">Pilih Kategori Barang...</option>
+    
+    <option value="Properti">Rumah, Tanah & Ruko</option>
+    <option value="Otomotif">Mobil & Sepeda Motor</option>
+    
+    <option value="Kuliner">Makanan & Minuman</option>
+    <option value="Sembako">Sembako & Kebutuhan Dapur</option>
+    
+    <option value="Gadget">HP, Tablet & Aksesoris</option>
+    <option value="Komputer">Laptop, Komputer & Printer</option>
+    <option value="Elektronik">Elektronik Rumah Tangga</option>
+    
+    <option value="Fashion">Fashion & Pakaian</option>
+    <option value="Kecantikan">Kesehatan & Kecantikan</option>
+    <option value="Hobi">Hobi, Koleksi & Mainan</option>
+    <option value="Olahraga">Alat Olahraga & Outdoor</option>
+    
+    <option value="Furniture">Furniture & Perabotan</option>
+    <option value="Alat_Kantor">Perlengkapan Kantor & Usaha</option>
+    
+    <option value="Bayi_Anak">Perlengkapan Bayi & Anak</option>
+    
+    <option value="Lainnya">Barang Lain-lain</option>
+</select>
+                </div>
+                <div>
+    <label class="block text-xs font-black text-[#1a237e] mb-2 uppercase">Wilayah / Kota</label>
+    <select name="wilayah" required class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#1a237e] outline-none appearance-none">
+        <option value="">Pilih Lokasi Barang...</option>
+        <option value="Batam">Kota Batam</option>
+        <option value="Tanjungpinang">Kota Tanjungpinang</option>
+        <option value="Bintan">Kab. Bintan</option>
+        <option value="Karimun">Kab. Karimun</option>
+        <option value="Anambas">Kab. Anambas</option>
+        <option value="Lingga">Kab. Lingga</option>
+        <option value="Natuna">Kab. Natuna</option>
+    </select>
+</div>
+
+                <div>
+                    <label class="block text-xs font-black text-[#1a237e] mb-2 uppercase">Harga (Rp)</label>
+                    <input type="number" name="harga" required placeholder="Contoh: 500000" 
+                        class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#1a237e] outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-[#1a237e] mb-3 uppercase">Foto Produk (Maksimal 4)</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="file" name="foto1" accept="image/*" class="text-xs bg-gray-50 p-2 rounded-lg border border-dashed border-gray-300">
+                        <input type="file" name="foto2" accept="image/*" class="text-xs bg-gray-50 p-2 rounded-lg border border-dashed border-gray-300">
+                        <input type="file" name="foto3" accept="image/*" class="text-xs bg-gray-50 p-2 rounded-lg border border-dashed border-gray-300">
+                        <input type="file" name="foto4" accept="image/*" class="text-xs bg-gray-50 p-2 rounded-lg border border-dashed border-gray-300">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-xs font-black text-[#1a237e] uppercase">Deskripsi Kondisi Barang</label>
+                        <span id="charCount" class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-full">0/200</span>
+                    </div>
+                    <textarea name="deskripsi" required maxlength="200" rows="4" 
+                        class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#1a237e] outline-none" 
+                        placeholder="Contoh: Pemakaian 3 bulan, kotak masih lengkap, minus lecet pemakaian sedikit..."></textarea>
+                </div>
+
+                <div>
+    <label class="block text-xs font-black text-[#1a237e] mb-2 uppercase">No. WhatsApp Penjual</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <i class="fab fa-whatsapp text-green-500 text-xl"></i>
+        </div>
+        <input type="number" name="whatsapp" required placeholder="628123456789" 
+            class="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#1a237e] outline-none transition-all">
+    </div>
+    <p class="text-[10px] text-gray-400 mt-2">*Gunakan format 62 (Contoh: 62812...)</p>
+</div>
+
+                <div class="flex items-center space-x-3 bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                    <input id="setuju" type="checkbox" required class="w-5 h-5 rounded border-gray-300 text-[#1a237e] focus:ring-[#1a237e]">
+                    <label for="setuju" class="text-xs text-blue-900 leading-tight font-medium">
+                        Saya menjamin barang ini milik saya dan deskripsi di atas.
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-[#1a237e] text-white font-black py-5 rounded-2xl hover:bg-blue-800 transition-all shadow-lg uppercase tracking-wider text-sm mt-4">
+    POSTING BARANG SEKARANG
+</button>
+            </form>
+        </div>
+    </main>
+
+    
+    <footer class="bg-[#001f42] text-white pt-20 pb-10">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-white/10 pb-16">
+            <div>
+                <h2 class="text-3xl font-black text-[#007BFF] mb-6">GOONA</h2>
+                <p class="text-xs opacity-60 leading-loose">Pusat Direktori Jasa Terlengkap di Kepulauan Riau. Menghubungkan penyedia jasa profesional dengan pelanggan di seluruh wilayah Kepri.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 uppercase text-sm tracking-widest">Alamat Kami</h4>
+                <p class="text-xs opacity-60 leading-loose">
+                    Gedung Digital Center Kepri<br>
+                    Jl. Engku Putri, Batam Centre<br>
+                    Kepulauan Riau, Indonesia
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 uppercase text-sm tracking-widest">Ikuti Kami</h4>
+                <div class="flex space-x-6 text-xl">
+                    <a href="#" class="hover:text-[#E4405F]"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-[#1877F2]"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" class="hover:text-[#25D366]"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="text-center text-[10px] opacity-30 mt-10 tracking-[0.3em] uppercase">© 2026 PT Goona Solusi Digital</p>
+    </footer>
+
+    <script>
+        // Logika Hitung Karakter Deskripsi
+        const textarea = document.querySelector('textarea[name="deskripsi"]');
+        const charCounter = document.getElementById('charCount');
+
+        textarea.addEventListener('input', () => {
+            const length = textarea.value.length;
+            charCounter.innerText = `${length}/200`;
+            if (length >= 180) charCounter.classList.add('text-red-500');
+            else charCounter.classList.remove('text-red-500');
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+// Pastikan ID di bawah ini 'formJualBeli' sesuai dengan yang ada di tag <form> kawan
+document.getElementById('formJualBeli').addEventListener('submit', function(e) {
+    e.preventDefault(); 
+    
+    Swal.fire({
+        title: 'Sedang Memproses...',
+        text: 'Sabar ya kawan, barang Anda sedang didaftarkan...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading() }
+    });
+
+    const form = e.target;
+    const data = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: data,
+        mode: 'no-cors' 
+    })
+    .then(() => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Barang Berhasil Diposting!',
+            html: 'Selamat kawan, iklan barang Anda sudah kami terima.<br>Mohon menunggu sebentar, admin Goona sedang melakukan pengecekan.',
+            confirmButtonText: 'KEMBALI KE BERANDA',
+            confirmButtonColor: '#1a237e',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'index.html'; 
+            }
+        });
+        form.reset(); 
+    })
+    .catch(error => {
+        Swal.fire('Waduh Eror kawan!', 'Gagal posting barang, coba cek koneksi atau lapor admin ya.', 'error');
+    });
+});
+</script>
+</body>
+</html>
