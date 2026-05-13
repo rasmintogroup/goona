@@ -1,1 +1,1 @@
-const GEMINI_API_KEY= "AIzaSyCjuwQ29jGttOvlCyaugurdFFJHh14cmos"
+const GEMINI_API_KEY= "AIzaSyDkL-4LDOABvHHMPlvn8b-ZCLVzjhFdHsY"
