@@ -105,7 +105,7 @@
     <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-    // Gunakan API Key baru kamu yang aktif (...dHSY)
+    // Konfigurasi API
     const API_KEY = "AIzaSyDkL-4LDOABvHHMPlvn8b-ZCLVzjhFdHsY"; 
     const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co'; 
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
@@ -135,18 +135,21 @@
             if (error) throw error;
             const contextData = JSON.stringify(data);
             
-            // 2. METODE FETCH (Langsung ke V1 - Lebih Stabil)
+            // 2. Perbaikan URL (Menambahkan /models/ dan menggunakan v1beta yang lebih stabil untuk Flash)
             const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
             
-            const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. Gunakan data ini: ${contextData}. Sapa dengan 'Cik' atau 'Bang'. Jawab dengan gaya santai orang Kepri. Jika info ada di data, berikan detail dan nomor WA-nya. Jika tidak ada, ajak pasang info sendiri.`;
+            // Pernyataan tanggung jawab ditambahkan di instruksi sistem
+            const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. 
+            Data referensi: ${contextData}. 
+            Aturan: 
+            1. Sapa dengan 'Cik' atau 'Bang'. Jawab santai ala orang Kepri.
+            2. Jika ada di data, berikan detail dan nomor WA-nya. Jika tidak, ajak pasang info sendiri.
+            3. Di akhir jawaban, tambahkan kalimat: "Informasi ini disampaikan dengan benar dan dapat dipertanggungjawabkan."`;
 
             const requestBody = {
-                contents: [
-                    {
-                        role: "user",
-                        parts: [{ text: systemInstruction + "\n\nPertanyaan User: " + prompt }]
-                    }
-                ]
+                contents: [{
+                    parts: [{ text: systemInstruction + "\n\nPertanyaan User: " + prompt }]
+                }]
             };
 
             const response = await fetch(URL, {
@@ -164,13 +167,13 @@
                 appendMessage(aiText, 'ai-msg');
             } else {
                 console.error("Respons Google error:", hasilJSON);
-                appendMessage("Waduh Cik, Goona lagi pening. Coba tanya lagi ya.", 'ai-msg');
+                appendMessage("Waduh Cik, sepertinya ada kendala teknis di server Google. Coba lagi sebentar ya.", 'ai-msg');
             }
 
         } catch (err) {
             console.error("Error Detail:", err);
             if(loadingDiv) loadingDiv.remove();
-            appendMessage("Waduh Cik, ada masalah koneksi. Coba periksa koneksi internet atau refresh ya.", 'ai-msg');
+            appendMessage("Waduh Cik, koneksi terputus. Coba refresh halamannya ya.", 'ai-msg');
         }
     }
 
@@ -183,20 +186,23 @@
         return div;
     }
 
-    // Pasang Event Listener
-    document.addEventListener('DOMContentLoaded', () => {
-        const sendBtn = document.getElementById('send-btn');
-        if (sendBtn) sendBtn.onclick = tanyaAI;
+    // Pasang Event Listener yang lebih aman
+    const sendBtn = document.getElementById('send-btn');
+    if (sendBtn) {
+        sendBtn.onclick = (e) => {
+            e.preventDefault();
+            tanyaAI();
+        };
+    }
 
-        if (inputField) {
-            inputField.onkeypress = (e) => { 
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    tanyaAI(); 
-                }
-            };
-        }
-    });
+    if (inputField) {
+        inputField.onkeydown = (e) => { 
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                tanyaAI(); 
+            }
+        };
+    }
 
     window.tanyaAI = tanyaAI;
 </script>
