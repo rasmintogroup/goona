@@ -136,7 +136,7 @@
             const contextData = JSON.stringify(data);
             
             // 2. METODE FETCH (Langsung ke V1 - Lebih Stabil)
-            const URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+            const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
             
             const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. Gunakan data ini: ${contextData}. Sapa dengan 'Cik' atau 'Bang'. Jawab dengan gaya santai orang Kepri. Jika info ada di data, berikan detail dan nomor WA-nya. Jika tidak ada, ajak pasang info sendiri.`;
 
