@@ -136,7 +136,7 @@
             const contextData = JSON.stringify(data);
             
             // 2. Perbaikan URL (Menambahkan /models/ dan menggunakan v1beta yang lebih stabil untuk Flash)
-            const URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+            const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
             
             // Pernyataan tanggung jawab ditambahkan di instruksi sistem
             const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. 
