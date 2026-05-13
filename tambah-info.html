@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pasang Info - Goona AI</title>
+    <style>
+        :root {
+            --primary-brown: #8B4513;
+            --secondary-brown: #A0522D;
+            --light-brown: #D2B48C;
+            --bg-brown: #FDF5E6;
+        }
+
+        * { box-sizing: border-box; }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg-brown); 
+            margin: 0; 
+            padding: 15px; 
+            color: #3E2723; 
+        }
+
+        .container { 
+            max-width: 500px; 
+            margin: 20px auto; 
+            background: #fff; 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1); 
+            border: 1px solid var(--light-brown); 
+        }
+
+        h2 { 
+            color: var(--primary-brown); 
+            margin-top: 0; 
+            font-size: 22px; 
+            border-bottom: 2px solid var(--light-brown); 
+            padding-bottom: 10px; 
+            text-align: center;
+        }
+
+        .sub-title { color: #5D4037; font-size: 13px; text-align: center; margin-bottom: 25px; }
+
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: bold; 
+            font-size: 14px; 
+            color: var(--primary-brown); 
+        }
+        
+        textarea, input[type="text"], input[type="file"] { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 10px; 
+            border: 1px solid var(--light-brown); 
+            outline: none; 
+            margin-bottom: 5px; 
+            font-size: 14px; 
+            background-color: #FFFAF0;
+            transition: 0.3s;
+        }
+
+        textarea { height: 150px; resize: none; }
+        textarea:focus, input[type="text"]:focus { border-color: var(--primary-brown); box-shadow: 0 0 5px rgba(139, 69, 19, 0.2); }
+
+        #char-count { text-align: right; font-size: 11px; margin-bottom: 15px; color: #8D6E63; }
+
+        button { 
+            background: var(--primary-brown); 
+            color: #fff; 
+            border: none; 
+            padding: 15px; 
+            width: 100%; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold; 
+            transition: 0.3s; 
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        button:hover { background: var(--secondary-brown); transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+        button:disabled { background: #D7CCC8; color: #8D6E63; cursor: not-allowed; }
+
+        .back-link { 
+            display: block; 
+            margin-top: 20px; 
+            text-align: center; 
+            color: var(--secondary-brown); 
+            text-decoration: none; 
+            font-size: 14px; 
+            font-weight: 500;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Pasang Informasi Baru</h2>
+        <p class="sub-title">Tuliskan info apa saja (Jual beli, Loker, Berita, Jasa dll).</p>
+        
+        <form id="upload-form">
+            <label>Deskripsi Informasi</label>
+            <textarea id="info-teks" maxlength="1000" placeholder="Contoh: Nanda Akupunktur melayani kesehatan holistik..."></textarea>
+            <div id="char-count">Sisa: <span id="count">1000</span> karakter</div>
+            
+            <label>Nomor WhatsApp (Aktif)</label>
+            <input type="text" id="wa-number" placeholder="Contoh: 082186953437">
+
+            <label>Foto Pendukung (Opsional)</label>
+            <input type="file" id="foto-input" accept="image/*">
+
+            <button type="submit" id="submit-btn">Kirim Informasi Sekarang</button>
+        </form>
+        
+        <a href="index.html" class="back-link">← Kembali ke Chat AI</a>
+    </div>
+
+    <!-- SDK Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script type="module">
+        // Konfigurasi Supabase Abang
+        const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const infoTeks = document.getElementById('info-teks');
+        const charCountDisplay = document.getElementById('count');
+        const form = document.getElementById('upload-form');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Penghitung karakter
+        infoTeks.addEventListener('input', () => {
+            const remaining = 1000 - infoTeks.value.length;
+            charCountDisplay.innerText = remaining;
+        });
+
+        // Proses Kirim Data
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const teksValue = infoTeks.value.trim();
+            const waValue = document.getElementById('wa-number').value.trim();
+
+            if (teksValue.length < 5 || !waValue) {
+                return alert("Mohon lengkapi deskripsi dan nomor WhatsApp, Bang!");
+            }
+
+            submitBtn.innerText = "Sedang Mengirim...";
+            submitBtn.disabled = true;
+
+            try {
+                // Langsung masukkan ke tabel konten_goona
+                const { error } = await supabase.from('konten_goona').insert([{
+                    kategori: "Jasa", // Kategori default
+                    judul: teksValue.substring(0, 40) + "...", // Judul diambil dari awal teks
+                    deskripsi: teksValue,
+                    whatsapp: waValue,
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                }]);
+
+                if (error) throw error;
+
+                alert("Mantap! Data berhasil terkirim ke database.");
+                form.reset(); // Kosongkan form
+                charCountDisplay.innerText = "1000";
+                
+            } catch (err) {
+                console.error("Error Detail:", err);
+                alert("Waduh, gagal kirim. Cek koneksi internet atau database Supabase Abang.");
+            } finally {
+                submitBtn.innerText = "Kirim Informasi Sekarang";
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
