@@ -176,6 +176,27 @@
         return div;
     }
 
-    sendBtn.addEventListener('click', tanyaAI);
-    inputField.addEventListener('keypress', (e) => { if (e.key === 'Enter') tanyaAI(); });
+    // --- PERBAIKAN DI SINI ---
+    
+    // Pastikan DOM sudah siap sebelum memasang event listener
+    document.addEventListener('DOMContentLoaded', () => {
+        const sendBtn = document.getElementById('send-btn');
+        const inputField = document.getElementById('user-input');
+
+        if (sendBtn) {
+            sendBtn.onclick = tanyaAI; // Gunakan .onclick untuk kepastian lebih tinggi
+        }
+
+        if (inputField) {
+            inputField.onkeypress = (e) => { 
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Mencegah refresh halaman
+                    tanyaAI(); 
+                }
+            };
+        }
+    });
+
+    // Ekspos fungsi ke window agar bisa dipanggil jika perlu (opsional untuk module)
+    window.tanyaAI = tanyaAI;
 </script>
