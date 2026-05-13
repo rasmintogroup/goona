@@ -102,19 +102,17 @@
         </div>
     </div>
 
-<script type="module">
+    <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
-    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai"; // Versi spesifik yang stabil
 
+    // Gunakan API Key baru kamu yang aktif (...dHSY)
     const API_KEY = "AIzaSyDkL-4LDOABvHHMPlvn8b-ZCLVzjhFdHsY"; 
     const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co'; 
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
 
-    const genAI = new GoogleGenerativeAI(API_KEY);
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const inputField = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
     const chatHistory = document.getElementById('chat-history');
     const chatWindow = document.getElementById('chat-window');
 
@@ -135,34 +133,43 @@
                 .eq('status', 'aktif'); 
 
             if (error) throw error;
-            console.log("Data Supabase Berhasil Diambil:", data);
-
             const contextData = JSON.stringify(data);
             
-            // 2. Gunakan model gemini-1.5-flash
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
+            // 2. METODE FETCH (Langsung ke V1 - Lebih Stabil)
+            const URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
             
             const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. Gunakan data ini: ${contextData}. Sapa dengan 'Cik' atau 'Bang'. Jawab dengan gaya santai orang Kepri. Jika info ada di data, berikan detail dan nomor WA-nya. Jika tidak ada, ajak pasang info sendiri.`;
 
-            // 3. Menjalankan AI dengan format terbaru
-            const chat = model.startChat({
-                history: [
-                    { role: "user", parts: [{ text: systemInstruction }] },
-                    { role: "model", parts: [{ text: "Siap Cik/Bang! Saya mengerti. Saya akan gunakan data tersebut untuk menjawab." }] }
+            const requestBody = {
+                contents: [
+                    {
+                        role: "user",
+                        parts: [{ text: systemInstruction + "\n\nPertanyaan User: " + prompt }]
+                    }
                 ]
+            };
+
+            const response = await fetch(URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
             });
 
-            const result = await chat.sendMessage(prompt);
-            const response = await result.response;
-            const aiText = await response.text();
+            const hasilJSON = await response.json();
             
             loadingDiv.remove();
-            appendMessage(aiText, 'ai-msg');
+
+            if (hasilJSON.candidates && hasilJSON.candidates[0].content.parts[0].text) {
+                const aiText = hasilJSON.candidates[0].content.parts[0].text;
+                appendMessage(aiText, 'ai-msg');
+            } else {
+                console.error("Respons Google error:", hasilJSON);
+                appendMessage("Waduh Cik, Goona lagi pening. Coba tanya lagi ya.", 'ai-msg');
+            }
 
         } catch (err) {
             console.error("Error Detail:", err);
-            loadingDiv.remove();
-            // Menampilkan pesan error yang lebih detail di UI untuk sementara
+            if(loadingDiv) loadingDiv.remove();
             appendMessage("Waduh Cik, ada masalah koneksi. Coba periksa koneksi internet atau refresh ya.", 'ai-msg');
         }
     }
@@ -176,27 +183,20 @@
         return div;
     }
 
-    // --- PERBAIKAN DI SINI ---
-    
-    // Pastikan DOM sudah siap sebelum memasang event listener
+    // Pasang Event Listener
     document.addEventListener('DOMContentLoaded', () => {
         const sendBtn = document.getElementById('send-btn');
-        const inputField = document.getElementById('user-input');
-
-        if (sendBtn) {
-            sendBtn.onclick = tanyaAI; // Gunakan .onclick untuk kepastian lebih tinggi
-        }
+        if (sendBtn) sendBtn.onclick = tanyaAI;
 
         if (inputField) {
             inputField.onkeypress = (e) => { 
                 if (e.key === 'Enter') {
-                    e.preventDefault(); // Mencegah refresh halaman
+                    e.preventDefault();
                     tanyaAI(); 
                 }
             };
         }
     });
 
-    // Ekspos fungsi ke window agar bisa dipanggil jika perlu (opsional untuk module)
     window.tanyaAI = tanyaAI;
 </script>
