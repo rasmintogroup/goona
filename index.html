@@ -140,7 +140,7 @@
             const contextData = JSON.stringify(data);
             
             // 2. Gunakan model gemini-1.5-flash
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }, { apiVersion: "v1" });
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
             
             const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. Gunakan data ini: ${contextData}. Sapa dengan 'Cik' atau 'Bang'. Jawab dengan gaya santai orang Kepri. Jika info ada di data, berikan detail dan nomor WA-nya. Jika tidak ada, ajak pasang info sendiri.`;
 
