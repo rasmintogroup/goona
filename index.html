@@ -102,11 +102,12 @@
         </div>
     </div>
 
-    <script type="module">
+    <!-- Bagian HTML dan CSS tetap sama sesuai kode abang -->
+<script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
     // Konfigurasi API
-    const API_KEY = "AIzaSyDkL-4LDOABvHHMPlvn8b-ZCLVzjhFdHsY"; 
+    const OPENROUTER_KEY = "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"; 
     const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co'; 
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
 
@@ -135,45 +136,43 @@
             if (error) throw error;
             const contextData = JSON.stringify(data.slice(0, 20));
             
-            // 2. Perbaikan URL (Menambahkan /models/ dan menggunakan v1beta yang lebih stabil untuk Flash)
-            const URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+            // 2. Konfigurasi OpenRouter (Menggantikan Jalur Gemini Langsung)
+            const URL = "https://openrouter.ai/api/v1/chat/completions";
             
-            // Pernyataan tanggung jawab ditambahkan di instruksi sistem
             const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. 
             Data referensi: ${contextData}. 
             Aturan: 
             1. Sapa dengan 'Cik' atau 'Bang'. Jawab santai ala orang Kepri.
             2. Jika ada di data, berikan detail dan nomor WA-nya. Jika tidak, ajak pasang info sendiri.
-            3. Di akhir jawaban, tambahkan kalimat: "Informasi ini disampaikan dengan benar dan dapat dipertanggungjawabkan."`;
+            3. Di akhir jawaban, tambahkan kalimat: "Informasi ini disampaikan dengan benar dan dapat dipertanggungjawabkan agar Goona juga aman ke depannya."`;
 
             const requestBody = {
-                contents: [{
-                    parts: [{ text: systemInstruction + "\n\nPertanyaan User: " + prompt }]
-                }]
+                "model": "meta-llama/llama-3-8b-instruct:free", // Menggunakan model gratis dari OpenRouter
+                "messages": [
+                    { "role": "system", "content": systemInstruction },
+                    { "role": "user", "content": prompt }
+                ]
             };
 
             const response = await fetch(URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${OPENROUTER_KEY}`
+                },
                 body: JSON.stringify(requestBody)
             });
 
             const hasilJSON = await response.json();
-            
             loadingDiv.remove();
 
-            if (
-    hasilJSON.candidates &&
-    hasilJSON.candidates.length > 0 &&
-    hasilJSON.candidates[0].content &&
-    hasilJSON.candidates[0].content.parts &&
-    hasilJSON.candidates[0].content.parts.length > 0
-) { {
-                const aiText = hasilJSON.candidates[0].content.parts[0].text;
+            // Pengecekan keamanan respon (Perbaikan dari kode abang yang typo)
+            if (hasilJSON.choices && hasilJSON.choices.length > 0) {
+                const aiText = hasilJSON.choices[0].message.content;
                 appendMessage(aiText, 'ai-msg');
             } else {
-                console.error("Respons Google error:", hasilJSON);
-                appendMessage("Waduh Cik, sepertinya ada kendala teknis di server Google. Coba lagi sebentar ya.", 'ai-msg');
+                console.error("Respons AI error:", hasilJSON);
+                appendMessage("Waduh Cik, sepertinya AI-nya lagi istirahat sebentar. Coba lagi ya.", 'ai-msg');
             }
 
         } catch (err) {
@@ -192,7 +191,6 @@
         return div;
     }
 
-    // Pasang Event Listener yang lebih aman
     const sendBtn = document.getElementById('send-btn');
     if (sendBtn) {
         sendBtn.onclick = (e) => {
