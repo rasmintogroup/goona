@@ -102,11 +102,10 @@
         </div>
     </div>
 
-    <!-- Bagian HTML dan CSS tetap sama sesuai kode abang -->
 <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-    // Konfigurasi API
+    // Konfigurasi API - Menggunakan Key OpenRouter Abang
     const OPENROUTER_KEY = "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"; 
     const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co'; 
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
@@ -136,43 +135,43 @@
             if (error) throw error;
             const contextData = JSON.stringify(data.slice(0, 20));
             
-            // 2. Konfigurasi OpenRouter (Menggantikan Jalur Gemini Langsung)
-            const URL = "https://goona.rasmintogroup.workers.dev";
+            // 2. Konfigurasi OpenRouter Langsung
+            const URL = "https://openrouter.ai/api/v1/chat/completions";
             
-            const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. 
+            const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepulauan Riau (Kepri). 
             Data referensi: ${contextData}. 
             Aturan: 
-            1. Sapa dengan 'Cik' atau 'Bang'. Jawab santai ala orang Kepri.
-            2. Jika ada di data, berikan detail dan nomor WA-nya. Jika tidak, ajak pasang info sendiri.
-            3. Di akhir jawaban, tambahkan kalimat: "Informasi ini disampaikan dengan benar dan dapat dipertanggungjawabkan agar Goona juga aman ke depannya."`;
-
-            const requestBody = {
-                "model": "meta-llama/llama-3-8b-instruct:free", // Menggunakan model gratis dari OpenRouter
-                "messages": [
-                    { "role": "system", "content": systemInstruction },
-                    { "role": "user", "content": prompt }
-                ]
-            };
+            1. Sapa dengan 'Cik' atau 'Bang'. Jawab dengan gaya santai dan akrab ala warga Kepri.
+            2. Jika informasi ada di data, berikan detail dan nomor WA-nya. Jika tidak ada, ajak mereka pasang info sendiri melalui tombol Pasang Info.
+            3. Di akhir jawaban, WAJIB tambahkan kalimat: "Informasi ini disampaikan dengan benar dan dapat dipertanggungjawabkan agar Goona juga aman ke depannya."`;
 
             const response = await fetch(URL, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENROUTER_KEY}`
+                    'Authorization': `Bearer ${OPENROUTER_KEY}`,
+                    'HTTP-Referer': 'https://goona.rasmintogroup.workers.dev', // Sesuai alamat web abang
+                    'X-Title': 'Goona AI'
                 },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify({
+                    "model": "meta-llama/llama-3-8b-instruct:free", // Model gratis OpenRouter
+                    "messages": [
+                        { "role": "system", "content": systemInstruction },
+                        { "role": "user", "content": prompt }
+                    ]
+                })
             });
 
             const hasilJSON = await response.json();
-            loadingDiv.remove();
+            if(loadingDiv) loadingDiv.remove();
 
-            // Pengecekan keamanan respon (Perbaikan dari kode abang yang typo)
+            // Pengecekan keamanan respon
             if (hasilJSON.choices && hasilJSON.choices.length > 0) {
                 const aiText = hasilJSON.choices[0].message.content;
                 appendMessage(aiText, 'ai-msg');
             } else {
                 console.error("Respons AI error:", hasilJSON);
-                appendMessage("Waduh Cik, sepertinya AI-nya lagi istirahat sebentar. Coba lagi ya.", 'ai-msg');
+                appendMessage("Waduh Cik, AI-nya lagi pening sebentar. Coba tanya lagi ya.", 'ai-msg');
             }
 
         } catch (err) {
@@ -210,3 +209,5 @@
 
     window.tanyaAI = tanyaAI;
 </script>
+</body>
+</html>
