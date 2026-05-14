@@ -473,11 +473,7 @@ ATURAN:
                     'Content-Type':
                     'application/json',
 
-                    'HTTP-Referer':
-                    'https://goona.rasmintogroup.workers.dev',
-
-                    'X-Title':
-                    'Goona AI'
+                    
                 },
 
                 body: JSON.stringify({
@@ -577,7 +573,7 @@ ATURAN:
                 ) {
 
                     const dataStr =
-                    line.slice(6);
+                    line.slice(6).trim();
 
                     if (
                         dataStr === "[DONE]"
