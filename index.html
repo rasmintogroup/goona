@@ -273,6 +273,50 @@ async function tanyaAI() {
 
     if (!prompt) return;
 
+// ===============================
+// DETEKSI PERLU DATABASE ATAU TIDAK
+// ===============================
+
+const databaseKeywords = [
+
+    "loker",
+    "kerja",
+    "lowongan",
+    "jual",
+    "beli",
+    "motor",
+    "mobil",
+    "rumah",
+    "kos",
+    "kontrakan",
+    "servis",
+    "service",
+    "jasa",
+    "wa",
+    "whatsapp",
+    "nomor",
+    "kontak",
+    "alamat",
+    "lokasi",
+    "cari",
+    "butuh",
+    "info",
+    "barber",
+    "laundry",
+    "makanan",
+    "kuliner",
+    "hotel",
+    "penginapan",
+    "sewa",
+    "konter",
+    "toko"
+];
+
+const shouldUseDatabase =
+databaseKeywords.some(keyword =>
+    prompt.toLowerCase().includes(keyword)
+);
+    
     // tampilkan pesan user
     appendMessage(prompt, 'user-msg');
 
@@ -337,6 +381,22 @@ async function tanyaAI() {
 
     try {
 
+// ===============================
+// MODE TANPA DATABASE
+// ===============================
+
+let contextData = "";
+
+if (!shouldUseDatabase) {
+
+    contextData = `
+User hanya sedang ngobrol biasa.
+Jawab dengan santai, singkat, ramah.
+Tidak perlu menyebut database.
+`;
+
+} else {
+        
         // ===============================
         // AMBIL DATA SUPABASE
         // ===============================
@@ -362,7 +422,7 @@ async function tanyaAI() {
         // FORMAT DATA
         // ===============================
 
-        const contextData =
+        contextData =
         data.map(item => {
 
             return `
@@ -373,6 +433,7 @@ WhatsApp: ${item.whatsapp || ''}
 Lokasi: ${item.lokasi || ''}
 `;
         }).join('\n');
+}
 
         // ===============================
         // SYSTEM PROMPT
