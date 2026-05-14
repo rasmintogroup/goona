@@ -250,7 +250,7 @@
 
         // Counter
         deskripsiInput.addEventListener('input', () => {
-            countSpan.innerText = 1000 - deskripsiInput.value.length;
+            countSpan.innerText = 200 - deskripsiInput.value.length;
         });
 
         // Submit
@@ -277,7 +277,7 @@
                 alert("Sukses! Informasi Anda sudah masuk.");
                 form.reset();
                 kecSelect.disabled = true;
-                countSpan.innerText = "1000";
+                countSpan.innerText = "200";
             } catch (err) {
                 alert("Gagal mengirim. Periksa koneksi.");
             } finally {
