@@ -263,7 +263,7 @@ const sendBtn =
 document.getElementById('send-btn');
 
 // ===============================
-// TANYA AI
+// TANYA AI (OPTIMIZED WITH CACHE & STREAMING)
 // ===============================
 
 async function tanyaAI() {
@@ -277,6 +277,38 @@ async function tanyaAI() {
     appendMessage(prompt, 'user-msg');
 
     inputField.value = '';
+
+    // ===============================
+    // CACHE 7 HARI
+    // ===============================
+
+    const cacheKey =
+    `goona_cache_${prompt.toLowerCase().replace(/\s/g, '_')}`;
+
+    const cachedData =
+    localStorage.getItem(cacheKey);
+
+    const cacheTime =
+    localStorage.getItem(`${cacheKey}_time`);
+
+    const SEVEN_DAYS =
+    7 * 24 * 60 * 60 * 1000;
+
+    if (
+        cachedData &&
+        cacheTime &&
+        (Date.now() - cacheTime < SEVEN_DAYS)
+    ) {
+
+        console.log("Ambil dari cache");
+
+        appendMessage(
+            cachedData,
+            'ai-msg'
+        );
+
+        return;
+    }
 
     // ===============================
     // LOADING ANIMATION
@@ -361,11 +393,12 @@ ATURAN:
 6. Jangan mengarang informasi palsu.
 7. Cari data yang PALING MIRIP dengan pertanyaan pengguna.
 8. Jika data ditemukan, jangan bilang data tidak tersedia.
-9. Jawaban singkat, jelas, dan ramah.
+9. Jawaban langsung ke inti.
+10. Jawaban singkat, jelas, dan ramah.
 `;
 
         // ===============================
-        // REQUEST AI
+        // REQUEST AI STREAMING
         // ===============================
 
         const response =
@@ -375,7 +408,9 @@ ATURAN:
                 method: 'POST',
 
                 headers: {
-                    'Content-Type': 'application/json',
+
+                    'Content-Type':
+                    'application/json',
 
                     'Authorization':
                     `Bearer ${OPENROUTER_KEY}`,
@@ -392,6 +427,8 @@ ATURAN:
                     model:
                     "z-ai/glm-4.5-air:free",
 
+                    stream: true,
+
                     messages: [
 
                         {
@@ -405,8 +442,8 @@ ATURAN:
                         }
                     ],
 
-                    temperature: 0.7,
-                    max_tokens: 500
+                    temperature: 0.5,
+                    max_tokens: 400
                 })
             }
         );
@@ -428,49 +465,109 @@ ATURAN:
             console.error(errorText);
 
             throw new Error(
-                `Server AI error (${response.status})`
+                `Server AI error`
             );
         }
 
         // ===============================
+        // HAPUS LOADING
+        // ===============================
 
-        const hasilJSON =
-        await response.json();
-
-        // hapus loading
         loadingDiv.remove();
 
-        console.log(
-            "Respons AI:",
-            hasilJSON
+        // ===============================
+        // BUBBLE CHAT AI
+        // ===============================
+
+        const aiBubble =
+        appendMessage(
+            "",
+            'ai-msg'
         );
 
+        let fullText = "";
+
         // ===============================
-        // AMBIL TEKS AI
+        // STREAM READER
+        // ===============================
+
+        const reader =
+        response.body.getReader();
+
+        const decoder =
+        new TextDecoder();
+
+        while (true) {
+
+            const {
+                done,
+                value
+            } = await reader.read();
+
+            if (done) break;
+
+            const chunk =
+            decoder.decode(value);
+
+            const lines =
+            chunk.split("\n");
+
+            for (const line of lines) {
+
+                if (
+                    line.startsWith("data: ")
+                ) {
+
+                    const dataStr =
+                    line.slice(6);
+
+                    if (
+                        dataStr === "[DONE]"
+                    ) {
+                        break;
+                    }
+
+                    try {
+
+                        const json =
+                        JSON.parse(dataStr);
+
+                        const content =
+                        json.choices?.[0]
+                        ?.delta?.content || "";
+
+                        fullText += content;
+
+                        aiBubble.innerText =
+                        fullText;
+
+                        chatWindow.scrollTop =
+                        chatWindow.scrollHeight;
+
+                    } catch (e) {
+
+                        // ignore chunk error
+                    }
+                }
+            }
+        }
+
+        // ===============================
+        // SIMPAN CACHE
         // ===============================
 
         if (
-            hasilJSON &&
-            hasilJSON.choices &&
-            hasilJSON.choices.length > 0 &&
-            hasilJSON.choices[0].message &&
-            hasilJSON.choices[0].message.content
+            fullText.trim().length > 0
         ) {
 
-            const aiText =
-            hasilJSON.choices[0]
-            .message.content;
-
-            appendMessage(
-                aiText,
-                'ai-msg'
+            localStorage.setItem(
+                cacheKey,
+                fullText
             );
 
-        } else {
-
-            appendMessage(
-                "Waduh Cik, Goona lagi pening 😅",
-                'ai-msg'
+            localStorage.setItem(
+                `${cacheKey}_time`,
+                Date.now().toString()
             );
         }
 
@@ -481,8 +578,10 @@ ATURAN:
             err
         );
 
-        // hapus loading
-        loadingDiv.remove();
+        if (loadingDiv) {
+
+            loadingDiv.remove();
+        }
 
         appendMessage(
             "Waduh Cik, server lagi gangguan 😥",
