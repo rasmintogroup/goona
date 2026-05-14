@@ -462,45 +462,21 @@ ATURAN:
         // REQUEST AI STREAMING
         // ===============================
 
-        const response =
-        await fetch(
-            "https://goona.rasmintogroup.workers.dev/",
-            {
-                method: 'POST',
-
-                headers: {
-
-                    'Content-Type':
-                    'application/json',
-
-                    
-                },
-
-                body: JSON.stringify({
-
-                    model:
-                    "z-ai/glm-4.5-air:free",
-
-                    stream: true,
-
-                    messages: [
-
-                        {
-                            role: "system",
-                            content: systemInstruction
-                        },
-
-                        {
-                            role: "user",
-                            content: prompt
-                        }
-                    ],
-
-                    temperature: 0.5,
+        // Ganti yang tadinya URL panjang rasmintogroup.workers.dev menjadi ini:
+const response = await fetch("/worker", { 
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        model: "z-ai/glm-4.5-air:free",
+        stream: true,
+        messages: [
+            { role: "system", content: systemInstruction },
+            { role: "user", content: prompt }
+        ]
+        temperature: 0.5,
                     max_tokens: 400
-                })
-            }
-        );
+    })
+});
 
         // ===============================
         // VALIDASI RESPONSE
