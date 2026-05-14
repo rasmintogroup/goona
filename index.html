@@ -103,111 +103,234 @@
     </div>
 
 <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-    // Konfigurasi API - Menggunakan Key OpenRouter Abang
-    const OPENROUTER_KEY = "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"; 
-    const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co'; 
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
+// ===============================
+// KONFIGURASI
+// ===============================
+const OPENROUTER_KEY = "ISI_API_KEY_OPENROUTER";
+const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
+const SUPABASE_ANON_KEY = 'ISI_SUPABASE_ANON_KEY';
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const inputField = document.getElementById('user-input');
-    const chatHistory = document.getElementById('chat-history');
-    const chatWindow = document.getElementById('chat-window');
+// ===============================
+// ELEMENT
+// ===============================
+const inputField = document.getElementById('user-input');
+const chatHistory = document.getElementById('chat-history');
+const chatWindow = document.getElementById('chat-window');
+const sendBtn = document.getElementById('send-btn');
 
-    async function tanyaAI() {
-        const prompt = inputField.value.trim();
-        if (!prompt) return;
+// ===============================
+// FUNGSI TANYA AI
+// ===============================
+async function tanyaAI() {
 
-        appendMessage(prompt, 'user-msg');
-        inputField.value = '';
+    const prompt = inputField.value.trim();
 
-        const loadingDiv = appendMessage("Sabar ya Cik, lagi dicari...", 'ai-msg');
+    if (!prompt) return;
 
-        try {
-            // 1. Ambil data dari Supabase
-            const { data, error } = await supabase
-                .from('konten_goona')
-                .select('*')
-                .eq('status', 'aktif'); 
+    // tampilkan chat user
+    appendMessage(prompt, 'user-msg');
 
-            if (error) throw error;
-            const contextData = JSON.stringify(data.slice(0, 20));
-            
-            // 2. Konfigurasi OpenRouter Langsung
-            const URL = "https://openrouter.ai/api/v1/chat/completions";
-            
-            const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepulauan Riau (Kepri). 
-            Data referensi: ${contextData}. 
-            Aturan: 
-            1. Sapa dengan 'Cik' atau 'Bang'. Jawab dengan gaya santai dan akrab ala warga Kepri.
-            2. Jika informasi ada di data, berikan detail dan nomor WA-nya. Jika tidak ada, ajak mereka pasang info sendiri melalui tombol Pasang Info.
-            3. Di akhir jawaban, WAJIB tambahkan kalimat: "Informasi ini disampaikan dengan benar dan dapat dipertanggungjawabkan agar Goona juga aman ke depannya."`;
+    // kosongkan input
+    inputField.value = '';
 
-            const response = await fetch(URL, {
+    // loading
+    const loadingDiv = appendMessage(
+        "Sabar ya Cik, Goona lagi cari info...",
+        'ai-msg'
+    );
+
+    try {
+
+        // ===============================
+        // AMBIL DATA SUPABASE
+        // ===============================
+        const { data, error } = await supabase
+            .from('konten_goona')
+            .select('*')
+            .eq('status', 'aktif')
+            .limit(20);
+
+        if (error) {
+            console.error("Supabase Error:", error);
+            throw new Error("Gagal mengambil data Supabase");
+        }
+
+        // context untuk AI
+        const contextData = JSON.stringify(data || []);
+
+        // ===============================
+        // SYSTEM PROMPT
+        // ===============================
+        const systemInstruction = `
+Kamu adalah AI Goona, asisten lokal Kepulauan Riau (Kepri).
+
+DATA REFERENSI:
+${contextData}
+
+ATURAN:
+1. Sapa pengguna dengan "Cik" atau "Bang".
+2. Gunakan gaya santai ala warga Kepri.
+3. Jika data tersedia, berikan detail lengkap.
+4. Jika ada nomor WA, tampilkan.
+5. Jika data tidak ada, arahkan pengguna untuk klik tombol "Pasang Info".
+6. Jangan mengarang informasi palsu.
+7. Jawaban singkat, jelas, dan ramah.
+8. Akhiri jawaban dengan:
+"Informasi ini disampaikan dengan benar dan dapat dipertanggungjawabkan agar Goona juga aman ke depannya."
+`;
+
+        // ===============================
+        // REQUEST KE OPENROUTER
+        // ===============================
+        const response = await fetch(
+            "https://openrouter.ai/api/v1/chat/completions",
+            {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${OPENROUTER_KEY}`,
-                    'HTTP-Referer': 'https://goona.rasmintogroup.workers.dev', // Sesuai alamat web abang
+                    'HTTP-Referer': 'https://goona.rasmintogroup.workers.dev',
                     'X-Title': 'Goona AI'
                 },
                 body: JSON.stringify({
-                    "model": "meta-llama/llama-3-8b-instruct:free", // Model gratis OpenRouter
-                    "messages": [
-                        { "role": "system", "content": systemInstruction },
-                        { "role": "user", "content": prompt }
-                    ]
+                    model: "google/gemma-2-9b-it:free",
+                    messages: [
+                        {
+                            role: "system",
+                            content: systemInstruction
+                        },
+                        {
+                            role: "user",
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 500
                 })
-            });
-
-            const hasilJSON = await response.json();
-            if(loadingDiv) loadingDiv.remove();
-
-            // Pengecekan keamanan respon
-            if (hasilJSON.choices && hasilJSON.choices.length > 0) {
-                const aiText = hasilJSON.choices[0].message.content;
-                appendMessage(aiText, 'ai-msg');
-            } else {
-                console.error("Respons AI error:", hasilJSON);
-                appendMessage("Waduh Cik, AI-nya lagi pening sebentar. Coba tanya lagi ya.", 'ai-msg');
             }
+        );
 
-        } catch (err) {
-            console.error("Error Detail:", err);
-            if(loadingDiv) loadingDiv.remove();
-            appendMessage("Waduh Cik, koneksi terputus. Coba refresh halamannya ya.", 'ai-msg');
+        // cek status response
+        if (!response.ok) {
+
+            const errorText = await response.text();
+
+            console.error("HTTP Error:", response.status);
+            console.error(errorText);
+
+            throw new Error(
+                `Server AI error (${response.status})`
+            );
         }
-    }
 
-    function appendMessage(text, className) {
-        const div = document.createElement('div');
-        div.className = className;
-        div.innerText = text;
-        chatHistory.appendChild(div);
-        chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
-        return div;
-    }
+        // convert json
+        const hasilJSON = await response.json();
 
-    const sendBtn = document.getElementById('send-btn');
-    if (sendBtn) {
-        sendBtn.onclick = (e) => {
+        // hapus loading
+        if (loadingDiv) {
+            loadingDiv.remove();
+        }
+
+        console.log("Respons AI:", hasilJSON);
+
+        // ===============================
+        // VALIDASI RESPONSE AI
+        // ===============================
+        if (
+            hasilJSON &&
+            hasilJSON.choices &&
+            hasilJSON.choices.length > 0 &&
+            hasilJSON.choices[0].message &&
+            hasilJSON.choices[0].message.content
+        ) {
+
+            const aiText =
+                hasilJSON.choices[0].message.content;
+
+            appendMessage(aiText, 'ai-msg');
+
+        } else {
+
+            console.error("Format response aneh:", hasilJSON);
+
+            appendMessage(
+                "Waduh Cik, Goona lagi pening sebentar 😅",
+                'ai-msg'
+            );
+        }
+
+    } catch (err) {
+
+        console.error("Error Detail:", err);
+
+        // hapus loading kalau ada
+        if (loadingDiv) {
+            loadingDiv.remove();
+        }
+
+        appendMessage(
+            "Waduh Cik, terjadi gangguan koneksi atau server 😥",
+            'ai-msg'
+        );
+    }
+}
+
+// ===============================
+// TAMBAH PESAN KE CHAT
+// ===============================
+function appendMessage(text, className) {
+
+    const div = document.createElement('div');
+
+    div.className = className;
+
+    div.innerText = text;
+
+    chatHistory.appendChild(div);
+
+    // auto scroll
+    chatWindow.scrollTo({
+        top: chatWindow.scrollHeight,
+        behavior: 'smooth'
+    });
+
+    return div;
+}
+
+// ===============================
+// EVENT BUTTON
+// ===============================
+if (sendBtn) {
+
+    sendBtn.addEventListener('click', (e) => {
+
+        e.preventDefault();
+
+        tanyaAI();
+    });
+}
+
+// ===============================
+// ENTER KEY
+// ===============================
+if (inputField) {
+
+    inputField.addEventListener('keydown', (e) => {
+
+        if (e.key === 'Enter') {
+
             e.preventDefault();
+
             tanyaAI();
-        };
-    }
+        }
+    });
+}
 
-    if (inputField) {
-        inputField.onkeydown = (e) => { 
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                tanyaAI(); 
-            }
-        };
-    }
+// global
+window.tanyaAI = tanyaAI;
 
-    window.tanyaAI = tanyaAI;
 </script>
-</body>
-</html>
