@@ -1,24 +1,75 @@
 export default {
-  async fetch(request) {
+  async fetch(request, env) {
 
-    // WAJIB ADA
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "*"
+    };
+
+    // OPTIONS
     if (request.method === "OPTIONS") {
       return new Response(null, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-          "Access-Control-Allow-Headers": "*"
-        }
+        headers: corsHeaders
       });
     }
 
-    return new Response("OK", {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "*"
-      }
-    });
+    // WAJIB POST
+    if (request.method !== "POST") {
+      return new Response("Method Not Allowed", {
+        status: 405,
+        headers: corsHeaders
+      });
+    }
 
+    try {
+
+      const body =
+      await request.json();
+
+      const response =
+      await fetch(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          method: "POST",
+
+          headers: {
+            "Authorization":
+            `Bearer ${env.OPENROUTER_API_KEY}`,
+
+            "Content-Type":
+            "application/json"
+          },
+
+          body: JSON.stringify(body)
+        }
+      );
+
+      const data =
+      await response.text();
+
+      return new Response(data, {
+        status: response.status,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json"
+        }
+      });
+
+    } catch (error) {
+
+      return new Response(
+        JSON.stringify({
+          error: error.message
+        }),
+        {
+          status: 500,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+    }
   }
 }
