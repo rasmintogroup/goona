@@ -133,10 +133,10 @@
                 .eq('status', 'aktif'); 
 
             if (error) throw error;
-            const contextData = JSON.stringify(data);
+            const contextData = JSON.stringify(data.slice(0, 20));
             
             // 2. Perbaikan URL (Menambahkan /models/ dan menggunakan v1beta yang lebih stabil untuk Flash)
-            const URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
+            const URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
             
             // Pernyataan tanggung jawab ditambahkan di instruksi sistem
             const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. 
@@ -162,7 +162,13 @@
             
             loadingDiv.remove();
 
-            if (hasilJSON.candidates && hasilJSON.candidates[0].content.parts[0].text) {
+            if (
+    hasilJSON.candidates &&
+    hasilJSON.candidates.length > 0 &&
+    hasilJSON.candidates[0].content &&
+    hasilJSON.candidates[0].content.parts &&
+    hasilJSON.candidates[0].content.parts.length > 0
+) { {
                 const aiText = hasilJSON.candidates[0].content.parts[0].text;
                 appendMessage(aiText, 'ai-msg');
             } else {
