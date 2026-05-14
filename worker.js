@@ -1,48 +1,62 @@
 export default {
   async fetch(request, env) {
-    // 1. Header Izin (CORS) - Harus Lengkap
+
     const corsHeaders = {
       "Access-Control-Allow-Origin": "https://goona.my.id",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "*",
+      "Content-Type": "application/json"
     };
 
-    // 2. Tangani request OPTIONS (Cek pintu dari browser)
+    // HANDLE PREFLIGHT
     if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders });
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders
+      });
     }
 
     try {
-      // 3. Ambil APAPUN yang dikirim dari index.html
-      const bodyDariBrowser = await request.json();
 
-      // 4. Kirim ke OpenRouter
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${env.OPENROUTER_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        // Teruskan data mentah agar format 'messages' kamu tidak rusak
-        body: JSON.stringify(bodyDariBrowser) 
-      });
+      const bodyDariBrowser =
+      await request.json();
 
-      // 5. Ambil jawaban dari OpenRouter
-      const data = await response.json();
+      const response = await fetch(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          method: "POST",
 
-      // 6. Kirim balik ke browser dengan Header CORS
-      return new Response(JSON.stringify(data), {
-        headers: { 
-          ...corsHeaders, 
-          "Content-Type": "application/json" 
+          headers: {
+            "Authorization":
+            `Bearer ${env.OPENROUTER_API_KEY}`,
+
+            "Content-Type":
+            "application/json"
+          },
+
+          body: JSON.stringify(bodyDariBrowser)
         }
+      );
+
+      const data =
+      await response.text();
+
+      return new Response(data, {
+        status: response.status,
+        headers: corsHeaders
       });
 
     } catch (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
-        status: 500,
-        headers: corsHeaders
-      });
+
+      return new Response(
+        JSON.stringify({
+          error: error.message
+        }),
+        {
+          status: 500,
+          headers: corsHeaders
+        }
+      );
     }
   }
 };
