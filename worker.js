@@ -3,8 +3,8 @@ export default {
     // 1. Header Izin (CORS) - Harus Lengkap
     const corsHeaders = {
       "Access-Control-Allow-Origin": "https://goona.my.id",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "*",
     };
 
     // 2. Tangani request OPTIONS (Cek pintu dari browser)
