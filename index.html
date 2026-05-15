@@ -265,8 +265,7 @@ async function tanyaAI() {
             body: JSON.stringify({
                 model: "z-ai/glm-4.5-air:free",
                 messages: [
-                    { role: "system", content: `Kamu AI Goona Kepri. Bantu jawab berdasarkan data ini: ${contextData}` },
-                    { role: "user", content: prompt }
+                    { role: "user", content: `Data referensi: ${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
                 stream: true
             })
