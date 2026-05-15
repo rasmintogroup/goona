@@ -222,466 +222,147 @@
 </div>
 
 <script type="module">
-
-import { createClient }
-from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
 // ===============================
 // KONFIGURASI
 // ===============================
+const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
 
-
-
-const SUPABASE_URL =
-'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
-
-const SUPABASE_ANON_KEY =
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
-
-// ===============================
-
-const supabase =
-createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ===============================
 // ELEMENT
 // ===============================
-
-const inputField =
-document.getElementById('user-input');
-
-const chatHistory =
-document.getElementById('chat-history');
-
-const chatWindow =
-document.getElementById('chat-window');
-
-const sendBtn =
-document.getElementById('send-btn');
+const inputField = document.getElementById('user-input');
+const chatHistory = document.getElementById('chat-history');
+const chatWindow = document.getElementById('chat-window');
+const sendBtn = document.getElementById('send-btn');
 
 // ===============================
-// TANYA AI (OPTIMIZED WITH CACHE & STREAMING)
+// TANYA AI (OPTIMIZED & FIX 405)
 // ===============================
-
 async function tanyaAI() {
-
-    const prompt =
-    inputField.value.trim();
-
+    const prompt = inputField.value.trim();
     if (!prompt) return;
 
-// ===============================
-// DETEKSI PERLU DATABASE ATAU TIDAK
-// ===============================
-
-const databaseKeywords = [
-
-    "loker",
-    "kerja",
-    "lowongan",
-    "jual",
-    "beli",
-    "motor",
-    "mobil",
-    "rumah",
-    "kos",
-    "kontrakan",
-    "servis",
-    "service",
-    "jasa",
-    "wa",
-    "whatsapp",
-    "nomor",
-    "kontak",
-    "alamat",
-    "lokasi",
-    "cari",
-    "butuh",
-    "info",
-    "barber",
-    "laundry",
-    "makanan",
-    "kuliner",
-    "hotel",
-    "penginapan",
-    "sewa",
-    "konter",
-    "toko"
-];
-
-const shouldUseDatabase =
-databaseKeywords.some(keyword =>
-    prompt.toLowerCase().includes(keyword)
-);
+    // Deteksi Kata Kunci untuk RAG
+    const databaseKeywords = ["loker", "kerja", "lowongan", "jual", "beli", "motor", "mobil", "rumah", "kos", "kontrakan", "servis", "service", "jasa", "wa", "whatsapp", "nomor", "kontak", "alamat", "lokasi", "cari", "butuh", "info", "barber", "laundry", "makanan", "kuliner", "hotel", "penginapan", "sewa", "konter", "toko"];
+    const shouldUseDatabase = databaseKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
     
-    // tampilkan pesan user
     appendMessage(prompt, 'user-msg');
-
     inputField.value = '';
 
-    // ===============================
-    // CACHE 7 HARI
-    // ===============================
-
-    const cacheKey =
-    `goona_cache_${prompt.toLowerCase().replace(/\s/g, '_')}`;
-
-    const cachedData =
-    localStorage.getItem(cacheKey);
-
-    const cacheTime =
-    localStorage.getItem(`${cacheKey}_time`);
-
-    const SEVEN_DAYS =
-    7 * 24 * 60 * 60 * 1000;
-
-    if (
-        cachedData &&
-        cacheTime &&
-        (Date.now() - cacheTime < SEVEN_DAYS)
-    ) {
-
-        console.log("Ambil dari cache");
-
-        appendMessage(
-            cachedData,
-            'ai-msg'
-        );
-
+    // Cache Logic
+    const cacheKey = `goona_cache_${prompt.toLowerCase().replace(/\s/g, '_')}`;
+    const cachedData = localStorage.getItem(cacheKey);
+    const cacheTime = localStorage.getItem(`${cacheKey}_time`);
+    if (cachedData && cacheTime && (Date.now() - cacheTime < 7 * 24 * 60 * 60 * 1000)) {
+        appendMessage(cachedData, 'ai-msg');
         return;
     }
 
-    // ===============================
-    // LOADING ANIMATION
-    // ===============================
-
-    const loadingDiv =
-    document.createElement('div');
-
-    loadingDiv.className =
-    'ai-msg loading-msg';
-
-    loadingDiv.innerHTML = `
-        <div class="typing">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    `;
-
+    // Loading Animation
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'ai-msg loading-msg';
+    loadingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
     chatHistory.appendChild(loadingDiv);
-
-    chatWindow.scrollTo({
-        top: chatWindow.scrollHeight,
-        behavior: 'smooth'
-    });
+    chatWindow.scrollTop = chatWindow.scrollHeight;
 
     try {
-
-// ===============================
-// MODE TANPA DATABASE
-// ===============================
-
-let contextData = "";
-
-if (!shouldUseDatabase) {
-
-    contextData = `
-User hanya sedang ngobrol biasa.
-Jawab dengan santai, singkat, ramah.
-Tidak perlu menyebut database.
-`;
-
-} else {
+        let contextData = "User hanya sedang ngobrol biasa.";
         
-        // ===============================
-        // AMBIL DATA SUPABASE
-        // ===============================
+        if (shouldUseDatabase) {
+            // RAG: Cari data yang spesifik saja dari Supabase
+            // Kita gunakan 'ilike' agar pencarian lebih fleksibel
+            const { data, error } = await supabase
+                .from('konten_goona')
+                .select('*')
+                .eq('status', 'aktif')
+                .or(`judul.ilike.%${prompt}%,deskripsi.ilike.%${prompt}%,kategori.ilike.%${prompt}%`)
+                .limit(5); // Ambil 5 yang paling relevan saja (Hemat Token!)
 
-        const { data, error } =
-        await supabase
-            .from('konten_goona')
-            .select('*')
-            .eq('status', 'aktif')
-            .limit(20);
-
-        if (error) {
-
-            console.error(
-                "Supabase Error:",
-                error
-            );
-
-            throw error;
+            if (!error && data.length > 0) {
+                contextData = data.map(item => `Judul: ${item.judul}\nDeskripsi: ${item.deskripsi}\nWA: ${item.whatsapp}\nLokasi: ${item.lokasi}`).join('\n---\n');
+            } else {
+                contextData = "Data tidak ditemukan di database.";
+            }
         }
 
-        // ===============================
-        // FORMAT DATA
-        // ===============================
+        const systemInstruction = `Kamu AI Goona, asisten lokal Kepri. Gunakan logat santai Kepri (Cik/Bang). 
+        REFERENSI DATA: ${contextData}. 
+        Jika data ada, berikan detailnya. Jika tidak ada, arahkan klik 'Pasang Info'. Jangan mengarang!`;
 
-        contextData =
-        data.map(item => {
+        // FIX ERROR 405: 
+        // Jika file kamu ada di folder /functions/tanya.js, maka ganti "/worker" jadi "/tanya"
+        // Jika kamu tetap ingin pakai "/worker", pastikan di wrangler.jsonc sudah ada "main": "worker.js"
+        const response = await fetch("/worker", { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: "z-ai/glm-4.5-air:free",
+                stream: true,
+                messages: [
+                    { role: "system", content: systemInstruction },
+                    { role: "user", content: prompt }
+                ],
+                temperature: 0.5
+            })
+        });
 
-            return `
-Judul: ${item.judul || ''}
-Kategori: ${item.kategori || ''}
-Deskripsi: ${item.deskripsi || ''}
-WhatsApp: ${item.whatsapp || ''}
-Lokasi: ${item.lokasi || ''}
-`;
-        }).join('\n');
-}
-
-        // ===============================
-        // SYSTEM PROMPT
-        // ===============================
-
-        const systemInstruction = `
-Kamu adalah AI Goona, asisten lokal Kepulauan Riau (Kepri).
-
-DATA REFERENSI:
-${contextData}
-
-ATURAN:
-1. Sapa pengguna dengan "Cik" atau "Bang".
-2. Gunakan gaya santai ala warga Kepri.
-3. Jika data tersedia, berikan detail lengkap.
-4. Jika ada nomor WA, tampilkan.
-5. Jika data tidak ada, arahkan pengguna klik tombol "Pasang Info".
-6. Jangan mengarang informasi palsu.
-7. Cari data yang PALING MIRIP dengan pertanyaan pengguna.
-8. Jika data ditemukan, jangan bilang data tidak tersedia.
-9. Jawaban langsung ke inti.
-10. Jawaban singkat, jelas, dan ramah.
-`;
-
-        // ===============================
-        // REQUEST AI STREAMING
-        // ===============================
-
-        // Ganti yang tadinya URL panjang rasmintogroup.workers.dev menjadi ini:
-const response = await fetch("/worker", { 
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        model: "z-ai/glm-4.5-air:free",
-        stream: true,
-        messages: [
-            { role: "system", content: systemInstruction },
-            { role: "user", content: prompt }
-        ], // <--- WAJIB ADA KOMA DI SINI
-        temperature: 0.5,
-        max_tokens: 100
-    })
-});
-
-        // ===============================
-        // VALIDASI RESPONSE
-        // ===============================
-
-        if (!response.ok) {
-
-            const errorText =
-            await response.text();
-
-            console.error(
-                "HTTP Error:",
-                response.status
-            );
-
-            console.error(errorText);
-
-            throw new Error(
-                `Server AI error`
-            );
-        }
-
-        // ===============================
-        // HAPUS LOADING
-        // ===============================
+        if (!response.ok) throw new Error('Server AI error');
 
         loadingDiv.remove();
-
-        // ===============================
-        // BUBBLE CHAT AI
-        // ===============================
-
-        const aiBubble =
-        appendMessage(
-            "",
-            'ai-msg'
-        );
-
+        const aiBubble = appendMessage("", 'ai-msg');
         let fullText = "";
 
-        // ===============================
-        // STREAM READER
-        // ===============================
-
-        const reader =
-        response.body.getReader();
-
-        const decoder =
-        new TextDecoder();
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
 
         while (true) {
-
-            const {
-                done,
-                value
-            } = await reader.read();
-
+            const { done, value } = await reader.read();
             if (done) break;
-
-            const chunk =
-            decoder.decode(value);
-
-            const lines =
-            chunk.split("\n");
+            const chunk = decoder.decode(value);
+            const lines = chunk.split("\n");
 
             for (const line of lines) {
-
-                if (
-                    line.startsWith("data: ")
-                ) {
-
-                    const dataStr =
-                    line.slice(6).trim();
-
-                    if (
-                        dataStr === "[DONE]"
-                    ) {
-                        break;
-                    }
-
+                if (line.startsWith("data: ")) {
+                    const dataStr = line.slice(6).trim();
+                    if (dataStr === "[DONE]") break;
                     try {
-
-                        const json =
-                        JSON.parse(dataStr);
-
-                        const content =
-                        json.choices?.[0]
-                        ?.delta?.content || "";
-
+                        const json = JSON.parse(dataStr);
+                        const content = json.choices?.[0]?.delta?.content || "";
                         fullText += content;
-
-                        aiBubble.innerText =
-                        fullText;
-
-                        chatWindow.scrollTop =
-                        chatWindow.scrollHeight;
-
-                    } catch (e) {
-
-                        // ignore chunk error
-                    }
+                        aiBubble.innerText = fullText;
+                        chatWindow.scrollTop = chatWindow.scrollHeight;
+                    } catch (e) {}
                 }
             }
         }
 
-        // ===============================
-        // SIMPAN CACHE
-        // ===============================
-
-        if (
-            fullText.trim().length > 0
-        ) {
-
-            localStorage.setItem(
-                cacheKey,
-                fullText
-            );
-
-            localStorage.setItem(
-                `${cacheKey}_time`,
-                Date.now().toString()
-            );
+        if (fullText.trim()) {
+            localStorage.setItem(cacheKey, fullText);
+            localStorage.setItem(`${cacheKey}_time`, Date.now().toString());
         }
 
     } catch (err) {
-
-        console.error(
-            "Error Detail:",
-            err
-        );
-
-        if (loadingDiv) {
-
-            loadingDiv.remove();
-        }
-
-        appendMessage(
-            "Waduh Cik, server lagi gangguan 😥",
-            'ai-msg'
-        );
+        if (loadingDiv) loadingDiv.remove();
+        appendMessage("Waduh Cik, server lagi gangguan 😥", 'ai-msg');
+        console.error(err);
     }
 }
 
-// ===============================
-// TAMPILKAN CHAT
-// ===============================
-
-function appendMessage(
-    text,
-    className
-) {
-
-    const div =
-    document.createElement('div');
-
-    div.className =
-    className;
-
-    div.innerText =
-    text;
-
+function appendMessage(text, className) {
+    const div = document.createElement('div');
+    div.className = className;
+    div.innerText = text;
     chatHistory.appendChild(div);
-
-    chatWindow.scrollTo({
-        top: chatWindow.scrollHeight,
-        behavior: 'smooth'
-    });
-
+    chatWindow.scrollTop = chatWindow.scrollHeight;
     return div;
 }
 
-// ===============================
-// BUTTON
-// ===============================
-
-sendBtn.addEventListener(
-    'click',
-    (e) => {
-
-        e.preventDefault();
-
-        tanyaAI();
-    }
-);
-
-// ===============================
-// ENTER
-// ===============================
-
-inputField.addEventListener(
-    'keydown',
-    (e) => {
-
-        if (e.key === 'Enter') {
-
-            e.preventDefault();
-
-            tanyaAI();
-        }
-    }
-);
-
+sendBtn.addEventListener('click', (e) => { e.preventDefault(); tanyaAI(); });
+inputField.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); tanyaAI(); } });
 window.tanyaAI = tanyaAI;
-
 </script>
-
-</body>
-</html>
