@@ -1,4 +1,4 @@
-export async function Post onRequest(context) {
+export async function onRequestPost(context) {
   const { request, env } = context;
 
   const corsHeaders = {
