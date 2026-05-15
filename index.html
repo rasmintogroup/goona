@@ -257,7 +257,7 @@ async function tanyaAI() {
         let contextData = data ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
 
         // PANGGIL BACKEND (Tembak langsung ke folder functions)
-        const response = await fetch("/", { 
+        const response = await fetch("/tanya", { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
