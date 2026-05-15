@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "goona",
+  "main": "functions/worker.js", // TAMBAHKAN BARIS INI (sesuaikan folder/nama filenya)
   "compatibility_date": "2026-05-15",
   "observability": {
     "enabled": true
