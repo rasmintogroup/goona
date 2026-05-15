@@ -237,9 +237,11 @@ async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
 
+    // 1. Tampilkan pesan User
     appendMessage(prompt, 'user-msg');
     inputField.value = '';
 
+    // 2. Loading State
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-msg loading-msg';
     loadingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
@@ -247,34 +249,34 @@ async function tanyaAI() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
     try {
-        // RAG Sederhana: Ambil data dari Supabase
-        const { data, error } = await supabase
+        // 3. Ambil data Supabase (RAG)
+        const { data } = await supabase
             .from('konten_goona')
             .select('*')
             .eq('status', 'aktif')
-            .limit(10);
+            .limit(5);
 
         let contextData = data ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
 
-        // PANGGIL BACKEND (Tembak langsung ke folder functions)
+        // 4. Tembak ke Worker (/tanya)
         const response = await fetch("/tanya", { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 model: "z-ai/glm-4.5-air:free",
                 messages: [
-                    { role: "system", content: `Kamu AI Goona Kepri. Data: ${contextData}` },
+                    { role: "system", content: `Kamu AI Goona Kepri. Bantu jawab berdasarkan data ini: ${contextData}` },
                     { role: "user", content: prompt }
-                ]
+                ],
+                stream: true
             })
         });
 
-        if (!response.ok) throw new Error('Gagal konek ke AI');
+        if (!response.ok) throw new Error('Koneksi Gagal');
 
         loadingDiv.remove();
         const aiBubble = appendMessage("", 'ai-msg');
         
-        // Membaca stream
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let fullText = "";
@@ -283,23 +285,20 @@ async function tanyaAI() {
             const { done, value } = await reader.read();
             if (done) break;
             
-            const chunk = decoder.decode(value);
-            // Pisahkan baris karena OpenRouter mengirimkan per baris dengan awalan 'data: '
+            const chunk = decoder.decode(value, { stream: true });
             const lines = chunk.split('\n');
             
             for (const line of lines) {
-                if (line.startsWith('data: ')) {
-                    const dataStr = line.slice(6).trim();
-                    if (dataStr === '[DONE]') break;
-                    
-                    try {
-                        const json = JSON.parse(dataStr);
-                        const content = json.choices[0]?.delta?.content || "";
-                        fullText += content;
-                        aiBubble.innerText = fullText; // Tampilkan teks bersih ke layar
-                    } catch (e) {
-                        // Abaikan jika ada baris yang bukan JSON sempurna
-                    }
+                const cleanLine = line.replace(/^data: /, '').trim();
+                if (!cleanLine || cleanLine === '[DONE]') continue;
+                
+                try {
+                    const json = JSON.parse(cleanLine);
+                    const content = json.choices[0]?.delta?.content || "";
+                    fullText += content;
+                    aiBubble.innerText = fullText;
+                } catch (e) {
+                    // Abaikan chunk JSON yang belum lengkap
                 }
             }
             chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -308,7 +307,7 @@ async function tanyaAI() {
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
         appendMessage("Waduh Cik, server lagi gangguan 😥", 'ai-msg');
-        console.error(err);
+        console.error("Detail Error:", err);
     }
 }
 
@@ -321,6 +320,7 @@ function appendMessage(text, className) {
     return div;
 }
 
-sendBtn.addEventListener('click', tanyaAI);
-inputField.addEventListener('keydown', (e) => { if (e.key === 'Enter') tanyaAI(); });
+// Pastikan listener terpasang setelah semua siap
+sendBtn.onclick = tanyaAI;
+inputField.onkeydown = (e) => { if (e.key === 'Enter') tanyaAI(); };
 </script>
