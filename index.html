@@ -224,79 +224,61 @@
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-// ===============================
-// KONFIGURASI
-// ===============================
+// --- KONFIGURASI ---
 const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ===============================
-// ELEMENT
-// ===============================
+// --- ELEMENT ---
 const inputField = document.getElementById('user-input');
 const chatHistory = document.getElementById('chat-history');
 const chatWindow = document.getElementById('chat-window');
 const sendBtn = document.getElementById('send-btn');
 
-// ===============================
-// TANYA AI (OPTIMIZED & FIX 405)
-// ===============================
+// --- TANYA AI ---
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
 
-    // Deteksi Kata Kunci untuk RAG
     const databaseKeywords = ["loker", "kerja", "lowongan", "jual", "beli", "motor", "mobil", "rumah", "kos", "kontrakan", "servis", "service", "jasa", "wa", "whatsapp", "nomor", "kontak", "alamat", "lokasi", "cari", "butuh", "info", "barber", "laundry", "makanan", "kuliner", "hotel", "penginapan", "sewa", "konter", "toko"];
     const shouldUseDatabase = databaseKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
     
     appendMessage(prompt, 'user-msg');
     inputField.value = '';
 
-    // Cache Logic
     const cacheKey = `goona_cache_${prompt.toLowerCase().replace(/\s/g, '_')}`;
     const cachedData = localStorage.getItem(cacheKey);
     const cacheTime = localStorage.getItem(`${cacheKey}_time`);
-    if (cachedData && cacheTime && (Date.now() - cacheTime < 7 * 24 * 60 * 60 * 1000)) {
+
+    if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime) < 7 * 24 * 60 * 60 * 1000)) {
         appendMessage(cachedData, 'ai-msg');
         return;
     }
 
-    // Loading Animation
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-msg loading-msg';
     loadingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
     chatHistory.appendChild(loadingDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+    chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
 
     try {
         let contextData = "User hanya sedang ngobrol biasa.";
-        
+
         if (shouldUseDatabase) {
-            // RAG: Cari data yang spesifik saja dari Supabase
-            // Kita gunakan 'ilike' agar pencarian lebih fleksibel
             const { data, error } = await supabase
                 .from('konten_goona')
                 .select('*')
                 .eq('status', 'aktif')
-                .or(`judul.ilike.%${prompt}%,deskripsi.ilike.%${prompt}%,kategori.ilike.%${prompt}%`)
-                .limit(5); // Ambil 5 yang paling relevan saja (Hemat Token!)
+                .limit(20);
 
-            if (!error && data.length > 0) {
-                contextData = data.map(item => `Judul: ${item.judul}\nDeskripsi: ${item.deskripsi}\nWA: ${item.whatsapp}\nLokasi: ${item.lokasi}`).join('\n---\n');
-            } else {
-                contextData = "Data tidak ditemukan di database.";
-            }
+            if (error) throw error;
+
+            contextData = data.map(item => `Judul: ${item.judul || ''}\nKategori: ${item.kategori || ''}\nDeskripsi: ${item.deskripsi || ''}\nWhatsApp: ${item.whatsapp || ''}\nLokasi: ${item.lokasi || ''}`).join('\n\n');
         }
 
-        const systemInstruction = `Kamu AI Goona, asisten lokal Kepri. Gunakan logat santai Kepri (Cik/Bang). 
-        REFERENSI DATA: ${contextData}. 
-        Jika data ada, berikan detailnya. Jika tidak ada, arahkan klik 'Pasang Info'. Jangan mengarang!`;
+        const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. Sapa dengan Cik/Bang. Referensi data: ${contextData}. Jika data tidak ada, arahkan klik Pasang Info.`;
 
-        // FIX ERROR 405: 
-        // Jika file kamu ada di folder /functions/tanya.js, maka ganti "/worker" jadi "/tanya"
-        // Jika kamu tetap ingin pakai "/worker", pastikan di wrangler.jsonc sudah ada "main": "worker.js"
         const response = await fetch("/worker", { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -307,11 +289,12 @@ async function tanyaAI() {
                     { role: "system", content: systemInstruction },
                     { role: "user", content: prompt }
                 ],
-                temperature: 0.5
+                temperature: 0.5,
+                max_tokens: 500
             })
         });
 
-        if (!response.ok) throw new Error('Server AI error');
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
 
         loadingDiv.remove();
         const aiBubble = appendMessage("", 'ai-msg');
@@ -341,15 +324,15 @@ async function tanyaAI() {
             }
         }
 
-        if (fullText.trim()) {
+        if (fullText.trim().length > 0) {
             localStorage.setItem(cacheKey, fullText);
             localStorage.setItem(`${cacheKey}_time`, Date.now().toString());
         }
 
     } catch (err) {
+        console.error("Error:", err);
         if (loadingDiv) loadingDiv.remove();
         appendMessage("Waduh Cik, server lagi gangguan 😥", 'ai-msg');
-        console.error(err);
     }
 }
 
@@ -358,7 +341,7 @@ function appendMessage(text, className) {
     div.className = className;
     div.innerText = text;
     chatHistory.appendChild(div);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+    chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
     return div;
 }
 
