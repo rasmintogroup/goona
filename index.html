@@ -237,11 +237,9 @@ async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
 
-    // 1. Tampilkan pesan User
     appendMessage(prompt, 'user-msg');
     inputField.value = '';
 
-    // 2. Loading State
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-msg loading-msg';
     loadingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
@@ -249,7 +247,6 @@ async function tanyaAI() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
     try {
-        // 3. Ambil data Supabase (RAG)
         const { data } = await supabase
             .from('konten_goona')
             .select('*')
@@ -258,12 +255,11 @@ async function tanyaAI() {
 
         let contextData = data ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
 
-        // 4. Tembak ke Worker (/tanya)
         const response = await fetch("/tanya", { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: "nvidia/nemotron-3-super:free",
+                model: "nvidia/nemotron-3-super:free", // KOMA SUDAH DITAMBAHKAN
                 messages: [
                     { role: "user", content: `Data referensi: ${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
@@ -296,12 +292,10 @@ async function tanyaAI() {
                     const content = json.choices[0]?.delta?.content || "";
                     fullText += content;
                     aiBubble.innerText = fullText;
-                } catch (e) {
-                    // Abaikan chunk JSON yang belum lengkap
-                }
+                } catch (e) {}
             }
-            chatWindow.scrollTop = chatWindow.scrollHeight;
         }
+        chatWindow.scrollTop = chatWindow.scrollHeight;
 
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
@@ -319,7 +313,21 @@ function appendMessage(text, className) {
     return div;
 }
 
-// Pastikan listener terpasang setelah semua siap
-sendBtn.onclick = tanyaAI;
-inputField.onkeydown = (e) => { if (e.key === 'Enter') tanyaAI(); };
+// PENGAMAN TOMBOL: Pastikan terpasang dengan kuat
+window.addEventListener('DOMContentLoaded', () => {
+    if (sendBtn) {
+        sendBtn.onclick = (e) => {
+            e.preventDefault();
+            tanyaAI();
+        };
+    }
+    if (inputField) {
+        inputField.onkeydown = (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                tanyaAI();
+            }
+        };
+    }
+});
 </script>
