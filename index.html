@@ -263,7 +263,7 @@ async function tanyaAI() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: "nvidia/nemotron-3-super:free"
+                model: "nvidia/nemotron-3-super:free",
                 messages: [
                     { role: "user", content: `Data referensi: ${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
