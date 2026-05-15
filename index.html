@@ -282,10 +282,26 @@ async function tanyaAI() {
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
+            
             const chunk = decoder.decode(value);
-            // Penanganan sederhana jika bukan streaming OpenAI format
-            fullText += chunk; 
-            aiBubble.innerText = fullText;
+            // Pisahkan baris karena OpenRouter mengirimkan per baris dengan awalan 'data: '
+            const lines = chunk.split('\n');
+            
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    const dataStr = line.slice(6).trim();
+                    if (dataStr === '[DONE]') break;
+                    
+                    try {
+                        const json = JSON.parse(dataStr);
+                        const content = json.choices[0]?.delta?.content || "";
+                        fullText += content;
+                        aiBubble.innerText = fullText; // Tampilkan teks bersih ke layar
+                    } catch (e) {
+                        // Abaikan jika ada baris yang bukan JSON sempurna
+                    }
+                }
+            }
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
