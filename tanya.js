@@ -2,7 +2,6 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    // JALUR KHUSUS CHAT (POST ke /tanya)
     if (url.pathname === "/tanya" && request.method === "POST") {
       try {
         const body = await request.json();
@@ -10,7 +9,9 @@ export default {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${env.OPENROUTER_API_KEY}`,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://goona.my.id", // Identitas Web
+            "X-Title": "Goona AI Kepri"           // Nama Aplikasi
           },
           body: JSON.stringify(body)
         });
@@ -26,7 +27,6 @@ export default {
       }
     }
 
-    // JALUR FILE WEB (Tampilan)
     return env.ASSETS.fetch(request);
   }
 };
