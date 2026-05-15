@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "goona",
+"main": "tanya.js",
   "compatibility_date": "2026-05-15",
   "observability": {
     "enabled": true
