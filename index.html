@@ -224,115 +224,74 @@
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-// --- KONFIGURASI ---
 const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
-
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// --- ELEMENT ---
 const inputField = document.getElementById('user-input');
 const chatHistory = document.getElementById('chat-history');
 const chatWindow = document.getElementById('chat-window');
 const sendBtn = document.getElementById('send-btn');
 
-// --- TANYA AI ---
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
 
-    const databaseKeywords = ["loker", "kerja", "lowongan", "jual", "beli", "motor", "mobil", "rumah", "kos", "kontrakan", "servis", "service", "jasa", "wa", "whatsapp", "nomor", "kontak", "alamat", "lokasi", "cari", "butuh", "info", "barber", "laundry", "makanan", "kuliner", "hotel", "penginapan", "sewa", "konter", "toko"];
-    const shouldUseDatabase = databaseKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
-    
     appendMessage(prompt, 'user-msg');
     inputField.value = '';
-
-    const cacheKey = `goona_cache_${prompt.toLowerCase().replace(/\s/g, '_')}`;
-    const cachedData = localStorage.getItem(cacheKey);
-    const cacheTime = localStorage.getItem(`${cacheKey}_time`);
-
-    if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime) < 7 * 24 * 60 * 60 * 1000)) {
-        appendMessage(cachedData, 'ai-msg');
-        return;
-    }
 
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-msg loading-msg';
     loadingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
     chatHistory.appendChild(loadingDiv);
-    chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
+    chatWindow.scrollTop = chatWindow.scrollHeight;
 
     try {
-        let contextData = "User hanya sedang ngobrol biasa.";
+        // RAG Sederhana: Ambil data dari Supabase
+        const { data, error } = await supabase
+            .from('konten_goona')
+            .select('*')
+            .eq('status', 'aktif')
+            .limit(10);
 
-        if (shouldUseDatabase) {
-            const { data, error } = await supabase
-                .from('konten_goona')
-                .select('*')
-                .eq('status', 'aktif')
-                .limit(20);
+        let contextData = data ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
 
-            if (error) throw error;
-
-            contextData = data.map(item => `Judul: ${item.judul || ''}\nKategori: ${item.kategori || ''}\nDeskripsi: ${item.deskripsi || ''}\nWhatsApp: ${item.whatsapp || ''}\nLokasi: ${item.lokasi || ''}`).join('\n\n');
-        }
-
-        const systemInstruction = `Kamu adalah AI Goona, asisten lokal Kepri. Sapa dengan Cik/Bang. Referensi data: ${contextData}. Jika data tidak ada, arahkan klik Pasang Info.`;
-
+        // PANGGIL BACKEND (Tembak langsung ke folder functions)
         const response = await fetch("/worker", { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: "z-ai/glm-4.5-air:free",
-                stream: true,
                 messages: [
-                    { role: "system", content: systemInstruction },
+                    { role: "system", content: `Kamu AI Goona Kepri. Data: ${contextData}` },
                     { role: "user", content: prompt }
-                ],
-                temperature: 0.5,
-                max_tokens: 500
+                ]
             })
         });
 
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+        if (!response.ok) throw new Error('Gagal konek ke AI');
 
         loadingDiv.remove();
         const aiBubble = appendMessage("", 'ai-msg');
-        let fullText = "";
-
+        
+        // Membaca stream
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
+        let fullText = "";
 
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
             const chunk = decoder.decode(value);
-            const lines = chunk.split("\n");
-
-            for (const line of lines) {
-                if (line.startsWith("data: ")) {
-                    const dataStr = line.slice(6).trim();
-                    if (dataStr === "[DONE]") break;
-                    try {
-                        const json = JSON.parse(dataStr);
-                        const content = json.choices?.[0]?.delta?.content || "";
-                        fullText += content;
-                        aiBubble.innerText = fullText;
-                        chatWindow.scrollTop = chatWindow.scrollHeight;
-                    } catch (e) {}
-                }
-            }
-        }
-
-        if (fullText.trim().length > 0) {
-            localStorage.setItem(cacheKey, fullText);
-            localStorage.setItem(`${cacheKey}_time`, Date.now().toString());
+            // Penanganan sederhana jika bukan streaming OpenAI format
+            fullText += chunk; 
+            aiBubble.innerText = fullText;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
     } catch (err) {
-        console.error("Error:", err);
         if (loadingDiv) loadingDiv.remove();
         appendMessage("Waduh Cik, server lagi gangguan 😥", 'ai-msg');
+        console.error(err);
     }
 }
 
@@ -341,11 +300,10 @@ function appendMessage(text, className) {
     div.className = className;
     div.innerText = text;
     chatHistory.appendChild(div);
-    chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
+    chatWindow.scrollTop = chatWindow.scrollHeight;
     return div;
 }
 
-sendBtn.addEventListener('click', (e) => { e.preventDefault(); tanyaAI(); });
-inputField.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); tanyaAI(); } });
-window.tanyaAI = tanyaAI;
+sendBtn.addEventListener('click', tanyaAI);
+inputField.addEventListener('keydown', (e) => { if (e.key === 'Enter') tanyaAI(); });
 </script>
