@@ -1,15 +1,19 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "goona",
-"main": "tanya.js",
+  "main": "tanya.js",
   "compatibility_date": "2026-05-15",
-  "observability": {
-    "enabled": true
-  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "assets": {
     "directory": "."
   },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ]
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  }
 }
