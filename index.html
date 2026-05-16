@@ -16,6 +16,7 @@
             --light-brown: #D2B48C;
             --bg-brown: #FDF5E6;
             --user-bubble: #6D4C41;
+            --wa-green: #25D366;
         }
 
         * {
@@ -35,6 +36,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            position: relative;
         }
 
         header {
@@ -51,6 +53,12 @@
             font-weight: bold;
             color: var(--primary-brown);
             font-size: 18px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         #chat-window {
@@ -135,8 +143,125 @@
             font-weight: bold;
         }
 
-        /* LOADING ANIMATION */
+        /* MENU UTAMA GARIS 3 (HAMBURGER) */
+        .menu-btn {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 5px;
+        }
 
+        .menu-btn span {
+            width: 20px;
+            height: 3px;
+            background: var(--primary-brown);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* SIDEBAR DRAWER (MENU SAMPING) */
+        .sidebar {
+            position: absolute;
+            top: 0;
+            right: -260px;
+            width: 260px;
+            height: 100%;
+            background: #fff;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.15);
+            transition: right 0.3s ease;
+            z-index: 99;
+            padding: 60px 20px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar h3 {
+            font-size: 14px;
+            color: var(--primary-brown);
+            margin: 0 0 5px 0;
+            border-bottom: 1px solid var(--light-brown);
+            padding-bottom: 5px;
+        }
+
+        .sidebar select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--light-brown);
+            background: #FFFAF0;
+            font-size: 13px;
+            color: #333;
+            outline: none;
+        }
+
+        .sidebar p {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+            margin: 0;
+            text-align: justify;
+        }
+
+        /* TAMPILAN KARTU JASA / LOKER YANG APIK */
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .jasa-card {
+            background: #fff;
+            border: 1px solid var(--light-brown);
+            border-left: 5px solid var(--primary-brown);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 15px;
+            color: var(--primary-brown);
+            margin-bottom: 6px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            white-space: pre-line;
+        }
+
+        .btn-wa {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: var(--wa-green);
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .btn-wa:hover {
+            background: #20ba56;
+        }
+
+        /* LOADING ANIMATION */
         .loading-msg {
             width: 70px;
             padding: 14px 18px;
@@ -169,7 +294,6 @@
                 transform: scale(0.7);
                 opacity: 0.5;
             }
-
             40% {
                 transform: scale(1);
                 opacity: 1;
@@ -184,15 +308,37 @@
 
     <header>
         <div class="logo">GOONA AI</div>
-        <a href="tambah-info.html" class="btn-post">+ Pasang Info</a>
+        <div class="header-right">
+            <a href="tambah-info.html" class="btn-post" id="ui-btn-post">+ Pasang Info</a>
+            <!-- Ikon Garis 3 Menu -->
+            <div class="menu-btn" id="menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
     </header>
+
+    <!-- MENU SAMPING (SIDEBAR DRAWER) -->
+    <div class="sidebar" id="sidebar">
+        <h3 id="ui-title-lang">Pilih Bahasa / Language</h3>
+        <select id="lang-select">
+            <option value="id">Bahasa Indonesia</option>
+            <option value="en">English</option>
+            <option value="zh">简体中文 (Mandarin)</option>
+        </select>
+
+        <h3 id="ui-title-rules">Aturan & Legalitas</h3>
+        <p id="ui-text-rules">
+            Setiap informasi yang disampaikan di Goona AI wajib berupa informasi yang benar, jujur, akurat, dan dapat dipertanggungjawabkan sepenuhnya oleh pemasang informasi demi kenyamanan dan keamanan hukum bersama.
+        </p>
+    </div>
 
     <main id="chat-window">
 
-        <div id="chat-history"
-             style="display:flex; flex-direction:column; gap:15px;">
+        <div id="chat-history" style="display:flex; flex-direction:column; gap:15px; width: 100%;">
 
-            <div class="ai-msg">
+            <div class="ai-msg" id="ui-welcome-msg">
                 Halo Cik/Bang! Saya AI Goona 😊
                 Mau cari loker, jasa, atau info apa di Kepri hari ini?
             </div>
@@ -232,6 +378,79 @@ const inputField = document.getElementById('user-input');
 const chatHistory = document.getElementById('chat-history');
 const chatWindow = document.getElementById('chat-window');
 const sendBtn = document.getElementById('send-btn');
+const menuBtn = document.getElementById('menu-btn');
+const sidebar = document.getElementById('sidebar');
+const langSelect = document.getElementById('lang-select');
+
+// Kamus Teks untuk Komponen Interface Statis (3 Bahasa)
+const dictionary = {
+    id: {
+        welcome: "Halo Cik/Bang! Saya AI Goona 😊 Mau cari loker, jasa, atau info apa di Kepri hari ini?",
+        placeholder: "Tanya di sini...",
+        btnTanya: "Tanya",
+        pasangInfo: "+ Pasang Info",
+        titleLang: "Pilih Bahasa",
+        titleRules: "Aturan & Legalitas",
+        textRules: "Setiap informasi yang disampaikan di Goona AI wajib berupa informasi yang benar, jujur, akurat, dan dapat dipertanggungjawabkan sepenuhnya oleh pemasang informasi demi kenyamanan dan keamanan hukum bersama.",
+        failSafeOpen: "Halo! Ini dia informasi teraktif yang berhasil kami temukan langsung dari sistem khusus untuk Anda:",
+        failSafeClose: "Ada yang perlu disesuaikan lagi? Ketik lokasinya atau nama jasanya secara spesifik ya agar saya saring kembali!",
+        notFound: "Maaf Cik/Bang, informasi yang Anda cari saat ini belum terdaftar atau sedang tidak aktif.",
+        waTemplate: "Halo, saya melihat info Anda di Goona AI. Boleh tahu detail lebih lanjut?"
+    },
+    en: {
+        welcome: "Hello! I am Goona AI 😊 What vacancies, services, or info are you looking for in Riau Islands today?",
+        placeholder: "Ask here...",
+        btnTanya: "Ask",
+        pasangInfo: "+ Post Info",
+        titleLang: "Select Language",
+        titleRules: "Terms & Legality",
+        textRules: "Any information provided on Goona AI must be true, honest, accurate, and fully accountable by the poster for mutual comfort and legal safety.",
+        failSafeOpen: "Hello! Here is the most active information we found directly from our system just for you:",
+        failSafeClose: "Is there anything else you'd like to adjust? Type the specific location or service name so I can filter it again!",
+        notFound: "Sorry, the information you are looking for is currently unregistered or inactive.",
+        waTemplate: "Hello, I saw your post on Goona AI. Could I get more details about it?"
+    },
+    zh: {
+        welcome: "您好！我是 Goona AI 😊 今天想在廖内群岛寻找什么招聘、服务或信息？",
+        placeholder: "在这里提问...",
+        btnTanya: "提问",
+        pasangInfo: "+ 发布信息",
+        titleLang: "选择语言",
+        titleRules: "规则与法律条款",
+        textRules: "在 Goona AI 上发布的任何信息必须真实、诚实、准确，并由发布者承担全部法律责任，以确保共同的舒适与安全。",
+        failSafeOpen: "您好！以下是我们直接从系统中为您找到的最活跃的信息：",
+        failSafeClose: "还有什么需要调整的吗？请输入具体的位置或服务名称，以便我再次为您筛选！",
+        notFound: "抱歉，您所寻找的信息目前未注册或处于未激活状态。",
+        waTemplate: "您好，我在 Goona AI 上看到了您的信息。可以了解更多详情吗？"
+    }
+};
+
+let currentLang = 'id';
+
+// Handler Toggle Buka-Tutup Sidebar Menu Garis 3
+menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sidebar.classList.toggle('open');
+});
+
+document.addEventListener('click', (e) => {
+    if (!sidebar.contains(e.target) && e.target !== menuBtn) {
+        sidebar.classList.remove('open');
+    }
+});
+
+// Event ganti bahasa pada UI Statis
+langSelect.addEventListener('change', (e) => {
+    currentLang = e.target.value;
+    document.getElementById('ui-welcome-msg').innerText = dictionary[currentLang].welcome;
+    inputField.placeholder = dictionary[currentLang].placeholder;
+    sendBtn.innerText = dictionary[currentLang].btnTanya;
+    document.getElementById('ui-btn-post').innerText = dictionary[currentLang].pasangInfo;
+    document.getElementById('ui-title-lang').innerText = dictionary[currentLang].titleLang;
+    document.getElementById('ui-title-rules').innerText = dictionary[currentLang].titleRules;
+    document.getElementById('ui-text-rules').innerText = dictionary[currentLang].textRules;
+    sidebar.classList.remove('open');
+});
 
 async function tanyaAI() {
     const prompt = inputField.value.trim();
@@ -240,69 +459,151 @@ async function tanyaAI() {
     appendMessage(prompt, 'user-msg');
     inputField.value = '';
 
+    // Buat animasi loading (titik tiga membal)
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-msg loading-msg';
     loadingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
     chatHistory.appendChild(loadingDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
+    let searchData = [];
+    let isProfileQuery = false;
+    let applicationProfileText = "";
+
     try {
-        const { data } = await supabase.from('konten_goona').select('judul, deskripsi').eq('status', 'aktif').limit(5);
-        let contextData = (data && data.length > 0) ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
-
-        const response = await fetch("/tanya", { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: "google/gemma-4-31b:free",
-                messages: [
-                    { role: "system", content: "Kamu adalah AI Goona. Jawab dengan ramah dan lengkap." },
-                    { role: "user", content: `Konteks:\n${contextData}\n\nPertanyaan: ${prompt}` }
-                ],
-                stream: true 
-            })
-        });
-
-        if (!response.ok) throw new Error('Koneksi Gagal');
-
-        loadingDiv.remove();
-        const aiBubble = appendMessage("", 'ai-msg');
+        const lowerPrompt = prompt.toLowerCase();
         
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let chunkBuffer = "";
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            
-            // Menggabungkan potongan data agar size KB bertambah
-            chunkBuffer += decoder.decode(value, { stream: true });
-            const lines = chunkBuffer.split('\n');
-            chunkBuffer = lines.pop(); 
-
-            for (const line of lines) {
-                const cleanLine = line.replace(/^data: /, '').trim();
-                if (!cleanLine || cleanLine === '[DONE]') continue;
-                
-                try {
-                    const json = JSON.parse(cleanLine);
-                    const content = json.choices[0]?.delta?.content || "";
-                    if (content) {
-                        aiBubble.innerText += content;
-                        chatWindow.scrollTop = chatWindow.scrollHeight;
-                    }
-                } catch (e) {
-                    // Abaikan jika JSON belum lengkap
-                }
+        // 1. CEK FILTER JALUR: APAKAH PERTANYAAN TENTANG PROFIL GOONA?
+        if (lowerPrompt.includes('goona') || lowerPrompt.includes('siapa kamu') || lowerPrompt.includes('aplikasi apa') || lowerPrompt.includes('what is goona')) {
+            isProfileQuery = true;
+            // Menarik data penjelasan empati dari tabel terpisah: info_aplikasi
+            const { data, error } = await supabase.from('info_aplikasi').select(`konten_${currentLang}`).eq('key', 'tentang_goona').maybeSingle();
+            if (data) {
+                applicationProfileText = data[`konten_${currentLang}`];
+            }
+        } else {
+            // 2. JALUR LAYANAN UTAMA: AMBIL SEMUA DATA AKTIF TANPA BATAS LIMIT DARI KONTEN_GOONA
+            const { data, error } = await supabase.from('konten_goona').select('judul, deskripsi, nomor_wa').eq('status', 'aktif');
+            if (data) {
+                // Saring data berdasarkan kecocokan kata kunci pencarian / lokasi di frontend
+                searchData = data.filter(item => 
+                    item.judul.toLowerCase().includes(lowerPrompt) || 
+                    item.deskripsi.toLowerCase().includes(lowerPrompt)
+                );
             }
         }
+
+        // Hapus animasi loading sebelum menggambar balon chat
+        loadingDiv.remove();
+
+        // 3. JALUR PROSES EKSEKUSI UTAMA (AI OPENER - DATA - AI CLOSER)
+        const aiBubbleOpen = appendMessage("", 'ai-msg');
+        let isAiWorking = false;
+
+        // Pemicu AI untuk Kalimat Pembuka (Sales Informan)
+        try {
+            const responseOpen = await fetch("/tanya", { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: "google/gemma-4-31b:free",
+                    messages: [
+                        { role: "system", content: `Kamu adalah Sales Informan Goona AI yang sangat ramah dan berempati. Jawab WAJIB menggunakan bahasa dengan kode: ${currentLang}. Tugasmu HANYA menyapa pengguna dengan hangat di awal obrolan untuk mengantarkan informasi hasil pencarian mereka berikut ini. Jangan mengulang detail isi datanya.` },
+                        { role: "user", content: `Berikan sapaan pembuka sales informan yang natural untuk query: "${prompt}"` }
+                    ],
+                    stream: false
+                })
+            });
+
+            if (responseOpen.ok) {
+                const resJson = await responseOpen.json();
+                aiBubbleOpen.innerText = resJson.choices[0]?.message?.content || dictionary[currentLang].failSafeOpen;
+                isAiWorking = true;
+            } else {
+                aiBubbleOpen.innerText = dictionary[currentLang].failSafeOpen; // Fail-Safe Aktif
+            }
+        } catch (aiErr) {
+            aiBubbleOpen.innerText = dictionary[currentLang].failSafeOpen; // Fail-Safe Aktif jika AI Error
+        }
+
+        // 4. CETAK HASIL DATA DARI SUPABASE (KARTU / PROFIL TENTANG GOONA)
+        if (isProfileQuery) {
+            if (applicationProfileText) {
+                appendMessage(applicationProfileText, 'ai-msg');
+            } else {
+                // Default teks empati cadangan jika tabel info_aplikasi kosong
+                const defaultAbout = {
+                    id: "Goona AI lahir dari hati untuk menemani perjuangan seluruh warga Kepri. Kami hadir sebagai wadah terpercaya yang mempermudah langkah Anda menemukan lowongan kerja valid, mempromosikan jasa, dan memperluas jaringan rezeki dengan aman.",
+                    en: "Goona AI was born from the heart to accompany the journey of all citizens in Riau Islands. We are here as a trusted platform that helps you find valid job vacancies, promote services, and expand your network safely.",
+                    zh: "Goona AI 顺应廖内群岛全体居民的心声而诞生。我们是一个值得信赖的平台，致力于为您提供便捷的合法招聘查询、服务推广，并安全地拓展您的致富网络。"
+                };
+                appendMessage(defaultAbout[currentLang], 'ai-msg');
+            }
+        } else if (searchData.length > 0) {
+            // Tampilkan kumpulan data dalam bentuk kartu yang rapi
+            const cardWrapper = document.createElement('div');
+            cardWrapper.className = 'card-container';
+            
+            searchData.forEach(item => {
+                const cleanPhone = item.nomor_wa ? item.nomor_wa.replace(/[^0-9]/g, '') : '';
+                const encodedMsg = encodeURIComponent(`${dictionary[currentLang].waTemplate} (${item.judul})`);
+                
+                cardWrapper.innerHTML += `
+                    <div class="jasa-card">
+                        <div class="card-title">${item.judul}</div>
+                        <div class="card-desc">${item.deskripsi}</div>
+                        <a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" class="btn-wa">
+                            💬 WhatsApp
+                        </a>
+                    </div>
+                `;
+            });
+            chatHistory.appendChild(cardWrapper);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        } else {
+            appendMessage(dictionary[currentLang].notFound, 'ai-msg');
+        }
+
+        // 5. PENUTUP OBROLAN (AI CLOSER / CADANGAN FAIL-SAFE)
+        const aiBubbleClose = appendMessage("", 'ai-msg');
+        
+        if (isAiWorking) {
+            try {
+                const responseClose = await fetch("/tanya", { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: "google/gemma-4-31b:free",
+                        messages: [
+                            { role: "system", content: `Kamu adalah Sales Informan Goona AI. Jawab menggunakan bahasa dengan kode: ${currentLang}. Tugasmu memberikan 1 kalimat penutup yang interaktif dan bersahabat agar pengguna terdorong untuk mempersempit kata kunci atau mengetikkan lokasi/nama jasa yang lebih spesifik jika ingin menyaring data.` },
+                            { role: "user", content: "Berikan kalimat penutup pengarah obrolan sales." }
+                        ],
+                        stream: false
+                    })
+                });
+                
+                if (responseClose.ok) {
+                    const resCloseJson = await responseClose.json();
+                    aiBubbleClose.innerText = resCloseJson.choices[0]?.message?.content || dictionary[currentLang].failSafeClose;
+                } else {
+                    aiBubbleClose.innerText = dictionary[currentLang].failSafeClose;
+                }
+            } catch(e) {
+                aiBubbleClose.innerText = dictionary[currentLang].failSafeClose;
+            }
+        } else {
+            aiBubbleClose.innerText = dictionary[currentLang].failSafeClose; // Penutup Otomatis Bawaan jika AI down
+        }
+
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
-        appendMessage("Maaf Cik, server lagi gangguan 😥", 'ai-msg');
+        appendMessage(currentLang === 'id' ? "Maaf Cik, koneksi terputus. Data tidak dapat dimuat. 😥" : "Sorry, connection lost. Data failed to fetch. 😥", 'ai-msg');
         console.error("Error Detail:", err);
     }
 }
+
 function appendMessage(text, className) {
     const div = document.createElement('div');
     div.className = className;
@@ -312,7 +613,7 @@ function appendMessage(text, className) {
     return div;
 }
 
-// PENGAMAN TOMBOL: Pastikan terpasang dengan kuat
+// Pengaman Tombol & Keyboard Enter
 window.addEventListener('DOMContentLoaded', () => {
     if (sendBtn) {
         sendBtn.onclick = (e) => {
@@ -330,3 +631,5 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
+</body>
+</html>
