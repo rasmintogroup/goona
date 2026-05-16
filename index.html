@@ -248,39 +248,59 @@ async function tanyaAI() {
 
     try {
         const { data } = await supabase.from('konten_goona').select('judul, deskripsi').eq('status', 'aktif').limit(5);
-        const contextData = (data && data.length > 0) ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
+        let contextData = (data && data.length > 0) ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
 
         const response = await fetch("/tanya", { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: "google/gemma-4-26b-a4b:free",
+                model: "google/gemma-4-31b:free",
                 messages: [
-                    { role: "system", content: "Kamu adalah AI Goona. Jawab dengan data referensi jika tersedia." },
+                    { role: "system", content: "Kamu adalah AI Goona. Jawab dengan ramah dan lengkap." },
                     { role: "user", content: `Konteks:\n${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
-                stream: false // Pastikan tetap false untuk tes ini
+                stream: true 
             })
         });
 
-        if (!response.ok) throw new Error('Koneksi AI Terputus');
+        if (!response.ok) throw new Error('Koneksi Gagal');
 
-        // AUDIT: Cara baca data utuh tanpa streaming
-        const result = await response.json();
-        
         loadingDiv.remove();
+        const aiBubble = appendMessage("", 'ai-msg');
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let chunkBuffer = "";
 
-        if (result.choices && result.choices[0]) {
-            const aiText = result.choices[0].message.content;
-            appendMessage(aiText, 'ai-msg');
-        } else {
-            throw new Error('Respons AI kosong');
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            // Menggabungkan potongan data agar size KB bertambah
+            chunkBuffer += decoder.decode(value, { stream: true });
+            const lines = chunkBuffer.split('\n');
+            chunkBuffer = lines.pop(); 
+
+            for (const line of lines) {
+                const cleanLine = line.replace(/^data: /, '').trim();
+                if (!cleanLine || cleanLine === '[DONE]') continue;
+                
+                try {
+                    const json = JSON.parse(cleanLine);
+                    const content = json.choices[0]?.delta?.content || "";
+                    if (content) {
+                        aiBubble.innerText += content;
+                        chatWindow.scrollTop = chatWindow.scrollHeight;
+                    }
+                } catch (e) {
+                    // Abaikan jika JSON belum lengkap
+                }
+            }
         }
-
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
-        appendMessage("Maaf Cik, koneksi terganggu. Sila coba sekejap lagi.", 'ai-msg');
-        console.error("Detail Error:", err);
+        appendMessage("Maaf Cik, server lagi gangguan 😥", 'ai-msg');
+        console.error("Error Detail:", err);
     }
 }
 function appendMessage(text, className) {
