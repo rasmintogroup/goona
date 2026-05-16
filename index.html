@@ -259,13 +259,13 @@ async function tanyaAI() {
                     { role: "system", content: "Kamu adalah AI Goona. Jawab dengan data referensi jika tersedia." },
                     { role: "user", content: `Konteks:\n${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
-                stream: true // Kita matikan stream untuk stabilitas tes
+                stream: false // Pastikan tetap false untuk tes ini
             })
         });
 
         if (!response.ok) throw new Error('Koneksi AI Terputus');
 
-        // Cara baca JSON utuh (Non-Streaming)
+        // AUDIT: Cara baca data utuh tanpa streaming
         const result = await response.json();
         
         loadingDiv.remove();
@@ -280,7 +280,7 @@ async function tanyaAI() {
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
         appendMessage("Maaf Cik, koneksi terganggu. Sila coba sekejap lagi.", 'ai-msg');
-        console.error(err);
+        console.error("Detail Error:", err);
     }
 }
 function appendMessage(text, className) {
