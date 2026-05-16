@@ -477,11 +477,16 @@ async function tanyaAI() {
         } else {
             // PERBAIKAN 1: Filter langsung di Database (Supabase) agar lebih akurat & cepat
             // Kita gunakan .ilike untuk pencarian yang tidak sensitif huruf besar/kecil
-            const { data, error } = await supabase
-                .from('konten_goona')
-                .select('judul, deskripsi, nomor_wa')
-                .eq('status', 'aktif')
-                .or(`judul.ilike.%${prompt}%,deskripsi.ilike.%${prompt}%`);
+            // KODE YANG SALAH SEBELUMNYA:
+const { data, error } = await supabase
+    .from('konten_goona')
+    .select('judul, deskripsi, nomor_wa')
+    .eq('status', 'aktif')
+    .or(`judul.ilike.%${prompt}%,deskripsi.ilike.%${prompt}%`);
+
+if (error) {
+    console.error("Kesalahan Pencarian Supabase:", error);
+} else {
             
             if (data) searchData = data;
         }
