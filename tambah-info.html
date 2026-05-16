@@ -13,6 +13,7 @@
             --light-brown: #D2B48C;
             --bg-brown: #FDF5E6;
             --white: #ffffff;
+            --success-green: #2ecc71;
         }
 
         * { 
@@ -125,7 +126,52 @@
             font-weight: 500;
         }
 
-        /* Mobile Specific Adjustment */
+        /* STYLING NOTIFIKASI SUKSES MENGAMBANG (TOAST COCOK UNTUK MOBILE) */
+        .toast-notification {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e2e8f0;
+            z-index: 9999;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+            opacity: 0;
+            width: 90%;
+            max-width: 450px;
+        }
+
+        .toast-notification.show {
+            top: 25px;
+            opacity: 1;
+        }
+
+        .toast-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--success-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .toast-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
         @media (max-width: 480px) {
             .row { grid-template-columns: 1fr; }
             .container { padding: 15px; border-radius: 15px; }
@@ -134,6 +180,11 @@
     </style>
 </head>
 <body>
+
+    <div id="toast" class="toast-notification">
+        <div class="toast-icon">✓</div>
+        <div class="toast-text" id="toast-message">Informasi berhasil dikirim!</div>
+    </div>
 
     <div class="container">
         <h2>Pasang Informasi</h2>
@@ -237,6 +288,20 @@
         const countSpan = document.getElementById('count');
         const form = document.getElementById('upload-form');
         const submitBtn = document.getElementById('submit-btn');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        // FUNGSI PEMICU NOTIFIKASI MENGAMBANG PINTAR
+        function tunjukkanToast(pesan, warnaIcon = '#2ecc71') {
+            toastMessage.innerText = pesan;
+            document.querySelector('.toast-icon').style.background = warnaIcon;
+            toast.classList.add('show');
+            
+            // Sembunyikan otomatis setelah 3.5 detik
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
 
         // Init Kabupaten
         function initKabupaten() {
@@ -271,13 +336,12 @@
             countSpan.innerText = 200 - deskripsiInput.value.length;
         });
 
-        // Submit
+        // Submit Action
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             submitBtn.innerText = "Mengirim...";
             submitBtn.disabled = true;
 
-            // PENYESUAIAN FINAL: Kolom diubah menjadi 'judul' dan ditambah 'url_foto' serta 'satuan_harga'
             const payload = {
                 kategori: document.getElementById('kategori').value,
                 judul: document.getElementById('judul-info').value, 
@@ -288,20 +352,23 @@
                 deskripsi: deskripsiInput.value,
                 whatsapp: document.getElementById('wa-number').value,
                 url_foto: document.getElementById('url-foto').value || null,
-                status: 'pending', // Masuk sebagai pending agar bisa kamu kurasi dulu di Supabase
+                status: 'pending',
                 created_at: new Date().toISOString()
             };
 
             try {
                 const { error } = await supabase.from('konten_goona').insert([payload]);
                 if (error) throw error;
-                alert("Sukses! Informasi Anda sudah diajukan untuk ditinjau.");
+                
+                // EKSEKUSI TOAST SUKSES MENGAMBANG
+                tunjukkanToast("Sukses! Informasi Goonity diajukan untuk ditinjau.");
+                
                 form.reset();
                 kecSelect.disabled = true;
                 countSpan.innerText = "200";
             } catch (err) {
                 console.error("Kesalahan pengiriman:", err);
-                alert("Gagal mengirim. Periksa koneksi atau struktur tabel.");
+                tunjukkanToast("Gagal mengirim. Periksa jaringan Anda.", "#e74c3c");
             } finally {
                 submitBtn.innerText = "Kirim Informasi Sekarang";
                 submitBtn.disabled = false;
