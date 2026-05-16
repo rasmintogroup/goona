@@ -382,6 +382,7 @@ const menuBtn = document.getElementById('menu-btn');
 const sidebar = document.getElementById('sidebar');
 const langSelect = document.getElementById('lang-select');
 
+// Kamus Teks untuk Komponen Interface Statis (3 Bahasa)
 const dictionary = {
     id: {
         welcome: "Halo Cik/Bang! Saya AI Goona 😊 Mau cari loker, jasa, atau info apa di Kepri hari ini?",
@@ -426,6 +427,7 @@ const dictionary = {
 
 let currentLang = 'id';
 
+// Handler Toggle Buka-Tutup Sidebar Menu Garis 3
 menuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     sidebar.classList.toggle('open');
@@ -437,9 +439,9 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// Event ganti bahasa pada UI Statis
 langSelect.addEventListener('change', (e) => {
     currentLang = e.target.value;
-    // Update UI Elements
     document.getElementById('ui-welcome-msg').innerText = dictionary[currentLang].welcome;
     inputField.placeholder = dictionary[currentLang].placeholder;
     sendBtn.innerText = dictionary[currentLang].btnTanya;
@@ -457,6 +459,7 @@ async function tanyaAI() {
     appendMessage(prompt, 'user-msg');
     inputField.value = '';
 
+    // Buat animasi loading (titik tiga membal)
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-msg loading-msg';
     loadingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
@@ -470,33 +473,37 @@ async function tanyaAI() {
     try {
         const lowerPrompt = prompt.toLowerCase();
         
-        if (lowerPrompt.includes('goona') || lowerPrompt.includes('siapa kamu') || lowerPrompt.includes('aplikasi apa')) {
+        // 1. CEK FILTER JALUR: APAKAH PERTANYAAN TENTANG PROFIL GOONA?
+        if (lowerPrompt.includes('goona') || lowerPrompt.includes('siapa kamu') || lowerPrompt.includes('aplikasi apa') || lowerPrompt.includes('what is goona')) {
             isProfileQuery = true;
-            const { data } = await supabase.from('info_aplikasi').select(`konten_${currentLang}`).eq('key', 'tentang_goona').maybeSingle();
-            if (data) applicationProfileText = data[`konten_${currentLang}`];
+            // Menarik data penjelasan empati dari tabel terpisah: info_aplikasi
+            const { data, error } = await supabase.from('info_aplikasi').select(`konten_${currentLang}`).eq('key', 'tentang_goona').maybeSingle();
+            if (data) {
+                applicationProfileText = data[`konten_${currentLang}`];
+            }
         } else {
-            // PERBAIKAN 1: Filter langsung di Database (Supabase) agar lebih akurat & cepat
-            // Kita gunakan .ilike untuk pencarian yang tidak sensitif huruf besar/kecil
-            // KODE YANG SALAH SEBELUMNYA:
-const { data, error } = await supabase
-    .from('konten_goona')
-    .select('judul, deskripsi, nomor_wa')
-    .eq('status', 'aktif')
-    .or(`judul.ilike.%${prompt}%,deskripsi.ilike.%${prompt}%`);
-
-if (error) {
-    console.error("Kesalahan Pencarian Supabase:", error);
-} else {
+            // 2. JALUR LAYANAN UTAMA: CARI DATA MENGGUNAKAN ILIKE DAN SINTAKS BINTANG (*) YANG DISETUJUI SUPABASE
+            const { data, error } = await supabase
+                .from('konten_goona')
+                .select('judul, deskripsi, nomor_wa')
+                .eq('status', 'aktif')
+                .or(`judul.ilike.*${prompt}*,deskripsi.ilike.*${prompt}*`);
             
-            if (data) searchData = data;
+            if (error) {
+                console.error("Kesalahan Pencarian Supabase:", error);
+            } else {
+                searchData = data || [];
+            }
         }
 
+        // Hapus animasi loading sebelum menggambar balon chat
         loadingDiv.remove();
 
-        // 3. JALUR PROSES EKSEKUSI UTAMA
+        // 3. JALUR PROSES EKSEKUSI UTAMA (AI OPENER - DATA - AI CLOSER)
         const aiBubbleOpen = appendMessage("", 'ai-msg');
         let isAiWorking = false;
 
+        // Pemicu AI untuk Kalimat Pembuka (Sales Informan)
         try {
             const responseOpen = await fetch("/tanya", { 
                 method: 'POST',
@@ -504,8 +511,8 @@ if (error) {
                 body: JSON.stringify({
                     model: "google/gemma-4-31b:free",
                     messages: [
-                        { role: "system", content: `Kamu adalah Sales Informan Goona AI. Jawab WAJIB menggunakan bahasa: ${currentLang}. Berikan salam pembuka ramah untuk mengantarkan data pencarian.` },
-                        { role: "user", content: `User mencari: ${prompt}` }
+                        { role: "system", content: `Kamu adalah Sales Informan Goona AI yang sangat ramah dan berempati. Jawab WAJIB menggunakan bahasa dengan kode: ${currentLang}. Tugasmu HANYA menyapa pengguna dengan hangat di awal obrolan untuk mengantarkan informasi hasil pencarian mereka berikut ini. Jangan mengulang detail isi datanya.` },
+                        { role: "user", content: `Berikan sapaan pembuka sales informan yang natural untuk query: "${prompt}"` }
                     ],
                     stream: false
                 })
@@ -522,16 +529,24 @@ if (error) {
             aiBubbleOpen.innerText = dictionary[currentLang].failSafeOpen;
         }
 
-        // 4. CETAK HASIL
+        // 4. CETAK HASIL DATA DARI SUPABASE (KARTU / PROFIL TENTANG GOONA)
         if (isProfileQuery) {
-            appendMessage(applicationProfileText || dictionary[currentLang].welcome, 'ai-msg');
+            if (applicationProfileText) {
+                appendMessage(applicationProfileText, 'ai-msg');
+            } else {
+                const defaultAbout = {
+                    id: "Goona AI lahir dari hati untuk menemani perjuangan seluruh warga Kepri. Kami hadir sebagai wadah terpercaya yang mempermudah langkah Anda menemukan lowongan kerja valid, mempromosikan jasa, dan memperluas jaringan rezeki dengan aman.",
+                    en: "Goona AI was born from the heart to accompany the journey of all citizens in Riau Islands. We are here as a trusted platform that helps you find valid job vacancies, promote services, and expand your network safely.",
+                    zh: "Goona AI 顺应廖内群岛全体居民的心声而诞生。我们是一个值得信赖的平台，致力于为您提供便捷的合法招聘查询、服务推广，并安全地拓展您的致富网络。"
+                };
+                appendMessage(defaultAbout[currentLang], 'ai-msg');
+            }
         } else if (searchData.length > 0) {
             const cardWrapper = document.createElement('div');
             cardWrapper.className = 'card-container';
             
             searchData.forEach(item => {
                 const cleanPhone = item.nomor_wa ? item.nomor_wa.replace(/[^0-9]/g, '') : '';
-                // PERBAIKAN 2: WhatsApp template sekarang mengikuti currentLang secara real-time
                 const encodedMsg = encodeURIComponent(`${dictionary[currentLang].waTemplate} (${item.judul})`);
                 
                 cardWrapper.innerHTML += `
@@ -545,12 +560,14 @@ if (error) {
                 `;
             });
             chatHistory.appendChild(cardWrapper);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
         } else {
             appendMessage(dictionary[currentLang].notFound, 'ai-msg');
         }
 
-        // 5. PENUTUP
+        // 5. PENUTUP OBROLAN (AI CLOSER / CADANGAN FAIL-SAFE)
         const aiBubbleClose = appendMessage("", 'ai-msg');
+        
         if (isAiWorking) {
             try {
                 const responseClose = await fetch("/tanya", { 
@@ -559,13 +576,19 @@ if (error) {
                     body: JSON.stringify({
                         model: "google/gemma-4-31b:free",
                         messages: [
-                            { role: "system", content: `Kamu adalah Sales Informan Goona AI. Jawab WAJIB menggunakan bahasa: ${currentLang}. Berikan 1 kalimat penutup interaktif.` },
-                            { role: "user", content: "Berikan penutup." }
-                        ]
+                            { role: "system", content: `Kamu adalah Sales Informan Goona AI. Jawab menggunakan bahasa dengan kode: ${currentLang}. Tugasmu memberikan 1 kalimat penutup yang interaktif dan bersahabat agar pengguna terdorong untuk mempersempit kata kunci atau mengetikkan lokasi/nama jasa yang lebih spesifik jika ingin menyaring data.` },
+                            { role: "user", content: "Berikan kalimat penutup pengarah obrolan sales." }
+                        ],
+                        stream: false
                     })
                 });
-                const resCloseJson = await responseClose.json();
-                aiBubbleClose.innerText = resCloseJson.choices[0]?.message?.content || dictionary[currentLang].failSafeClose;
+                
+                if (responseClose.ok) {
+                    const resCloseJson = await responseClose.json();
+                    aiBubbleClose.innerText = resCloseJson.choices[0]?.message?.content || dictionary[currentLang].failSafeClose;
+                } else {
+                    aiBubbleClose.innerText = dictionary[currentLang].failSafeClose;
+                }
             } catch(e) {
                 aiBubbleClose.innerText = dictionary[currentLang].failSafeClose;
             }
@@ -577,6 +600,7 @@ if (error) {
 
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
+        appendMessage(currentLang === 'id' ? "Maaf Cik, koneksi terputus. Data tidak dapat dimuat. 😥" : "Sorry, connection lost. Data failed to fetch. 😥", 'ai-msg');
         console.error("Error Detail:", err);
     }
 }
@@ -590,8 +614,21 @@ function appendMessage(text, className) {
     return div;
 }
 
+// Pengaman Tombol & Keyboard Enter
 window.addEventListener('DOMContentLoaded', () => {
-    if (sendBtn) sendBtn.onclick = (e) => { e.preventDefault(); tanyaAI(); };
-    if (inputField) inputField.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); tanyaAI(); } };
+    if (sendBtn) {
+        sendBtn.onclick = (e) => {
+            e.preventDefault();
+            tanyaAI();
+        };
+    }
+    if (inputField) {
+        inputField.onkeydown = (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                tanyaAI();
+            }
+        };
+    }
 });
 </script>
