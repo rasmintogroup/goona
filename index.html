@@ -488,7 +488,7 @@ langSelect.addEventListener('change', (e) => {
     sidebar.classList.remove('open');
 });
 
-// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI (VERSI PINTAR: ANTI-KATA SAMPAH)
+// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI (VERSI PINTAR & RINGKAS TANPA KATA SAMPAH)
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
@@ -506,46 +506,28 @@ async function tanyaAI() {
     let searchData = [];
 
     try {
-        // ============================================================
-        // PROSES STRATEGI SEMI-AI: ELIMINASI KATA SAMPAH (STOPWORDS)
-        // ============================================================
+        // 1. Pecah input pengguna berdasarkan spasi menjadi kata-kata terpisah
+        const kataKunci = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
         
-        // 1. Daftar kata sambung/umum/basa-basi yang sering diketik manusia
-        const kataSampah = [
-            'saya', 'mau', 'cari', 'di', 'ada', 'info', 'dong', 'bisa', 
-            'kah', 'yang', 'halo', 'tolong', 'tampilkan', 'tentang', 
-            'lokasi', 'daerah', 'daerahnya', 'ke', 'dari', 'kamu', 
-            'ai', 'goona', 'apakah', 'adakah', 'saja', 'terdekat', 'buat'
-        ];
+        // 2. Buat array untuk menampung perintah query OR Supabase
+        let perintahFilter = [];
         
-        // 2. Pecah input menjadi huruf kecil dan saring, sisakan hanya kata kunci inti saja
-        const kataKunci = prompt.toLowerCase().split(/\s+/)
-            .filter(word => word.length > 0 && !kataSampah.includes(word));
-            
-        console.log("Kata kunci murni yang dikirim ke database:", kataKunci);
+        // 3. Masukkan setiap kata ke dalam target kolom pencarian (Logika ATAU)
+        kataKunci.forEach(kata => {
+            perintahFilter.push(
+                `judul.ilike.*${kata}*`,
+                `deskripsi.ilike.*${kata}*`,
+                `kabupaten_kota.ilike.*${kata}*`,
+                `kecamatan.ilike.*${kata}*`
+            );
+        });
 
-        // Jika setelah disaring ternyata tidak ada kata kunci tersisa (misal cuma ketik "halo ada yang bisa"), 
-        // kita batalkan query agar tidak error.
-        if (kataKunci.length === 0) {
-            loadingDiv.remove();
-            appendMessage(dictionary[currentLang].notFound, 'ai-msg');
-            return;
-        }
-        
-        // 3. Siapkan query dasar ke tabel konten_goona
-        let query = supabase
+        // 4. Eksekusi ke Supabase menggunakan gabungan perintah OR yang sudah dibuat
+        const { data, error } = await supabase
             .from('konten_goona')
             .select('judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan')
-            .eq('status', 'aktif');
-            
-        // 4. Masukkan filter pencarian berantai (Logika DAN). 
-        // Kita perluas juga area pencarian ke kolom 'kecamatan' biar makin jos!
-        kataKunci.forEach(kata => {
-            query = query.or(`judul.ilike.*${kata}*,deskripsi.ilike.*${kata}*,kabupaten_kota.ilike.*${kata}*,kecamatan.ilike.*${kata}*`);
-        });
-        
-        // 5. Unduh data hasil filter dari Supabase
-        const { data, error } = await query;
+            .eq('status', 'aktif')
+            .or(perintahFilter.join(',')); // Menggabungkan semua kata dengan logika ATAU
         
         if (error) {
             console.error("Supabase Query Error:", error);
@@ -569,15 +551,12 @@ async function tanyaAI() {
 
             searchData.forEach(item => {
                 if (item.kategori === 'FAQ') {
-                    // Jika data bermerek FAQ, cetak sebagai Balon Teks Biasa yang rapi
                     appendMessage(item.deskripsi, 'ai-msg');
                 } else {
-                    // Jika kategori Jasa/Loker, gambar dalam bentuk KARTU LENGKAP yang apik
                     containsCards = true;
                     const cleanPhone = item.whatsapp ? item.whatsapp.replace(/[^0-9]/g, '') : '';
                     const encodedMsg = encodeURIComponent(`${dictionary[currentLang].waTemplate} (${item.judul})`);
                     
-                    // Format tampilan harga jika ada
                     let hargaTeks = "";
                     if (item.harga) {
                         const formatHarga = new Intl.NumberFormat('id-ID').format(item.harga);
@@ -585,7 +564,6 @@ async function tanyaAI() {
                         hargaTeks = `<div class="card-desc"><b>${dictionary[currentLang].priceLabel}</b> Rp ${formatHarga}${satuan}</div>`;
                     }
 
-                    // Teks Lokasi Kota & Kecamatan
                     let lokasiGabungan = item.kabupaten_kota || "";
                     if (item.kecamatan) {
                         lokasiGabungan += item.kabupaten_kota ? `, ${item.kecamatan}` : item.kecamatan;
@@ -616,7 +594,6 @@ async function tanyaAI() {
             appendMessage(penutupAcak, 'ai-msg');
 
         } else {
-            // Jika data kata kunci tidak ditemukan sama sekali di database
             appendMessage(dictionary[currentLang].notFound, 'ai-msg');
         }
 
@@ -628,6 +605,7 @@ async function tanyaAI() {
         console.error("Fatal Error:", err);
     }
 }
+    
 function appendMessage(text, className) {
     const div = document.createElement('div');
     div.className = className;
