@@ -384,10 +384,10 @@ const menuBtn = document.getElementById('menu-btn');
 const sidebar = document.getElementById('sidebar');
 const langSelect = document.getElementById('lang-select');
 
-// Kamus Teks & Variasi Kalimat Acak (3 Bahasa) - SUDAH MENGGUNAKAN "GOONITY"
+// Kamus Teks & Variasi Kalimat Acak (3 Bahasa) - VERSI SUPER RINGKAS GOONITY
 const dictionary = {
     id: {
-        welcome: "Halo Goonity! Selamat datang di Goona AI 😊\n\nBiar pencarian cepat dan tepat, silakan ketik info yang dicari diikuti lokasinya.\nContoh: 'kue batam center', 'loker tpi timur', atau 'notaris bukit bestari'.\n\nMau cari info apa di Kepri hari ini?",
+        welcome: "Halo Goonity! Mau cari info apa di Kepri hari ini? 😊\n\nBiar cepat, langsung ketik kata kunci dan lokasinya ya.\nContoh: 'kue batam center' atau 'loker bintan'.",
         placeholder: "Contoh: kue batam center...",
         btnTanya: "Tanya",
         pasangInfo: "+ Pasang Info",
@@ -412,7 +412,7 @@ const dictionary = {
         ]
     },
     en: {
-        welcome: "Hello Goonity! Welcome to Goona AI 😊\n\nFor fast and accurate search, please type the info you are looking for followed by the location.\nExample: 'cake batam center', 'job tpi timur', or 'doctor sekupang'.\n\nWhat info are you looking for in Riau Islands today?",
+        welcome: "Hello Goonity! What info are you looking for in Riau Islands today? 😊\n\nFor a fast search, just type the keyword and location.\nExample: 'cake batam center' or 'job bintan'.",
         placeholder: "Example: cake batam center...",
         btnTanya: "Ask",
         pasangInfo: "+ Post Info",
@@ -437,7 +437,7 @@ const dictionary = {
         ]
     },
     zh: {
-        welcome: "您好 Goonity！欢迎来到 Goona AI 😊\n\n为了快速准确地搜索，请输入您要查找的信息以及区域。\n例如：'kue batam center'、'loker tpi timur' 或 'notaris bukit bestari'。\n\n今天想在廖内群岛寻找什么信息？",
+        welcome: "您好 Goonity！今天想在廖内群岛寻找什么信息？😊\n\n为了快速搜索，请直接输入关键词和区域。\n例如：'kue batam center' 或 'loker bintan'。",
         placeholder: "例如：kue batam center...",
         btnTanya: "提问",
         pasangInfo: "+ 发布信息",
@@ -456,13 +456,13 @@ const dictionary = {
         ],
         failSafeClose: [
             "还有什么需要调整的吗？请输入具体的位置或关键词，以便我再次为您筛选！",
-            "没有找到您需要的？尝试输入其他区域或服务名称，我帮您再找找！",
+            "没有找到您需要的？尝试输入其他区域 or 服务名称，我帮您再找找！",
             "希望这些信息对您有所帮助 Goonity！如果您想搜索其他内容，请在下方输入。",
             "需要更多招聘或服务信息吗？随时在这里输入，我全天候为您服务！"
         ]
     }
 };
-
+    
 let currentLang = 'id';
 
 // Menampilkan pesan welcome pertama kali sesuai dengan modifikasi baris baru (\n)
