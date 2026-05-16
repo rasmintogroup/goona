@@ -259,7 +259,7 @@ async function tanyaAI() {
                     { role: "system", content: "Kamu adalah AI Goona. Jawab dengan data referensi jika tersedia." },
                     { role: "user", content: `Konteks:\n${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
-                stream: false // Kita matikan stream untuk stabilitas tes
+                stream: true // Kita matikan stream untuk stabilitas tes
             })
         });
 
