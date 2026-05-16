@@ -261,30 +261,23 @@ async function tanyaAI() {
             body: JSON.stringify({
                 model: "nvidia/nemotron-3-super:free",
                 messages: [
-                    { 
-                        role: "system", 
-                        content: "Kamu adalah AI Goona, asisten ramah untuk warga Kepulauan Riau (Kepri). Tugasmu memberikan informasi lengkap berdasarkan data yang ada. Jika memberikan daftar, berikan penjelasan singkat di setiap poinnya. Jangan memotong jawaban." 
-                    },
-                    { 
-                        role: "user", 
-                        content: `Data referensi: ${contextData}\n\nPertanyaan: ${prompt}` 
-                    }
+                    { role: "system", content: "Kamu adalah AI Goona. Berikan jawaban yang lengkap dan jelas." },
+                    { role: "user", content: `Data referensi:\n${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
-                max_tokens: 1500, // Menambah kapasitas jawaban agar tidak terpotong
-                temperature: 0.7,
+                max_tokens: 1500,
                 stream: true
             })
         });
 
-        if (!response.ok) throw new Error('Koneksi Gagal');
+        if (!response.ok) throw new Error('Koneksi ke AI gagal');
 
+        // Hapus loading dan buat bubble kosong untuk AI
         loadingDiv.remove();
         const aiBubble = appendMessage("", 'ai-msg');
         
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
-        let fullText = "";
-        let buffer = ""; // Penyangga untuk menjaga paket data yang pecah
+        let buffer = "";
 
         while (true) {
             const { done, value } = await reader.read();
@@ -292,9 +285,7 @@ async function tanyaAI() {
             
             buffer += decoder.decode(value, { stream: true });
             const lines = buffer.split('\n');
-            
-            // Simpan baris terakhir yang mungkin belum lengkap kembali ke buffer
-            buffer = lines.pop();
+            buffer = lines.pop(); // Simpan sisa baris yang belum lengkap
 
             for (const line of lines) {
                 const cleanLine = line.replace(/^data: /, '').trim();
@@ -303,19 +294,19 @@ async function tanyaAI() {
                 try {
                     const json = JSON.parse(cleanLine);
                     const content = json.choices[0]?.delta?.content || "";
-                    fullText += content;
-                    aiBubble.innerText = fullText;
-                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                    if (content) {
+                        aiBubble.textContent += content; // Gunakan textContent agar lebih cepat
+                        chatWindow.scrollTop = chatWindow.scrollHeight;
+                    }
                 } catch (e) {
-                    // Abaikan jika ada baris yang bukan JSON valid saat streaming
+                    // JSON parsial, abaikan dan lanjut ke chunk berikutnya
                 }
             }
         }
-
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
-        appendMessage("Waduh Cik, server lagi gangguan 😥", 'ai-msg');
-        console.error("Detail Error:", err);
+        appendMessage("Waduh, koneksi lagi sibuk Cik. Coba tanya lagi ya? 😥", 'ai-msg');
+        console.error("Error:", err);
     }
 }
 
