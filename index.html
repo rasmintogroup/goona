@@ -338,10 +338,12 @@
 
         <div id="chat-history" style="display:flex; flex-direction:column; gap:15px; width: 100%;">
 
-            <div class="ai-msg" id="ui-welcome-msg">
-                Halo Cik/Bang! Saya AI Goona 😊
-                Mau cari loker, jasa, atau info apa di Kepri hari ini?
-            </div>
+            <div class="ai-msg" id="ui-welcome-msg" style="white-space: pre-line;">
+    Halo Goonity! Mau cari info apa di Kepri hari ini? 😊
+
+    Biar cepat, langsung ketik kata kunci dan lokasinya ya.
+    Contoh: "kue batam center" atau "loker bintan".
+</div>
 
         </div>
 
@@ -382,86 +384,89 @@ const menuBtn = document.getElementById('menu-btn');
 const sidebar = document.getElementById('sidebar');
 const langSelect = document.getElementById('lang-select');
 
-// Kamus Teks & Variasi Kalimat Acak (3 Bahasa)
+// Kamus Teks & Variasi Kalimat Acak (3 Bahasa) - SUDAH MENGGUNAKAN "GOONITY"
 const dictionary = {
     id: {
-        welcome: "Halo Cik/Bang! Saya AI Goona 😊 Mau cari loker, jasa, atau info apa di Kepri hari ini?",
-        placeholder: "Tanya di sini...",
+        welcome: "Halo Goonity! Selamat datang di Goona AI 😊\n\nBiar pencarian cepat dan tepat, silakan ketik info yang dicari diikuti lokasinya.\nContoh: 'kue batam center', 'loker tpi timur', atau 'notaris bukit bestari'.\n\nMau cari info apa di Kepri hari ini?",
+        placeholder: "Contoh: kue batam center...",
         btnTanya: "Tanya",
         pasangInfo: "+ Pasang Info",
         titleLang: "Pilih Bahasa",
         titleRules: "Aturan & Legalitas",
         textRules: "Setiap informasi yang disampaikan di Goona AI wajib berupa informasi yang benar, jujur, akurat, dan dapat dipertanggungjawabkan sepenuhnya oleh pemasang informasi demi kenyamanan dan keamanan hukum bersama.",
-        notFound: "Maaf Cik/Bang, informasi atau jawaban yang Anda cari saat ini belum tersedia di sistem kami.",
+        notFound: "Maaf Goonity, informasi atau jawaban yang Anda cari saat ini belum tersedia di sistem kami.",
         waTemplate: "Halo, saya melihat info Anda di Goona AI. Boleh tahu detail lebih lanjut?",
         locLabel: "Lokasi:",
         priceLabel: "Harga:",
         failSafeOpen: [
-            "Halo! Ini dia informasi teraktif yang berhasil kami temukan langsung dari sistem khusus untuk Anda:",
+            "Halo Goonity! Ini dia informasi teraktif yang berhasil kami temukan langsung dari sistem khusus untuk Anda:",
             "Hai kawan! Saya sudah menyaring database dan menemukan info terbaik ini untukmu:",
-            "Kabar baik! Info yang kamu cari sudah siap. Silakan dicek detailnya di bawah ini ya:",
+            "Kabar baik Goonity! Info yang kamu cari sudah siap. Silakan dicek detailnya di bawah ini ya:",
             "Yey, ketemu! Ini dia data terakurat yang berhasil saya kumpulkan:"
         ],
         failSafeClose: [
             "Ada yang perlu disesuaikan lagi? Ketik lokasinya atau nama jasanya secara spesifik ya agar saya saring kembali!",
             "Belum ketemu yang pas? Coba ketik nama daerah atau kata kunci lain, nanti saya bantu cari lagi!",
-            "Semoga informasinya membantu ya! Kalau ada info lain yang ingin dicari, langsung ketik saja di bawah.",
+            "Semoga informasinya membantu Goonity! Kalau ada info lain yang ingin dicari, langsung ketik saja di bawah.",
             "Butuh info loker atau jasa lainnya? Tuliskan saja di sini, saya siap bantu 24 jam!"
         ]
     },
     en: {
-        welcome: "Hello! I am Goona AI 😊 What vacancies, services, or info are you looking for in Riau Islands today?",
-        placeholder: "Ask here...",
+        welcome: "Hello Goonity! Welcome to Goona AI 😊\n\nFor fast and accurate search, please type the info you are looking for followed by the location.\nExample: 'cake batam center', 'job tpi timur', or 'doctor sekupang'.\n\nWhat info are you looking for in Riau Islands today?",
+        placeholder: "Example: cake batam center...",
         btnTanya: "Ask",
         pasangInfo: "+ Post Info",
         titleLang: "Select Language",
         titleRules: "Terms & Legality",
         textRules: "Any information provided on Goona AI must be true, honest, accurate, and fully accountable by the poster for mutual comfort and legal safety.",
-        notFound: "Sorry, the information or answer you are looking for is currently unavailable in our system.",
+        notFound: "Sorry Goonity, the information or answer you are looking for is currently unavailable in our system.",
         waTemplate: "Hello, I saw your post on Goona AI. Could I get more details about it?",
         locLabel: "Location:",
         priceLabel: "Price:",
         failSafeOpen: [
-            "Hello! Here is the most active information we found directly from our system just for you:",
+            "Hello Goonity! Here is the most active information we found directly from our system just for you:",
             "Hi there! I have searched our database and found the best information for you:",
-            "Great news! The details you requested are ready. Please check them out below:",
+            "Great news Goonity! The details you requested are ready. Please check them out below:",
             "Found it! Here is the most accurate data I managed to collect:"
         ],
         failSafeClose: [
             "Is there anything else you'd like to adjust? Type a specific location or keyword so I can filter it again!",
             "Didn't find what you need? Try typing another area or service name, and I'll look it up!",
-            "Hope this information helps! If you want to search for something else, just type it below.",
+            "Hope this information helps Goonity! If you want to search for something else, just type it below.",
             "Need more job vacancies or services? Just write it here, I'm ready to help you 24/7!"
         ]
     },
     zh: {
-        welcome: "您好！我是 Goona AI 😊 今天想在廖内群岛寻找什么招聘、服务或信息？",
-        placeholder: "在这里提问...",
+        welcome: "您好 Goonity！欢迎来到 Goona AI 😊\n\n为了快速准确地搜索，请输入您要查找的信息以及区域。\n例如：'kue batam center'、'loker tpi timur' 或 'notaris bukit bestari'。\n\n今天想在廖内群岛寻找什么信息？",
+        placeholder: "例如：kue batam center...",
         btnTanya: "提问",
         pasangInfo: "+ 发布信息",
         titleLang: "选择语言",
         titleRules: "规则与法律条款",
         textRules: "在 Goona AI 上发布的任何信息必须真实、诚实、准确，并由发布者承担全部法律责任，以确保共同的舒适与安全。",
-        notFound: "抱歉，您所寻找的信息或答案目前在我们的系统中不可用。",
+        notFound: "抱歉 Goonity，您所寻找的信息或答案目前在我们的系统中不可用。",
         waTemplate: "您好，我在 Goona AI 上看到了您的信息。可以了解更多详情吗？",
         locLabel: "区域:",
         priceLabel: "价格:",
         failSafeOpen: [
-            "您好！以下是我们直接从系统中为您找到的最活跃的信息：",
+            "您好 Goonity！以下是我们直接从系统中为您找到的最活跃的信息：",
             "嗨！我已经搜索了数据库，并为您找到了最佳信息：",
-            "好消息！您需要的信息已准备就绪，请在下方查看详情：",
+            "好消息 Goonity！您需要的信息已准备就绪，请在下方查看详情：",
             "找到了！这是我成功收集到的最准确的数据："
         ],
         failSafeClose: [
             "还有什么需要调整的吗？请输入具体的位置或关键词，以便我再次为您筛选！",
             "没有找到您需要的？尝试输入其他区域或服务名称，我帮您再找找！",
-            "希望这些信息对您有所帮助！如果您想搜索其他内容，请在下方输入。",
+            "希望这些信息对您有所帮助 Goonity！如果您想搜索其他内容，请在下方输入。",
             "需要更多招聘或服务信息吗？随时在这里输入，我全天候为您服务！"
         ]
     }
 };
 
 let currentLang = 'id';
+
+// Menampilkan pesan welcome pertama kali sesuai dengan modifikasi baris baru (\n)
+document.getElementById('ui-welcome-msg').innerText = dictionary[currentLang].welcome;
 
 // Handler Drawer Sidebar Menu Garis 3
 menuBtn.addEventListener('click', (e) => {
@@ -488,7 +493,7 @@ langSelect.addEventListener('change', (e) => {
     sidebar.classList.remove('open');
 });
 
-// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI (VERSI SELEKSI SKOR KECOCOKAN LOKAL - AMAN KALIMAT PANJANG)
+// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI (VERSI PENCARIAN 3 KATA PERTAMA)
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
@@ -503,65 +508,41 @@ async function tanyaAI() {
     chatHistory.appendChild(loadingDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
-    try {
-        // 1. Ambil kata-kata murni dari ketikan user (pecah jadi huruf kecil semua)
-        const kataUser = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+    let searchData = [];
 
-        // 2. Tarik SEMUA data aktif dari Supabase (Cepat dan anti-gagal karena tanpa filter rumit di server)
-        const { data: semuaData, error } = await supabase
+    try {
+        // 1. Pecah kalimat menjadi potongan kata individu
+        const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+        
+        // 2. Ambil maksimal 3 kata pertama saja (Membatasi kata recok masukan pengguna)
+        const kataKunci = semuaKata.slice(0, 3);
+
+        console.log("Kata kunci database:", kataKunci);
+
+        // 3. Siapkan query dasar ke tabel konten_goona
+        let query = supabase
             .from('konten_goona')
             .select('judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan')
             .eq('status', 'aktif');
+            
+        // 4. Masukkan filter berantai (Logika DAN yang stabil). 
+        kataKunci.forEach(kata => {
+            query = query.or(`judul.ilike.*${kata}*,deskripsi.ilike.*${kata}*,kabupaten_kota.ilike.*${kata}*,kecamatan.ilike.*${kata}*`);
+        });
+        
+        // 5. Unduh data hasil filter dari Supabase
+        const { data, error } = await query;
         
         if (error) {
-            console.error("Supabase Fetch Error:", error);
-            loadingDiv.remove();
-            appendMessage(dictionary[currentLang].notFound, 'ai-msg');
-            return;
+            console.error("Supabase Query Error:", error);
+        } else {
+            searchData = data || [];
         }
-
-        let hasilSaring = [];
-
-        // 3. HITUNG SKOR KECOCOKAN DI SISI BROWSER (LOKAL)
-        (semuaData || []).forEach(item => {
-            let skor = 0;
-            const teksTarget = `
-                ${(item.judul || '').toLowerCase()} 
-                ${(item.deskripsi || '').toLowerCase()} 
-                ${(item.kabupaten_kota || '').toLowerCase()} 
-                ${(item.kecamatan || '').toLowerCase()}
-            `;
-
-            // Cek setiap kata ketikan user, jika ada di dalam teks target, naikkan skornya
-            kataUser.forEach(kata => {
-                if (kata.length > 1 && teksTarget.includes(kata)) {
-                    skor += 1;
-                }
-            });
-
-            // Jika skor lebih dari 0, berarti ada kecocokan kata kunci penting!
-            if (skor > 0) {
-                hasilSaring.push({ data: item, skor: skor });
-            }
-        });
-
-        // Urutkan hasil berdasarkan skor tertinggi (yang paling cocok tampil paling atas)
-        hasilSaring.sort((a, b) => b.skor - a.skor);
 
         // Hapus animasi loading
         loadingDiv.remove();
 
-        // ============================================================
-        // SISTEM ELIMINASI DATA RECOK (HANYA AMBIL YANG PALING COCOK)
-        // ============================================================
-        const skorTertinggi = hasilSaring[0]?.skor || 0;
-        // Jika skor tertinggi adalah 2 atau lebih, buang semua data yang skornya cuma 1 (data kebetulan)
-        if (skorTertinggi >= 2) {
-            hasilSaring = hasilSaring.filter(hasil => hasil.skor >= 2);
-        }
-        // ============================================================
-
-        if (hasilSaring.length > 0) {
+        if (searchData.length > 0) {
             // 1. AMBIL SAPAAN PEMBUKA SECARA ACAK (RANDOMIZER)
             const daftarPembuka = dictionary[currentLang].failSafeOpen;
             const pembukaAcak = daftarPembuka[Math.floor(Math.random() * daftarPembuka.length)];
@@ -572,12 +553,12 @@ async function tanyaAI() {
             cardWrapper.className = 'card-container';
             let containsCards = false;
 
-            hasilSaring.forEach(hasil => {
-                const item = hasil.data;
-
+            searchData.forEach(item => {
                 if (item.kategori === 'FAQ') {
+                    // Jika data bermerek FAQ, cetak sebagai Balon Teks Biasa yang rapi
                     appendMessage(item.deskripsi, 'ai-msg');
                 } else {
+                    // Jika kategori Jasa/Loker, gambar dalam bentuk KARTU LENGKAP
                     containsCards = true;
                     const cleanPhone = item.whatsapp ? item.whatsapp.replace(/[^0-9]/g, '') : '';
                     const encodedMsg = encodeURIComponent(`${dictionary[currentLang].waTemplate} (${item.judul})`);
@@ -626,11 +607,11 @@ async function tanyaAI() {
 
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
-        appendMessage(currentLang === 'id' ? "Maaf Cik, sistem sedang pemeliharaan. 😥" : "Sorry, system under maintenance. 😥", 'ai-msg');
+        appendMessage(currentLang === 'id' ? "Maaf Kak, sistem sedang pemeliharaan. 😥" : "Sorry, system under maintenance. 😥", 'ai-msg');
         console.error("Fatal Error:", err);
     }
 }
-    
+
 function appendMessage(text, className) {
     const div = document.createElement('div');
     div.className = className;
