@@ -551,6 +551,16 @@ async function tanyaAI() {
         // Hapus animasi loading
         loadingDiv.remove();
 
+        // ============================================================
+        // SISTEM ELIMINASI DATA RECOK (HANYA AMBIL YANG PALING COCOK)
+        // ============================================================
+        const skorTertinggi = hasilSaring[0]?.skor || 0;
+        // Jika skor tertinggi adalah 2 atau lebih, buang semua data yang skornya cuma 1 (data kebetulan)
+        if (skorTertinggi >= 2) {
+            hasilSaring = hasilSaring.filter(hasil => hasil.skor >= 2);
+        }
+        // ============================================================
+
         if (hasilSaring.length > 0) {
             // 1. AMBIL SAPAAN PEMBUKA SECARA ACAK (RANDOMIZER)
             const daftarPembuka = dictionary[currentLang].failSafeOpen;
