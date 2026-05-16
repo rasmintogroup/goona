@@ -364,6 +364,7 @@
                 tunjukkanToast("Sukses! Informasi Goonity diajukan untuk ditinjau.");
                 
                 form.reset();
+                document.getElementById('wa-number').value = '';
                 kecSelect.disabled = true;
                 countSpan.innerText = "200";
             } catch (err) {
