@@ -255,28 +255,26 @@ async function tanyaAI() {
 
         let contextData = data ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
 
-        // ... di dalam fungsi tanyaAI ...
-
-const response = await fetch("/tanya", { 
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        model: "nvidia/nemotron-3-super:free",
-        messages: [
-            { 
-                role: "system", 
-                content: "Kamu adalah AI Goona. Berikan jawaban yang sangat detail, lengkap, dan informatif. Jangan memotong penjelasan." 
-            },
-            { 
-                role: "user", 
-                content: `Data referensi: ${contextData}\n\nPertanyaan: ${prompt}` 
-            }
-        ],
-        max_tokens: 1500, // <--- KUNCI UTAMA: Memberi ruang jawaban lebih panjang
-        temperature: 0.7, // Membuat jawaban lebih natural
-        stream: true
-    })
-});
+        const response = await fetch("/tanya", { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: "nvidia/nemotron-3-super:free",
+                messages: [
+                    { 
+                        role: "system", 
+                        content: "Kamu adalah AI Goona, asisten ramah untuk warga Kepulauan Riau (Kepri). Tugasmu memberikan informasi lengkap berdasarkan data yang ada. Jika memberikan daftar, berikan penjelasan singkat di setiap poinnya. Jangan memotong jawaban." 
+                    },
+                    { 
+                        role: "user", 
+                        content: `Data referensi: ${contextData}\n\nPertanyaan: ${prompt}` 
+                    }
+                ],
+                max_tokens: 1500, // Menambah kapasitas jawaban agar tidak terpotong
+                temperature: 0.7,
+                stream: true
+            })
+        });
 
         if (!response.ok) throw new Error('Koneksi Gagal');
 
@@ -286,14 +284,18 @@ const response = await fetch("/tanya", {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let fullText = "";
+        let buffer = ""; // Penyangga untuk menjaga paket data yang pecah
 
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
             
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n');
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
             
+            // Simpan baris terakhir yang mungkin belum lengkap kembali ke buffer
+            buffer = lines.pop();
+
             for (const line of lines) {
                 const cleanLine = line.replace(/^data: /, '').trim();
                 if (!cleanLine || cleanLine === '[DONE]') continue;
@@ -303,10 +305,12 @@ const response = await fetch("/tanya", {
                     const content = json.choices[0]?.delta?.content || "";
                     fullText += content;
                     aiBubble.innerText = fullText;
-                } catch (e) {}
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                } catch (e) {
+                    // Abaikan jika ada baris yang bukan JSON valid saat streaming
+                }
             }
         }
-        chatWindow.scrollTop = chatWindow.scrollHeight;
 
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
