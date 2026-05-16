@@ -364,31 +364,32 @@
         document.getElementById('btn-close-analitik').onclick = () => { document.getElementById('papan-analitik-overlay').style.display = 'none'; };
     };
 
-    function prosesMasuk() {
-        const pass = document.getElementById('input-password').value;
-        if(pass === 'goona2026') {
-            document.getElementById('login-panel').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'block';
-            panggilDatabase();
-        } else { alert('Password Salah!'); }
-    }
+function prosesMasuk() {
+    const pass = document.getElementById('input-password').value;
+    if(pass === 'goona2026') {
+        document.getElementById('login-panel').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+        
+        // Teks pemuat hanya muncul sekali di sini saat pertama kali masuk, jadi aman kawan
+        document.getElementById('isi-tabel').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Memuat data awal...</td></tr>';
+        panggilDatabase();
+    } else { alert('Password Salah!'); }
+}
 
-    async function panggilDatabase() {
-        const listBody = document.getElementById('isi-tabel');
-        listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Memuat data dari server Supabase...</td></tr>';
+   async function panggilDatabase() {
+    // Teks "Memuat data" dihapus agar tidak membuat browser HP freeze/blank saat refresh otomatis
+    const { data, error } = await supabaseClient
+        .from('konten_goona')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-        const { data, error } = await supabaseClient
-            .from('konten_goona')
-            .select('*')
-            .order('created_at', { ascending: false });
+    if(error) { alert('Gagal memuat database: ' + error.message); return; }
 
-        if(error) { alert('Gagal memuat database: ' + error.message); return; }
-
-        cacheDatabaseData = data || [];
-        hitungMetriksAnalitikDasbor(cacheDatabaseData);
-        hitungDanCetakPapanAnalitik(cacheDatabaseData);
-        cetakTabelUtama(cacheDatabaseData);
-    }
+    cacheDatabaseData = data || [];
+    hitungMetriksAnalitikDasbor(cacheDatabaseData);
+    hitungDanCetakPapanAnalitik(cacheDatabaseData);
+    cetakTabelUtama(cacheDatabaseData);
+}
 
     function hitungMetriksAnalitikDasbor(dataList) {
         document.getElementById('stat-total').innerText = dataList.length;
