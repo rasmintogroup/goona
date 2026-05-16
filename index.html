@@ -247,13 +247,9 @@ async function tanyaAI() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
     try {
-        const { data } = await supabase
-            .from('konten_goona')
-            .select('*')
-            .eq('status', 'aktif')
-            .limit(5);
-
-        let contextData = data ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
+        // Ambil data hanya jika diperlukan (Deep Audit alur No. 5)
+        const { data } = await supabase.from('konten_goona').select('judul, deskripsi').eq('status', 'aktif').limit(5);
+        const contextData = (data && data.length > 0) ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
 
         const response = await fetch("/tanya", { 
             method: 'POST',
@@ -261,31 +257,29 @@ async function tanyaAI() {
             body: JSON.stringify({
                 model: "nvidia/nemotron-3-super:free",
                 messages: [
-                    { role: "system", content: "Kamu adalah AI Goona. Berikan jawaban yang lengkap dan jelas." },
-                    { role: "user", content: `Data referensi:\n${contextData}\n\nPertanyaan: ${prompt}` }
+                    { role: "system", content: "Kamu adalah AI Goona. Jawab dengan data referensi jika tersedia." },
+                    { role: "user", content: `Konteks:\n${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
-                max_tokens: 1500,
                 stream: true
             })
         });
 
-        if (!response.ok) throw new Error('Koneksi ke AI gagal');
+        if (!response.ok) throw new Error('Koneksi AI Terputus');
 
-        // Hapus loading dan buat bubble kosong untuk AI
         loadingDiv.remove();
         const aiBubble = appendMessage("", 'ai-msg');
         
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
-        let buffer = "";
+        let chunkBuffer = "";
 
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
             
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop(); // Simpan sisa baris yang belum lengkap
+            chunkBuffer += decoder.decode(value, { stream: true });
+            const lines = chunkBuffer.split('\n');
+            chunkBuffer = lines.pop(); 
 
             for (const line of lines) {
                 const cleanLine = line.replace(/^data: /, '').trim();
@@ -293,23 +287,21 @@ async function tanyaAI() {
                 
                 try {
                     const json = JSON.parse(cleanLine);
-                    const content = json.choices[0]?.delta?.content || "";
-                    if (content) {
-                        aiBubble.textContent += content; // Gunakan textContent agar lebih cepat
+                    const text = json.choices[0]?.delta?.content || "";
+                    if (text) {
+                        aiBubble.innerText += text;
                         chatWindow.scrollTop = chatWindow.scrollHeight;
                     }
                 } catch (e) {
-                    // JSON parsial, abaikan dan lanjut ke chunk berikutnya
+                    // Audit: Menangani JSON yang pecah di tengah baris
                 }
             }
         }
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
-        appendMessage("Waduh, koneksi lagi sibuk Cik. Coba tanya lagi ya? 😥", 'ai-msg');
-        console.error("Error:", err);
+        appendMessage("Maaf Cik, koneksi terganggu. Sila coba sekejap lagi.", 'ai-msg');
     }
 }
-
 function appendMessage(text, className) {
     const div = document.createElement('div');
     div.className = className;
