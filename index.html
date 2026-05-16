@@ -382,7 +382,7 @@ const menuBtn = document.getElementById('menu-btn');
 const sidebar = document.getElementById('sidebar');
 const langSelect = document.getElementById('lang-select');
 
-// Kamus Teks untuk Komponen Interface Statis (3 Bahasa)
+// Kamus Teks & Variasi Kalimat Acak (3 Bahasa)
 const dictionary = {
     id: {
         welcome: "Halo Cik/Bang! Saya AI Goona 😊 Mau cari loker, jasa, atau info apa di Kepri hari ini?",
@@ -392,10 +392,22 @@ const dictionary = {
         titleLang: "Pilih Bahasa",
         titleRules: "Aturan & Legalitas",
         textRules: "Setiap informasi yang disampaikan di Goona AI wajib berupa informasi yang benar, jujur, akurat, dan dapat dipertanggungjawabkan sepenuhnya oleh pemasang informasi demi kenyamanan dan keamanan hukum bersama.",
-        failSafeOpen: "Halo! Ini dia informasi teraktif yang berhasil kami temukan langsung dari sistem khusus untuk Anda:",
-        failSafeClose: "Ada yang perlu disesuaikan lagi? Ketik lokasinya atau nama jasanya secara spesifik ya agar saya saring kembali!",
-        notFound: "Maaf Cik/Bang, informasi yang Anda cari saat ini belum terdaftar atau sedang tidak aktif.",
-        waTemplate: "Halo, saya melihat info Anda di Goona AI. Boleh tahu detail lebih lanjut?"
+        notFound: "Maaf Cik/Bang, informasi atau jawaban yang Anda cari saat ini belum tersedia di sistem kami.",
+        waTemplate: "Halo, saya melihat info Anda di Goona AI. Boleh tahu detail lebih lanjut?",
+        locLabel: "Lokasi:",
+        priceLabel: "Harga:",
+        failSafeOpen: [
+            "Halo! Ini dia informasi teraktif yang berhasil kami temukan langsung dari sistem khusus untuk Anda:",
+            "Hai kawan! Saya sudah menyaring database dan menemukan info terbaik ini untukmu:",
+            "Kabar baik! Info yang kamu cari sudah siap. Silakan dicek detailnya di bawah ini ya:",
+            "Yey, ketemu! Ini dia data terakurat yang berhasil saya kumpulkan:"
+        ],
+        failSafeClose: [
+            "Ada yang perlu disesuaikan lagi? Ketik lokasinya atau nama jasanya secara spesifik ya agar saya saring kembali!",
+            "Belum ketemu yang pas? Coba ketik nama daerah atau kata kunci lain, nanti saya bantu cari lagi!",
+            "Semoga informasinya membantu ya! Kalau ada info lain yang ingin dicari, langsung ketik saja di bawah.",
+            "Butuh info loker atau jasa lainnya? Tuliskan saja di sini, saya siap bantu 24 jam!"
+        ]
     },
     en: {
         welcome: "Hello! I am Goona AI 😊 What vacancies, services, or info are you looking for in Riau Islands today?",
@@ -405,10 +417,22 @@ const dictionary = {
         titleLang: "Select Language",
         titleRules: "Terms & Legality",
         textRules: "Any information provided on Goona AI must be true, honest, accurate, and fully accountable by the poster for mutual comfort and legal safety.",
-        failSafeOpen: "Hello! Here is the most active information we found directly from our system just for you:",
-        failSafeClose: "Is there anything else you'd like to adjust? Type the specific location or service name so I can filter it again!",
-        notFound: "Sorry, the information you are looking for is currently unregistered or inactive.",
-        waTemplate: "Hello, I saw your post on Goona AI. Could I get more details about it?"
+        notFound: "Sorry, the information or answer you are looking for is currently unavailable in our system.",
+        waTemplate: "Hello, I saw your post on Goona AI. Could I get more details about it?",
+        locLabel: "Location:",
+        priceLabel: "Price:",
+        failSafeOpen: [
+            "Hello! Here is the most active information we found directly from our system just for you:",
+            "Hi there! I have searched our database and found the best information for you:",
+            "Great news! The details you requested are ready. Please check them out below:",
+            "Found it! Here is the most accurate data I managed to collect:"
+        ],
+        failSafeClose: [
+            "Is there anything else you'd like to adjust? Type a specific location or keyword so I can filter it again!",
+            "Didn't find what you need? Try typing another area or service name, and I'll look it up!",
+            "Hope this information helps! If you want to search for something else, just type it below.",
+            "Need more job vacancies or services? Just write it here, I'm ready to help you 24/7!"
+        ]
     },
     zh: {
         welcome: "您好！我是 Goona AI 😊 今天想在廖内群岛寻找什么招聘、服务或信息？",
@@ -418,16 +442,28 @@ const dictionary = {
         titleLang: "选择语言",
         titleRules: "规则与法律条款",
         textRules: "在 Goona AI 上发布的任何信息必须真实、诚实、准确，并由发布者承担全部法律责任，以确保共同的舒适与安全。",
-        failSafeOpen: "您好！以下是我们直接从系统中为您找到的最活跃的信息：",
-        failSafeClose: "还有什么需要调整的吗？请输入具体的位置或服务名称，以便我再次为您筛选！",
-        notFound: "抱歉，您所寻找的信息目前未注册或处于未激活状态。",
-        waTemplate: "您好，我在 Goona AI 上看到了您的信息。可以了解更多详情吗？"
+        notFound: "抱歉，您所寻找的信息或答案目前在我们的系统中不可用。",
+        waTemplate: "您好，我在 Goona AI 上看到了您的信息。可以了解更多详情吗？",
+        locLabel: "区域:",
+        priceLabel: "价格:",
+        failSafeOpen: [
+            "您好！以下是我们直接从系统中为您找到的最活跃的信息：",
+            "嗨！我已经搜索了数据库，并为您找到了最佳信息：",
+            "好消息！您需要的信息已准备就绪，请在下方查看详情：",
+            "找到了！这是我成功收集到的最准确的数据："
+        ],
+        failSafeClose: [
+            "还有什么需要调整的吗？请输入具体的位置或关键词，以便我再次为您筛选！",
+            "没有找到您需要的？尝试输入其他区域或服务名称，我帮您再找找！",
+            "希望这些信息对您有所帮助！如果您想搜索其他内容，请在下方输入。",
+            "需要更多招聘或服务信息吗？随时在这里输入，我全天候为您服务！"
+        ]
     }
 };
 
 let currentLang = 'id';
 
-// Handler Toggle Buka-Tutup Sidebar Menu Garis 3
+// Handler Drawer Sidebar Menu Garis 3
 menuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     sidebar.classList.toggle('open');
@@ -439,7 +475,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Event ganti bahasa pada UI Statis
+// Event Handler Ganti Bahasa UI
 langSelect.addEventListener('change', (e) => {
     currentLang = e.target.value;
     document.getElementById('ui-welcome-msg').innerText = dictionary[currentLang].welcome;
@@ -452,6 +488,7 @@ langSelect.addEventListener('change', (e) => {
     sidebar.classList.remove('open');
 });
 
+// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
@@ -459,7 +496,7 @@ async function tanyaAI() {
     appendMessage(prompt, 'user-msg');
     inputField.value = '';
 
-    // Buat animasi loading (titik tiga membal)
+    // Munculkan animasi mengetik/loading
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-msg loading-msg';
     loadingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
@@ -467,141 +504,90 @@ async function tanyaAI() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
     let searchData = [];
-    let isProfileQuery = false;
-    let applicationProfileText = "";
 
     try {
-        const lowerPrompt = prompt.toLowerCase();
+        // TARIK DATA TANPA BATAS & SESUAIKAN DENGAN NAMA KOLOM BARU KAMU (*whatsapp*)
+        const { data, error } = await supabase
+            .from('konten_goona')
+            .select('judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga')
+            .eq('status', 'aktif')
+            .or(`judul.ilike.*${prompt}*,deskripsi.ilike.*${prompt}*`);
         
-        // 1. CEK FILTER JALUR: APAKAH PERTANYAAN TENTANG PROFIL GOONA?
-        if (lowerPrompt.includes('goona') || lowerPrompt.includes('siapa kamu') || lowerPrompt.includes('aplikasi apa') || lowerPrompt.includes('what is goona')) {
-            isProfileQuery = true;
-            // Menarik data penjelasan empati dari tabel terpisah: info_aplikasi
-            const { data, error } = await supabase.from('info_aplikasi').select(`konten_${currentLang}`).eq('key', 'tentang_goona').maybeSingle();
-            if (data) {
-                applicationProfileText = data[`konten_${currentLang}`];
-            }
+        if (error) {
+            console.error("Supabase Query Error:", error);
         } else {
-            // 2. JALUR LAYANAN UTAMA: CARI DATA MENGGUNAKAN ILIKE DAN SINTAKS BINTANG (*) YANG DISETUJUI SUPABASE
-            const { data, error } = await supabase
-                .from('konten_goona')
-                .select('judul, deskripsi, nomor_wa')
-                .eq('status', 'aktif')
-                .or(`judul.ilike.*${prompt}*,deskripsi.ilike.*${prompt}*`);
-            
-            if (error) {
-                console.error("Kesalahan Pencarian Supabase:", error);
-            } else {
-                searchData = data || [];
-            }
+            searchData = data || [];
         }
 
-        // Hapus animasi loading sebelum menggambar balon chat
+        // Hapus animasi loading
         loadingDiv.remove();
 
-        // 3. JALUR PROSES EKSEKUSI UTAMA (AI OPENER - DATA - AI CLOSER)
-        const aiBubbleOpen = appendMessage("", 'ai-msg');
-        let isAiWorking = false;
+        if (searchData.length > 0) {
+            // 1. AMBIL SAPAAN PEMBUKA SECARA ACAK (RANDOMIZER)
+            const daftarPembuka = dictionary[currentLang].failSafeOpen;
+            const pembukaAcak = daftarPembuka[Math.floor(Math.random() * daftarPembuka.length)];
+            appendMessage(pembukaAcak, 'ai-msg');
 
-        // Pemicu AI untuk Kalimat Pembuka (Sales Informan)
-        try {
-            const responseOpen = await fetch("/tanya", { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    model: "google/gemma-4-31b:free",
-                    messages: [
-                        { role: "system", content: `Kamu adalah Sales Informan Goona AI yang sangat ramah dan berempati. Jawab WAJIB menggunakan bahasa dengan kode: ${currentLang}. Tugasmu HANYA menyapa pengguna dengan hangat di awal obrolan untuk mengantarkan informasi hasil pencarian mereka berikut ini. Jangan mengulang detail isi datanya.` },
-                        { role: "user", content: `Berikan sapaan pembuka sales informan yang natural untuk query: "${prompt}"` }
-                    ],
-                    stream: false
-                })
-            });
-
-            if (responseOpen.ok) {
-                const resJson = await responseOpen.json();
-                aiBubbleOpen.innerText = resJson.choices[0]?.message?.content || dictionary[currentLang].failSafeOpen;
-                isAiWorking = true;
-            } else {
-                aiBubbleOpen.innerText = dictionary[currentLang].failSafeOpen;
-            }
-        } catch (aiErr) {
-            aiBubbleOpen.innerText = dictionary[currentLang].failSafeOpen;
-        }
-
-        // 4. CETAK HASIL DATA DARI SUPABASE (KARTU / PROFIL TENTANG GOONA)
-        if (isProfileQuery) {
-            if (applicationProfileText) {
-                appendMessage(applicationProfileText, 'ai-msg');
-            } else {
-                const defaultAbout = {
-                    id: "Goona AI lahir dari hati untuk menemani perjuangan seluruh warga Kepri. Kami hadir sebagai wadah terpercaya yang mempermudah langkah Anda menemukan lowongan kerja valid, mempromosikan jasa, dan memperluas jaringan rezeki dengan aman.",
-                    en: "Goona AI was born from the heart to accompany the journey of all citizens in Riau Islands. We are here as a trusted platform that helps you find valid job vacancies, promote services, and expand your network safely.",
-                    zh: "Goona AI 顺应廖内群岛全体居民的心声而诞生。我们是一个值得信赖的平台，致力于为您提供便捷的合法招聘查询、服务推广，并安全地拓展您的致富网络。"
-                };
-                appendMessage(defaultAbout[currentLang], 'ai-msg');
-            }
-        } else if (searchData.length > 0) {
+            // 2. MENGGAMBAR KONTEN/DATA
             const cardWrapper = document.createElement('div');
             cardWrapper.className = 'card-container';
-            
-            searchData.forEach(item => {
-                const cleanPhone = item.nomor_wa ? item.nomor_wa.replace(/[^0-9]/g, '') : '';
-                const encodedMsg = encodeURIComponent(`${dictionary[currentLang].waTemplate} (${item.judul})`);
-                
-                cardWrapper.innerHTML += `
-                    <div class="jasa-card">
-                        <div class="card-title">${item.judul}</div>
-                        <div class="card-desc">${item.deskripsi}</div>
-                        <a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" class="btn-wa">
-                            💬 WhatsApp
-                        </a>
-                    </div>
-                `;
-            });
-            chatHistory.appendChild(cardWrapper);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        } else {
-            appendMessage(dictionary[currentLang].notFound, 'ai-msg');
-        }
+            let containsCards = false;
 
-        // 5. PENUTUP OBROLAN (AI CLOSER / CADANGAN FAIL-SAFE)
-        const aiBubbleClose = appendMessage("", 'ai-msg');
-        
-        if (isAiWorking) {
-            try {
-                const responseClose = await fetch("/tanya", { 
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: "google/gemma-4-31b:free",
-                        messages: [
-                            { role: "system", content: `Kamu adalah Sales Informan Goona AI. Jawab menggunakan bahasa dengan kode: ${currentLang}. Tugasmu memberikan 1 kalimat penutup yang interaktif dan bersahabat agar pengguna terdorong untuk mempersempit kata kunci atau mengetikkan lokasi/nama jasa yang lebih spesifik jika ingin menyaring data.` },
-                            { role: "user", content: "Berikan kalimat penutup pengarah obrolan sales." }
-                        ],
-                        stream: false
-                    })
-                });
-                
-                if (responseClose.ok) {
-                    const resCloseJson = await responseClose.json();
-                    aiBubbleClose.innerText = resCloseJson.choices[0]?.message?.content || dictionary[currentLang].failSafeClose;
+            searchData.forEach(item => {
+                if (item.kategori === 'FAQ') {
+                    // Jika data bermerek FAQ, cetak sebagai Balon Teks Biasa yang rapi
+                    appendMessage(item.deskripsi, 'ai-msg');
                 } else {
-                    aiBubbleClose.innerText = dictionary[currentLang].failSafeClose;
+                    // Jika kategori Jasa/Loker, gambar dalam bentuk KARTU LENGKAP yang apik
+                    containsCards = true;
+                    const cleanPhone = item.whatsapp ? item.whatsapp.replace(/[^0-9]/g, '') : '';
+                    const encodedMsg = encodeURIComponent(`${dictionary[currentLang].waTemplate} (${item.judul})`);
+                    
+                    // Format tampilan harga jika ada
+                    let hargaTeks = "";
+                    if (item.harga) {
+                        const formatHarga = new Intl.NumberFormat('id-ID').format(item.harga);
+                        const satuan = item.satuan_harga ? ` / ${item.satuan_harga}` : "";
+                        hargaTeks = `<div class="card-desc"><b>${dictionary[currentLang].priceLabel}</b> Rp ${formatHarga}${satuan}</div>`;
+                    }
+
+                    // Teks Lokasi Kota
+                    const lokasiTeks = item.kabupaten_kota ? `<div class="card-desc"><b>${dictionary[currentLang].locLabel}</b> ${item.kabupaten_kota}</div>` : "";
+
+                    cardWrapper.innerHTML += `
+                        <div class="jasa-card">
+                            <div class="card-title">${item.judul}</div>
+                            <div class="card-desc">${item.deskripsi}</div>
+                            ${lokasiTeks}
+                            ${hargaTeks}
+                            <a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" class="btn-wa">
+                                💬 WhatsApp
+                            </a>
+                        </div>
+                    `;
                 }
-            } catch(e) {
-                aiBubbleClose.innerText = dictionary[currentLang].failSafeClose;
+            });
+
+            if (containsCards) {
+                chatHistory.appendChild(cardWrapper);
             }
+
+            // 3. AMBIL SAPAAN PENUTUP SECARA ACAK (RANDOMIZER)
+            const daftarPenutup = dictionary[currentLang].failSafeClose;
+            const penutupAcak = daftarPenutup[Math.floor(Math.random() * daftarPenutup.length)];
+            appendMessage(penutupAcak, 'ai-msg');
+
         } else {
-            aiBubbleClose.innerText = dictionary[currentLang].failSafeClose;
+            // Jika data kata kunci tidak ditemukan sama sekali di database
+            appendMessage(dictionary[currentLang].notFound, 'ai-msg');
         }
 
         chatWindow.scrollTop = chatWindow.scrollHeight;
 
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
-        appendMessage(currentLang === 'id' ? "Maaf Cik, koneksi terputus. Data tidak dapat dimuat. 😥" : "Sorry, connection lost. Data failed to fetch. 😥", 'ai-msg');
-        console.error("Error Detail:", err);
+        appendMessage(currentLang === 'id' ? "Maaf Cik, sistem sedang pemeliharaan. 😥" : "Sorry, system under maintenance. 😥", 'ai-msg');
+        console.error("Fatal Error:", err);
     }
 }
 
@@ -614,21 +600,9 @@ function appendMessage(text, className) {
     return div;
 }
 
-// Pengaman Tombol & Keyboard Enter
+// Event Listener Keamanan Tombol & Tombol Enter Keyboard
 window.addEventListener('DOMContentLoaded', () => {
-    if (sendBtn) {
-        sendBtn.onclick = (e) => {
-            e.preventDefault();
-            tanyaAI();
-        };
-    }
-    if (inputField) {
-        inputField.onkeydown = (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                tanyaAI();
-            }
-        };
-    }
+    if (sendBtn) sendBtn.onclick = (e) => { e.preventDefault(); tanyaAI(); };
+    if (inputField) inputField.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); tanyaAI(); } };
 });
 </script>
