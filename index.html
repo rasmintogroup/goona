@@ -247,7 +247,6 @@ async function tanyaAI() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
     try {
-        // Ambil data hanya jika diperlukan (Deep Audit alur No. 5)
         const { data } = await supabase.from('konten_goona').select('judul, deskripsi').eq('status', 'aktif').limit(5);
         const contextData = (data && data.length > 0) ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
 
@@ -260,46 +259,28 @@ async function tanyaAI() {
                     { role: "system", content: "Kamu adalah AI Goona. Jawab dengan data referensi jika tersedia." },
                     { role: "user", content: `Konteks:\n${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
-                stream: true
+                stream: false // Kita matikan stream untuk stabilitas tes
             })
         });
 
         if (!response.ok) throw new Error('Koneksi AI Terputus');
 
-        loadingDiv.remove();
-        const aiBubble = appendMessage("", 'ai-msg');
+        // Cara baca JSON utuh (Non-Streaming)
+        const result = await response.json();
         
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let chunkBuffer = "";
+        loadingDiv.remove();
 
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            
-            chunkBuffer += decoder.decode(value, { stream: true });
-            const lines = chunkBuffer.split('\n');
-            chunkBuffer = lines.pop(); 
-
-            for (const line of lines) {
-                const cleanLine = line.replace(/^data: /, '').trim();
-                if (!cleanLine || cleanLine === '[DONE]') continue;
-                
-                try {
-                    const json = JSON.parse(cleanLine);
-                    const text = json.choices[0]?.delta?.content || "";
-                    if (text) {
-                        aiBubble.innerText += text;
-                        chatWindow.scrollTop = chatWindow.scrollHeight;
-                    }
-                } catch (e) {
-                    // Audit: Menangani JSON yang pecah di tengah baris
-                }
-            }
+        if (result.choices && result.choices[0]) {
+            const aiText = result.choices[0].message.content;
+            appendMessage(aiText, 'ai-msg');
+        } else {
+            throw new Error('Respons AI kosong');
         }
+
     } catch (err) {
         if (loadingDiv) loadingDiv.remove();
         appendMessage("Maaf Cik, koneksi terganggu. Sila coba sekejap lagi.", 'ai-msg');
+        console.error(err);
     }
 }
 function appendMessage(text, className) {
