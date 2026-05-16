@@ -11,33 +11,29 @@ export default {
             "Authorization": `Bearer ${env.OPENROUTER_API_KEY}`,
             "Content-Type": "application/json",
             "HTTP-Referer": "https://goona.my.id",
-            "X-Title": "Goona AI"
+            "X-Title": "Goona AI Kepri"
           },
           body: JSON.stringify(body)
         });
 
-        if (!response.ok) {
-          const errorData = await response.text();
-          return new Response(errorData, { status: response.status });
-        }
-
-        // Stream Helper untuk memastikan data terkirim tiap ada kata baru
+        // Buat stream baru agar lebih stabil di Cloudflare
         const { readable, writable } = new TransformStream();
         response.body.pipeTo(writable);
 
         return new Response(readable, {
-          headers: {
-            "Content-Type": "text/event-stream; charset=utf-8",
+          headers: { 
+            "Content-Type": "text/event-stream; charset=utf-8", 
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
-            "Access-Control-Allow-Origin": "*",
-            "X-Accel-Buffering": "no"
+            "Access-Control-Allow-Origin": "*" 
           }
         });
+
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500 });
       }
     }
+
     return env.ASSETS.fetch(request);
   }
 };
