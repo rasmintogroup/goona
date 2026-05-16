@@ -488,7 +488,7 @@ langSelect.addEventListener('change', (e) => {
     sidebar.classList.remove('open');
 });
 
-// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI (VERSI PINTAR & RINGKAS TANPA KATA SAMPAH)
+// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI (VERSI STABIL & PINTAR MULTI-KATA)
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
@@ -506,28 +506,33 @@ async function tanyaAI() {
     let searchData = [];
 
     try {
-        // 1. Pecah input pengguna berdasarkan spasi menjadi kata-kata terpisah
-        const kataKunci = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+        // 1. Pecah kalimat, ambil kata yang HANYA memiliki panjang lebih dari 3 huruf 
+        // (Otomatis kata seperti: 'di', 'mau', 'ada', 'yang', 'ke' akan terbuang sendiri!)
+        const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
         
-        // 2. Buat array untuk menampung perintah query OR Supabase
-        let perintahFilter = [];
-        
-        // 3. Masukkan setiap kata ke dalam target kolom pencarian (Logika ATAU)
-        kataKunci.forEach(kata => {
-            perintahFilter.push(
-                `judul.ilike.*${kata}*`,
-                `deskripsi.ilike.*${kata}*`,
-                `kabupaten_kota.ilike.*${kata}*`,
-                `kecamatan.ilike.*${kata}*`
-            );
-        });
+        // Saring kata kunci penting (panjang > 3 karakter)
+        let kataKunci = semuaKata.filter(word => word.length > 3);
 
-        // 4. Eksekusi ke Supabase menggunakan gabungan perintah OR yang sudah dibuat
-        const { data, error } = await supabase
+        // Fail-safe: jika user mengetik kata pendek semua (misal: "kue"), tetap masukkan kata tersebut
+        if (kataKunci.length === 0) {
+            kataKunci = semuaKata;
+        }
+
+        console.log("Kata kunci penting hasil penyaringan:", kataKunci);
+
+        // 2. Siapkan query dasar ke tabel konten_goona
+        let query = supabase
             .from('konten_goona')
             .select('judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan')
-            .eq('status', 'aktif')
-            .or(perintahFilter.join(',')); // Menggabungkan semua kata dengan logika ATAU
+            .eq('status', 'aktif');
+            
+        // 3. Masukkan filter berantai (Logika DAN yang sukses kemarin)
+        kataKunci.forEach(kata => {
+            query = query.or(`judul.ilike.*${kata}*,deskripsi.ilike.*${kata}*,kabupaten_kota.ilike.*${kata}*,kecamatan.ilike.*${kata}*`);
+        });
+        
+        // 4. Unduh data dari Supabase
+        const { data, error } = await query;
         
         if (error) {
             console.error("Supabase Query Error:", error);
