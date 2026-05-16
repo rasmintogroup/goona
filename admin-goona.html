@@ -472,43 +472,42 @@ function prosesMasuk() {
     }
 
 function cetakTabelUtama(dataList) {
-    const listBody = document.getElementById('isi-tabel');
-    listBody.innerHTML = '';
+        const listBody = document.getElementById('isi-tabel');
+        listBody.innerHTML = '';
 
-    dataList.forEach(item => {
-        const waNum = item.whatsapp || '-';
-        const waKlik = waNum.replace(/\D/g, '');
-        const waFinal = waKlik.startsWith('0') ? '62' + waKlik.slice(1) : waKlik;
-        
-        let lokasiInfo = item.kabupaten_kota || '-';
-        if(item.kecamatan) lokasiInfo += ` (${item.kecamatan})`;
+        dataList.forEach(item => {
+            const waNum = item.whatsapp || '-';
+            const waKlik = waNum.replace(/\D/g, '');
+            const waFinal = waKlik.startsWith('0') ? '62' + waKlik.slice(1) : waKlik;
+            
+            let lokasiInfo = item.kabupaten_kota || '-';
+            if(item.kecamatan) lokasiInfo += ` (${item.kecamatan})`;
 
-        // Diubah menggunakan parameter onclick langsung kawan
-        const barisHtml = `
-            <tr>
-                <td data-label="Layanan" class="text-left">
-                    <span style="font-size:16px; font-weight:bold; color:#3E2723;">${item.judul || '-'}</span>
-                    <div style="font-size:12px; color:#795548; margin-top:4px; font-weight:500;">${item.kategori || '-'} | ${lokasiInfo}</div>
-                </td>
-                <td data-label="WhatsApp" class="text-center">
-                    <a href="https://wa.me/${waFinal}" target="_blank" class="wa-link">${waNum}</a>
-                </td>
-                <td data-label="Status" class="text-center" style="color:${item.status === 'aktif' ? 'green' : 'orange'}; font-weight:bold; letter-spacing:0.5px;">
-                    ${item.status.toUpperCase()}
-                </td>
-                <td data-label="Aksi" class="text-center">
-                    <div style="display:flex; gap:8px; justify-content:center;">
-                        ${item.status === 'pending' ? `<button onclick="window.eksekusiAktifkan('${item.id}', this)" class="btn btn-ok">OK</button>` : ''}
-                        <button onclick="window.eksekusiHapus('${item.id}', this)" class="btn btn-hapus">Delete</button>
-                    </div>
-                </td>
-            </tr>
-        `;
-        listBody.innerHTML += barisHtml;
-    });
-} `
+            const barisHtml = `
+                <tr>
+                    <td data-label="Layanan" class="text-left">
+                        <span style="font-size:16px; font-weight:bold; color:#3E2723;">${item.judul || '-'}</span>
+                        <div style="font-size:12px; color:#795548; margin-top:4px; font-weight:500;">${item.kategori || '-'} | ${lokasiInfo}</div>
+                    </td>
+                    <td data-label="WhatsApp" class="text-center">
+                        <a href="https://wa.me/${waFinal}" target="_blank" class="wa-link">${waNum}</a>
+                    </td>
+                    <td data-label="Status" class="text-center" style="color:${item.status === 'aktif' ? 'green' : 'orange'}; font-weight:bold; letter-spacing:0.5px;">
+                        ${item.status.toUpperCase()}
+                    </td>
+                    <td data-label="Aksi" class="text-center">
+                        <div style="display:flex; gap:8px; justify-content:center;">
+                            ${item.status === 'pending' ? `<button onclick="window.eksekusiAktifkan('${item.id}', this)" class="btn btn-ok">OK</button>` : ''}
+                            <button onclick="window.eksekusiHapus('${item.id}', this)" class="btn btn-hapus">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            listBody.innerHTML += barisHtml;
+        });
+    } // <-- Kurung kurawal ini WAJIB mengunci fungsi cetakTabelUtama di sini kawan!
 
-    // PENGUNCIAN JALUR UTAMA API SUPABASE (ANTI REBUTAN TARGET DAN RESPONSIF DI LAYAR SENTUH HP)
+    // Di bawah ini adalah fungsi mandiri yang berada di luar cetakTabelUtama
     window.eksekusiAktifkan = async (idData, elemenTombol) => {
         if(!idData) return;
         elemenTombol.innerText = "⏳..."; 
@@ -542,7 +541,6 @@ function cetakTabelUtama(dataList) {
             elemenTombol.disabled = false;
         }
     };
-}
 </script>
 </body>
 </html>
