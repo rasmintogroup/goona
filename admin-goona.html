@@ -126,23 +126,17 @@
         input[type="password"] { padding: 12px; width: 260px; border-radius: 8px; border: 1.5px solid var(--light-brown); margin-bottom: 15px; outline: none; background: #FFFAF0; font-size: 16px; text-align: center; }
         input[type="password"]:focus { border-color: var(--primary); background: #fff; }
 
-        /* ============================================================
-           PERBAIKAN CSS MOBILE FRIENDLY KARTU TOTAL - KHUSUS RESPONSIVE
-           ============================================================ */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .container { padding: 15px; border-radius: 15px; }
             
-            /* Tampilan kontrol filter melebar penuh menyesuaikan gambar 2 kamu */
             .table-controls { width: 100%; flex-direction: column; gap: 8px; }
             select { width: 100%; flex: 1; }
 
-            /* Hilangkan pembungkus tabel kaku agar tidak muncul scrollbar horizontal */
             .table-wrapper { border: none; overflow: visible; }
             table, tbody, tr, td { display: block; width: 100%; }
-            thead { display: none; } /* Sembunyikan judul th tabel komputer */
+            thead { display: none; }
             
-            /* SULAP TR MENJADI SEBUAH KARTU INDAH */
             tr {
                 background: #ffffff;
                 border: 1.5px solid var(--light-brown);
@@ -152,15 +146,13 @@
                 box-shadow: 0 4px 10px rgba(139, 69, 19, 0.04);
             }
 
-            /* Atur tata letak komponen di dalam kartu */
             td {
-                padding: 6px 0;
-                border-bottom: 1px dashed #f1f5f9;
+                padding: 8px 0;
+                border-bottom: 1px dashed #e2e8f0;
                 text-align: left !important;
                 display: block;
             }
 
-            /* Memunculkan penunjuk teks murni di sebelah atas data seluler */
             td::before {
                 content: attr(data-label);
                 font-weight: 800;
@@ -172,7 +164,6 @@
                 letter-spacing: 0.5px;
             }
 
-            /* Kolom Aksi tombol diletakkan di paling bawah kanan kartu */
             td:last-child {
                 border-bottom: none;
                 padding-top: 12px;
@@ -181,7 +172,6 @@
                 justify-content: flex-end;
             }
             
-            /* Sembunyikan penunjuk label untuk kolom aksi tombol agar tidak sumpek */
             td:last-child::before { display: none; }
         }
     </style>
@@ -273,11 +263,15 @@
     const SB_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
 
+    // PENYESUAIAN 1: DATABASE WILAYAH KEPULAUAN RIAU SUDAH LENGKAP 7 KOTA/KABUPATEN
     const dataWilayahAdmin = {
         "Kota Batam": ["Batam Kota", "Batu Ampar", "Batu Aji", "Belakang Padang", "Bengkong", "Bulang", "Galang", "Lubuk Baja", "Nongsa", "Sagulung", "Sei Beduk", "Sekupang"],
         "Kota Tanjungpinang": ["Tanjungpinang Barat", "Tanjungpinang Kota", "Tanjungpinang Timur", "Bukit Bestari"],
         "Kabupaten Bintan": ["Bintan Pesisir", "Bintan Timur", "Bintan Utara", "Gunung Kijang", "Mantang", "Seri Kuala Lobam", "Tambelan", "Teluk Bintan", "Teluk Sebong", "Toapaya"],
-        "Kabupaten Karimun": ["Belat", "Buru", "Durai", "Karimun", "Kundur", "Kundur Barat", "Kundur Utara", "Meral", "Meral Barat", "Moro", "Selat Gelam", "Tebing", "Ungar"]
+        "Kabupaten Karimun": ["Belat", "Buru", "Durai", "Karimun", "Kundur", "Kundur Barat", "Kundur Utara", "Meral", "Meral Barat", "Moro", "Selat Gelam", "Tebing", "Ungar"],
+        "Kabupaten Lingga": ["Bakung Serumpun", "Katang Bidare", "Kepulauan Posek", "Lingga", "Lingga Timur", "Lingga Utara", "Pesisir Bukit", "Selayar", "Senayang", "Singkep", "Singkep Barat", "Singkep Pesisir", "Singkep Selatan", "Temiang Pesisir"],
+        "Kabupaten Natuna": ["Bunguran Barat", "Bunguran Batubi", "Bunguran Selatan", "Bunguran Tengah", "Bunguran Timur", "Bunguran Timur Laut", "Bunguran Utara", "Midai", "Pulau Laut", "Pulau Panjang", "Pulau Tiga", "Pulau Tiga Barat", "Serasan", "Serasan Timur", "Suak Midai", "Subi"],
+        "Kabupaten Kepulauan Anambas": ["Jemaja", "Jemaja Barat", "Jemaja Timur", "Kute Siantan", "Palmatak", "Siantan", "Siantan Selatan", "Siantan Tengah", "Siantan Timur", "Siantan Utara"]
     };
 
     window.onload = () => {
@@ -336,14 +330,14 @@
 
     async function panggilDatabase() {
         const listBody = document.getElementById('isi-tabel');
-        listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Memuat data...</td></tr>';
+        listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Memuat data dari server Supabase...</td></tr>';
 
         const { data, error } = await supabaseClient
             .from('konten_goona')
             .select('*')
             .order('created_at', { ascending: false });
 
-        if(error) { alert('Gagal: ' + error.message); return; }
+        if(error) { alert('Gagal memuat database: ' + error.message); return; }
 
         cacheDatabaseData = data || [];
         saringDanCetakTabel();
@@ -406,26 +400,67 @@
                 </td>
                 <td data-label="Aksi" class="text-center">
                     <div style="display:flex; gap:8px; justify-content:center;">
-                        ${item.status === 'pending' ? `<button onclick="window.aksiAktifkan('${item.id}')" class="btn btn-ok">OK</button>` : ''}
-                        <button onclick="window.aksiHapus('${item.id}')" class="btn btn-hapus">Delete</button>
+                        ${item.status === 'pending' ? `<button class="btn btn-ok" data-id="${item.id}">OK</button>` : ''}
+                        <button class="btn btn-hapus" data-id="${item.id}">Delete</button>
                     </div>
                 </td>
             `;
             listBody.appendChild(tr);
         });
+
+        // PENYESUAIAN 2: PASANG EVENT LISTENERS MODERN (MENJAMIN 100% RESPONSIVE DI LAPTOP & HP)
+        ikatPemicuTombolAksi();
     }
 
-    window.aksiAktifkan = async (id) => {
-        const { error } = await supabaseClient.from('konten_goona').update({ status: 'aktif' }).eq('id', id);
-        if(error) { alert("Gagal mengaktifkan data!"); } else { panggilDatabase(); }
-    };
+    function ikatPemicuTombolAksi() {
+        // Ikat Tombol OK (Aktifkan Data)
+        document.querySelectorAll('.btn-ok').forEach(tombol => {
+            tombol.onclick = async (e) => {
+                const idData = e.target.getAttribute('data-id');
+                e.target.innerText = "⏳...";
+                e.target.disabled = true;
+                
+                try {
+                    const { error } = await supabaseClient
+                        .from('konten_goona')
+                        .update({ status: 'aktif' })
+                        .eq('id', idData);
 
-    window.aksiHapus = async (id) => {
-        if(confirm('Apakah kawan yakin ingin menghapus data ini?')) {
-            const { error } = await supabaseClient.from('konten_goona').delete().eq('id', id);
-            if(error) { alert("Gagal menghapus data!"); } else { panggilDatabase(); }
-        }
-    };
+                    if (error) throw error;
+                    panggilDatabase(); // Tarik data baru pasca sukses diaktifkan
+                } catch (err) {
+                    alert("Gagal mengaktifkan pendaftar!");
+                    e.target.innerText = "OK";
+                    e.target.disabled = false;
+                }
+            };
+        });
+
+        // Ikat Tombol Delete (Hapus Data Permanen)
+        document.querySelectorAll('.btn-hapus').forEach(tombol => {
+            tombol.onclick = async (e) => {
+                const idData = e.target.getAttribute('data-id');
+                if(!confirm('Apakah kawan yakin ingin menghapus data ini secara permanen dari server?')) return;
+                
+                e.target.innerText = "❌...";
+                e.target.disabled = true;
+
+                try {
+                    const { error } = await supabaseClient
+                        .from('konten_goona')
+                        .delete()
+                        .eq('id', idData);
+
+                    if (error) throw error;
+                    panggilDatabase(); // Muat ulang tabel agar angka metrik langsung berkurang nyata
+                } catch (err) {
+                    alert("Gagal menghapus data dari server!");
+                    e.target.innerText = "Delete";
+                    e.target.disabled = false;
+                }
+            };
+        });
+    }
 </script>
 </body>
 </html>
