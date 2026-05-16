@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pasang Info - Goona AI</title>
-        <!-- FAVICON -->
     <link rel="icon" type="image/png" href="Pavicon_goona.png">
 
     <style>
@@ -156,9 +155,9 @@
             </div>
 
             <div class="form-group">
-    <label>Judul Informasi (Maks 50 Karakter)</label>
-    <input type="text" id="judul-info" placeholder="Contoh: Jual Motor Bekas Mulus" required maxlength="50">
-</div>
+                <label>Judul Informasi (Maks 50 Karakter)</label>
+                <input type="text" id="judul-info" placeholder="Contoh: Jual Motor Bekas Mulus" required maxlength="50">
+            </div>
 
             <div class="row">
                 <div class="form-group">
@@ -173,20 +172,39 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Harga (Rp) - <small>Kosongkan jika tidak ada</small></label>
-                <input type="number" id="harga" placeholder="Contoh: 150000">
+            <div class="row">
+                <div class="form-group">
+                    <label>Harga (Rp) - <small>Opsional</small></label>
+                    <input type="number" id="harga" placeholder="Contoh: 150000">
+                </div>
+                <div class="form-group">
+                    <label>Satuan Harga</label>
+                    <select id="satuan_harga">
+                        <option value="">-- Tanpa Satuan --</option>
+                        <option value="Porsi">/ Porsi</option>
+                        <option value="Bulan">/ Bulan</option>
+                        <option value="Hari">/ Hari</option>
+                        <option value="Jam">/ Jam</option>
+                        <option value="Unit">/ Unit</option>
+                        <option value="Borongan">/ Borongan</option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-group">
-    <label>Deskripsi Singkat (Maks 200 Karakter)</label>
-    <textarea id="deskripsi" maxlength="200" placeholder="Jelaskan detail ringkas di sini..." required></textarea>
-    <div id="char-count">Sisa: <span id="count">200</span> karakter</div>
-</div>
+                <label>Deskripsi Singkat (Maks 200 Karakter)</label>
+                <textarea id="deskripsi" maxlength="200" placeholder="Jelaskan detail ringkas di sini..." required></textarea>
+                <div id="char-count">Sisa: <span id="count">200</span> karakter</div>
+            </div>
             
             <div class="form-group">
                 <label>Nomor WhatsApp</label>
                 <input type="tel" id="wa-number" placeholder="Contoh: 081234567890" required>
+            </div>
+
+            <div class="form-group">
+                <label>URL Tautan Foto Jasa/Produk <small>(Opsional)</small></label>
+                <input type="url" id="url-foto" placeholder="Contoh: https://linkfoto.com/gambar.jpg">
             </div>
 
             <button type="submit" id="submit-btn">Kirim Informasi Sekarang</button>
@@ -259,27 +277,31 @@
             submitBtn.innerText = "Mengirim...";
             submitBtn.disabled = true;
 
+            // PENYESUAIAN FINAL: Kolom diubah menjadi 'judul' dan ditambah 'url_foto' serta 'satuan_harga'
             const payload = {
                 kategori: document.getElementById('kategori').value,
-                judul_info: document.getElementById('judul-info').value,
+                judul: document.getElementById('judul-info').value, 
                 kabupaten_kota: kabSelect.value,
                 kecamatan: kecSelect.value,
-                harga: document.getElementById('harga').value || null,
+                harga: document.getElementById('harga').value ? parseInt(document.getElementById('harga').value) : null,
+                satuan_harga: document.getElementById('satuan_harga').value || null,
                 deskripsi: deskripsiInput.value,
                 whatsapp: document.getElementById('wa-number').value,
-                status: 'pending',
+                url_foto: document.getElementById('url-foto').value || null,
+                status: 'pending', // Masuk sebagai pending agar bisa kamu kurasi dulu di Supabase
                 created_at: new Date().toISOString()
             };
 
             try {
                 const { error } = await supabase.from('konten_goona').insert([payload]);
                 if (error) throw error;
-                alert("Sukses! Informasi Anda sudah masuk.");
+                alert("Sukses! Informasi Anda sudah diajukan untuk ditinjau.");
                 form.reset();
                 kecSelect.disabled = true;
                 countSpan.innerText = "200";
             } catch (err) {
-                alert("Gagal mengirim. Periksa koneksi.");
+                console.error("Kesalahan pengiriman:", err);
+                alert("Gagal mengirim. Periksa koneksi atau struktur tabel.");
             } finally {
                 submitBtn.innerText = "Kirim Informasi Sekarang";
                 submitBtn.disabled = false;
