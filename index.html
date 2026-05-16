@@ -488,7 +488,7 @@ langSelect.addEventListener('change', (e) => {
     sidebar.classList.remove('open');
 });
 
-// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI (VERSI STABIL & PINTAR MULTI-KATA)
+// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI (VERSI SELEKSI SKOR KECOCOKAN LOKAL - AMAN KALIMAT PANJANG)
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
@@ -503,47 +503,55 @@ async function tanyaAI() {
     chatHistory.appendChild(loadingDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
-    let searchData = [];
-
     try {
-        // 1. Pecah kalimat, ambil kata yang HANYA memiliki panjang lebih dari 3 huruf 
-        // (Otomatis kata seperti: 'di', 'mau', 'ada', 'yang', 'ke' akan terbuang sendiri!)
-        const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
-        
-        // Saring kata kunci penting (panjang > 3 karakter)
-        let kataKunci = semuaKata.filter(word => word.length > 3);
+        // 1. Ambil kata-kata murni dari ketikan user (pecah jadi huruf kecil semua)
+        const kataUser = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
 
-        // Fail-safe: jika user mengetik kata pendek semua (misal: "kue"), tetap masukkan kata tersebut
-        if (kataKunci.length === 0) {
-            kataKunci = semuaKata;
-        }
-
-        console.log("Kata kunci penting hasil penyaringan:", kataKunci);
-
-        // 2. Siapkan query dasar ke tabel konten_goona
-        let query = supabase
+        // 2. Tarik SEMUA data aktif dari Supabase (Cepat dan anti-gagal karena tanpa filter rumit di server)
+        const { data: semuaData, error } = await supabase
             .from('konten_goona')
             .select('judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan')
             .eq('status', 'aktif');
-            
-        // 3. Masukkan filter berantai (Logika DAN yang sukses kemarin)
-        kataKunci.forEach(kata => {
-            query = query.or(`judul.ilike.*${kata}*,deskripsi.ilike.*${kata}*,kabupaten_kota.ilike.*${kata}*,kecamatan.ilike.*${kata}*`);
-        });
-        
-        // 4. Unduh data dari Supabase
-        const { data, error } = await query;
         
         if (error) {
-            console.error("Supabase Query Error:", error);
-        } else {
-            searchData = data || [];
+            console.error("Supabase Fetch Error:", error);
+            loadingDiv.remove();
+            appendMessage(dictionary[currentLang].notFound, 'ai-msg');
+            return;
         }
+
+        let hasilSaring = [];
+
+        // 3. HITUNG SKOR KECOCOKAN DI SISI BROWSER (LOKAL)
+        (semuaData || []).forEach(item => {
+            let skor = 0;
+            const teksTarget = `
+                ${(item.judul || '').toLowerCase()} 
+                ${(item.deskripsi || '').toLowerCase()} 
+                ${(item.kabupaten_kota || '').toLowerCase()} 
+                ${(item.kecamatan || '').toLowerCase()}
+            `;
+
+            // Cek setiap kata ketikan user, jika ada di dalam teks target, naikkan skornya
+            kataUser.forEach(kata => {
+                if (kata.length > 1 && teksTarget.includes(kata)) {
+                    skor += 1;
+                }
+            });
+
+            // Jika skor lebih dari 0, berarti ada kecocokan kata kunci penting!
+            if (skor > 0) {
+                hasilSaring.push({ data: item, skor: skor });
+            }
+        });
+
+        // Urutkan hasil berdasarkan skor tertinggi (yang paling cocok tampil paling atas)
+        hasilSaring.sort((a, b) => b.skor - a.skor);
 
         // Hapus animasi loading
         loadingDiv.remove();
 
-        if (searchData.length > 0) {
+        if (hasilSaring.length > 0) {
             // 1. AMBIL SAPAAN PEMBUKA SECARA ACAK (RANDOMIZER)
             const daftarPembuka = dictionary[currentLang].failSafeOpen;
             const pembukaAcak = daftarPembuka[Math.floor(Math.random() * daftarPembuka.length)];
@@ -554,7 +562,9 @@ async function tanyaAI() {
             cardWrapper.className = 'card-container';
             let containsCards = false;
 
-            searchData.forEach(item => {
+            hasilSaring.forEach(hasil => {
+                const item = hasil.data;
+
                 if (item.kategori === 'FAQ') {
                     appendMessage(item.deskripsi, 'ai-msg');
                 } else {
