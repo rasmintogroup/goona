@@ -263,6 +263,7 @@ async function tanyaAI() {
                 messages: [
                     { role: "user", content: `Data referensi: ${contextData}\n\nPertanyaan: ${prompt}` }
                 ],
+                max_tokens: 500,
                 stream: true
             })
         });
