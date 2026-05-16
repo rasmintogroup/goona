@@ -53,7 +53,6 @@
 
         .header h2 { color: var(--primary); margin: 0; font-size: 24px; }
         
-        /* METRIKS DASBOR ATAS YANG MENARIK */
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -88,7 +87,6 @@
         .metric-value { font-size: 24px; font-weight: bold; color: #3E2723; line-height: 1.2; }
         .metric-label { font-size: 12px; color: #8D6E63; font-weight: 500; }
 
-        /* KONTROL FILTER JALUR ATAS */
         .table-controls {
             display: flex;
             gap: 10px;
@@ -104,9 +102,9 @@
             font-size: 14px;
             color: #3E2723;
             outline: none;
+            min-width: 140px;
         }
 
-        /* STRUKTUR TABEL */
         .table-wrapper { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid #eee; }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th { background-color: var(--primary); color: white; padding: 15px; font-weight: bold; }
@@ -115,7 +113,6 @@
         .text-center { text-align: center; }
         .text-left { text-align: left; }
 
-        /* STYLING BUTTON */
         .btn { padding: 8px 16px; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; font-size: 13px; transition: transform 0.1s; }
         .btn:active { transform: scale(0.96); }
         .btn-hapus { background: var(--danger-red); }
@@ -124,56 +121,68 @@
         .wa-link { color: #25D366; font-weight: bold; text-decoration: none; border-bottom: 1px dashed #25D366; }
         .wa-link:hover { color: #128C7E; }
 
-        /* PANEL INTERFACE LOGIN */
         #login-panel { text-align: center; padding: 60px 20px; }
         #admin-panel { display: none; }
         input[type="password"] { padding: 12px; width: 260px; border-radius: 8px; border: 1.5px solid var(--light-brown); margin-bottom: 15px; outline: none; background: #FFFAF0; font-size: 16px; text-align: center; }
         input[type="password"]:focus { border-color: var(--primary); background: #fff; }
 
-        /* LAYOUT RESPONSIVE MOBILE FRIENDLY (TABEL MAJU JADI KARTU) */
+        /* ============================================================
+           PERBAIKAN CSS MOBILE FRIENDLY KARTU TOTAL - KHUSUS RESPONSIVE
+           ============================================================ */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .container { padding: 15px; border-radius: 15px; }
-            .header h2 { font-size: 20px; }
             
-            table, thead, tbody, th, td, tr { display: block; }
-            thead { display: none; }
+            /* Tampilan kontrol filter melebar penuh menyesuaikan gambar 2 kamu */
+            .table-controls { width: 100%; flex-direction: column; gap: 8px; }
+            select { width: 100%; flex: 1; }
+
+            /* Hilangkan pembungkus tabel kaku agar tidak muncul scrollbar horizontal */
+            .table-wrapper { border: none; overflow: visible; }
+            table, tbody, tr, td { display: block; width: 100%; }
+            thead { display: none; } /* Sembunyikan judul th tabel komputer */
             
+            /* SULAP TR MENJADI SEBUAH KARTU INDAH */
             tr {
-                border: 1px solid var(--light-brown);
-                padding: 12px;
-                background: #FFFAF0;
-                margin-bottom: 12px;
-                border-radius: 12px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+                background: #ffffff;
+                border: 1.5px solid var(--light-brown);
+                padding: 16px;
+                margin-bottom: 15px;
+                border-radius: 16px;
+                box-shadow: 0 4px 10px rgba(139, 69, 19, 0.04);
             }
 
+            /* Atur tata letak komponen di dalam kartu */
             td {
-                border-bottom: 1px dashed #e2e8f0;
-                padding: 8px 0;
-                display: flex;
-                flex-direction: column;
+                padding: 6px 0;
+                border-bottom: 1px dashed #f1f5f9;
                 text-align: left !important;
+                display: block;
             }
 
+            /* Memunculkan penunjuk teks murni di sebelah atas data seluler */
             td::before {
                 content: attr(data-label);
-                font-weight: bold;
-                color: var(--primary);
+                font-weight: 800;
+                color: var(--secondary-brown);
                 font-size: 11px;
                 text-transform: uppercase;
+                display: block;
                 margin-bottom: 2px;
+                letter-spacing: 0.5px;
             }
 
+            /* Kolom Aksi tombol diletakkan di paling bawah kanan kartu */
             td:last-child {
                 border-bottom: none;
                 padding-top: 12px;
+                display: flex;
                 flex-direction: row;
                 justify-content: flex-end;
             }
             
-            select { flex: 1; }
-            .table-controls { width: 100%; }
+            /* Sembunyikan penunjuk label untuk kolom aksi tombol agar tidak sumpek */
+            td:last-child::before { display: none; }
         }
     </style>
 </head>
@@ -198,7 +207,7 @@
                 <div class="metric-icon" style="background: var(--accent-blue);">📋</div>
                 <div class="metric-info">
                     <span class="metric-value" id="stat-total">0</span>
-                    <span class="metric-label">Total Pendaftar</span>
+                    <span class="metric-label" id="label-total">Total Terfilter</span>
                 </div>
             </div>
             <div class="metric-card">
@@ -224,11 +233,20 @@
                 <option value="Loker">Loker</option>
                 <option value="Kuliner">Kuliner</option>
                 <option value="Jual Beli">Jual Beli</option>
+                <option value="Properti">Properti (Sewa/Kos)</option>
+                <option value="Wisata">Wisata</option>
+                <option value="Info/Pengumuman">Info/Pengumuman</option>
             </select>
             <select id="filter-status">
                 <option value="ALL">Semua Status</option>
                 <option value="pending">Pending</option>
                 <option value="aktif">Aktif</option>
+            </select>
+            <select id="filter-kabupaten">
+                <option value="ALL">Semua Kota/Kab</option>
+            </select>
+            <select id="filter-kecamatan" disabled>
+                <option value="ALL">Semua Kecamatan</option>
             </select>
         </div>
 
@@ -255,16 +273,57 @@
     const SB_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
 
+    const dataWilayahAdmin = {
+        "Kota Batam": ["Batam Kota", "Batu Ampar", "Batu Aji", "Belakang Padang", "Bengkong", "Bulang", "Galang", "Lubuk Baja", "Nongsa", "Sagulung", "Sei Beduk", "Sekupang"],
+        "Kota Tanjungpinang": ["Tanjungpinang Barat", "Tanjungpinang Kota", "Tanjungpinang Timur", "Bukit Bestari"],
+        "Kabupaten Bintan": ["Bintan Pesisir", "Bintan Timur", "Bintan Utara", "Gunung Kijang", "Mantang", "Seri Kuala Lobam", "Tambelan", "Teluk Bintan", "Teluk Sebong", "Toapaya"],
+        "Kabupaten Karimun": ["Belat", "Buru", "Durai", "Karimun", "Kundur", "Kundur Barat", "Kundur Utara", "Meral", "Meral Barat", "Moro", "Selat Gelam", "Tebing", "Ungar"]
+    };
+
     window.onload = () => {
         supabaseClient = window.supabase.createClient(SB_URL, SB_KEY);
         document.getElementById('btn-login-action').onclick = prosesMasuk;
         document.getElementById('input-password').onkeydown = (e) => { if(e.key === 'Enter') prosesMasuk(); };
         document.getElementById('btn-refresh').onclick = panggilDatabase;
         
-        // Hubungkan fungsi filter menu ganti opsi
         document.getElementById('filter-kategori').onchange = saringDanCetakTabel;
         document.getElementById('filter-status').onchange = saringDanCetakTabel;
+        document.getElementById('filter-kabupaten').onchange = handleKabupatenChange;
+        document.getElementById('filter-kecamatan').onchange = saringDanCetakTabel;
+
+        initFilterWilayah();
     };
+
+    function initFilterWilayah() {
+        const kabSel = document.getElementById('filter-kabupaten');
+        Object.keys(dataWilayahAdmin).sort().forEach(kab => {
+            const opt = document.createElement('option');
+            opt.value = kab;
+            opt.text = kab;
+            kabSel.add(opt);
+        });
+    }
+
+    function handleKabupatenChange() {
+        const kabVal = document.getElementById('filter-kabupaten').value;
+        const kecSel = document.getElementById('filter-kecamatan');
+        
+        kecSel.innerHTML = '<option value="ALL">Semua Kecamatan</option>';
+        if(kabVal === 'ALL') {
+            kecSel.disabled = true;
+        } else {
+            kecSel.disabled = false;
+            if(dataWilayahAdmin[kabVal]) {
+                dataWilayahAdmin[kabVal].sort().forEach(kec => {
+                    const opt = document.createElement('option');
+                    opt.value = kec;
+                    opt.text = kec;
+                    kecSel.add(opt);
+                });
+            }
+        }
+        saringDanCetakTabel();
+    }
 
     function prosesMasuk() {
         const pass = document.getElementById('input-password').value;
@@ -277,7 +336,7 @@
 
     async function panggilDatabase() {
         const listBody = document.getElementById('isi-tabel');
-        listBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>';
+        listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Memuat data...</td></tr>';
 
         const { data, error } = await supabaseClient
             .from('konten_goona')
@@ -287,42 +346,41 @@
         if(error) { alert('Gagal: ' + error.message); return; }
 
         cacheDatabaseData = data || [];
-        hitungMetriks(cacheDatabaseData);
         saringDanCetakTabel();
     }
 
-    // HITUNG DATA KARTU ATAS SECARA AKURAT
-    function hitungMetriks(dataList) {
-        document.getElementById('stat-total').innerText = dataList.length;
+    function hitungMetriksAnalitik(filteredList) {
+        document.getElementById('stat-total').innerText = filteredList.length;
 
-        // Hitung data pendaftar baru masuk hari ini
         const hariIni = new Date().toISOString().split('T')[0];
-        const pendaftarHariIni = dataList.filter(item => item.created_at && item.created_at.startsWith(hariIni)).length;
+        const pendaftarHariIni = filteredList.filter(item => item.created_at && item.created_at.startsWith(hariIni)).length;
         document.getElementById('stat-today').innerText = pendaftarHariIni;
 
-        // Simulasi Visitor Counter Berbasis LocalStorage
         let vCount = localStorage.getItem('goonity_visitors') || 1240;
-        vCount = parseInt(vCount) + Math.floor(Math.random() * 2);
-        localStorage.setItem('goonity_visitors', vCount);
         document.getElementById('stat-visitors').innerText = new Intl.NumberFormat('id-ID').format(vCount);
     }
 
-    // SARING DATA & CETAK (MENDUKUNG MOBILE CARD)
     function saringDanCetakTabel() {
         const listBody = document.getElementById('isi-tabel');
         listBody.innerHTML = '';
 
         const filterKat = document.getElementById('filter-kategori').value;
         const filterStat = document.getElementById('filter-status').value;
+        const filterKab = document.getElementById('filter-kabupaten').value;
+        const filterKec = document.getElementById('filter-kecamatan').value;
 
         const filtered = cacheDatabaseData.filter(item => {
             const cocokKat = (filterKat === 'ALL' || item.kategori === filterKat);
             const cocokStat = (filterStat === 'ALL' || item.status === filterStat);
-            return cocokKat && cocokStat;
+            const cocokKab = (filterKab === 'ALL' || item.kabupaten_kota === filterKab);
+            const cocokKec = (filterKec === 'ALL' || item.kecamatan === filterKec);
+            return cocokKat && cocokStat && cocokKab && cocokKec;
         });
 
+        hitungMetriksAnalitik(filtered);
+
         if (filtered.length === 0) {
-            listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#8d6e63; padding:20px;">Belum ada pendaftaran yang sesuai.</td></tr>';
+            listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#8d6e63; padding:35px; font-weight:600;">Belum ada pendaftaran yang sesuai.</td></tr>';
             return;
         }
 
@@ -331,22 +389,25 @@
             const waNum = item.whatsapp || '-';
             const waKlik = waNum.replace(/\D/g, '');
             const waFinal = waKlik.startsWith('0') ? '62' + waKlik.slice(1) : waKlik;
+            
+            let lokasiInfo = item.kabupaten_kota || '-';
+            if(item.kecamatan) lokasiInfo += ` (${item.kecamatan})`;
 
             tr.innerHTML = `
                 <td data-label="Layanan" class="text-left">
-                    <b>${item.judul || '-'}</b>
-                    <div style="font-size:12px; color:#795548; margin-top:2px;">${item.kategori || '-'} | ${item.kabupaten_kota || '-'}</div>
+                    <span style="font-size:16px; font-weight:bold; color:#3E2723;">${item.judul || '-'}</span>
+                    <div style="font-size:12px; color:#795548; margin-top:4px; font-weight:500;">${item.kategori || '-'} | ${lokasiInfo}</div>
                 </td>
                 <td data-label="WhatsApp" class="text-center">
                     <a href="https://wa.me/${waFinal}" target="_blank" class="wa-link">${waNum}</a>
                 </td>
-                <td data-label="Status" class="text-center" style="color:${item.status === 'aktif' ? 'green' : 'orange'}; font-weight:bold">
+                <td data-label="Status" class="text-center" style="color:${item.status === 'aktif' ? 'green' : 'orange'}; font-weight:bold; letter-spacing:0.5px;">
                     ${item.status.toUpperCase()}
                 </td>
                 <td data-label="Aksi" class="text-center">
-                    <div style="display:flex; gap:5px; justify-content:center;">
-                        ${item.status === 'pending' ? `<button onclick="aksiAktifkan('${item.id}')" class="btn btn-ok">OK</button>` : ''}
-                        <button onclick="aksiHapus('${item.id}')" class="btn btn-hapus">Delete</button>
+                    <div style="display:flex; gap:8px; justify-content:center;">
+                        ${item.status === 'pending' ? `<button onclick="window.aksiAktifkan('${item.id}')" class="btn btn-ok">OK</button>` : ''}
+                        <button onclick="window.aksiHapus('${item.id}')" class="btn btn-hapus">Delete</button>
                     </div>
                 </td>
             `;
@@ -355,14 +416,14 @@
     }
 
     window.aksiAktifkan = async (id) => {
-        await supabaseClient.from('konten_goona').update({ status: 'aktif' }).eq('id', id);
-        panggilDatabase();
+        const { error } = await supabaseClient.from('konten_goona').update({ status: 'aktif' }).eq('id', id);
+        if(error) { alert("Gagal mengaktifkan data!"); } else { panggilDatabase(); }
     };
 
     window.aksiHapus = async (id) => {
         if(confirm('Apakah kawan yakin ingin menghapus data ini?')) {
-            await supabaseClient.from('konten_goona').delete().eq('id', id);
-            panggilDatabase();
+            const { error } = await supabaseClient.from('konten_goona').delete().eq('id', id);
+            if(error) { alert("Gagal menghapus data!"); } else { panggilDatabase(); }
         }
     };
 </script>
