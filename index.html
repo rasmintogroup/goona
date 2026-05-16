@@ -489,6 +489,7 @@ langSelect.addEventListener('change', (e) => {
 });
 
 // LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI
+// LOGIKA UTAMA SEMI-AI MANDIRI GOONA AI (VERSI PENCARIAN PINTAR MULTI-KATA)
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
@@ -506,12 +507,28 @@ async function tanyaAI() {
     let searchData = [];
 
     try {
-        // TARIK DATA TANPA BATAS & SESUAIKAN DENGAN NAMA KOLOM BARU KAMU (*whatsapp*)
-        const { data, error } = await supabase
+        // ============================================================
+        // PROSES STRATEGI SEMI-AI: PECAH KATA (TOKENIZING MULTI-WORD)
+        // ============================================================
+        
+        // 1. Memisahkan spasi untuk mengambil kata per kata (Contoh: "kue batam" -> ["kue", "batam"])
+        const kataKunci = prompt.split(/\s+/).filter(word => word.length > 0);
+        
+        // 2. Siapkan query dasar ke tabel konten_goona
+        let query = supabase
             .from('konten_goona')
             .select('judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga')
-            .eq('status', 'aktif')
-            .or(`judul.ilike.*${prompt}*,deskripsi.ilike.*${prompt}*`);
+            .eq('status', 'aktif');
+            
+        // 3. Gabungkan filter kata kunci ke database. 
+        // Sistem akan menyaring agar data yang keluar WAJIB mengandung KATA 1 + KATA 2 + KATA 3 dst.
+        // Rentang pencarian diperluas meliputi: JUDUL, DESKRIPSI, dan KABUPATEN_KOTA
+        kataKunci.forEach(kata => {
+            query = query.or(`judul.ilike.*${kata}*,deskripsi.ilike.*${kata}*,kabupaten_kota.ilike.*${kata}*`);
+        });
+        
+        // 4. Jalankan perintah unduh data dari database
+        const { data, error } = await query;
         
         if (error) {
             console.error("Supabase Query Error:", error);
