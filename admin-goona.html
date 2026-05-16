@@ -59,7 +59,6 @@
             align-items: center;
         }
 
-        /* BUTTON TRIGGERS EMOTICON ANALISIS PASAR */
         .btn-analitik-trigger {
             background: #e67e22;
             font-size: 18px;
@@ -118,6 +117,7 @@
 
         .text-center { text-align: center; }
         .text-left { text-align: left; }
+        .text-right { text-align: right; }
 
         .btn { padding: 8px 16px; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; font-size: 13px; transition: transform 0.1s; }
         .btn:active { transform: scale(0.96); }
@@ -132,9 +132,7 @@
         input[type="password"] { padding: 12px; width: 260px; border-radius: 8px; border: 1.5px solid var(--light-brown); margin-bottom: 15px; outline: none; background: #FFFAF0; font-size: 16px; text-align: center; }
         input[type="password"]:focus { border-color: var(--primary); background: #fff; }
 
-        /* ============================================================
-           PAPAN PENGUMUMAN ANALITIK (MODAL WINDOW COCOK UNTUK HP)
-           ============================================================ */
+        /* OVERLAY PANEL PAPAN PENGUMUMAN ANALITIK */
         .board-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -149,7 +147,7 @@
         .announcement-board {
             background: #ffffff;
             width: 100%;
-            max-width: 650px;
+            max-width: 800px; /* Diperlebar sedikit agar muat tabel matriks silang */
             max-height: 85vh;
             border-radius: 24px;
             border: 2px solid var(--primary);
@@ -180,20 +178,25 @@
 
         .analitik-section-title {
             font-size: 14px; font-weight: bold; color: var(--secondary-brown);
-            margin: 15px 0 8px 0; border-left: 4px solid var(--primary); padding-left: 8px;
+            margin: 20px 0 8px 0; border-left: 4px solid var(--primary); padding-left: 8px;
+        }
+
+        .board-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #f3e8da;
         }
 
         .board-table {
-            width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 13px;
+            width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px;
         }
-        .board-table th { background: var(--bg); color: var(--primary); padding: 8px 12px; text-align: left; font-size: 12px; }
-        .board-table td { padding: 8px 12px; border-bottom: 1px solid #f3e8da; color: #3E2723; }
+        .board-table th { background: var(--bg); color: var(--primary); padding: 10px; font-size: 12px; font-weight: bold; }
+        .board-table td { padding: 10px; border-bottom: 1px solid #f3e8da; color: #3E2723; }
 
-        /* PERBAIKAN TOTAL LAYOUT SELULER TABEL BAWAH */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .container { padding: 15px; border-radius: 15px; }
-            .header h2 { font-size: 20px; }
             
             .table-wrapper { border: none; overflow: visible; }
             table, tbody, tr, td { display: block; width: 100%; }
@@ -303,38 +306,38 @@
             <button id="btn-close-analitik" class="btn-close-board">Tutup</button>
         </div>
         
-        <div class="analitik-section-title">📦 Analisis Suplai Kategori</div>
-        <table class="board-table">
-            <thead>
-                <tr>
-                    <th>Kategori</th>
-                    <th>Jumlah Data</th>
-                </tr>
-            </thead>
-            <tbody id="analitik-kategori-rows"></tbody>
-        </table>
+        <div class="analitik-section-title">⚓ Matriks Suplai Kategori Per Wilayah (Otomatis)</div>
+        <div class="board-wrapper">
+            <table class="board-table">
+                <thead>
+                    <tr>
+                        <th class="text-left" style="min-width: 150px;">Kabupaten / Kota</th>
+                        <th class="text-right">Jasa</th>
+                        <th class="text-right">Loker</th>
+                        <th class="text-right">Kuliner</th>
+                        <th class="text-right">Jual Beli</th>
+                        <th class="text-right">Properti</th>
+                        <th class="text-right">Wisata</th>
+                        <th class="text-right">Info</th>
+                        <th class="text-right" style="background: #f5e6d3;">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="analitik-matriks-rows"></tbody>
+            </table>
+        </div>
 
-        <div class="analitik-section-title">⚓ Analisis Geografis (7 Wilayah Kepri)</div>
-        <table class="board-table">
-            <thead>
-                <tr>
-                    <th>Kabupaten / Kota</th>
-                    <th>Jumlah Data</th>
-                </tr>
-            </thead>
-            <tbody id="analitik-wilayah-rows"></tbody>
-        </table>
-
-        <div class="analitik-section-title">📍 Data Breakdown Per Kecamatan</div>
-        <table class="board-table">
-            <thead>
-                <tr>
-                    <th>Kecamatan</th>
-                    <th>Jumlah Data</th>
-                </tr>
-            </thead>
-            <tbody id="analitik-kecamatan-rows"></tbody>
-        </table>
+        <div class="analitik-section-title">📍 Breakdown Mikro Per Kecamatan</div>
+        <div class="board-wrapper">
+            <table class="board-table">
+                <thead>
+                    <tr>
+                        <th class="text-left">Kecamatan</th>
+                        <th class="text-right">Jumlah Data</th>
+                    </tr>
+                </thead>
+                <tbody id="analitik-kecamatan-rows"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -351,7 +354,6 @@
         document.getElementById('input-password').onkeydown = (e) => { if(e.key === 'Enter') prosesMasuk(); };
         document.getElementById('btn-refresh').onclick = panggilDatabase;
         
-        // Event listener papan pengumuman analitik
         document.getElementById('btn-open-analitik').onclick = () => { document.getElementById('papan-analitik-overlay').style.display = 'flex'; };
         document.getElementById('btn-close-analitik').onclick = () => { document.getElementById('papan-analitik-overlay').style.display = 'none'; };
     };
@@ -393,22 +395,13 @@
         document.getElementById('stat-visitors').innerText = new Intl.NumberFormat('id-ID').format(vCount);
     }
 
-    // HITUNG OTOMATIS SELURUH DATA PASAR KEPRI DALAM PAPAN ANALITIK OVERLAY
     function hitungDanCetakPapanAnalitik(dataList) {
-        const katBody = document.getElementById('analitik-kategori-rows');
-        const wilBody = document.getElementById('analitik-wilayah-rows');
+        const matriksBody = document.getElementById('analitik-matriks-rows');
         const kecBody = document.getElementById('analitik-kecamatan-rows');
         
-        katBody.innerHTML = ''; wilBody.innerHTML = ''; kecBody.innerHTML = '';
+        matriksBody.innerHTML = ''; kecBody.innerHTML = '';
 
-        // 1. Hitung Otomatis Kategori
-        const daftarKategori = ["Jasa", "Loker", "Kuliner", "Jual Beli", "Properti", "Wisata", "Info/Pengumuman"];
-        daftarKategori.forEach(kat => {
-            const total = dataList.filter(item => item.kategori === kat).length;
-            katBody.innerHTML += `<tr><td><b>${kat}</b></td><td><span class="status-badge" style="background:#eee; padding:3px 10px; border-radius:10px;">${total} Data</span></td></tr>`;
-        });
-
-        // 2. Hitung Otomatis 7 Wilayah Resmi Kepri (Ditranslate ke Huruf Kecil Supaya Akurat Fleksibel)
+        // Definisi 7 Wilayah Resmi & Peta Pencarian Supabase (.toLowerCase fleksibel)
         const pemetaan7Wilayah = {
             "Kota Batam": "batam",
             "Kota Tanjungpinang": "tanjungpinang",
@@ -419,16 +412,30 @@
             "Kabupaten Kepulauan Anambas": "anambas"
         };
 
+        const daftarKategori = ["Jasa", "Loker", "Kuliner", "Jual Beli", "Properti", "Wisata", "Info/Pengumuman"];
+
+        // 1. GENERATE TABEL MATRIKS SILANG OTOMATIS (WILAYAH VS KATEGORI DETAIL)
         Object.keys(pemetaan7Wilayah).forEach(namaResmi => {
             const kataKunciDb = pemetaan7Wilayah[namaResmi];
-            const total = dataList.filter(item => {
-                const lokasiMentah = (item.kabupaten_kota || '').toLowerCase();
-                return lokasiMentah.includes(kataKunciDb);
-            }).length;
-            wilBody.innerHTML += `<tr><td><b>${namaResmi}</b></td><td><span class="status-badge" style="background:#e3f2fd; color:#1e88e5; padding:3px 10px; border-radius:10px; font-weight:bold;">${total} Data</span></td></tr>`;
+            
+            // Saring data khusus daerah ini
+            const dataDaerahIni = dataList.filter(item => (item.kabupaten_kota || '').toLowerCase().includes(kataKunciDb));
+            
+            let rowHtml = `<tr><td class="text-left">${namaResmi}</td>`;
+            
+            // Hitung data per kategori di daerah tersebut
+            daftarKategori.forEach(kat => {
+                const totalPerKatDaerah = dataDaerahIni.filter(item => item.kategori === kat).length;
+                rowHtml += `<blank class="text-right" style="display:table-cell; padding:10px; text-align:right;">${totalPerKatDaerah}</blank>`;
+            });
+            
+            // Tambahkan total keseluruhan baris daerah tersebut di ujung kanan
+            rowHtml += `<blank class="text-right" style="display:table-cell; padding:10px; text-align:right; background:#fff8ef; font-weight:600;">${dataDaerahIni.length}</blank></tr>`;
+            
+            matriksBody.innerHTML += rowHtml;
         });
 
-        // 3. Hitung Otomatis Breakdown Kecamatan (Hanya menampilkan kecamatan yang sudah diisi oleh pendaftar)
+        // 2. GENERATE RINGKASAN DATA KECAMATAN TERISI (RATA KANAN & TIDAK BOLD)
         const mapKecamatan = {};
         dataList.forEach(item => {
             if (item.kecamatan) {
@@ -439,10 +446,10 @@
 
         const listKecTerisi = Object.keys(mapKecamatan).sort();
         if(listKecTerisi.length === 0) {
-            kecBody.innerHTML = '<tr><td colspan="2" style="color:gray; text-align:center;">Belum ada data kecamatan masuk.</td></tr>';
+            kecBody.innerHTML = '<tr><td colspan="2" style="color:gray; text-align:center; padding:15px;">Belum ada data kecamatan masuk.</td></tr>';
         } else {
             listKecTerisi.forEach(kec => {
-                kecBody.innerHTML += `<tr><td>${kec}</td><td><b>${mapKecamatan[kec]}</b></td></tr>`;
+                kecBody.innerHTML += `<tr><td class="text-left">${kec}</td><td class="text-right">${mapKecamatan[kec]} Data</td></tr>`;
             });
         }
     }
@@ -481,15 +488,18 @@
             listBody.appendChild(tr);
         });
 
-        // NYALAKAN EVENT LISTENER SAKLAR UTAMA TOMBOL (ANTI-MACET DI SELULER HP)
         ikatPemicuTombolAksi();
     }
 
+    // PERBAIKAN 1: PENGGUNAAN TOMBOL AKURAT BERBASIS TARGET ELEMEN SEHINGGA SINKRONISASI SUPABASE BERJALAN 100%
     function ikatPemicuTombolAksi() {
         document.querySelectorAll('.btn-ok').forEach(tombol => {
             tombol.onclick = async (e) => {
-                const idData = e.target.getAttribute('data-id');
-                e.target.innerText = "⏳..."; e.target.disabled = true;
+                const idData = tombol.getAttribute('data-id');
+                if(!idData) return;
+                
+                tombol.innerText = "⏳..."; 
+                tombol.disabled = true;
                 
                 try {
                     const { error } = await supabaseClient.from('konten_goona').update({ status: 'aktif' }).eq('id', idData);
@@ -497,17 +507,20 @@
                     panggilDatabase();
                 } catch (err) {
                     alert("Gagal mengaktifkan data!");
-                    e.target.innerText = "OK"; e.target.disabled = false;
+                    tombol.innerText = "OK"; 
+                    tombol.disabled = false;
                 }
             };
         });
 
         document.querySelectorAll('.btn-hapus').forEach(tombol => {
             tombol.onclick = async (e) => {
-                const idData = e.target.getAttribute('data-id');
+                const idData = tombol.getAttribute('data-id');
+                if(!idData) return;
                 if(!confirm('Apakah kawan yakin ingin menghapus permanen data ini?')) return;
                 
-                e.target.innerText = "❌..."; tombol.disabled = true;
+                tombol.innerText = "❌..."; 
+                tombol.disabled = true;
 
                 try {
                     const { error } = await supabaseClient.from('konten_goona').delete().eq('id', idData);
@@ -515,7 +528,8 @@
                     panggilDatabase();
                 } catch (err) {
                     alert("Gagal menghapus data!");
-                    e.target.innerText = "Delete"; e.target.disabled = false;
+                    tombol.innerText = "Delete"; 
+                    tombol.disabled = false;
                 }
             };
         });
