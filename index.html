@@ -255,18 +255,28 @@ async function tanyaAI() {
 
         let contextData = data ? data.map(item => `${item.judul}: ${item.deskripsi}`).join('\n') : "";
 
-        const response = await fetch("/tanya", { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: "nvidia/nemotron-3-super:free", // KOMA SUDAH DITAMBAHKAN
-                messages: [
-                    { role: "user", content: `Data referensi: ${contextData}\n\nPertanyaan: ${prompt}` }
-                ],
-                max_tokens: 500,
-                stream: true
-            })
-        });
+        // ... di dalam fungsi tanyaAI ...
+
+const response = await fetch("/tanya", { 
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        model: "nvidia/nemotron-3-super:free",
+        messages: [
+            { 
+                role: "system", 
+                content: "Kamu adalah AI Goona. Berikan jawaban yang sangat detail, lengkap, dan informatif. Jangan memotong penjelasan." 
+            },
+            { 
+                role: "user", 
+                content: `Data referensi: ${contextData}\n\nPertanyaan: ${prompt}` 
+            }
+        ],
+        max_tokens: 1500, // <--- KUNCI UTAMA: Memberi ruang jawaban lebih panjang
+        temperature: 0.7, // Membuat jawaban lebih natural
+        stream: true
+    })
+});
 
         if (!response.ok) throw new Error('Koneksi Gagal');
 
