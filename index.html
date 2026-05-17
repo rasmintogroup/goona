@@ -142,7 +142,7 @@
             font-weight: bold;
         }
 
-        /* MENU UTAMA GARIS 3 (HAMBURGER) */
+        /* MENU HAMBURGER */
         .menu-btn {
             cursor: pointer;
             display: flex;
@@ -159,7 +159,7 @@
             transition: 0.3s;
         }
 
-        /* SIDEBAR DRAWER (MENU SAMPING) */
+        /* SIDEBAR DRAWER */
         .sidebar {
             position: absolute;
             top: 0;
@@ -196,7 +196,7 @@
             text-align: justify;
         }
 
-        /* TAMPILAN KARTU JASA / LOKER YANG APIK */
+        /* KARTU JASA / LOKER */
         .card-container {
             display: flex;
             flex-direction: column;
@@ -347,7 +347,7 @@ const sendBtn = document.getElementById('send-btn');
 const menuBtn = document.getElementById('menu-btn');
 const sidebar = document.getElementById('sidebar');
 
-// STATE IDENTITAS & ALUR PROSES KLIEN
+// STATE IDENTITAS 
 let userIdentity = {
     nama: localStorage.getItem('goona_nama') || '',
     daerah: localStorage.getItem('goona_daerah') || ''
@@ -355,7 +355,7 @@ let userIdentity = {
 let currentStep = 'normal'; 
 const normalPlaceholder = "Gunakan 3 kata (Contoh: kue batam center)...";
 
-// MODUL 1: VARIASI PERTANYAAN NAMA (FOKUS BHS INDONESIA)
+// MODUL 1: 40 PERTANYAAN NAMA (SANGAT MANUSIAWI, BEBAS BAHASA TEKNIS)
 const modul1Variations = [
     "Hallo Goonity! Selamat datang di Goona Chat. Biar makin akrab, Goona boleh tahu nama panggilan Kakak? 😁",
     "Hai! Seru banget bisa ketemu kamu di Goona Chat. Sebelum kita mulai, kenalan dulu yuk! Nama panggilan Kakak siapa nih? ✨",
@@ -363,7 +363,7 @@ const modul1Variations = [
     "Halo! Goona senang banget Kakak mampir ke sini. Boleh tahu siapa nama panggilan Kakak? 🌟",
     "Eh ada tamu baru! Salam kenal ya dari Goona. Nama panggilan Kakak siapa nih? 😊",
     "Hallo Goonity! Biar obrolan kita makin asyik dan pas, boleh tahu dengan Kakak siapa di sini? 🙌",
-    "Hai Kak! Selamat datang di ekosistem Goona Chat. Kenalan dulu yuk, nama panggilan Kakak siapa? 🍃",
+    "Hai Kak! Selamat datang di dunia Goona Chat. Kenalan dulu yuk, nama panggilan Kakak siapa? 🍃",
     "Halo, selamat hari yang indah! Goona siap bantu kamu hari ini. Tapi sebelumnya, dengan Kakak siapa nih? 😁",
     "Wah, ada teman baru nih di Goona Chat! Kenalan dong, boleh tahu nama panggilan Kakak? 🥳",
     "Hallo! Goona di sini. Biar obrolan kita makin personal dan santai, boleh sebutkan nama panggilan Kakak? ✨",
@@ -386,51 +386,240 @@ const modul1Variations = [
     "Hallo! Goona Chat di sini buat kamu. Biar makin santai, panggilannya siapa nih Kak? 🧸",
     "Hai Kak! Biar Goona bisa kasih rekomendasi yang oke, boleh tahu nama panggilan Kakak? 🎯",
     "Wah, makasih ya udah buka Goona Chat. Kenalan dulu yuk, nama panggilan Kakak siapa? 💖",
-    "Hallo Goonity! Yuk mulai obrolan seru kita. Tapi sebelumnya, nama panggilan Kakak siapa nih? 🥰"
+    "Hallo Goonity! Yuk mulai obrolan seru kita. Tapi sebelumnya, nama panggilan Kakak siapa nih? 🥰",
+    "Yey, ada yang mampir! Salam hangat dari Goona. Panggilannya siapa nih Kak, biar langsung akrab? 🌸",
+    "Halo Kak! Hari ini cerah banget ya. Boleh tahu nama panggilan Kakak siapa? Goona pengen kenalan. ☀️",
+    "Selamat datang kawan! Goona seneng banget bisa terhubung sama kamu. Panggilanmu siapa nih? 🤝",
+    "Hai Kak! Yuk kita saling kenal dulu biar obrolannya makin asyik. Nama panggilan Kakak siapa? 💎",
+    "Hallo Goonity! Anggap saja rumah sendiri ya. Boleh sebutkan nama panggilan Kakak ke Goona? 🏡",
+    "Wah, kedatangan temen ngobrol baru nih! Siapa nama panggilan Kakak kalau boleh tahu? 🎈",
+    "Halo Kak! Senyumanmu hari ini pasti manis banget. Kenalan dong, nama panggilannya siapa? 😊",
+    "Hai! Goona siap jadi teman setiamu mencari informasi hari ini. Nama panggilan Kakak siapa? 🕯️",
+    "Hallo! Lembaran baru obrolan kita dimulai dari sebuah nama. Nama panggilan Kakak siapa nih? 📖",
+    "Hai Kak! Biar Goona enggak kaku manggilnya, nama panggilannya siapa ya? Let's be friends! 🍁"
 ];
 
-// VARIASI PERTANYAAN DAERAH
+// 40 PERTANYAAN DAERAH (SEMAKIN BANYAK VARIASI, TANPA KATA TEKNIS)
 const daerahQuestions = [
     "Wah keren! Kalau asal daerah atau domisili Kak [Nama] saat ini di kota/kabupaten mana? 🌍",
     "Sip deh Kak [Nama]! Oh ya, sekarang posisi Kakak lagi tinggal di kota atau daerah mana nih di Kepri? 🏝️",
     "Salam kenal Kak [Nama]! Biar Goona bisa cariin info yang paling dekat, domisili Kakak di daerah mana ya? 📍",
     "Noted Kak [Nama]! Sekarang Goona mau tahu dong, Kakak lagi chat dari kota atau kabupaten mana? 😊",
-    "Nama yang bagus, Kak [Nama]! Nah, kalau boleh tahu, daerah asal atau tempat tinggal Kakak sekarang di mana? 🗺️"
+    "Nama yang bagus, Kak [Nama]! Nah, kalau boleh tahu, daerah asal atau tempat tinggal Kakak sekarang di mana? 🗺️",
+    "Oke Kak [Nama], lalu sekarang Kakak domisilinya di daerah mana nih? Biar infonya pas! 🏡",
+    "Wah, mantap Kak [Nama]! Ngomong-ngomong, Kakak tinggal di kota atau wilayah mana sekarang? ✨",
+    "Sip, nama Kakak sudah Goona ingat. Kalau posisi tempat tinggal Kak [Nama] sekarang di kota mana ya? 🏙️",
+    "Senang kenalan sama Kak [Nama]! Btw, domisili atau asal daerah Kakak saat ini di mana nih? 🌴",
+    "Noted Kak [Nama]! Biar Goona tidak salah kasih info lingkungan sekitar, Kakak sekarang tinggal di wilayah mana? 🎯",
+    "Asyik, panggilannya Kak [Nama]. Kalau daerah domisili Kakak saat ini di kota atau kabupaten apa ya? 🌻",
+    "Salam hangat Kak [Nama]! Kalau boleh tahu, daerah asal atau tempat tinggal Kakak sekarang di kota mana? 🌈",
+    "Oke Kak [Nama], dicatat ya! Terus kalau daerah asal atau tempat nongkrong Kakak sekarang di kota mana? 🗺️",
+    "Wah, seru nih ngobrol dengan Kak [Nama]. Kalau boleh tahu, Kakak domisili di daerah mana sekarang? 🧸",
+    "Sip deh Kak [Nama]! Biar pencarian kita makin mantap, Kakak lagi chat dari wilayah mana nih? 🔍",
+    "Nama panggilan yang keren Kak [Nama]! Sekarang, domisili atau tempat tinggal Kakak di wilayah mana? 🍃",
+    "Halo Kak [Nama]! Boleh tahu wilayah tempat tinggal atau asal daerah Kakak saat ini di kota mana? 🌊",
+    "Oke Kak [Nama]! Langkah kedua, domisili Kakak sekarang di kota atau kabupaten mana nih? 🛵",
+    "Wah, asyik! Kak [Nama], kalau wilayah domisili atau tempat tinggal sekarang di mana ya? 🎈",
+    "Noted lengkap Kak [Nama]! Kalau area tempat tinggal atau asal daerah Kakak sekarang di mana? 📍",
+    "Keren banget Kak [Nama]! Nah, kalau boleh tahu, posisi Kakak sekarang ada di daerah mana? 🗺️",
+    "Sip, panggilannya Kak [Nama]. Kalau tempat tinggal atau domisili saat ini di wilayah mana, Kak? 🏡",
+    "Salam kenal kembali Kak [Nama]! Kalau area tempat tinggal atau asal kota Kakak sekarang di mana? 🌟",
+    "Wah, makin akrab kita Kak [Nama]. Btw, wilayah asal atau tempat tinggal Kakak sekarang di mana nih? 🗺️",
+    "Oke dicatat Kak [Nama]! Kalau kota asal atau daerah tempat tinggal Kakak sekarang di mana ya? 🏙️",
+    "Mantap Kak [Nama]! Terus kalau area domisili atau tempat tinggal Kakak sekarang di kota apa? 🎯",
+    "Nama yang indah Kak [Nama]! Kalau daerah asal atau tempat tinggal Kakak sekarang di wilayah mana? 🌿",
+    "Sip Kak [Nama]! Biar Goona tahu sekeliling Kakak, wilayah tempat tinggal sekarang di daerah mana? 🧭",
+    "Wah seru, Kak [Nama]! Kalau asal daerah atau tempat tinggal sekarang di kota atau wilayah mana? 🏔️",
+    "Noted ya Kak [Nama]! Kalau domisili atau daerah tempat tinggal Kakak saat ini di mana nih? 🛵",
+    "Halo Kak [Nama]! Biar infonya tidak kejauhan, Kakak tinggal di kota atau kabupaten mana sekarang? 🏝️",
+    "Asyik, salam kenal Kak [Nama]! Kalau boleh tahu, posisi domisili Kakak saat ini ada di daerah mana? 📌",
+    "Sip Kak [Nama], panggilannya oke banget. Kalau asal kota atau area tempat tinggal Kakak di mana ya? 🏠",
+    "Wah, mantap Kak [Nama]! Kalau boleh tahu, wilayah tempat tinggal atau kota Kakak sekarang di mana? 🏙️",
+    "Oke Kak [Nama], paham! Terus kalau domisili atau wilayah tempat tinggal sekarang di mana nih? 🌍",
+    "Senang bisa menyapa Kak [Nama]! Btw, kota asal atau area tempat tinggal Kakak sekarang di kota mana? ✨",
+    "Noted Kak [Nama]! Kalau boleh tahu, area domisili atau wilayah tempat tinggal Kakak sekarang di mana? 🗺️",
+    "Keren Kak [Nama]! Tinggal satu lagi nih, daerah asal atau kota tempat tinggal Kakak sekarang di mana? 🌟",
+    "Sip deh Kak [Nama]! Kalau daerah domisili atau kota tempat tinggal Kakak sekarang di wilayah mana ya? 🛸",
+    "Wah, makin seru nih Kak [Nama]! Kalau boleh tahu, daerah asal atau domisili tempat tinggal Kakak di mana? 🍃"
 ];
 
-// MODUL 2: RESPONS SUKSES SETELAH IDENTITAS LENGKAP
+// MODUL 2: 40 RESPONS SUKSES (RAMAH, ALAMI, TANPA KATA TEKNIS)
 const modul2Variations = [
-    "Wah, salam kenal Kak [Nama] dari [Daerah]! Salken ya. Nah, sekarang ada yang bisa Goona bantu hari ini? Mau cari info apa nih? Gunakan minimal 3 kata ya biar akurat! 😁",
-    "Mantap, salam kenal ya Kak [Nama]! Semoga hari ini menyenangkan ya di [Daerah]. Oh ya, ada yang bisa Goona bantu di Goona Search? Biar pas, ketik nama info + lokasinya ya! ✨",
-    "Halo Kak [Nama]! Keren banget, salam buat teman-teman di [Daerah] ya. Oke deh, sekarang Goona siap bantu kamu. Ada yang bisa kita cari hari ini? Tulis 3 kata kunci andalanmu ya!",
-    "Salam kenal Kak [Nama]! Wah, Goona suka banget sama daerah [Daerah]. Anyway, ada yang bisa Goona bantu hari ini? Gunakan format kata kunci + lokasi ya supaya pencariannya tepat! 😉",
-    "Oke dicatat, Kak [Nama] dari [Daerah]. Mantap! Sekarang yuk kita mulai pencariannya. Kakak lagi butuh info apa? Tulis detail sampai 3 kata ya! 🚀"
+    "Wah, salam kenal Kak [Nama] dari [Daerah]! Salken ya. Nah, sekarang ada yang bisa Goona bantu hari ini? Mau cari info apa nih? Gunakan minimal 3 kata ya biar jelas! 😁",
+    "Mantap, salam kenal ya Kak [Nama]! Semoga hari ini menyenangkan ya di [Daerah]. Oh ya, ada yang bisa Goona bantu? Biar pas, ketik nama info + lokasinya ya! ✨",
+    "Halo Kak [Nama]! Keren banget, salam buat teman-teman di [Daerah] ya. Oke deh, sekarang Goona siap bantu kamu. Ada yang bisa kita cari hari ini? Tulis 3 kata andalanmu ya!",
+    "Salam kenal Kak [Nama]! Wah, Goona suka banget sama daerah [Daerah]. Anyway, ada yang bisa Goona bantu hari ini? Gunakan format info + lokasi ya supaya pencariannya tepat! 😉",
+    "Oke dicatat, Kak [Nama] dari [Daerah]. Mantap! Sekarang yuk kita mulai pencariannya. Kakak lagi butuh info apa? Tulis detail sampai 3 kata ya! 🚀",
+    "Salken ya Kak [Nama]! Wah, dari [Daerah] ternyata. Siap deh, Goona sekarang siaga buat bantu Kakak. Mau cari tahu tentang apa nih? Tulis lengkap 3 kata ya! 🔍",
+    "Hai Kak [Nama]! Data Kakak udah Goona simpan ya, biar kita selalu akrab. Nah, sekarang ada kendala atau info apa yang mau dicari di [Daerah]? 🤔",
+    "Salam hangat Kak [Nama] buat kamu di [Daerah]! Goona siap nemenin kamu ngobrol hari ini. Ada yang bisa Goona bantu? Jelaskan dalam 3 kata ya! ☕",
+    "Noted ya Kak [Nama] dari [Daerah]! Pilihan yang bagus buat kenalan. Sekarang, yuk langsung aja kasih tahu Goona apa yang bisa dibantu! 🙌",
+    "Wah, asyik banget bisa kenalan sama Kak [Nama] dari [Daerah]! Nah, biar makin produktif, ada hal apa nih yang bisa Goona bantu? ✨",
+    "Halo Kak [Nama]! Salam kenal ya. Berarti posisi lagi di [Daerah] nih ya? Sip deh, ada info atau layanan apa yang lagi Kakak butuhin saat ini? 😁",
+    "Hai Kak [Nama]! Senang bisa terhubung dengan warga [Daerah]. Hehehe. Yuk, silakan sampaikan apa yang bisa Goona bantu hari ini. 🎈",
+    "Salken Kak [Nama]! Wah, [Daerah] tempat yang keren tuh. Oke, sekarang Goona siap dengerin. Ada yang bisa dibantu, Kak? 😉",
+    "Mantap, salam kenal Kak [Nama] dari [Daerah]! Sekarang kita udah akrab nih. Ada pencarian atau bantuan apa yang Kakak butuhkan? 🎯",
+    "Halo Kak [Nama]! Makasih udah kenalan ya. Salam buat warga [Daerah]! Yuk, langsung aja ceritain apa yang lagi mau Kakak cari tahu di sini? 🤗",
+    "Hai Kak [Nama]! Wah, seru nih bisa ngobrol sama orang [Daerah]. Ada hal menarik apa nih yang bisa Goona bantu hari ini? 🌟",
+    "Oke Kak [Nama], salam kenal ya! Sip, data daerah [Daerah] udah aman di catatan Goona. Sekarang, ada info apa nih yang bisa Goona bantu cari? 🛠️",
+    "Salam kenal Kak [Nama]! Semoga aktivitasmu di [Daerah] lancar ya hari ini. Oh ya, ada hal apa yang bisa Goona bantu sekarang? 😄",
+    "Wah, halo Kak [Nama] dari [Daerah]! Senang sekali bisa menyapa Kakak. Yuk, langsung aja, ada yang bisa Goona bantu atau cari tahu? 🍃",
+    "Noted, Kak [Nama]! Jadi sekarang lagi di [Daerah] ya? Siaapp. Ada info seru apa yang mau Kakak ulik bareng Goona hari ini? 🤠",
+    "Hai Kak [Nama]! Salam kenal dari Goona buat kamu di [Daerah]. Yuk, ada yang bisa Goona bantu buat mempermudah harimu? ✨",
+    "Salken Kak [Nama]! Wah, yang penting [Daerah] tetap di hati. Hehehe. Ada yang bisa Goona bantu hari ini, Kak? 💖",
+    "Halo Kak [Nama] dari [Daerah]! Kenalan selesai, sekarang waktunya beraksi. Ada hal apa nih yang bisa Goona bantu buat Kakak? 😉",
+    "Wah, salam kenal Kak [Nama]! Senang bisa menyapa Kakak yang ada di [Daerah]. Yuk, mau cari tahu info atau produk apa hari ini? Goona siap bantu! 🛍️",
+    "Hai Kak [Nama]! Salam hangat buat warga [Daerah]. Oke deh, sekarang silakan ketik apa aja yang bisa Goona bantu ya. Feel free! 😊",
+    "Noted Kak [Nama]! Wah, seru banget bisa tahu Kakak dari [Daerah]. Ada topik atau informasi apa nih yang mau kita bahas hari ini? 📚",
+    "Halo Kak [Nama]! Salam kenal ya. Oke, urusan kenalan di [Daerah] udah beres. Ada hal penting apa nih yang bisa Goona bantu sekarang? 🛎️",
+    "Salken Kak [Nama]! Wah, senang banget bisa ngobrol sama kamu yang di [Daerah]. Yuk, langsung aja, ada yang bisa Goona bantu hari ini? 🥰",
+    "Luar biasa, salam kenal Kak [Nama] dari [Daerah]! Senang sekali bisa berteman. Yuk, langsung sebutkan info yang ingin Kakak ketahui dalam 3 kata! 🌿",
+    "Akrab banget rasanya! Halo Kak [Nama] di [Daerah]. Goona siap sedia mencarikan info terbaik untukmu hari ini. Mau cari apa? 🎯",
+    "Hore, catatan kenalan kita sudah tersimpan, Kak [Nama] dari [Daerah]! Sekarang, silakan ketik hal apa saja yang ingin Kakak tanyakan. 📝",
+    "Senang sekali berpapasan dengan warga [Daerah]! Halo Kak [Nama], ketik apa saja kebutuhanmu hari ini dalam 3 kata ya, biar Goona bantu! 💎",
+    "Noted lengkap, Kak [Nama] asal [Daerah]! Pintu informasi sudah terbuka lebar. Ada hal seru atau kebutuhan mendesak apa hari ini? 🚪",
+    "Mantap betul! Salam hangat untuk Kak [Nama] di [Daerah]. Goona tidak sabar ingin membantu mempermudah harimu. Yuk mulai carinya! 🧸",
+    "Halo Kak [Nama]! Wah, [Daerah] itu tempat yang indah. Sekarang, beri tahu Goona info apa yang paling Kakak butuhkan saat ini? 🌸",
+    "Kenalan sukses, obrolan dimulai! Kak [Nama] dari [Daerah], silakan ketik apa saja pencarianmu hari ini. Goona siap memandu. 🗺️",
+    "Hai Kak [Nama]! Senang bisa mendengarmu dari [Daerah]. Goona sudah bersiap nih. Yuk, kasih tahu Goona apa yang mau dicari hari ini? ⚡",
+    "Salken Kak [Nama]! Semoga harimu di [Daerah] selalu dipenuhi keberuntungan. Mau cari info loker, kuliner, atau jasa apa hari ini? 🍀",
+    "Catatan identitas aman, Kak [Nama] dari [Daerah]! Mari kita temukan informasi paling menarik untukmu hari ini. Silakan diketik! 🎩",
+    "Halo Kak [Nama]! Senang bisa melayani warga [Daerah] yang ramah. Yuk, ketik 3 kata kunci infomu sekarang, Goona bantu cari! 🚀"
 ];
 
-// MODUL 3: KATA AWAL USER LAMA
+// MODUL 3: 40 KATA AWAL USER LAMA (FOKUS MINIMAL 3 KATA)
 const modul3Variations = [
     "Halo Kak [Nama]! Senang banget Goonity yang satu ini balik lagi ke Goona Chat. Mau cari info ter-update apa hari ini? Tulis penjelasan 3 kata ya biar cepat ketemu! ✨",
-    "Hai Kak [Nama]! Gimana kabarnya hari ini? Oh ya, mau cari info apa lagi nih di Goona Search? Goona siap bantu, langsung ketik kata kunci dan lokasinya ya! 🚀",
+    "Hai Kak [Nama]! Gimana kabarnya hari ini? Oh ya, mau cari info apa lagi nih di pencarian Goona? Goona siap bantu, langsung ketik kata kunci dan lokasinya ya! 🚀",
     "Wah, ketemu lagi kita Kak [Nama]! Gimana situasi di [Daerah] hari ini, aman? Hehehe. Yuk, langsung sebutkan info yang kamu butuhkan dalam 3 kata ya! 😄",
-    "Halo Kak [Nama]! Goona kangen deh ngobrol sama Kakak. Hari ini ada hal baru apa nih yang bisa Goona bantu cari di database? 😉",
-    "Hai Kak [Nama]! Selamat datang kembali di Goona Chat. Butuh bantuan apa lagi nih buat hari ini? Gunakan minimal 3 kata agar penyaringan info di [Daerah] makin akurat ya! 🛠️"
+    "Halo Kak [Nama]! Goona kangen deh ngobrol sama Kakak. Hari ini ada hal baru apa nih yang bisa Goona bantu cari di catatan harian? 😉",
+    "Hai Kak [Nama]! Selamat datang kembali di Goona Chat. Butuh bantuan apa lagi nih buat hari ini? Gunakan minimal 3 kata agar penyaringan info di [Daerah] makin akurat ya! 🛠️",
+    "Wah, Goonity setia kita balik lagi! Halo Kak [Nama], gimana kabar [Daerah] hari ini? Ada yang bisa Goona bantu lagi? 🌤️",
+    "Halo Kak [Nama]! Senang melihat Kakak kembali ke sini. Ada info atau pencarian seru apa nih yang mau kita lakukan hari ini? 🔍",
+    "Hai Kak [Nama]! Goona Chat selalu siap buat kamu. Ada hal menarik apa lagi nih yang bisa Goona bantu hari ini? 😁",
+    "Wah, halo Kak [Nama]! Ketemu lagi kita. Gimana aktivitasnya di [Daerah] hari ini? Ada yang bisa Goona bantu lagi? 🌟",
+    "Halo Kak [Nama]! Selamat datang kembali. Yuk, langsung aja, ada hal apa lagi nih yang perlu Goona bantu beresin? 😎",
+    "Hai Kak [Nama]! Senang banget bisa nemenin Kakak lagi di Goona Chat. Mau cari tahu info apa kita hari ini? ✨",
+    "Wah, Kak [Nama] balik lagi! Gimana nih, ada yang bisa Goona bantu lagi untuk urusan hari ini? Jangan sungkan ya! 😉",
+    "Halo Kak [Nama] dari [Daerah]! Senang banget bisa ketemu lagi di Goona Chat. Ada yang bisa Goona bantu hari ini? 😊",
+    "Hai Kak [Nama]! Selamat datang kembali ya. Ada topik seru apa lagi nih yang mau kita ulik di pencarian Goona hari ini? 🚀",
+    "Wah, halo Kak [Nama]! Senang rasanya Kakak balik lagi ke sini. Ada kendala atau info baru yang mau ditanyakan ke Goona? 🤔",
+    "Halo Kak [Nama]! Goona Chat siap membantu harimu lagi. Ada hal apa nih yang bisa Goona bantu untuk saat ini? 🙌",
+    "Hai Kak [Nama]! Selamat datang kembali di lingkaran pertemanan Goona. Gimana nih, ada hal baru apa yang bisa Goona bantu hari ini? 🍃",
+    "Wah, ketemu lagi kita Kak [Nama]! Semoga harimu di [Daerah] menyenangkan ya. Oh ya, ada yang bisa Goona bantu lagi? 😁",
+    "Halo Kak [Nama]! Goona senang banget setiap kali Kakak balik ke sini. Yuk, ceritain ada info apa lagi yang mau dicari? 🌻",
+    "Hai Kak [Nama]! Selamat datang kembali. Ada hal penting apa nih yang bisa Goona bantu selesaikan hari ini? 🛎️",
+    "Wah, halo Kak [Nama]! Senang banget bisa menyapa Goonity andalan lagi. Ada yang bisa Goona bantu untuk hari ini? 🥰",
+    "Halo Kak [Nama]! Selamat datang kembali di Goona Chat. Mau lanjutin yang kemarin atau ada hal baru lagi nih yang bisa dibantu? 😉",
+    "Hai Kak [Nama]! Gimana kondisi di [Daerah] hari ini? Semoga aman ya. Btw, ada yang bisa Goona bantu lagi hari ini? 🌈",
+    "Wah, Kak [Nama] datang lagi! Senang banget Goona bisa nemenin Kakak lagi. Yuk, langsung aja, apa yang bisa Goona bantu? 🤗",
+    "Halo Kak [Nama]! Selamat datang kembali ya. Jangan ragu buat ketik apa aja yang lagi Kakak butuhkan, Goona siap bantu! 🎯",
+    "Hai Kak [Nama]! Ketemu lagi di Goona Chat. Ada info atau produk ter-update apa nih yang mau Kakak cari hari ini? 🛍️",
+    "Wah, halo lagi Kak [Nama]! Senang banget bisa terhubung kembali. Ada hal seru apa nih yang bisa Goona bantu hari ini? ✨",
+    "Halo Kak [Nama]! Selamat datang kembali di Goona Chat. Yuk, silakan sampaikan apa yang bisa Goona bantu buat Kakak hari ini. 😄",
+    "Hai Kak [Nama]! Semoga harimu di [Daerah] luar biasa ya. Btw, ada bantuan apa lagi nih yang Kakak butuhkan dari Goona? ⚡",
+    "Wah, halo Kak [Nama]! Senang sekali Goonity kesayangan balik lagi. Yuk, langsung aja ketik apa yang bisa Goona bantu hari ini! 🥰",
+    "Selamat datang kembali, kawan baikku Kak [Nama]! Ruang obrolan kita sudah siap. Mau berburu informasi seru apa hari ini? 🏹",
+    "Hai Kak [Nama]！ Kehadiranmu selalu bikin Goona makin semangat. Yuk, ceritain info apa lagi yang lagi Kakak ulik di [Daerah]? 🌟",
+    "Halo lagi Kak [Nama]! Senang melihatmu dalam keadaan sehat. Butuh info cepat atau kontak layanan apa lagi kita hari ini? ⚡",
+    "Wah, Kak [Nama] balik lagi! Keadaan di [Daerah] aman kan? Sini kasih tahu Goona hal baru apa yang mau dicari hari ini. 📝",
+    "Selamat pagi/siang/malam Kak [Nama]! Goona senang banget Kakak kembali mempercayakan pencariannya di sini. Mari kita mulai! 🗺️",
+    "Hai Kak [Nama] kesayangan Goona! Jangan bosan-bosan ya mampir ke sini. Ada hal menarik apa lagi yang bisa Goona carikan? 💎",
+    "Hallo Kak [Nama]! Senang bisa kembali mendampingi aktivitas pencarianmu di daerah [Daerah]. Ketik saja 3 kata kuncinya ya! 🎈",
+    "Wah, teman diskusi andalanku sudah kembali! Halo Kak [Nama], ada info mendesak atau hal penting apa yang mau dicari hari ini? 📢",
+    "Hai Kak [Nama]! Catatan Goona selalu terbuka untukmu. Yuk, sebutkan layanan atau info apa yang ingin dicari di [Daerah] sekarang. ☕",
+    "Halo Kak [Nama]! Kembali lagi bersama asisten setiamu. Sampaikan saja dalam 3 kata apa yang lagi Kakak butuhin hari ini ya! 🚀"
 ];
 
-// DICTIONARY FIXED INDONESIA ONLY
+// DICTIONARY INDONESIA DENGAN 40 FAILSAFE OPEN & 40 FAILSAFE CLOSE (STRICT NO "DATABASE")
 const dictionary = {
-    notFound: "Maaf Goonity, informasi atau jawaban yang Anda cari saat ini belum tersedia di sistem kami. Coba ketik lebih spesifik menggunakan kombinasi 3 kata (Nama Jasa + Kecamatan + Kota).",
+    notFound: "Maaf Goonity, informasi atau jawaban yang Anda cari saat ini belum tersedia di catatan kami. Coba ketik lebih spesifik menggunakan kombinasi 3 kata (Nama Jasa + Kecamatan + Kota).",
     waTemplate: "Halo, saya melihat info Anda di Goona. Boleh tahu detail lebih lanjut?",
     locLabel: "Lokasi:",
     priceLabel: "Harga:",
     failSafeOpen: [
-        "Halo Goonity! Ini dia informasi teraktif yang berhasil kami temukan langsung dari sistem khusus untuk Anda:",
-        "Hai kawan! Saya sudah menyaring database dan menemukan info terbaik ini untukmu:",
-        "Kabar baik Goonity! Info yang kamu cari sudah siap. Silakan dicek detailnya di bawah ini ya:"
+        "Halo Goonity! Ini dia informasi teraktif yang berhasil kami temukan khusus untuk Anda:",
+        "Hai kawan! Saya sudah menyaring catatan harian dan menemukan info terbaik ini untukmu:",
+        "Kabar baik Goonity! Info yang kamu cari sudah siap. Silakan dicek detailnya di bawah ini ya:",
+        "Yey, ketemu! Ini dia data paling cocok yang berhasil saya kumpulkan:",
+        "Asyik, pencarianmu membuahkan hasil kawan! Ini dia infonya:",
+        "Siap, langsung Goona carikan! Ini dia opsi teraktif yang bisa kamu pilih:",
+        "Wah, beruntung banget! Goona baru saja memperbarui catatan ini untukmu:",
+        "Ini dia Kak! Hasil pencarian terbaik khusus untuk warga lokal:",
+        "Ketikannya jelas banget kawan, makanya langsung ketemu! Ini detailnya:",
+        "Halo Kak! Jangan khawatir, info terakurat yang kamu cari sudah ada di sini:",
+        "Tepat sekali! Goona punya rekomendasi bagus untuk kata kunci tersebut:",
+        "Ini dia yang kamu cari-cari kawan! Yuk langsung dilihat:",
+        "Mantap, pencarian super cepat selesai! Berikut daftarnya:",
+        "Kabar gembira! Goona menemukan kontak teraktif untuk kebutuhanmu:",
+        "Halo kawan! Silakan dicek, ini pilihan paling pas hasil pencarian tadi:",
+        "Ketemu nih Kak! Yuk langsung intip detail layanannya di bawah:",
+        "Berdasarkan wilayah terdekat, ini dia info paling aktif saat ini:",
+        "Sip kawan! Catatan Goona menunjukkan hasil terbaik sebagai berikut:",
+        "Jangan bingung lagi ya Kak, ini dia data yang berhasil Goona kumpulkan:",
+        "Hadir kawan! Info terhangat hari ini sudah siap kamu gunakan:",
+        "Wah, untung kamu tanya Goona! Ini dia daftar kontak teraktifnya:",
+        "Spesial untuk kamu, berikut rangkuman informasi paling sesuai:",
+        "Siaga penuh! Goona sudah mengumpulkan pilihan terbaik di bawah ini:",
+        "Yey, tidak sia-sia mencari! Berikut rekomendasi paling pas buatmu:",
+        "Halo Kak! Ini dia beberapa info terpercaya yang langsung bisa dihubungi:",
+        "Berhasil kawan! Catatan lokal kita menunjukkan hasil yang memuaskan:",
+        "Ini dia pilihan paling top yang sukses Goona kumpulkan untukmu:",
+        "Sesuai dengan kata kuncimu, berikut opsi teraktif hari ini:",
+        "Kabar baik kawan! Pencarianmu membuahkan hasil yang menarik di bawah ini:",
+        "Yuk Kak dicek! Ini dia rangkuman informasi terakurat khusus hari ini:",
+        "Goona senang bisa menemukan ini untukmu! Silakan dibaca detailnya:",
+        "Tepat waktu sekali! Informasi teraktif ini baru saja masuk catatan Goona:",
+        "Sip kawan, ini dia info paling direkomendasikan untuk daerah tersebut:",
+        "Tidak perlu mencari ke mana-mana lagi Kak, ini dia hasilnya:",
+        "Mantap betul, ketemu! Berikut detail info kontak yang kamu cari:",
+        "Halo Goonity! Ini dia hasil pencarian paling segar khusus buat kamu:",
+        "Berhasil disaring dengan baik kawan! Yuk cek daftarnya di bawah:",
+        "Catatan Goona merekomendasikan pilihan-pilihan terbaik berikut ini:",
+        "Halaman informasi sudah siap Kak! Silakan dicek satu per satu ya:",
+        "Yey, selesai! Ini dia info teraktif yang paling banyak dicari orang:"
     ],
     failSafeClose: [
         "Ada yang perlu disesuaikan lagi? Ketik lokasinya atau nama jasanya secara spesifik minimal 3 kata ya agar saya saring kembali!",
         "Belum ketemu yang pas? Coba ketik nama daerah atau kata kunci lain, nanti saya bantu cari lagi!",
-        "Semoga informasinya membantu Goonity! Kalau ada info lain yang ingin dicari, langsung ketik saja di bawah."
+        "Semoga informasinya membantu Goonity! Kalau ada info lain yang ingin dicari, langsung ketik saja di bawah.",
+        "Butuh info loker atau jasa lainnya? Tuliskan saja di sini, saya siap bantu 24 jam!",
+        "Jangan ragu untuk bertanya lagi ya kawan. Goona selalu siaga menemani harimu!",
+        "Semoga cocok dengan rekomendasinya ya Kak! Ada hal lain yang mau dicari?",
+        "Kalau dirasa kurang spesifik, coba tambahkan nama kecamatan atau kelurahannya ya!",
+        "Nah, tinggal klik tombol WhatsApp di atas untuk langsung terhubung kawan!",
+        "Semoga harimu menyenangkan setelah dapat info ini! Hubungi Goona lagi jika butuh sesuatu ya.",
+        "Goona harap informasi ini bisa menyelesaikan masalahmu hari ini. Tetap semangat!",
+        "Jika ada layanan lain yang ingin dicari di daerahmu, langsung ketik di bawah ya kawan.",
+        "Pencarian selesai dengan aman! Ada topik menarik lain yang mau kita bahas?",
+        "Semoga pas di hati ya Kak! Goona selalu di sini kalau kamu butuh bantuan lagi.",
+        "Jangan lupa simpan kontaknya ya kawan. Butuh info apa lagi setelah ini?",
+        "Ketik saja apa pun kebutuhanmu, biar Goona yang bantu carikan solusinya!",
+        "Senang bisa membantu mempermudah harimu kawan! Ditunggu pertanyaan berikutnya.",
+        "Semoga urusanmu berjalan lancar setelah dapat kontak ini ya Kak. Tetap optimis!",
+        "Ada hal seru lain yang ingin kamu ulik hari ini? Katakan saja pada Goona!",
+        "Pilihan di atas adalah yang paling aktif saat ini kawan. Semoga membantu!",
+        "Tetap jaga kesehatan ya Kak! Kalau butuh info kuliner atau loker, ketik saja di sini.",
+        "Mudah kan cari info di Goona? Yuk, ketik kata kunci baru kalau masih penasaran!",
+        "Semoga membantu memotong waktu pencarianmu hari ini kawan. Ada lagi?",
+        "Jika kontak di atas belum merespons, beri tahu Goona ya! Mau cari alternatif lain?",
+        "Semoga harimu penuh berkah Kak! Goona siap bantu cari info apa saja 24 jam.",
+        "Pencarian baru selalu terbuka kawan. Silakan ketik 3 kata andalanmu lagi!",
+        "Rekomendasi di atas murni untuk mempermudah harimu. Semoga bermanfaat ya!",
+        "Ketik nama lingkunganmu secara detail jika ingin hasil yang lebih dekat, kawan!",
+        "Goona ikut senang kalau info ini berguna buat kamu. Pertanyaan apa lagi sekarang?",
+        "Jangan sungkan-sungkan kawan, ketik saja apa yang sedang kamu cari saat ini.",
+        "Semoga urusan mencari jasanya cepat beres ya Kak! Ada hal lain?",
+        "Kapan pun kamu butuh info lokal di Kepri, panggil Goona di sini ya kawan!",
+        "Semoga harimu penuh kemudahan kawan! Hubungi Goona lagi kalau mau cari info.",
+        "Beri tahu Goona kalau ada bagian yang kurang pas ya! Mau cari topik apa lagi?",
+        "Semoga sukses dengan kegiatannya hari ini Kak! Ada yang bisa Goona bantu lagi?",
+        "Senang sekali bisa menjadi asisten setiamu hari ini. Ketik apa saja jika butuh lagi!",
+        "Rekomendasi terbaik sudah Goona sampaikan. Semoga harimu menyenangkan kawan!",
+        "Selalu gunakan kombinasi 3 kata ya Kak agar pencarian berikutnya makin jos!",
+        "Jika butuh info kuliner malam atau toko terdekat, sebutkan saja lokasimu kawan!",
+        "Semoga informasinya akurat dan membantu ya Kak. Sampai jumpa di pertanyaan berikutnya!",
+        "Goona pamit siaga dulu ya, kalau mau cari info lain langsung ketik saja di bawah! 🥰"
     ]
 };
 
@@ -452,7 +641,6 @@ function formatResponseText(text) {
     return text.replace(/\[Nama\]/g, userIdentity.nama).replace(/\[Daerah\]/g, userIdentity.daerah);
 }
 
-// INisialisasi PEMBUKAAN
 function initWelcomeMessage() {
     showTypingIndicator();
     
@@ -475,7 +663,6 @@ function initWelcomeMessage() {
     }, 1600);
 }
 
-// MODUL 4: INTERSEPSI EMOSI
 function checkEmotionInterception(prompt) {
     const lowerPrompt = prompt.toLowerCase();
 
@@ -494,7 +681,7 @@ function checkEmotionInterception(prompt) {
         const responsesB = [
             "Waduh, maaf banget ya Kak [Nama] atas ketidaknyamanan ini. Goona ngerti banget pasti kesel banget. Sini, biar Goona bantu cek dan selesaikan masalahnya sekarang juga. 🙏😔",
             "Aduh... maaf ya Kak [Nama] kalau bikin kecewa atau kesal. Goona bener-bener minta maaf. Boleh ceritain detailnya biar langsung Goona perbaiki? 😢",
-            "Waduh, maaf banget Kak [Nama] kalau layanannya dirasa kurang memuaskan atau ada error. Goona tampung komplainnya dan langsung kita cari solusinya bareng ya. Tolong ceritain masalahnya Kak. 🙏"
+            "Waduh, maaf banget Kak [Nama] kalau layanannya dirasa kurang memuaskan. Goona tampung keluhannya dan langsung kita cari solusinya bareng ya. Tolong ceritain masalahnya Kak. 🙏"
         ];
         return formatResponseText(responsesB[Math.floor(Math.random() * responsesB.length)]);
     }
@@ -512,7 +699,6 @@ function checkEmotionInterception(prompt) {
     return null;
 }
 
-// EKSEKUSI UTAMA CHAT
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
@@ -520,7 +706,6 @@ async function tanyaAI() {
     appendMessage(prompt, 'user-msg');
     inputField.value = '';
 
-    // PROSES INPUT IDENTITAS BERTAPAH (SOLUSI A)
     if (currentStep === 'menunggu_nama') {
         userIdentity.nama = prompt;
         currentStep = 'menunggu_daerah';
@@ -552,7 +737,6 @@ async function tanyaAI() {
         return;
     }
 
-    // ALUR NORMAL: SUPABASE + DETEKSI EMOSI
     showTypingIndicator();
 
     const emosiResponse = checkEmotionInterception(prompt);
@@ -567,7 +751,6 @@ async function tanyaAI() {
     let searchData = [];
     try {
         const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
-        // Membatasi query maksimal mengambil 3 kata pertama masukan pengguna
         const kataKunci = semuaKata.slice(0, 3);
 
         let query = supabase
@@ -581,7 +764,7 @@ async function tanyaAI() {
         
         const { data, error } = await query;
         if (error) {
-            console.error("Supabase Query Error:", error);
+            console.error("Error fetching data:", error);
         } else {
             searchData = data || [];
         }
@@ -664,7 +847,6 @@ function appendMessage(text, className) {
     return div;
 }
 
-// MENU DRAWER UTAMA SIMPLE
 menuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     sidebar.classList.toggle('open');
