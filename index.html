@@ -67,10 +67,8 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    /* PERBAIKAN DESKTOP: Menjaga area chat tetap di tengah dan tidak melar */
+    /* Membuat ruang obrolan kembali melebar penuh tanpa batas kaku di tengah */
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
 }
 
         .ai-msg,
@@ -202,22 +200,25 @@
 
         /* TAMPILAN KARTU JASA DENGAN KOMPONEN FOTO */
         .card-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 100%;
-            margin: 5px 0;
-        }
+    display: flex;
+    flex-direction: row; /* Membuat kartu menyusun ke samping di layar lebar */
+    flex-wrap: wrap;     /* Jika barisan kartu sudah penuh, otomatis turun ke bawahnya */
+    gap: 15px;
+    width: 100%;
+    margin: 5px 0;
+}
 
         .jasa-card {
-            background: #fff;
-            border: 1px solid var(--light-brown);
-            border-left: 5px solid var(--primary-brown);
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
+    background: #fff;
+    border: 1px solid var(--light-brown);
+    border-left: 5px solid var(--primary-brown);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    /* Mengunci lebar kartu: maksimal 320px di komputer PC, dan otomatis 100% penuh jika di HP */
+    width: 100%;
+    max-width: 320px; 
+}
 
         .card-title {
             font-weight: bold;
