@@ -254,8 +254,8 @@
             </div>
 
             <div class="form-group">
-                <label>URL Tautan Foto Jasa/Produk <small>(Opsional)</small></label>
-                <input type="url" id="url-foto" placeholder="Contoh: https://linkfoto.com/gambar.jpg">
+                <label>Foto Jasa/Produk <small>(Opsional - Otomatis Dikompres)</small></label>
+                <input type="file" id="input-foto" accept="image/*">
             </div>
 
             <button type="submit" id="submit-btn">Kirim Informasi Sekarang</button>
@@ -265,6 +265,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.min.js"></script>
     
     <script type="module">
         const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co'; 
@@ -290,20 +292,17 @@
         const submitBtn = document.getElementById('submit-btn');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toast-message');
+        const fileInput = document.getElementById('input-foto');
 
-        // FUNGSI PEMICU NOTIFIKASI MENGAMBANG PINTAR
         function tunjukkanToast(pesan, warnaIcon = '#2ecc71') {
             toastMessage.innerText = pesan;
             document.querySelector('.toast-icon').style.background = warnaIcon;
             toast.classList.add('show');
-            
-            // Sembunyikan otomatis setelah 3.5 detik
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3500);
         }
 
-        // Init Kabupaten
         function initKabupaten() {
             kabSelect.innerHTML = '<option value="">-- Pilih Kota --</option>';
             Object.keys(dataWilayah).sort().forEach(kab => {
@@ -314,7 +313,6 @@
             });
         }
 
-        // Cascading Logic
         kabSelect.addEventListener('change', () => {
             const val = kabSelect.value;
             kecSelect.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
@@ -331,45 +329,87 @@
             }
         });
 
-        // Counter
         deskripsiInput.addEventListener('input', () => {
             countSpan.innerText = 200 - deskripsiInput.value.length;
         });
 
-        // Submit Action
+        // ACTION UTAMA PENGIRIMAN DATA FORMULIR + FOTO TERKOMPRES
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            submitBtn.innerText = "Mengirim...";
+            submitBtn.innerText = "Memproses & Mengompres Foto...";
             submitBtn.disabled = true;
 
-            const payload = {
-                kategori: document.getElementById('kategori').value,
-                judul: document.getElementById('judul-info').value, 
-                kabupaten_kota: kabSelect.value,
-                kecamatan: kecSelect.value,
-                harga: document.getElementById('harga').value ? parseInt(document.getElementById('harga').value) : null,
-                satuan_harga: document.getElementById('satuan_harga').value || null,
-                deskripsi: deskripsiInput.value,
-                whatsapp: document.getElementById('wa-number').value,
-                url_foto: document.getElementById('url-foto').value || null,
-                status: 'pending',
-                created_at: new Date().toISOString()
-            };
+            let finalFotoUrl = null;
+            const fileMentah = fileInput.files[0];
 
             try {
-                const { error } = await supabase.from('konten_goona').insert([payload]);
-                if (error) throw error;
+                // 1. JIKA ADA BERSKAS FOTO, JALANKAN PROSES KOMPRESI OTOMATIS DI SINI
+                if (fileMentah) {
+                    const opsiKompresi = {
+                        maxSizeMB: 0.2,          // Target ukuran maksimal ~200 KB
+                        maxWidthOrHeight: 1024,  // Lebar/tinggi maksimal gambar agar tidak merusak kualitas mata
+                        useWebWorker: true       // Memakai thread latar belakang browser agar HP tidak lag
+                    };
+
+                    console.log("Ukuran file asli:", (fileMentah.size / 1024 / 1024).toFixed(2), "MB");
+                    
+                    // Eksekusi kompresi otomatis via library
+                    const fileKompres = await imageCompression(fileMentah, opsiKompresi);
+                    console.log("Ukuran file setelah kompres:", (fileKompres.size / 1024).toFixed(2), "KB");
+
+                    submitBtn.innerText = "Mengunggah Foto...";
+
+                    // Membuat nama acak file yang unik agar tidak saling bertabrakan di storage
+                    const ekstensi = fileMentah.name.split('.').pop();
+                    const namaFileUnik = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${ekstensi}`;
+
+                    // Kirim ke Bucket Storage Supabase bernama 'foto_goona'
+                    const { data: storageData, error: storageError } = await supabase
+                        .storage
+                        .from('foto_goona')
+                        .upload(namaFileUnik, fileKompres);
+
+                    if (storageError) throw new Error("Gagal mengunggah gambar ke storage: " + storageError.message);
+
+                    // Ambil URL Publik tautan fotonya
+                    const { data: urlData } = supabase
+                        .storage
+                        .from('foto_goona')
+                        .getPublicUrl(namaFileUnik);
+
+                    finalFotoUrl = urlData.publicUrl;
+                }
+
+                submitBtn.innerText = "Mengirim Data...";
+
+                // 2. MASUKKAN SEMUA PAYLOAD LENGKAP KE TABEL INTI
+                const payload = {
+                    kategori: document.getElementById('kategori').value,
+                    judul: document.getElementById('judul-info').value, 
+                    kabupaten_kota: kabSelect.value,
+                    kecamatan: kecSelect.value,
+                    harga: document.getElementById('harga').value ? parseInt(document.getElementById('harga').value) : null,
+                    satuan_harga: document.getElementById('satuan_harga').value || null,
+                    deskripsi: deskripsiInput.value,
+                    whatsapp: document.getElementById('wa-number').value,
+                    url_foto: finalFotoUrl, // Menyimpan link URL dari hasil upload storage di atas
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                };
+
+                const { error: insertError } = await supabase.from('konten_goona').insert([payload]);
+                if (insertError) throw insertError;
                 
-                // EKSEKUSI TOAST SUKSES MENGAMBANG
                 tunjukkanToast("Sukses! Informasi Goonity diajukan untuk ditinjau.");
                 
                 form.reset();
                 document.getElementById('wa-number').value = '';
                 kecSelect.disabled = true;
                 countSpan.innerText = "200";
+
             } catch (err) {
-                console.error("Kesalahan pengiriman:", err);
-                tunjukkanToast("Gagal mengirim. Periksa jaringan Anda.", "#e74c3c");
+                console.error("Kesalahan sistem:", err);
+                tunjukkanToast(err.message || "Gagal mengirim. Periksa jaringan Anda.", "#e74c3c");
             } finally {
                 submitBtn.innerText = "Kirim Informasi Sekarang";
                 submitBtn.disabled = false;
