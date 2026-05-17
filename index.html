@@ -6,7 +6,6 @@
 
     <title>Goona Chat</title>
 
-    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="Pavicon_goona.png">
 
     <style>
@@ -189,17 +188,6 @@
             padding-bottom: 5px;
         }
 
-        .sidebar select {
-            width: 100%;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--light-brown);
-            background: #FFFAF0;
-            font-size: 13px;
-            color: #333;
-            outline: none;
-        }
-
         .sidebar p {
             font-size: 12px;
             color: #666;
@@ -310,7 +298,6 @@
         <div class="logo">GOONA Chat</div>
         <div class="header-right">
             <a href="tambah-info.html" class="btn-post" id="ui-btn-post">+ Pasang Info</a>
-            <!-- Ikon Garis 3 Menu -->
             <div class="menu-btn" id="menu-btn">
                 <span></span>
                 <span></span>
@@ -319,15 +306,7 @@
         </div>
     </header>
 
-    <!-- MENU SAMPING (SIDEBAR DRAWER) -->
     <div class="sidebar" id="sidebar">
-        <h3 id="ui-title-lang">Pilih Bahasa / Language</h3>
-        <select id="lang-select">
-            <option value="id">Bahasa Indonesia</option>
-            <option value="en">English</option>
-            <option value="zh">简体中文 (Mandarin)</option>
-        </select>
-
         <h3 id="ui-title-rules">Aturan & Legalitas</h3>
         <p id="ui-text-rules">
             Setiap informasi yang disampaikan di Goona AI wajib berupa informasi yang benar, jujur, akurat, dan dapat dipertanggungjawabkan sepenuhnya oleh pemasang informasi demi kenyamanan dan keamanan hukum bersama.
@@ -336,8 +315,7 @@
 
     <main id="chat-window">
         <div id="chat-history" style="display:flex; flex-direction:column; gap:15px; width: 100%;">
-            <!-- Pesan Pembuka Selamat Datang Dinamis akan disisipkan via JavaScript -->
-        </div>
+            </div>
     </main>
 
     <div class="input-container">
@@ -368,194 +346,94 @@ const chatWindow = document.getElementById('chat-window');
 const sendBtn = document.getElementById('send-btn');
 const menuBtn = document.getElementById('menu-btn');
 const sidebar = document.getElementById('sidebar');
-const langSelect = document.getElementById('lang-select');
 
 // STATE IDENTITAS & ALUR PROSES KLIEN
-let currentLang = 'id';
 let userIdentity = {
     nama: localStorage.getItem('goona_nama') || '',
     daerah: localStorage.getItem('goona_daerah') || ''
 };
-// Status alur: 'normal', 'menunggu_nama', 'menunggu_daerah'
 let currentStep = 'normal'; 
+const normalPlaceholder = "Gunakan 3 kata (Contoh: kue batam center)...";
 
-// KUMPULAN ARRAYS UNTUK MODUL 1, 2, DAN 3
+// MODUL 1: VARIASI PERTANYAAN NAMA (FOKUS BHS INDONESIA)
 const modul1Variations = [
-    "Hallo Goonity! Selamat datang di Goona Chat. Biar makin akrab, Goona boleh tahu nama panggilan dan asal daerah Kakak? 😁",
-    "Hai! Seru banget bisa ketemu kamu di Goona Chat. Sebelum kita mulai, kenalan dulu yuk! Nama panggilan Kakak siapa dan tinggal di mana nih? ✨",
-    "Wah, selamat datang di Goona Chat! Biar Goona bisa bantu dengan maksimal, kenalan dulu dong. Nama panggilan Kakak siapa dan dari kota mana? 😉",
-    "Halo! Goona senang banget Kakak mampir ke sini. Boleh tahu nama panggilan Kakak dan asal daerahnya dari mana? 🌟",
-    "Eh ada tamu baru! Salam kenal ya dari Goona. Nama Kakak siapa nih dan lagi chat dari daerah mana? 😊",
-    "Hallo Goonity! Biar obrolan kita makin asyik dan pas, boleh tahu dengan Kakak siapa dan asalnya dari mana? 🙌",
-    "Hai Kak! Selamat datang di ekosistem Goona Chat. Kenalan dulu yuk, nama panggilan Kakak siapa dan dari kota mana? 🍃",
-    "Halo, selamat pagi/siang/malam! Goona siap bantu kamu hari ini. Tapi sebelumnya, dengan Kakak siapa dan dari daerah mana nih? 😁",
-    "Wah, ada teman baru nih di Goona Chat! Kenalan dong, boleh tahu nama panggilan dan daerah asal Kakak? 🥳",
-    "Hallo! Goona di sini. Biar obrolan kita makin personal, boleh sebutkan nama panggilan Kakak dan kotanya? ✨",
-    "Hai! Jangan sungkan-sungkan ya di Goona Chat. Tapi biar makin akrab, nama panggilan Kakak siapa dan dari daerah mana? 😉",
-    "Halo Goonity! Senang banget bisa terhubung. Boleh tahu Kakak namanya siapa dan tinggal di daerah mana sekarang? 🌈",
-    "Hai Kak! Sebelum kita ngobrol lebih jauh, kenalan singkat yuk. Nama panggilan Kakak siapa dan dari daerah mana? 😄",
-    "Hallo! Goona Chat siap menemani harimu. Biar enggak kaku, panggilannya siapa nih Kak, dan dari kota mana? ✌️",
-    "Wah, selamat mampir ya! Goona pengen tahu dong, nama panggilan Kakak siapa dan asalnya dari daerah mana? 🌻",
-    "Hai Kak, salam kenal dari Goona! Biar komunikasinya makin enak, boleh tahu nama panggilan dan kota asal Kakak? 😎",
-    "Hallo! Selamat datang di dunia Goona Chat. Boleh share nama panggilan dan asal daerah Kakak ke Goona? 🎈",
-    "Hai Goonity! Biar Goona enggak salah panggil, nama panggilan Kakak siapa dan sekarang lagi di daerah mana? 😁",
-    "Halo Kak! Salam hangat dari Goona Chat. Boleh tahu nama panggilan Kakak dan kota tempat tinggalnya? ✨",
-    "Wah, asyik banget bisa ketemu di sini. Kenalan dulu yuk, nama panggilan Kakak siapa dan asalnya dari kota mana? 🌟",
-    "Hallo! Goona siap bantu cari info apa aja. Tapi kenalan dulu dong, nama panggilan Kakak siapa dan dari daerah mana? 😉",
-    "Hai! Selamat bergabung di Goona Chat. Biar makin dekat, boleh tahu nama panggilan Kakak dan asal kotanya? 😊",
-    "Halo Kak! Goona pengen akrab nih. Boleh tahu nama panggilan dan daerah asal Kakak sekarang? 🌿",
-    "Hallo Goonity! Langkah awal sebelum ngobrol: kenalan yuk! Nama panggilan Kakak siapa dan tinggal di daerah mana? 🙌",
-    "Hai! Senang sekali kamu buka Goona Chat. Boleh tahu dengan Kakak siapa dan dari kota mana nih? 😄",
-    "Halo Kak, salam kenal! Biar obrolan kita makin berenergi, nama panggilan Kakak siapa dan dari daerah mana? ⚡",
-    "Hallo! Goona Chat di sini buat kamu. Biar makin santai, panggilannya siapa nih Kak, dan kotanya di mana? 🧸",
-    "Hai Kak! Biar Goona bisa kasih rekomendasi yang pas, boleh tahu nama panggilan dan kota asal Kakak? 🎯",
-    "Wah, makasih ya udah buka Goona Chat. Kenalan dulu yuk, nama panggilan Kakak siapa dan dari daerah mana? 💖",
-    "Hallo Goonity! Yuk mulai obrolan seru kita. Tapi sebelumnya, nama panggilan Kakak siapa dan dari kota mana nih? 🥰"
+    "Hallo Goonity! Selamat datang di Goona Chat. Biar makin akrab, Goona boleh tahu nama panggilan Kakak? 😁",
+    "Hai! Seru banget bisa ketemu kamu di Goona Chat. Sebelum kita mulai, kenalan dulu yuk! Nama panggilan Kakak siapa nih? ✨",
+    "Wah, selamat datang di Goona Chat! Biar Goona bisa bantu dengan maksimal, kenalan dulu dong. Nama panggilan Kakak siapa? 😉",
+    "Halo! Goona senang banget Kakak mampir ke sini. Boleh tahu siapa nama panggilan Kakak? 🌟",
+    "Eh ada tamu baru! Salam kenal ya dari Goona. Nama panggilan Kakak siapa nih? 😊",
+    "Hallo Goonity! Biar obrolan kita makin asyik dan pas, boleh tahu dengan Kakak siapa di sini? 🙌",
+    "Hai Kak! Selamat datang di ekosistem Goona Chat. Kenalan dulu yuk, nama panggilan Kakak siapa? 🍃",
+    "Halo, selamat hari yang indah! Goona siap bantu kamu hari ini. Tapi sebelumnya, dengan Kakak siapa nih? 😁",
+    "Wah, ada teman baru nih di Goona Chat! Kenalan dong, boleh tahu nama panggilan Kakak? 🥳",
+    "Hallo! Goona di sini. Biar obrolan kita makin personal dan santai, boleh sebutkan nama panggilan Kakak? ✨",
+    "Hai! Jangan sungkan-sungkan ya di Goona Chat. Tapi biar makin dekat, nama panggilan Kakak siapa? 😉",
+    "Halo Goonity! Senang banget bisa terhubung. Boleh tahu Kakak biasanya dipanggil siapa? 🌈",
+    "Hai Kak! Sebelum kita ngobrol lebih jauh, kenalan singkat yuk. Nama panggilan Kakak siapa? 😄",
+    "Hallo! Goona Chat siap menemani harimu. Biar enggak kaku, panggilannya siapa nih Kak? ✌️",
+    "Wah, selamat mampir ya! Goona pengen tahu dong, nama panggilan Kakak siapa? 🌻",
+    "Hai Kak, salam kenal dari Goona! Biar komunikasinya makin enak, boleh tahu nama panggilan Kakak? 😎",
+    "Hallo! Selamat datang di dunia Goona Chat. Boleh share nama panggilan Kakak ke Goona? 🎈",
+    "Hai Goonity! Biar Goona enggak salah panggil, nama panggilan Kakak siapa nih? 😁",
+    "Halo Kak! Salam hangat dari Goona Chat. Boleh tahu siapa nama panggilan Kakak? ✨",
+    "Wah, asyik banget bisa ketemu di sini. Kenalan dulu yuk, nama panggilan Kakak siapa? 🌟",
+    "Hallo! Goona siap bantu cari info apa aja. Tapi kenalan dulu dong, nama panggilan Kakak siapa? 😉",
+    "Hai! Selamat bergabung di Goona Chat. Biar makin akrab, boleh tahu nama panggilan Kakak? 😊",
+    "Halo Kak! Goona pengen akrab nih. Boleh tahu nama panggilan Kakak siapa? 🌿",
+    "Hallo Goonity! Langkah awal sebelum ngobrol: kenalan yuk! Nama panggilan Kakak siapa? 🙌",
+    "Hai! Senang sekali kamu buka Goona Chat. Boleh tahu dengan Kakak siapa nih? 😄",
+    "Halo Kak, salam kenal! Biar obrolan kita makin berenergi, nama panggilan Kakak siapa? ⚡",
+    "Hallo! Goona Chat di sini buat kamu. Biar makin santai, panggilannya siapa nih Kak? 🧸",
+    "Hai Kak! Biar Goona bisa kasih rekomendasi yang oke, boleh tahu nama panggilan Kakak? 🎯",
+    "Wah, makasih ya udah buka Goona Chat. Kenalan dulu yuk, nama panggilan Kakak siapa? 💖",
+    "Hallo Goonity! Yuk mulai obrolan seru kita. Tapi sebelumnya, nama panggilan Kakak siapa nih? 🥰"
 ];
 
+// VARIASI PERTANYAAN DAERAH
+const daerahQuestions = [
+    "Wah keren! Kalau asal daerah atau domisili Kak [Nama] saat ini di kota/kabupaten mana? 🌍",
+    "Sip deh Kak [Nama]! Oh ya, sekarang posisi Kakak lagi tinggal di kota atau daerah mana nih di Kepri? 🏝️",
+    "Salam kenal Kak [Nama]! Biar Goona bisa cariin info yang paling dekat, domisili Kakak di daerah mana ya? 📍",
+    "Noted Kak [Nama]! Sekarang Goona mau tahu dong, Kakak lagi chat dari kota atau kabupaten mana? 😊",
+    "Nama yang bagus, Kak [Nama]! Nah, kalau boleh tahu, daerah asal atau tempat tinggal Kakak sekarang di mana? 🗺️"
+];
+
+// MODUL 2: RESPONS SUKSES SETELAH IDENTITAS LENGKAP
 const modul2Variations = [
-    "Wah, salam kenal Kak [Nama] dari [Daerah]! Salken ya. Nah, sekarang ada yang bisa Goona bantu hari ini? Mau cari info apa nih? 😁",
-    "Mantap, salam kenal ya Kak [Nama]! Semoga hari ini menyenangkan ya di [Daerah]. Hehehe. Oh ya, ada yang bisa Goona bantu di Goona Search? ✨",
-    "Halo Kak [Nama]! Keren banget, salam buat teman-teman di [Daerah] ya. Oke deh, sekarang Goona siap bantu kamu. Ada yang bisa kita diskusikan?",
-    "Salam kenal Kak [Nama]! Wah, Goona suka banget sama daerah [Daerah]. Anyway, ada yang bisa Goona bantu hari ini? 😉",
-    "Oke dicatat, Kak [Nama] dari [Daerah]. Mantap! Sekarang yuk kita mulai obrolannya. Kakak lagi butuh info apa nih? 🚀",
-    "Wah, salam kenal ya Kak [Nama]! Semoga cuaca di [Daerah] lagi cerah ya hari ini. Hehehe. Ada yang bisa Goona bantu? 🌤️",
-    "Halo Kak [Nama] dari [Daerah]! Senang banget bisa kenalan. Yuk, langsung aja ceritain ke Goona, ada yang bisa dibantu? 😊",
-    "Salken ya Kak [Nama]! Wah, dari [Daerah] ternyata. Siap deh, Goona sekarang siaga buat bantu Kakak. Mau cari tahu tentang apa nih? 🔍",
-    "Hai Kak [Nama]! Data Kakak udah Goona simpan ya, biar kita selalu akrab. Nah, sekarang ada kendala atau info apa yang mau dicari di [Daerah]? 🤔",
-    "Salam hangat Kak [Nama] buat kamu di [Daerah]! Goona siap nemenin kamu ngobrol hari ini. Ada yang bisa Goona bantu? ☕",
-    "Noted ya Kak [Nama] dari [Daerah]! Pilihan yang bagus buat kenalan. Sekarang, yuk langsung aja kasih tahu Goona apa yang bisa dibantu! 🙌",
-    "Wah, asyik banget bisa kenalan sama Kak [Nama] dari [Daerah]! Nah, biar makin produktif, ada hal apa nih yang bisa Goona bantu? ✨",
-    "Halo Kak [Nama]! Salam kenal ya. Berarti posisi lagi di [Daerah] nih ya? Sip deh, ada info atau layanan apa yang lagi Kakak butuhin saat ini? 😁",
-    "Hai Kak [Nama]! Senang bisa terhubung dengan warga [Daerah]. Hehehe. Yuk, silakan sampaikan apa yang bisa Goona bantu hari ini. 🎈",
-    "Salken Kak [Nama]! Wah, [Daerah] kota yang keren tuh. Oke, sekarang Goona siap dengerin. Ada yang bisa dibantu, Kak? 😉",
-    "Mantap, salam kenal Kak [Nama] dari [Daerah]! Sekarang kita udah akrab nih. Ada pencarian atau bantuan apa yang Kakak butuhkan? 🎯",
-    "Halo Kak [Nama]! Makasih udah kenalan ya. Salam buat [Daerah]! Yuk, langsung aja ceritain apa yang lagi mau Kakak cari tahu di sini? 🤗",
-    "Hai Kak [Nama]! Wah, seru nih bisa ngobrol sama orang [Daerah]. Ada hal menarik apa nih yang bisa Goona bantu hari ini? 🌟",
-    "Oke Kak [Nama], salam kenal ya! Sip, data [Daerah] udah aman di Goona. Sekarang, ada info atau masalah apa nih yang bisa Goona bantu selesaikan? 🛠️",
-    "Salam kenal Kak [Nama]! Semoga aktivitasmu di [Daerah] lancar ya hari ini. Oh ya, ada hal apa yang bisa Goona bantu sekarang? 😄",
-    "Wah, halo Kak [Nama] dari [Daerah]! Senang sekali bisa menyapa Kakak. Yuk, langsung aja, ada yang bisa Goona bantu atau cari tahu? 🍃",
-    "Noted, Kak [Nama]! Jadi sekarang lagi di [Daerah] ya? Siaapp. Ada info seru apa yang mau Kakak ulik bareng Goona hari ini? 🤠",
-    "Hai Kak [Nama]! Salam kenal dari tim Goona Chat buat kamu di [Daerah]. Yuk, ada yang bisa Goona bantu buat mempermudah harimu? ✨",
-    "Salken Kak [Nama]! Wah, jauh/dekat ya dari sini, yang penting [Daerah] tetap di hati. Hehehe. Ada yang bisa Goona bantu hari ini, Kak? 💖",
-    "Halo Kak [Nama] dari [Daerah]! Kenalan selesai, sekarang waktunya eksekusi. Ada hal apa nih yang bisa Goona bantu buat Kakak? 😉",
-    "Wah, salam kenal Kak [Nama]! Senang bisa menyapa Kakak yang ada di [Daerah]. Yuk, mau cari tahu info atau produk apa hari ini? Goona siap bantu! 🛍️",
-    "Hai Kak [Nama]! Salam hangat buat warga [Daerah]. Oke deh, sekarang silakan ketik apa aja yang bisa Goona bantu ya. Feel free! 😊",
-    "Noted Kak [Nama]! Wah, seru banget bisa tahu Kakak dari [Daerah]. Ada topik atau informasi apa nih yang mau kita bahas hari ini? 📚",
-    "Halo Kak [Nama]! Salam kenal ya. Oke, urusan kenalan di [Daerah] udah beres. Ada hal penting apa nih yang bisa Goona bantu sekarang? 🛎️",
-    "Salken Kak [Nama]! Wah, senang banget bisa ngobrol sama kamu yang di [Daerah]. Yuk, langsung aja, ada yang bisa Goona bantu hari ini? 🥰"
+    "Wah, salam kenal Kak [Nama] dari [Daerah]! Salken ya. Nah, sekarang ada yang bisa Goona bantu hari ini? Mau cari info apa nih? Gunakan minimal 3 kata ya biar akurat! 😁",
+    "Mantap, salam kenal ya Kak [Nama]! Semoga hari ini menyenangkan ya di [Daerah]. Oh ya, ada yang bisa Goona bantu di Goona Search? Biar pas, ketik nama info + lokasinya ya! ✨",
+    "Halo Kak [Nama]! Keren banget, salam buat teman-teman di [Daerah] ya. Oke deh, sekarang Goona siap bantu kamu. Ada yang bisa kita cari hari ini? Tulis 3 kata kunci andalanmu ya!",
+    "Salam kenal Kak [Nama]! Wah, Goona suka banget sama daerah [Daerah]. Anyway, ada yang bisa Goona bantu hari ini? Gunakan format kata kunci + lokasi ya supaya pencariannya tepat! 😉",
+    "Oke dicatat, Kak [Nama] dari [Daerah]. Mantap! Sekarang yuk kita mulai pencariannya. Kakak lagi butuh info apa? Tulis detail sampai 3 kata ya! 🚀"
 ];
 
+// MODUL 3: KATA AWAL USER LAMA
 const modul3Variations = [
-    "Halo Kak [Nama]! Senang banget Goonity yang satu ini balik lagi ke Goona Chat. Ada yang bisa Goona bantu lagi hari ini? ✨",
-    "Hai Kak [Nama]! Gimana kabarnya hari ini? Oh ya, mau cari info ter-update apa lagi nih di Goona Search? Goona siap bantu! 🚀",
-    "Wah, ketemu lagi kita Kak [Nama]! Gimana situasi di [Daerah] hari ini, aman? Hehehe. Yuk, ada yang bisa Goona bantu buat obrolan kita kali ini? 😄",
-    "Halo Kak [Nama]! Goona kangen deh ngobrol sama Kakak. Hari ini ada hal baru apa nih yang bisa Goona bantu? 😉",
-    "Hai Kak [Nama]! Selamat datang kembali di Goona Chat. Butuh bantuan apa lagi nih buat hari ini? Goona siap sedia! 🛠️",
-    "Wah, Goonity setia kita balik lagi! Halo Kak [Nama], gimana kabar [Daerah] hari ini? Ada yang bisa Goona bantu lagi? 🌤️",
-    "Halo Kak [Nama]! Senang melihat Kakak kembali ke sini. Ada info atau pencarian seru apa nih yang mau kita lakukan hari ini? 🔍",
-    "Hai Kak [Nama]! Goona Chat selalu siap buat kamu. Ada hal menarik apa lagi nih yang bisa Goona bantu hari ini? 😁",
-    "Wah, halo Kak [Nama]! Ketemu lagi kita. Gimana aktivitasnya di [Daerah] hari ini? Ada yang bisa Goona bantu lagi? 🌟",
-    "Halo Kak [Nama]! Selamat datang kembali. Yuk, langsung aja, ada hal apa lagi nih yang perlu Goona bantu beresin? 😎",
-    "Hai Kak [Nama]! Senang banget bisa nemenin Kakak lagi di Goona Chat. Mau cari tahu info apa kita hari ini? ✨",
-    "Wah, Kak [Nama] balik lagi! Gimana nih, ada yang bisa Goona bantu lagi untuk urusan hari ini? Jangan sungkan ya! 😉",
-    "Halo Kak [Nama] dari [Daerah]! Senang banget bisa ketemu lagi di Goona Chat. Ada yang bisa Goona bantu hari ini? 😊",
-    "Hai Kak [Nama]! Selamat datang kembali ya. Ada topik seru apa lagi nih yang mau kita ulik di Goona Search hari ini? 🚀",
-    "Wah, halo Kak [Nama]! Senang rasanya Kakak balik lagi ke sini. Ada kendala atau info baru yang mau ditanyakan ke Goona? 🤔",
-    "Halo Kak [Nama]! Goona Chat siap membantu harimu lagi. Ada hal apa nih yang bisa Goona bantu untuk saat ini? 🙌",
-    "Hai Kak [Nama]! Selamat datang kembali di ekosistem Goona. Gimana nih, ada hal baru apa yang bisa Goona bantu hari ini? 🍃",
-    "Wah, ketemu lagi kita Kak [Nama]! Semoga harimu di [Daerah] menyenangkan ya. Oh ya, ada yang bisa Goona bantu lagi? 😁",
-    "Halo Kak [Nama]! Goona senang banget setiap kali Kakak balik ke sini. Yuk, ceritain ada info apa lagi yang mau dicari? 🌻",
-    "Hai Kak [Nama]! Selamat datang kembali. Ada hal penting apa nih yang bisa Goona bantu selesaikan hari ini? 🛎️",
-    "Wah, halo Kak [Nama]! Senang banget bisa menyapa Goonity andalan lagi. Ada yang bisa Goona bantu untuk hari ini? 🥰",
-    "Halo Kak [Nama]! Selamat datang kembali di Goona Chat. Mau lanjutin yang kemarin atau ada hal baru lagi nih yang bisa dibantu? 😉",
-    "Hai Kak [Nama]! Gimana kondisi di [Daerah] hari ini? Semoga aman ya. Btw, ada yang bisa Goona bantu lagi hari ini? 🌈",
-    "Wah, Kak [Nama] datang lagi! Senang banget Goona bisa nemenin Kakak lagi. Yuk, langsung aja, apa yang bisa Goona bantu? 🤗",
-    "Halo Kak [Nama]! Selamat datang kembali ya. Jangan ragu buat ketik apa aja yang lagi Kakak butuhkan, Goona siap bantu! 🎯",
-    "Hai Kak [Nama]! Ketemu lagi di Goona Chat. Ada info atau produk ter-update apa nih yang mau Kakak cari hari ini? 🛍️",
-    "Wah, halo lagi Kak [Nama]! Senang banget bisa terhubung kembali. Ada hal seru apa nih yang bisa Goona bantu hari ini? ✨",
-    "Halo Kak [Nama]! Selamat datang kembali di Goona Chat. Yuk, silakan sampaikan apa yang bisa Goona bantu buat Kakak hari ini. 😄",
-    "Hai Kak [Nama]! Semoga harimu di [Daerah] luar biasa ya. Btw, ada bantuan apa lagi nih yang Kakak butuhkan dari Goona? ⚡",
-    "Wah, halo Kak [Nama]! Senang sekali Goonity kesayangan balik lagi. Yuk, langsung aja ketik apa yang bisa Goona bantu hari ini! 🥰"
+    "Halo Kak [Nama]! Senang banget Goonity yang satu ini balik lagi ke Goona Chat. Mau cari info ter-update apa hari ini? Tulis penjelasan 3 kata ya biar cepat ketemu! ✨",
+    "Hai Kak [Nama]! Gimana kabarnya hari ini? Oh ya, mau cari info apa lagi nih di Goona Search? Goona siap bantu, langsung ketik kata kunci dan lokasinya ya! 🚀",
+    "Wah, ketemu lagi kita Kak [Nama]! Gimana situasi di [Daerah] hari ini, aman? Hehehe. Yuk, langsung sebutkan info yang kamu butuhkan dalam 3 kata ya! 😄",
+    "Halo Kak [Nama]! Goona kangen deh ngobrol sama Kakak. Hari ini ada hal baru apa nih yang bisa Goona bantu cari di database? 😉",
+    "Hai Kak [Nama]! Selamat datang kembali di Goona Chat. Butuh bantuan apa lagi nih buat hari ini? Gunakan minimal 3 kata agar penyaringan info di [Daerah] makin akurat ya! 🛠️"
 ];
 
-// KAMUS KAMUS TEKS DASAR SISTEM (BANYAK BAHASA)
+// DICTIONARY FIXED INDONESIA ONLY
 const dictionary = {
-    id: {
-        placeholder: "Tanya di sini...",
-        btnTanya: "Tanya",
-        pasangInfo: "+ Pasang Info",
-        titleLang: "Pilih Bahasa",
-        titleRules: "Aturan & Legalitas",
-        textRules: "Setiap informasi yang disampaikan di Goona AI wajib berupa informasi yang benar, jujur, akurat, dan dapat dipertanggungjawabkan sepenuhnya oleh pemasang informasi demi kenyamanan dan keamanan hukum bersama.",
-        notFound: "Maaf Goonity, informasi atau jawaban yang Anda cari saat ini belum tersedia di sistem kami.",
-        waTemplate: "Halo, saya melihat info Anda di Goona. Boleh tahu detail lebih lanjut?",
-        locLabel: "Lokasi:",
-        priceLabel: "Harga:",
-        failSafeOpen: [
-            "Halo Goonity! Ini dia informasi teraktif yang berhasil kami temukan langsung dari sistem khusus untuk Anda:",
-            "Hai kawan! Saya sudah menyaring database dan menemukan info terbaik ini untukmu:",
-            "Kabar baik Goonity! Info yang kamu cari sudah siap. Silakan dicek detailnya di bawah ini ya:",
-            "Yey, ketemu! Ini dia data terakurat yang berhasil saya kumpulkan:"
-        ],
-        failSafeClose: [
-            "Ada yang perlu disesuaikan lagi? Ketik lokasinya atau nama jasanya secara spesifik ya agar saya saring kembali!",
-            "Belum ketemu yang pas? Coba ketik nama daerah atau kata kunci lain, nanti saya bantu cari lagi!",
-            "Semoga informasinya membantu Goonity! Kalau ada info lain yang ingin dicari, langsung ketik saja di bawah.",
-            "Butuh info loker atau jasa lainnya? Tuliskan saja di sini, saya siap bantu 24 jam!"
-        ]
-    },
-    en: {
-        placeholder: "Ask here...",
-        btnTanya: "Ask",
-        pasangInfo: "+ Post Info",
-        titleLang: "Select Language",
-        titleRules: "Terms & Legality",
-        textRules: "Any information provided on Goona AI must be true, honest, accurate, and fully accountable by the poster for mutual comfort and legal safety.",
-        notFound: "Sorry Goonity, the information or answer you are looking for is currently unavailable in our system.",
-        waTemplate: "Hello, I saw your post on Goona AI. Could I get more details about it?",
-        locLabel: "Location:",
-        priceLabel: "Price:",
-        failSafeOpen: [
-            "Hello Goonity! Here is the most active information we found directly from our system just for you:",
-            "Hi there! I have searched our database and found the best information for you:",
-            "Great news Goonity! The details you requested are ready. Please check them out below:",
-            "Found it! Here is the most accurate data I managed to collect:"
-        ],
-        failSafeClose: [
-            "Is there anything else you'd like to adjust? Type a specific location or keyword so I can filter it again!",
-            "Didn't find what you need? Try typing another area or service name, and I'll look it up!",
-            "Hope this information helps Goonity! If you want to search for something else, just type it below.",
-            "Need more job vacancies or services? Just write it here, I'm ready to help you 24/7!"
-        ]
-    },
-    zh: {
-        placeholder: "在这里提问...",
-        btnTanya: "提问",
-        pasangInfo: "+ 发布信息",
-        titleLang: "选择语言",
-        titleRules: "规则与法律条款",
-        textRules: "在 Goona AI 上发布的任何信息必须真实、诚实、准确，并由发布者承担全部法律责任，以确保共同的舒适与安全。",
-        notFound: "抱歉 Goonity，您所寻找的信息或答案目前在我们的系统中不可用。",
-        waTemplate: "您好，我在 Goona AI 上看到了您的信息。可以了解更多详情吗？",
-        locLabel: "区域:",
-        priceLabel: "价格:",
-        failSafeOpen: [
-            "您好 Goonity！以下是我们直接从系统中为您找到的最活跃的信息：",
-            "嗨！我已经搜索了数据库，并为您找到了最佳信息：",
-            "好消息 Goonity！您需要的信息已准备就绪，请在下方查看详情：",
-            "找到了！这是我成功收集到的最准确的数据："
-        ],
-        failSafeClose: [
-            "还有什么需要调整的吗？请输入具体的位置或关键词，以便我再次为您筛选！",
-            "没有找到您需要的？尝试输入其他区域 or 服务名称，我帮您再找找！",
-            "希望这些信息对您有所帮助 Goonity！如果您想搜索其他内容，请在下方输入。",
-            "需要更多招聘或服务信息吗？随时在这里输入，我全天候为您服务！"
-        ]
-    }
+    notFound: "Maaf Goonity, informasi atau jawaban yang Anda cari saat ini belum tersedia di sistem kami. Coba ketik lebih spesifik menggunakan kombinasi 3 kata (Nama Jasa + Kecamatan + Kota).",
+    waTemplate: "Halo, saya melihat info Anda di Goona. Boleh tahu detail lebih lanjut?",
+    locLabel: "Lokasi:",
+    priceLabel: "Harga:",
+    failSafeOpen: [
+        "Halo Goonity! Ini dia informasi teraktif yang berhasil kami temukan langsung dari sistem khusus untuk Anda:",
+        "Hai kawan! Saya sudah menyaring database dan menemukan info terbaik ini untukmu:",
+        "Kabar baik Goonity! Info yang kamu cari sudah siap. Silakan dicek detailnya di bawah ini ya:"
+    ],
+    failSafeClose: [
+        "Ada yang perlu disesuaikan lagi? Ketik lokasinya atau nama jasanya secara spesifik minimal 3 kata ya agar saya saring kembali!",
+        "Belum ketemu yang pas? Coba ketik nama daerah atau kata kunci lain, nanti saya bantu cari lagi!",
+        "Semoga informasinya membantu Goonity! Kalau ada info lain yang ingin dicari, langsung ketik saja di bawah."
+    ]
 };
 
-// SIMULASI TYPING DELAY ANIMATION (1.5 - 2 detik)
 function showTypingIndicator() {
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-msg loading-msg';
@@ -570,12 +448,11 @@ function removeTypingIndicator() {
     if (indicator) indicator.remove();
 }
 
-// FORMAT TEXT CUSTOM DENGAN VARIABEL USER [Nama] & [Daerah]
 function formatResponseText(text) {
     return text.replace(/\[Nama\]/g, userIdentity.nama).replace(/\[Daerah\]/g, userIdentity.daerah);
 }
 
-// INisialisasi PESAN AWAL (MODUL 1 VS MODUL 3)
+// INisialisasi PEMBUKAAN
 function initWelcomeMessage() {
     showTypingIndicator();
     
@@ -584,27 +461,24 @@ function initWelcomeMessage() {
         let selectedText = "";
         
         if (!userIdentity.nama || !userIdentity.daerah) {
-            // Pengguna baru (Belum ada nama/daerah lengkap)
             selectedText = modul1Variations[Math.floor(Math.random() * modul1Variations.length)];
             currentStep = 'menunggu_nama';
-            inputField.placeholder = "Ketik nama panggilan Anda di sini...";
+            inputField.placeholder = "Ketik nama panggilan Anda...";
         } else {
-            // Pengguna lama (Sudah terekam di localStorage)
             selectedText = modul3Variations[Math.floor(Math.random() * modul3Variations.length)];
             selectedText = formatResponseText(selectedText);
             currentStep = 'normal';
-            inputField.placeholder = dictionary[currentLang].placeholder;
+            inputField.placeholder = normalPlaceholder;
         }
         
         appendMessage(selectedText, 'ai-msg');
-    }, 1600); // Delay acak natural mendekati 1.5s - 2s
+    }, 1600);
 }
 
-// MODUL 4: INTERSEPSI EMOSI (CASE-INSENSITIVE DETECTOR)
+// MODUL 4: INTERSEPSI EMOSI
 function checkEmotionInterception(prompt) {
     const lowerPrompt = prompt.toLowerCase();
 
-    // A. Bingung / Pusing
     const keywordsA = ['bingung', 'pusing', 'gak tahu', 'tidak tahu', 'gimana', 'cara', 'ribet', 'bingungin', 'pusingin'];
     if (keywordsA.some(kw => lowerPrompt.includes(kw))) {
         const responsesA = [
@@ -615,7 +489,6 @@ function checkEmotionInterception(prompt) {
         return formatResponseText(responsesA[Math.floor(Math.random() * responsesA.length)]);
     }
 
-    // B. Kecewa / Marah / Error
     const keywordsB = ['kecewa', 'marah', 'kesal', 'jelek', 'mahal', 'error', 'rusak', 'lambat', 'lelet', 'parah'];
     if (keywordsB.some(kw => lowerPrompt.includes(kw))) {
         const responsesB = [
@@ -626,7 +499,6 @@ function checkEmotionInterception(prompt) {
         return formatResponseText(responsesB[Math.floor(Math.random() * responsesB.length)]);
     }
 
-    // C. Senang / Puas / Bagus
     const keywordsC = ['keren', 'bagus', 'puas', 'senang', 'suka', 'mantap', 'makasih', 'terima kasih', 'top', 'terbantu'];
     if (keywordsC.some(kw => lowerPrompt.includes(kw))) {
         const responsesC = [
@@ -637,19 +509,18 @@ function checkEmotionInterception(prompt) {
         return formatResponseText(responsesC[Math.floor(Math.random() * responsesC.length)]);
     }
 
-    return null; // Tidak terdeteksi emosi spesifik, lanjutkan proses normal
+    return null;
 }
 
-// LOGIKA UTAMA EKSEKUSI OBROLAN GOONA AI
+// EKSEKUSI UTAMA CHAT
 async function tanyaAI() {
     const prompt = inputField.value.trim();
     if (!prompt) return;
 
-    // Tampilkan pesan pengguna ke chat room
     appendMessage(prompt, 'user-msg');
     inputField.value = '';
 
-    // PROSES PASKA ALUR JIKA SEDANG INPUT IDENTITAS (MODUL 1 & MODUL 2 KONTROL)
+    // PROSES INPUT IDENTITAS BERTAPAH (SOLUSI A)
     if (currentStep === 'menunggu_nama') {
         userIdentity.nama = prompt;
         currentStep = 'menunggu_daerah';
@@ -657,8 +528,9 @@ async function tanyaAI() {
         showTypingIndicator();
         setTimeout(() => {
             removeTypingIndicator();
-            appendMessage(`Wah keren! Kalau asal daerah atau domisili Kak ${userIdentity.nama} saat ini di kota/kabupaten mana? 🌍`, 'ai-msg');
-            inputField.placeholder = "Ketik nama daerah tinggal Anda...";
+            let rawQuestion = daerahQuestions[Math.floor(Math.random() * daerahQuestions.length)];
+            appendMessage(formatResponseText(rawQuestion), 'ai-msg');
+            inputField.placeholder = "Ketik kota/kabupaten domisili Anda...";
         }, 1500);
         return;
     }
@@ -666,7 +538,6 @@ async function tanyaAI() {
     if (currentStep === 'menunggu_daerah') {
         userIdentity.daerah = prompt;
         
-        // Simpan permanen di Browser Klien (Stempel Digital)
         localStorage.setItem('goona_nama', userIdentity.nama);
         localStorage.setItem('goona_daerah', userIdentity.daerah);
         currentStep = 'normal';
@@ -676,15 +547,14 @@ async function tanyaAI() {
             removeTypingIndicator();
             let successText = modul2Variations[Math.floor(Math.random() * modul2Variations.length)];
             appendMessage(formatResponseText(successText), 'ai-msg');
-            inputField.placeholder = dictionary[currentLang].placeholder;
+            inputField.placeholder = normalPlaceholder;
         }, 1700);
         return;
     }
 
-    // ALUR NORMAL (PENCARIAN SUPABASE + DETEKSI EMOSI)
+    // ALUR NORMAL: SUPABASE + DETEKSI EMOSI
     showTypingIndicator();
 
-    // Cek Intersepsi Emosi Terlebih Dahulu (Modul 4)
     const emosiResponse = checkEmotionInterception(prompt);
     if (emosiResponse) {
         setTimeout(() => {
@@ -694,10 +564,10 @@ async function tanyaAI() {
         return;
     }
 
-    // Jika tidak ada deteksi emosi, jalankan pencarian database Supabase normal
     let searchData = [];
     try {
         const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+        // Membatasi query maksimal mengambil 3 kata pertama masukan pengguna
         const kataKunci = semuaKata.slice(0, 3);
 
         let query = supabase
@@ -716,17 +586,14 @@ async function tanyaAI() {
             searchData = data || [];
         }
 
-        // Penundaan agar serasa ketikan manusia asli
         setTimeout(() => {
             removeTypingIndicator();
 
             if (searchData.length > 0) {
-                // Sapaan Pembuka Acak
-                const daftarPembuka = dictionary[currentLang].failSafeOpen;
+                const daftarPembuka = dictionary.failSafeOpen;
                 const pembukaAcak = daftarPembuka[Math.floor(Math.random() * daftarPembuka.length)];
                 appendMessage(pembukaAcak, 'ai-msg');
 
-                // Menggambar Komponen Kartu Hasil Konten
                 const cardWrapper = document.createElement('div');
                 cardWrapper.className = 'card-container';
                 let containsCards = false;
@@ -737,20 +604,20 @@ async function tanyaAI() {
                     } else {
                         containsCards = true;
                         const cleanPhone = item.whatsapp ? item.whatsapp.replace(/[^0-9]/g, '') : '';
-                        const encodedMsg = encodeURIComponent(`${dictionary[currentLang].waTemplate} (${item.judul})`);
+                        const encodedMsg = encodeURIComponent(`${dictionary.waTemplate} (${item.judul})`);
                         
                         let hargaTeks = "";
                         if (item.harga) {
                             const formatHarga = new Intl.NumberFormat('id-ID').format(item.harga);
                             const satuan = item.satuan_harga ? ` / ${item.satuan_harga}` : "";
-                            hargaTeks = `<div class="card-desc"><b>${dictionary[currentLang].priceLabel}</b> Rp ${formatHarga}${satuan}</div>`;
+                            hargaTeks = `<div class="card-desc"><b>${dictionary.priceLabel}</b> Rp ${formatHarga}${satuan}</div>`;
                         }
 
                         let lokasiGabungan = item.kabupaten_kota || "";
                         if (item.kecamatan) {
                             lokasiGabungan += item.kabupaten_kota ? `, ${item.kecamatan}` : item.kecamatan;
                         }
-                        const lokasiTeks = lokasiGabungan ? `<div class="card-desc"><b>${dictionary[currentLang].locLabel}</b> ${lokasiGabungan}</div>` : "";
+                        const lokasiTeks = lokasiGabungan ? `<div class="card-desc"><b>${dictionary.locLabel}</b> ${lokasiGabungan}</div>` : "";
 
                         cardWrapper.innerHTML += `
                             <div class="jasa-card">
@@ -770,13 +637,12 @@ async function tanyaAI() {
                     chatHistory.appendChild(cardWrapper);
                 }
 
-                // Sapaan Penutup Acak
-                const daftarPenutup = dictionary[currentLang].failSafeClose;
+                const daftarPenutup = dictionary.failSafeClose;
                 const penutupAcak = daftarPenutup[Math.floor(Math.random() * daftarPenutup.length)];
                 appendMessage(penutupAcak, 'ai-msg');
 
             } else {
-                appendMessage(dictionary[currentLang].notFound, 'ai-msg');
+                appendMessage(dictionary.notFound, 'ai-msg');
             }
 
             chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -784,7 +650,7 @@ async function tanyaAI() {
 
     } catch (err) {
         removeTypingIndicator();
-        appendMessage(currentLang === 'id' ? "Maaf Kak, sistem sedang pemeliharaan. 😥" : "Sorry, system under maintenance. 😥", 'ai-msg');
+        appendMessage("Maaf Kak, sistem sedang pemeliharaan. 😥", 'ai-msg');
         console.error("Fatal Error:", err);
     }
 }
@@ -798,7 +664,7 @@ function appendMessage(text, className) {
     return div;
 }
 
-// HANDLER DRAWER SIDEBAR & MENU HAMBURGER
+// MENU DRAWER UTAMA SIMPLE
 menuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     sidebar.classList.toggle('open');
@@ -810,19 +676,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// EVENT HANDLER GANTI BAHASA UI
-langSelect.addEventListener('change', (e) => {
-    currentLang = e.target.value;
-    inputField.placeholder = (currentStep === 'normal') ? dictionary[currentLang].placeholder : inputField.placeholder;
-    sendBtn.innerText = dictionary[currentLang].btnTanya;
-    document.getElementById('ui-btn-post').innerText = dictionary[currentLang].pasangInfo;
-    document.getElementById('ui-title-lang').innerText = dictionary[currentLang].titleLang;
-    document.getElementById('ui-title-rules').innerText = dictionary[currentLang].titleRules;
-    document.getElementById('ui-text-rules').innerText = dictionary[currentLang].textRules;
-    sidebar.classList.remove('open');
-});
-
-// START INisialisasi UTAMANYA DI SINI
 window.addEventListener('DOMContentLoaded', () => {
     initWelcomeMessage();
     if (sendBtn) sendBtn.onclick = (e) => { e.preventDefault(); tanyaAI(); };
