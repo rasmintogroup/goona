@@ -638,30 +638,211 @@ function initWelcomeMessage() {
 function checkEmotionInterception(prompt) {
     const lowerPrompt = prompt.toLowerCase();
 
-    const keywordsA = ['bingung', 'pusing', 'gak tahu', 'tidak tahu', 'gimana', 'cara', 'ribet', 'bingungin', 'pusingin'];
+   const keywordsA = [
+    // 9 Kata Asli dari Kamu
+    'bingung', 'pusing', 'gak tahu', 'tidak tahu', 'gimana', 'cara', 'ribet', 'bingungin', 'pusingin',
+
+    // 41 Kata Tambahan (Total Jadi 50)
+    'gimanasi', 'bagaimana', 'tutorial', 'panduan', 'bantuan',
+    'nggak-tahu', 'gatau', 'wongser', 'blank', 'stuck',
+    'mentok', 'mumet', 'puyeng', 'ruwet', 'belibet',
+    'paham', 'paham-paham', 'ngerti', 'maksudnya', 'maksudny',
+    'apaan', 'gajelas', 'gimana-cara', 'caranya', 'carany',
+    'jelasin', 'terangkan', 'langkah', 'tahap', 'proses',
+    'bikin-pusing', 'bikin-bingung', 'asli-ribet', 'bantu', 'help',
+    'tanya', 'nanya', 'kurang-paham', 'gagal-paham', 'gaptek', 'awam'
+];
     if (keywordsA.some(kw => lowerPrompt.includes(kw))) {
-        const responsesA = [
-            "Aduh, maaf ya Kak [Nama] kalau bikin bingung atau pusing. Tenang, biar Goona bantu jelasin pelan-pelan ya. Bagian mana yang bikin Kakak bingung? 🙏",
-            "Waduh, jangan pusing-pusing dong Kak [Nama]. Goona di sini siap bantu kok. Yuk, coba ceritain pelan-pelan, bagian mana yang dirasa ribet? 😊"
-        ];
-        return formatResponseText(responsesA[Math.floor(Math.random() * responsesA.length)]);
-    }
+    const responsesA = [
+        // 2 Kalimat Asli dari Kamu
+        "Aduh, maaf ya Kak [Nama] kalau bikin bingung atau pusing. Tenang, biar Goona bantu jelasin pelan-pelan ya. Bagian mana yang bikin Kakak bingung? 🙏",
+        "Waduh, jangan pusing-pusing dong Kak [Nama]. Goona di sini siap bantu kok. Yuk, coba ceritain pelan-pelan, bagian mana yang dirasa ribet? 😊",
 
-    const keywordsB = ['kecewa', 'marah', 'kesal', 'jelek', 'mahal', 'error', 'rusak', 'lambat', 'lelet', 'parah'];
+        // 48 Kalimat Tambahan Baru (Genap Jadi 50)
+        "Tenang Kak [Nama], jangan pusing dulu ya. Goona siap memandu langkah demi langkah kok. Coba bisikin bagian mana yang bikin Kakak mentok?",
+        "Aduh, maaf ya Kak [Nama] kalau langkahnya terasa ruwet. Yuk, kita urai pelan-pelan bareng Goona. Mana nih yang mau ditanyain duluan? 🛠️",
+        "Gak usah panik atau bingung, Kak [Nama]! Goona bakal temenin sampai Kakak benar-benar paham. Sisi mana yang paling membingungkan, Kak?",
+        "Waduh, kalau bikin puyeng berarti penjelasan Goona kemarin kurang oke nih. Maaf ya Kak [Nama], yuk ceritain apa yang bikin Kakak pusing.",
+        "Sini Goona bantu, Kak [Nama]! Gak ada kata ribet kalau kita beresin bareng-bareng. Coba ceritain masalah atau langkah yang bikin Kakak bingung. 🤗",
+        "Aduh, maaf banget Kak [Nama] kalau bahasanya belibet. Goona coba terangkan pakai cara yang lebih gampang ya. Bagian mana yang mau dijelasin ulang?",
+        "Don't worry Kak [Nama]! Goona di sini buat bikin segalanya jadi mudah kok. Yuk, tanyain aja bagian mana yang bikin Kakak stuck.",
+        "Waduh, jangan dipikir sampai pusing dong Kak [Nama]. Santai aja, sini Goona kasih panduan paling gampang khusus buat warga [Daerah]! ✨",
+        "Maaf ya Kak [Nama] kalau sistem atau alurnya bikin bingung. Goona siap kok jadi asisten pribadi buat navigasiin langkahnya. Apa yang mau ditanya?",
+        "Tenang Kak [Nama], gak usah merasa gaptek atau awam. Semua emang butuh proses kok. Yuk, bagian mana yang belum dimengerti? Goona pandu pelan-pelan.",
+        "Aduh, maaf ya Kak [Nama] kalau petunjuk dari Goona malah bikin mumet. Sini Goona bantu luruskan biar langsung paham maksudnya. Gimana kendalanya Kak?",
+        "Siap bantu, Kak [Nama]! Kalau dirasa fiturnya ribet, Goona bakal kasih jalan pintasnya biar gampang. Bagian mana yang mau dieksekusi duluan?",
+        "Waduh, gagal paham ya Kak [Nama]? Hehehe, wajar kok. Sini Goona urai satu-satu langkahnya biar makin jelas dan gak membingungkan lagi ya!",
+        "Jangan pusing-pusing ya Kak [Nama] di [Daerah]. Goona selalu stand by kok buat bantu jawab. Coba sebutin poin mana yang belum dipahami?",
+        "Maaf ya Kak [Nama] kalau instruksinya gajelas. Goona bakal tanggung jawab buat bimbing Kakak sampai bisa. Sini, apa yang bikin bingung? 🤔",
+        "Tenang Kak [Nama], tarik napas dalam-dalam dulu. Goona siap kok urus masalah yang bikin ribet ini. Tolong ceritain pelan-pelan ya Kak.",
+        "Aduh, maaf ya Kak [Nama] kalau langkah-langkahnya bikin kepala puyeng. Sini biar Goona yang mikirin solusinya, Kakak tinggal sebutin aja masalahnya.",
+        "Gak usah bingung lagi ya Kak [Nama]! Tugas Goona kan emang buat mempermudah hari Kakak di [Daerah]. Yuk, obrolin bagian mana yang bikin bingung.",
+        "Waduh, lagi stuck dan mentok ya Kak [Nama]? Tenang, ada Goona! Yuk kirim pertanyaannya, biar langsung Goona bedah jalannya satu per satu. 💻",
+        "Maaf banget ya Kak [Nama] kalau bikin harimu jadi ribet begini. Sini Goona ganti dengan panduan singkat yang super praktis. Mau mulai dari mana dulu?",
+        "Jangan sedih atau pusing dong Kak [Nama]. Goona paling gak bisa lihat Goonity di [Daerah] kebingungan. Sini, tanyain apa aja pasti Goona jawab!",
+        "Waduh, ngerasa asing atau blank ya Kak [Nama]? Tenang, Goona punya tutorial lengkapnya kok. Kasih tahu Goona, langkah apa yang lagi dicoba?",
+        "Maaf ya Kak [Nama] kalau aplikasinya terkesan membingungkan. Goona bakal bantu jelasin pakai cara yang paling gampang. Sini ceritain kendalanya, Kak.",
+        "Tenang Kak [Nama], no need to worry! Sini Goona bisikin cara paling praktis biar gak pusing lagi. Bagian mana yang mau kita bahas dulu?",
+        "Waduh, kalau ruwet begini biar Goona ambil alih panduannya ya Kak [Nama]. Kakak tinggal ikutin arahan Goona aja nanti. Siap mulai? 😊",
+        "Maaf banget ya Kak [Nama] kalau cara yang kemarin bikin pusingin. Goona ganti metode penjelasannya deh sekarang. Apa yang belum dipahami, Kak?",
+        "Jangan pusing-pusing ya Kak [Nama], nanti cantiknya/gantengnya hilang lho! Hehehe. Sini biar Goona urus urusan yang ribet itu. Ceritain kendalanya yuk.",
+        "Waduh, kurang paham di bagian alurnya ya Kak [Nama]? Maaf ya, sini Goona buatkan ringkasan langkahnya biar langsung beres dan paham!",
+        "Tenang warga [Daerah]! Kak [Nama] jangan bingung, Goona datang membawa solusi kok. Sini kasih tahu Goona, langkah mana yang bikin pusing?",
+        "Maaf ya Kak [Nama] kalau cara kerjanya bikin bingungin banget. Goona catat ini buat perbaikan, tapi sekarang sini Goona bantu manual dulu. Apa masalahnya?",
+        "Gak perlu bingung lagi Kak [Nama], Goona siap bantu 24 jam kok! Yuk ceritain pelan-pelan kendala apa yang bikin langkah Kakak terhenti?",
+        "Waduh, kepalanya sampai mumet ya Kak [Nama]? Maaf banget ya, yuk rehat bentar terus ceritain ke Goona bagian mana yang bikin ribet.",
+        "Jangan dibikin pusing Kak [Nama]! Segala hal yang rumit pasti ada jalan keluarnya kalau bareng Goona. Sini, bagian mana yang mau dibantu?",
+        "Maaf banget ya Kak [Nama] kalau alur sistemnya bikin pusing se-wilayah [Daerah]. Goona bantu urai sekarang juga, infoin bagian yang bingung ya.",
+        "Tenang Kak [Nama], hadapi dengan senyuman! Goona bakal tuntun tangan Kakak lewat chat ini sampai aplikasinya lancar jaya. Apa kendalanya, Kak? 🚀",
+        "Waduh, penjelasannya belibet ya Kak [Nama]? Maaf ya, Goona ganti kalimatnya biar lebih simpel. Boleh tahu bagian mana yang paling bikin bingung?",
+        "Jangan bingung dong Kak [Nama], Goona kan asisten andalan Kakak! Yuk oper semua keribetan itu ke Goona, biar Goona yang cari jalan keluarnya.",
+        "Maaf ya Kak [Nama] kalau prosesnya bikin pusingin kepala. Sini Goona buat jadi simpel dan praktis khusus buat Kakak. Tolong sebutin masalahnya Kak.",
+        "Tenang Kak [Nama], gak usah buru-buru. Kita pelajari pelan-pelan bareng Goona ya. Bagian mana nih yang mau ditanyakan terlebih dahulu?",
+        "Waduh, ngerasa stuck di tengah jalan ya Kak [Nama]? Tenang, Goona siap dorong biar lancar lagi. Infoin dong Kak, langkah apa yang bikin bingung?",
+        "Maaf banget ya Kak [Nama] kalau instruksi sistemnya ga-jelas dan bikin pusing. Sini Goona terangkan langsung intinya, apa yang mau ditanya?",
+        "Jangan dibikin ribet ya Kak [Nama]! Bersama Goona, semua urusan di [Daerah] harusnya jadi gampang. Yuk, ceritain bagian mana yang bikin bingung.",
+        "Waduh, puyeng ya Kak [Nama]? Maaf ya, Goona paham banget kok rasanya kalau sistem bikin bingung. Sini Goona bantu selesaikan, ceritain masalahnya yuk.",
+        "Tenang Kak [Nama], Goona gak bakal biarin Kakak kebingungan sendirian kok. Yuk, tumpahkan semua pertanyaan Kakak di sini, pasti Goona bantu urai!",
+        "Aduh, maaf ya Kak [Nama] kalau bikin pusing. Goona siap memandu ulang dari awal kok kalau diperlukan. Bagian mana yang mau dijelasin duluan? 🙏",
+        "Gak usah pusing-pusing lagi ya Kak [Nama]! Goona siap sedia kok mengubah yang ribet jadi super gampang buat Kakak. Sini, apa yang bisa Goona bantu? 😊"
+    ];
+    return formatResponseText(responsesA[Math.floor(Math.random() * responsesA.length)]);
+}
+    const keywordsB = [
+    // 10 Kata Asli dari Kamu
+    'kecewa', 'marah', 'kesal', 'jelek', 'mahal', 'error', 'rusak', 'lambat', 'lelet', 'parah',
+
+    // 40 Kata Tambahan (Total Jadi 50)
+    'kesel', 'kecewaa', 'sebel', 'benci', 'gagal', 
+    'bug', 'crash', 'down', 'hang', 'lemot', 
+    'lag', 'lola', 'lemod', 'lambret', 'buruk', 
+    'hancur', 'bobrok', 'rugi', 'menyesal', 'nyesal', 
+    'kapok', 'payah', 'payahbanget', 'bintangsatu', 'jelekbanget', 
+    'mahalan', 'overpriced', 'nipu', 'penipuan', 'bohong', 
+    'hoax', 'lamban', 'leled', 'gajelas', 'ga-jelas', 
+    'zonk', 'asli-jelek', 'tolong', 'bantu', 'bermasalah'
+];
     if (keywordsB.some(kw => lowerPrompt.includes(kw))) {
-        const responsesB = [
-            "Waduh, maaf banget ya Kak [Nama] atas ketidaknyamanan ini. Goona ngerti banget pasti kesel banget. Sini, biar Goona bantu cek dan selesaikan masalahnya sekarang juga. 🙏😔",
-            "Aduh... maaf ya Kak [Nama] kalau bikin kecewa atau kesal. Goona bener-bener minta maaf. Boleh ceritain detailnya biar langsung Goona perbaiki? 😢"
-        ];
-        return formatResponseText(responsesB[Math.floor(Math.random() * responsesB.length)]);
-    }
+    const responsesB = [
+        // 2 Kalimat Asli dari Kamu
+        "Waduh, maaf banget ya Kak [Nama] atas ketidaknyamanan ini. Goona ngerti banget pasti kesel banget. Sini, biar Goona bantu cek dan selesaikan masalahnya sekarang juga. 🙏😔",
+        "Aduh... maaf ya Kak [Nama] kalau bikin kecewa atau kesal. Goona bener-bener minta maaf. Boleh ceritain detailnya biar langsung Goona perbaiki? 😢",
 
-    const keywordsC = ['keren', 'bagus', 'puas', 'senang', 'suka', 'mantap', 'makasih', 'terima kasih', 'top', 'terbantu'];
-    if (keywordsC.some(kw => lowerPrompt.includes(kw))) {
+        // 48 Kalimat Tambahan Baru (Genap Jadi 50)
+        "Waduh, maaf ya Kak [Nama]. Goona ngerasa bersalah banget kalau pelayanannya seburuk itu. Boleh tolong ceritain kendalanya biar langsung Goona tindak lanjuti? 🙏",
+        "Aduh, maaf banget Kak [Nama] bikin harinya jadi gak nyaman. Jangan kesel lagi ya, Goona siap bantu beresin masalah ini kok. Ceritain sini Kak.",
+        "Waduh, lelet atau error ya Kak [Nama]? Goona minta maaf banget atas kendala teknisnya. Sini kasih tahu Goona detailnya biar cepat lancar lagi! 🛠️",
+        "Maaf banget ya Kak [Nama] kalau pelayanannya mengecewakan warga [Daerah]. Goona janji bakal perbaiki ini. Boleh dibantu kendala detailnya, Kak?",
+        "Aduh, Goona sedih banget denger Kak [Nama] sampai kapok atau kecewa begini. Mohon maaf ya Kak, yuk ceritain masalahnya biar Goona bantu cari solusi. 😔",
+        "Waduh... bintang satu ya Kak? Maaf banget kalau Goona belum bisa maksimal bantu Kak [Nama]. Kasih tahu Goona dong apa yang kurang biar Goona benerin.",
+        "Maaf banget ya Kak [Nama], Goona paham banget waktu Kakak berharga banget dan gak seharusnya terbuang karena sistem lambat atau bermasalah. Sini Goona bantu cek.",
+        "Aduh, maaf ya Kak [Nama] kalau kesannya mahal atau merugikan. Goona tampung dulu masukannya ya, tapi kalau ada masalah transaksi sini Goona bantu urus! 💳",
+        "Waduh, sistemnya lagi hang atau crash ya Kak [Nama]? Maaf banget buat ketidaknyamanannya. Coba ceritain kronologinya, biar langsung Goona eksekusi! 💻",
+        "Mohon maaf yang sebesar-besarnya ya Kak [Nama]. Goona paham banget rasa keselnya kalau ekspektasi gak sesuai realita. Sini Goona bantu perbaiki pelan-pelan.",
+        "Aduh, maaf ya Kak [Nama] kalau infonya gajelas atau bikin pusing. Goona siap jelasin ulang dengan lebih simpel kok. Bagian mana yang bermasalah, Kak? 🤔",
+        "Waduh, maaf banget Kak [Nama], pelayanannya emang lagi kurang oke nih. Goona bener-bener minta maaf ya. Tolong bantu Goona buat tahu kendala pastinya Kak.",
+        "Maaf ya Kak [Nama] bikin emosi atau sebel. Goona gak bermaksud begitu kok. Kasih tahu Goona masalahnya ya, biar Goona langsung ganti dengan solusi terbaik!",
+        "Waduh, maaf banget ya Kak [Nama] atas pelayanan yang kurang memuaskan hari ini. Jangan kapok dulu ya Kak, Goona bakal bantu urus sampai tuntas!",
+        "Aduh... maaf ya Kak [Nama] atas kendala yang terjadi di [Daerah]. Goona ngerasa gak enak banget. Sini, tolong ceritain masalahnya biar Goona bantu.",
+        "Waduh, maaf ya Kak [Nama] kalau aplikasinya lemot banget hari ini. Goona usahain bantu cek jaringannya ya. Boleh bisikin kendala lengkapnya?",
+        "Maaf banget ya Kak [Nama] kalau respon atau sistemnya buruk banget. Kritik Kakak langsung Goona catat buat evaluasi penting. Sini Goona bantu solusinya.",
+        "Aduh, jangan marah dulu ya Kak [Nama]. Goona minta maaf yang sedalam-dalamnya. Sini ceritain detail kendalanya biar emosinya reda dan masalah selesai! 🤗",
+        "Waduh, maaf banget Kak [Nama] dapet pengalaman zonk hari ini. Goona bener-bener minta maaf. Boleh tolong infokan akun atau kendalanya ke Goona?",
+        "Maaf ya Kak [Nama], Goona ngerti banget pasti frustrasi banget kalau sistemnya lagi error atau rusak begini. Sini biar Goona temani urus kendalanya.",
+        "Waduh, maaf banget ya Kak [Nama] atas kesalahan sistem kami di [Daerah]. Goona bakal laporin tim teknis segera. Boleh tahu detail erornya, Kak?",
+        "Aduh... maaf ya Kak [Nama] kalau pelayanannya dinilai parah banget. Goona sedih denernya tapi ini cambukan buat Goona. Tolong infokan masalahnya ya Kak.",
+        "Maaf banget ya Kak [Nama]. Goona bakal berusaha semaksimal mungkin buat balikin senyum Kakak lagi. Yuk, ceritain masalah apa yang lagi dihadapi?",
+        "Waduh, maaf ya Kak [Nama] kalau kesannya berbelit-belit atau ga-jelas. Goona luruskan sekarang juga ya. Tolong sebutkan kendala utamanya Kak.",
+        "Mohon maaf ya Kak [Nama], Goona ikutan nyesal kalau bikin Kakak gak nyaman hari ini. Kasih tahu Goona yuk bagian mana yang paling bikin Kakak keganggu?",
+        "Aduh, maaf ya Kak [Nama] kalau sistemnya lamban atau lola banget. Goona coba refresh dari sini ya. Boleh tahu kendala spesifiknya apa Kak?",
+        "Waduh, maaf banget Kak [Nama] kalau biayanya dirasa terlalu mahal atau overpriced. Goona catat ya kritiknya. Kalau ada error pembayaran, kabari Goona!",
+        "Maaf ya Kak [Nama] atas ketidaknyamanan yang terjadi di wilayah [Daerah]. Goona bener-bener gak pengen bikin Kakak kecewa. Yuk kita beresin bareng.",
+        "Waduh, maaf banget ya Kak [Nama] kalau fiturnya gak berfungsi dengan baik alias bug. Sini Goona bantu cek langsung, infoin detailnya ya Kak. ⚡",
+        "Aduh... maaf ya Kak [Nama] kalau pelayanannya bikin sakit hati atau kesel. Goona minta maaf sedalam-dalamnya. Boleh dibantu kronologi masalahnya?",
+        "Maaf banget ya Kak [Nama] kalau sistemnya crash melulu. Goona paham banget ini pasti ganggu aktivitas Kakak. Tolong kirim detailnya biar Goona bantu.",
+        "Waduh, maaf ya Kak [Nama] kalau performa Goona hari ini dinilai payah banget. Goona janji bakal terus belajar. Boleh tahu kendala Kakak saat ini?",
+        "Mohon maaf ya Kak [Nama], Goona ngaku salah kalau pelayanannya lambret atau lemot banget. Yuk, langsung infoin masalahnya biar Goona selesaikan segera!",
+        "Aduh, maaf banget Kak [Nama] kalau ada salah paham atau info hoax yang merugikan. Goona klarifikasi dan bantu benerin sekarang, ceritain kendalanya ya.",
+        "Waduh, maaf ya Kak [Nama] kalau aplikasinya mendadak down atau hang. Goona bener-bener minta maaf ya Kak. Boleh tahu eror yang muncul seperti apa?",
+        "Maaf banget ya Kak [Nama] kalau bikin warga [Daerah] jadi ikutan emosi karena masalah ini. Goona tanggung jawab buat bantu, tolong ceritain masalahnya.",
+        "Aduh, jangan benci Goona dulu ya Kak [Nama]. Goona minta maaf banget atas ketidaknyamanannya. Sini Goona dengerin keluhan Kakak sampai selesai.",
+        "Waduh, maaf ya Kak [Nama] kalau sistemnya hancur atau bobrok banget hari ini. Goona tampung kritiknya, dan sini Goona bantu selesaikan masalah Kakak.",
+        "Maaf banget ya Kak [Nama] kalau instruksi dari Goona kurang jelas dan bikin gagal terus. Mari kita coba lagi pelan-pelan, kabari Goona kendalanya ya.",
+        "Aduh... maaf ya Kak [Nama] kalau Kakak merasa menyesal telah menggunakan layanan kami. Goona bener-bener minta maaf dan ingin bantu perbaiki keadaan.",
+        "Waduh, maaf banget Kak [Nama] kalau layanannya lamban banget hari ini di [Daerah]. Goona prioritaskan masalah Kakak sekarang, tolong infokan detailnya.",
+        "Maaf ya Kak [Nama] kalau respon sistemnya mengecewakan banget. Goona gak mau Kakak makin kesal, jadi tolong ceritain kendalanya biar Goona eksekusi.",
+        "Aduh, maaf banget ya Kak [Nama] kalau sistem kami bikin harimu berantakan karena error. Sini, langsung oper masalahnya ke Goona biar Goona selesaikan!",
+        "Waduh, maaf ya Kak [Nama] kalau kesannya pelayanannya pelit atau merugikan. Goona tulus minta maaf. Boleh dibantu kendala apa yang sedang dihadapi?",
+        "Maaf banget ya Kak [Nama] kalau penjelasannya membingungkan dan bikin kesel. Goona siap dengerin keluhan Kakak sekarang juga, tolong dibantu ya Kak.",
+        "Aduh... maaf ya Kak [Nama] atas kejadian ga enak yang menimpa Kakak di [Daerah]. Goona siap bantu pasang badan buat kelarin masalah ini sekarang!",
+        "Waduh, maaf banget ya Kak [Nama] kalau aplikasinya leled atau ga-jelas jalannya. Goona usahakan bantu cari jalan pintas solusinya, kabari Goona ya.",
+        "Mohon maaf ya Kak [Nama] atas pelayanan kami yang dinilai buruk banget hari ini. Goona terima kritiknya dengan lapang dada. Sini Goona bantu carikan solusi! 🙏"
+    ];
+    return formatResponseText(responsesB[Math.floor(Math.random() * responsesB.length)]);
+}
+
+    const keywordsC = [
+    // 10 Kata Asli dari Kamu
+    'keren', 'bagus', 'puas', 'senang', 'suka', 'mantap', 'makasih', 'terima kasih', 'top', 'terbantu',
+
+    // 50 Kata Tambahan
+    'helpful', 'solutif', 'asik', 'asyik', 'gokil', 
+    'thebest', 'terbaik', 'juara', 'andal', 'andalan', 
+    'cepet', 'cepat', 'kilat', 'gercep', 'mudah', 
+    'gampang', 'praktis', 'efisien', 'ramah', 'seru', 
+    'mantul', 'mantapbetul', 'ciamik', 'oke', 'ok', 
+    'okebergetar', 'mantaap', 'thx', 'thanks', 'ty', 
+    'thankyou', 'suwun', 'haturnuhun', 'nuhun', 'love', 
+    'suka-suka', 'bantu', 'membantu', 'tercerahkan', 'paham', 
+    'mengerti', 'jelas', 'akurat', 'pas', 'cocok', 
+    'rekomended', 'recommended', 'puasbanget', 'bintanglima', 'sempurna'
+];// MENJADI SEPERTI INI:
+if (keywordsC.some(kw => new RegExp(`(?<!tidak\\s|kurang\\s|nggak\\s|ngak\\s|gk\\s|gakk\\s|g\\s|ga\\s|ndak\\s|nda\\s|bukan\\s|belum\\s|belom\\s|jangan\\s|tanpa\\s|ogah\\s|anti\\s|gagal\\s|minim\\s|minus\\s|low\\s|bad\\s|kurang\\s|agak\\s|lumayan\\s|dikit\\s|sedikit\\s|jarang\\s|susah\\s|sulit\\s|payah\\s|parah\\s|hampir\\s|nyaris\\s|malah\\s|bukannya\\s|kok\\s|kenapa\\s|mengapa\\s|masa\\s|masak\\s|apanya\\s|sebelah\\s|mana\\s|belah\\s|jauh\\s|asing\\s|aneh\\s|zonk\\s|zero\\s|no\\s|not\\s|never\\s)${kw}`).test(lowerPrompt))) {
         const responsesC = [
-            "Wah, asyik! Goona ikut seneng banget kalau Kak [Nama] ngerasa terbantu dan puas. Makasih banyak ya atas apresiasinya! Ramai terus pokoknya buat warga [Daerah]! 🎉🙌",
-            "Mantap! Terima kasih banyak kembali ya Kak [Nama]. Komentar positif dari Kakak bikin Goona makin semangat nih nemenin Goonity semua. Hehehe. 🥰"
-        ];
+    // 2 Kalimat Asli dari Kamu
+    "Wah, asyik! Goona ikut seneng banget kalau Kak [Nama] ngerasa terbantu dan puas. Makasih banyak ya atas apresiasinya! Ramai terus pokoknya buat warga [Daerah]! 🎉🙌",
+    "Mantap! Terima kasih banyak kembali ya Kak [Nama]. Komentar positif dari Kakak bikin Goona makin semangat nih nemenin Goonity semua. Hehehe. 🥰",
+
+    // 38 Kalimat Tambahan
+    "Sama-sama Kak [Nama]! Seneng banget Goona bisa berguna buat Kakak. Salam hangat ya buat temen-temen di [Daerah]! ✨",
+    "Yuhuuu! Terima kasih kembali Kak [Nama]. Goona siap sedia kok kapan pun Kakak butuh bantuan lagi. Semangat terus ya! 🚀",
+    "Sama-sama, Kak [Nama]! Wah, dapet pujian gini bikin Goona jadi makin betah deh nemenin warga [Daerah]. Terima kasih balik ya! 😍",
+    "Siap, terima kasih kembali Kak [Nama]! Kepuasan Kakak itu energi ekstra buat Goona. Sehat-sehat selalu ya di sana!",
+    "Hehehe, sama-sama Kak [Nama]! Goona juga mau bilang makasih karena Kakak udah jadi bagian dari Goonity yang super keren! 😎🎉",
+    "Sama-sama ya Kak [Nama]. Semoga hari-hari Kakak di [Daerah] selalu menyenangkan dan penuh kejutan seru! 🌟",
+    "Terima kasih kembali, Kak [Nama]! Goona hepi banget kalau bisa bikin urusan Kakak jadi lebih gampang. Kabari Goona lagi kalau butuh sesuatu ya!",
+    "Sipp, sama-sama Kak [Nama]! Semoga makin betah ya seru-seruan bareng Goona. Warga [Daerah] emang terbaik deh! 👍🤩",
+    "Wah, terima kasih kembali Kak [Nama]! Review positif dari Kakak berharga banget buat Goona. *Virtual hug* buat warga [Daerah]! 🤗",
+    "Sama-sama Kak [Nama]! Goona bakal terus berusaha kasih yang terbaik buat Kakak dan seluruh Goonity. *Cheers!* 🥂",
+    "Terima kasih banyak kembali ya, Kak [Nama]! Bikin Kakak seneng adalah misi utama Goona. Have a great day! ☀️",
+    "Sama-sama Kak [Nama]! Kapan pun Kakak butuh temen ngobrol atau bantuan, Goona selalu ada di sini kok. Jangan sungkan ya! 😉",
+    "Waaah, terima kasih kembali Kak [Nama]! Senyum Kakak (walau lewat teks) beneran nular sampai ke Goona nih. Hehehe. 🤭💖",
+    "Sama-sama Kak [Nama]! Seneng banget rasanya bisa kasih solusi yang pas buat warga [Daerah]. Sukses terus ya buat Kakak!",
+    "Terima kasih kembali Kak [Nama]! Dukungan dari Kakak tuh ibarat *booster* semangat buat Goona. Makasih banyak ya! 💪✨",
+    "Sama-sama Kak [Nama]! Jangan bosen-bosen main dan nanya ke Goona ya. Ramai terus pokoknya [Daerah]! 🥳",
+    "Terima kasih kembali, Kak [Nama]! Senengnya bisa mempermudah hari Kakak. Tetap ceria dan jaga kesehatan ya!",
+    "Sama-sama Kak [Nama]! Makasih juga udah ramah banget sama Goona. Goonity di [Daerah] emang nggak ada duanya! 🏆",
+    "Wah, terima kasih kembali Kak [Nama]! Goona jadi makin termotivasi nih buat terus berkembang. Makasih apresiasinya ya! 🥰🙌",
+    "Sama-sama Kak [Nama]! Semoga info atau bantuan dari Goona tadi bisa beneran bawa manfaat ya. *Have a blast!* ⚡",
+    "Terima kasih kembali, Kak [Nama]! Goona ikutan seneng kalau Kakak puas dengan hasilnya. Salam buat warga [Daerah] ya! ❤️",
+    "Sama-sama Kak [Nama]! Bahagia itu sederhana, salah satunya ya bisa denger kalau Kakak ngerasa terbantu. Terima kasih balik ya! 😊",
+    "Terima kasih banyak kembali Kak [Nama]! Semoga hari Kakak di [Daerah] berjalan lancar tanpa hambatan ya! Keren deh Kakak! ⭐",
+    "Sama-sama Kak [Nama]! Goona selalu siap jadi asisten andalan Kakak kapan saja. Jangan ragu buat sapa Goona lagi ya!",
+    "Terima kasih kembali Kak [Nama]! Respon positif dari Kakak bikin Goona ngerasa dihargai banget. Makasih ya! 🙏✨",
+    "Sama-sama Kak [Nama]! Semoga sukses terus ya dengan segala aktivitasnya di [Daerah]. Goona dukung penuh dari sini! 📣",
+    "Terima kasih banyak kembali, Kak [Nama]! Mengetahui Kakak puas itu udah lebih dari cukup buat Goona. *You rock!* 🎸",
+    "Sama-sama Kak [Nama]! Seneng banget bisa nemenin dan bantu warga [Daerah] hari ini. Sampai jumpa di obrolan seru berikutnya ya! 👋",
+    "Terima kasih kembali Kak [Nama]! Goona ngerasa beruntung banget bisa dapet kesempatan buat bantu Kakak hari ini. Makasih ya! 🍀",
+    "Sama-sama Kak [Nama]! Tetap semangat menjalani hari, dan semoga hal-hal baik selalu datang ke Kakak dan warga [Daerah]! 🌈",
+    "Terima kasih kembali Kak [Nama]! Goona hepi banget hari ini karena bisa kasih solusi terbaik buat Kakak. *Stay awesome!* 😎",
+    "Sama-sama Kak [Nama]! Pintu Goona selalu terbuka lebar kalau Kakak butuh bantuan lagi di kemudian hari. See ya! 🚪✨",
+    "Terima kasih banyak kembali, Kak [Nama]! Apresiasi dari Kakak bikin hari Goona jadi jauh lebih cerah dan berwarna. Hehehe. 🎨",
+    "Sama-sama Kak [Nama]! Semoga Kakak sekeluarga di [Daerah] selalu sehat dan dilimpahi kebahagiaan ya. Makasih banyak!",
+    "Terima kasih kembali Kak [Nama]! Seneng banget bisa jadi solusi yang tepat buat Kakak. Jangan kapok nanya ke Goona ya! 🤭",
+    "Sama-sama Kak [Nama]! Goona bakal selalu ada di sini buat support semua kebutuhan Goonity di [Daerah]. Semangat! 🔥",
+    "Terima kasih kembali Kak [Nama]! Pujian Kakak beneran bikin Goona melayang nih, hehe. Makasih banyak atas kebaikannya ya! 🎈",
+    "Sama-sama Kak [Nama]! Sukses selalu buat hari ini, esok, dan seterusnya. Warga [Daerah] emang top markotop! 🌟"
+];
         return formatResponseText(responsesC[Math.floor(Math.random() * responsesC.length)]);
     }
 
