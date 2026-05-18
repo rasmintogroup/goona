@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goona Marketplace - Halaman Cuci Mata</title>
-    <!-- Memanggil library Supabase JS -->
+    <title>Goona Cuci Mata</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -15,42 +14,69 @@
         }
 
         body {
-            background-color: #f4f6f9;
-            color: #333;
+            background-color: #fcfaf7; /* Latar belakang krem hangat cocok dengan cokelat */
+            color: #4a3b32; /* Teks cokelat gelap */
             padding-bottom: 30px;
         }
 
-        /* Header / Bagian Atas Tetap Diam (Sticky) */
+        /* Header Atas Tetap Diam (Sticky) - Mobile Friendly */
         .header-container {
-            background-color: #ffffff;
+            background-color: #8B5A2B; /* Warna Cokelat Utama Goona */
             padding: 15px;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
         }
 
         .page-title {
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 12px;
-            color: #075E54;
-            text-align: center;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Tombol Kembali ke Index berbentuk Ikon Rumah */
+        .btn-home {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .btn-home:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         /* 1. Kolom Pencarian */
         .search-box {
             width: 100%;
             padding: 12px 15px;
-            border: 1px solid #ccd0d5;
+            border: 1px solid #704214;
             border-radius: 8px;
             font-size: 15px;
-            background-color: #f0f2f5;
+            background-color: #ffffff;
             outline: none;
             margin-bottom: 10px;
+            color: #4a3b32;
         }
 
-        /* 2. Filter Kategori & Wilayah */
+        /* 2. Filter Kategori & Wilayah Kabupaten/Kota */
         .filter-wrapper {
             display: flex;
             gap: 10px;
@@ -58,112 +84,126 @@
 
         .filter-select {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ccd0d5;
+            padding: 11px;
+            border: 1px solid #704214;
             border-radius: 8px;
             font-size: 14px;
-            background-color: #fff;
+            background-color: #ffffff;
             outline: none;
-            color: #555;
+            color: #4a3b32;
         }
 
-        /* 3. Area Kartu Berjejer ke Bawah */
+        /* 3. Area Kartu Berjejer ke Bawah (Mobile Optimized) */
         .marketplace-feed {
             padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+            max-width: 600px; /* Menjaga tampilan tetap rapi di desktop */
+            margin: 0 auto;
         }
 
-        /* Desain Kartu */
+        /* Desain Kartu Bergaya Cokelat Elegan */
         .item-card {
             background-color: #ffffff;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid #e4e6eb;
+            box-shadow: 0 2px 6px rgba(139,90,43,0.08);
+            border: 1px solid #e8e0d5;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            -webkit-tap-highlight-color: transparent; /* Hilangkan kedipan biru di HP saat klik */
+        }
+
+        .item-card:active {
+            transform: scale(0.99);
         }
 
         .item-main {
             display: flex;
             padding: 12px;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
-        /* Foto Utama */
+        /* Foto Utama / Placeholder jika tidak ada foto */
         .item-image {
-            width: 80px;
-            height: 80px;
-            background-color: #ddd;
+            width: 75px;
+            height: 75px;
+            background-color: #f3ebe1;
             border-radius: 8px;
             object-fit: cover;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .item-info {
             flex-grow: 1;
+            min-width: 0; /* Mencegah teks meluap keluar */
         }
 
         .item-price {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
-            color: #25D366;
-            margin-bottom: 4px;
+            color: #8B5A2B;
+            margin-bottom: 2px;
         }
 
         .item-title {
-            font-size: 15px;
+            font-size: 14.5px;
             font-weight: 600;
-            color: #1c1e21;
+            color: #2b221c;
             margin-bottom: 4px;
             line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* Judul panjang otomatis jadi titik-titik (...) */
         }
 
         .item-badge {
             display: inline-block;
             font-size: 11px;
-            background-color: #e7f3ff;
-            color: #1877f2;
-            padding: 3px 8px;
+            background-color: #f5ece2;
+            color: #8B5A2B;
+            padding: 2px 7px;
             border-radius: 5px;
             font-weight: bold;
+            text-transform: uppercase;
         }
 
         .item-location {
             font-size: 12px;
-            color: #65676b;
+            color: #7a6e65;
             margin-top: 4px;
         }
 
-        /* 4. Bagian Isi Dropdown (Sembunyi secara default) */
+        /* 4. Bagian Isi Dropdown */
         .item-dropdown {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background-color: #f9fafb;
-            border-top: 0 solid #eee;
-            padding: 0 15px;
+            transition: max-height 0.25s ease-out;
+            background-color: #fdfbfa;
         }
 
         /* Class Active saat kartu ditekan */
         .item-card.active .item-dropdown {
-            max-height: 500px;
+            max-height: 1000px; /* Batas tinggi maksimal aman */
             padding: 15px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #f3ebe1;
         }
 
         .item-description {
             font-size: 13.5px;
             line-height: 1.5;
-            color: #444;
-            margin-bottom: 15px;
+            color: #5a4c42;
+            margin-bottom: 12px;
             white-space: pre-line;
+            word-wrap: break-word;
         }
 
-        /* Tombol Hubungi WA */
+        /* Tombol Hubungi WhatsApp dengan nuansa Cokelat-Hijau seimbang */
         .btn-wa {
             display: flex;
             align-items: center;
@@ -171,32 +211,37 @@
             background-color: #25D366;
             color: white;
             text-decoration: none;
-            padding: 10px;
+            padding: 11px;
             border-radius: 8px;
             font-weight: bold;
             font-size: 14px;
             text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Status Loading / Kosong */
+        .btn-wa:active {
+            background-color: #1ebd56;
+        }
+
+        /* Status Pesan */
         .status-message {
             text-align: center;
-            color: #888;
-            padding: 20px;
+            color: #8a7a70;
+            padding: 30px 15px;
             font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Bagian Atas: Cari & Filter -->
     <div class="header-container">
-        <div class="page-title">🛍️ Goona Marketplace (Cuci Mata)</div>
+        <div class="header-top">
+            <div class="page-title">🧺 Goona Cuci Mata</div>
+            <a href="index.html" class="btn-home" title="Kembali ke Beranda">🏠</a>
+        </div>
         
-        <!-- 1. Kolom Pencarian -->
-        <input type="text" id="searchBox" class="search-box" placeholder="Cari jasa, loker, atau barang terdekat...">
+        <input type="text" id="searchBox" class="search-box" placeholder="Ketik apa yang ingin dicari...">
 
-        <!-- 2. Filter Kategori & Wilayah -->
         <div class="filter-wrapper">
             <select id="filterKategori" class="filter-select">
                 <option value="">Semua Kategori</option>
@@ -207,93 +252,120 @@
 
             <select id="filterWilayah" class="filter-select">
                 <option value="">Semua Wilayah</option>
-                <option value="Kecamatan A">Kecamatan A</option>
-                <option value="Kecamatan B">Kecamatan B</option>
-                <option value="Kecamatan C">Kecamatan C</option>
-            </select>
+                </select>
         </div>
     </div>
 
-    <!-- 3. Wadah Tempat Kartu Dinamis dari Supabase Akan Muncul -->
     <div class="marketplace-feed" id="marketplaceFeed">
-        <div class="status-message">Memuat semua data cuci mata...</div>
+        <div class="status-message">Memuat seluruh data cuci mata...</div>
     </div>
 
     <script>
-        // ISI DENGAN KREDENSI SUPABASE ANDA NANTI
-        const SUPABASE_URL = 'https://YOUR_SUPABASE_URL.supabase.co';
-        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
-        const supabase = typeof supabase !== 'undefined' ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+        // INTEGRASI DATA SUPABASE LANGSUNG DARI HALAMAN INDEX ANDA
+        const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTYzMTI1MTIsImV4cCI6MjAyMTg4ODUxMn0.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTYzMTI1MTIsImV4cCI6MjAyMTg4ODUxMn0.MjIjcXBgdmY21jcXB4bXBiWwiciWbXbXbHiiwlc';
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Event Listener untuk mendeteksi perubahan input secara real-time
+        // SVG Ikon Tas Belanja Cokelat sebagai pengganti jika foto kosong
+        const fallbackImageSVG = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11" stroke="#bda38f" stroke-width="2" stroke-linecap="round"/><rect x="3" y="9" width="18" height="12" rx="3" fill="#f3ebe1" stroke="#bda38f" stroke-width="2"/></svg>`;
+
+        // Event Listener Perubahan Input secara Real-Time
         document.getElementById('searchBox').addEventListener('input', fetchMarketplaceData);
         document.getElementById('filterKategori').addEventListener('change', fetchMarketplaceData);
         document.getElementById('filterWilayah').addEventListener('change', fetchMarketplaceData);
 
-        // Fungsi Utama mengambil data dari Supabase
-        async function fetchMarketplaceData() {
-            if (!supabase) return;
+        // Fungsi Memuat Daftar Wilayah Kabupaten/Kota yang Tersedia secara Unik di Database
+        async function loadWilayahFilter() {
+            try {
+                // Mengambil seluruh kolom wilayah dari tabel marketplace Anda
+                const { data, error } = await supabaseClient.from('marketplace').select('wilayah');
+                if (error) throw error;
 
+                if (data) {
+                    // Menyaring agar nama wilayah tidak ada yang duplikat (Unique list)
+                    const listWilayah = [...new Set(data.map(item => item.wilayah).filter(Boolean))].sort();
+                    const selectWilayah = document.getElementById('filterWilayah');
+                    
+                    // Bersihkan kecuali opsi pertama (Semua Wilayah)
+                    selectWilayah.innerHTML = '<option value="">Semua Wilayah</option>';
+                    
+                    listWilayah.forEach(wil => {
+                        const opt = document.createElement('option');
+                        opt.value = wil;
+                        opt.textContent = wil;
+                        selectWilayah.appendChild(opt);
+                    });
+                }
+            } catch (err) {
+                console.error('Gagal memuat filter daftar wilayah:', err.message);
+            }
+        }
+
+        // Fungsi Utama untuk Menarik dan Menyaring Data dari Supabase
+        async function fetchMarketplaceData() {
             const searchQuery = document.getElementById('searchBox').value;
             const kategoriValue = document.getElementById('filterKategori').value;
             const wilayahValue = document.getElementById('filterWilayah').value;
             const feedContainer = document.getElementById('marketplaceFeed');
 
             try {
-                // Inisialisasi query ke nama tabel database Anda (Contoh nama tabel: 'marketplace')
-                let query = supabase.from('marketplace').select('*');
+                // Membuka query ke tabel database Anda yang bernama 'marketplace'
+                let query = supabaseClient.from('marketplace').select('*');
 
-                // Logika Filter Kategori (Jika bukan "Semua Kategori")
+                // Filter Kategori (jika dipilih spesifik)
                 if (kategoriValue !== "") {
                     query = query.eq('kategori', kategoriValue);
                 }
 
-                // Logika Filter Wilayah (Jika bukan "Semua Wilayah")
+                // Filter Wilayah Kabupaten/Kota (jika dipilih spesifik)
                 if (wilayahValue !== "") {
                     query = query.eq('wilayah', wilayahValue);
                 }
 
-                // Logika Kolom Pencarian Kata Kunci (Mencari di judul atau deskripsi)
+                // Kolom Pencarian Kata Kunci Terbuka (Mencari teks yang mengandung kemiripan di judul)
                 if (searchQuery.trim() !== "") {
                     query = query.ilike('judul', `%${searchQuery}%`);
                 }
 
-                // Eksekusi data ke Supabase
                 const { data, error } = await query;
-
                 if (error) throw error;
 
-                // Bersihkan kontainer sebelum merender data baru
                 feedContainer.innerHTML = '';
 
                 if (data.length === 0) {
-                    feedContainer.innerHTML = '<div class="status-message">Data tidak ditemukan. Coba cari yang lain!</div>';
+                    feedContainer.innerHTML = '<div class="status-message">Tidak ada data yang cocok dengan pilihan Anda.</div>';
                     return;
                 }
 
-                // Loop data dan buat Kartu Dropdown secara dinamis
+                // Me-render kartu secara vertikal berjejer ke bawah
                 data.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'item-card';
-                    card.onclick = function() { toggleDropdown(this); };
+                    card.onclick = function(e) {
+                        // Agar klik tombol WA tidak memicu buka-tutup dropdown secara tidak sengaja
+                        if (e.target.tagName.toLowerCase() !== 'a') {
+                            toggleDropdown(this);
+                        }
+                    };
 
-                    // Format Badge Warna Kategori
-                    let badgeColor = 'background-color: #e7f3ff; color: #1877f2;';
-                    if (item.kategori === 'loker') badgeColor = 'background-color: #fff3cd; color: #856404;';
-                    if (item.kategori === 'jualbeli') badgeColor = 'background-color: #d4edda; color: #155724;';
+                    // Pengecekan Foto: Jika link foto tersedia pakai <img>, jika kosong gunakan SVG placeholder ramah visual
+                    const mediaElement = (item.foto_url && item.foto_url.trim() !== "") 
+                        ? `<img class="item-image" src="${item.foto_url}" alt="Foto Produk">`
+                        : `<div class="item-image">${fallbackImageSVG}</div>`;
 
                     card.innerHTML = `
                         <div class="item-main">
-                            <img class="item-image" src="${item.foto_url || 'https://via.placeholder.com/80'}" alt="Foto">
+                            ${mediaElement}
                             <div class="item-info">
-                                <div class="item-price">${item.harga || 'Gratis / Nego'}</div>
+                                <div class="item-price">${item.harga || 'Hubungi Kontak'}</div>
                                 <div class="item-title">${item.judul}</div>
-                                <span class="item-badge" style="${badgeColor}">${item.kategori.toUpperCase()}</span>
-                                <div class="item-location">📍 ${item.wilayah}</div>
+                                <span class="item-badge">${item.kategori || 'UMUM'}</span>
+                                <div class="item-location">📍 ${item.wilayah || 'Semua Wilayah'}</div>
                             </div>
                         </div>
                         <div class="item-dropdown">
-                            <div class="item-description">${item.deskripsi}</div>
+                            <div class="item-description">${item.deskripsi || 'Tidak ada deskripsi tambahan.'}</div>
                             <a href="https://wa.me/${item.nomor_wa}" class="btn-wa" target="_blank">💬 Hubungi via WhatsApp</a>
                         </div>
                     `;
@@ -301,23 +373,27 @@
                 });
 
             } catch (error) {
-                console.error('Gagal memuat data Supabase:', error.message);
-                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Periksa koneksi atau database.</div>';
+                console.error('Koneksi Supabase Bermasalah:', error.message);
+                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Silakan periksa kembali konfigurasi database Anda.</div>';
             }
         }
 
-        // Fungsi Efek Dropdown Akordion
+        // Fungsi Animasi Buka Tutup Akordion Dropdown
         function toggleDropdown(card) {
             const isActive = card.classList.contains('active');
+            
+            // Menutup kartu lain yang sedang terbuka agar layar tetap rapi dan tidak penuh
             document.querySelectorAll('.item-card').forEach(c => c.classList.remove('active'));
+            
             if (!isActive) {
                 card.classList.add('active');
             }
         }
 
-        // Otomatis jalankan fungsi saat halaman pertama kali dibuka (Menampilkan SEMUA data awal)
-        window.onload = function() {
-            fetchMarketplaceData();
+        // Inisialisasi awal saat halaman diakses pertama kali
+        window.onload = async function() {
+            await loadWilayahFilter(); // Muat nama-nama kabupaten/kota asli dari DB ke dropdown
+            fetchMarketplaceData();    // Munculkan seluruh kategori dan wilayah di awal pembukaan halaman
         };
     </script>
 </body>
