@@ -19,7 +19,7 @@
             padding-bottom: 30px;
         }
 
-        /* Header Atas Tetap Diam (Sticky) - Warna Cokelat Goona */
+        /* Header Atas Tetap Diam (Sticky) */
         .header-container {
             background-color: #8B5A2B;
             padding: 15px;
@@ -42,22 +42,23 @@
             color: #ffffff;
         }
 
-        /* Tombol Kembali Berbentuk Ikon Rumah */
+        /* Tombol Kembali Berbentuk Lingkaran dengan Ikon Khas Goona */
         .btn-home {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(255, 255, 255, 0.15);
             text-decoration: none;
-            font-size: 18px;
-            padding: 6px 10px;
-            border-radius: 8px;
+            border-radius: 50%; /* Membuat lingkaran sempurna */
+            width: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .btn-home:hover {
+        .btn-home:active {
             background: rgba(255, 255, 255, 0.3);
+            transform: scale(0.95);
         }
 
         /* 1. Kolom Pencarian */
@@ -90,99 +91,65 @@
             color: #4a3b32;
         }
 
-        /* 3. Area Kartu Berjejer ke Bawah */
+        /* 3. Area Grid Kartu (2 Baris Kanan-Kiri) */
         .marketplace-feed {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             max-width: 600px;
             margin: 0 auto;
         }
 
-        /* Desain Kartu */
+        /* Desain Kartu Grid Foto */
         .item-card {
             background-color: #ffffff;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 6px rgba(139,90,43,0.08);
+            box-shadow: 0 2px 6px rgba(139,90,43,0.06);
             border: 1px solid #e8e0d5;
             cursor: pointer;
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+            height: fit-content;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .item-card:active {
-            transform: scale(0.99);
+        .item-card.active {
+            grid-column: span 2; 
+            box-shadow: 0 4px 12px rgba(139,90,43,0.15);
+            border-color: #8B5A2B;
         }
 
         .item-main {
-            display: flex;
-            padding: 12px;
-            align-items: center;
-            gap: 12px;
+            width: 100%;
+            position: relative;
         }
 
-        /* Foto Utama / Placeholder */
         .item-image {
-            width: 75px;
-            height: 75px;
-            background-color: #f3ebe1;
-            border-radius: 8px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
             object-fit: cover;
-            flex-shrink: 0;
+            display: block;
+            background-color: #f3ebe1;
+        }
+
+        .item-image-placeholder {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #f3ebe1;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .item-info {
-            flex-grow: 1;
-            min-width: 0;
-        }
-
-        .item-price {
-            font-size: 15px;
-            font-weight: bold;
-            color: #8B5A2B;
-            margin-bottom: 2px;
-        }
-
-        .item-title {
-            font-size: 14.5px;
-            font-weight: 600;
-            color: #2b221c;
-            margin-bottom: 4px;
-            line-height: 1.3;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .item-badge {
-            display: inline-block;
-            font-size: 11px;
-            background-color: #f5ece2;
-            color: #8B5A2B;
-            padding: 2px 7px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .item-location {
-            font-size: 12px;
-            color: #7a6e65;
-            margin-top: 4px;
-            text-transform: capitalize;
         }
 
         /* 4. Bagian Isi Dropdown */
         .item-dropdown {
             max-height: 0;
             overflow: hidden;
+            background-color: #ffffff;
             transition: max-height 0.25s ease-out;
-            background-color: #fdfbfa;
         }
 
         .item-card.active .item-dropdown {
@@ -191,13 +158,54 @@
             border-top: 1px solid #f3ebe1;
         }
 
+        .item-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #8B5A2B;
+            margin-bottom: 4px;
+        }
+
+        .item-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2b221c;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .item-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .item-badge {
+            font-size: 11px;
+            background-color: #f5ece2;
+            color: #8B5A2B;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .item-location {
+            font-size: 12.5px;
+            color: #7a6e65;
+            text-transform: capitalize;
+        }
+
         .item-description {
             font-size: 13.5px;
             line-height: 1.5;
             color: #5a4c42;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             white-space: pre-line;
             word-wrap: break-word;
+            border-top: 1px dashed #f3ebe1;
+            padding-top: 10px;
         }
 
         /* Tombol WhatsApp */
@@ -208,7 +216,7 @@
             background-color: #25D366;
             color: white;
             text-decoration: none;
-            padding: 11px;
+            padding: 12px;
             border-radius: 8px;
             font-weight: bold;
             font-size: 14px;
@@ -216,14 +224,11 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .btn-wa:active {
-            background-color: #1ebd56;
-        }
-
         .status-message {
+            grid-column: span 2;
             text-align: center;
             color: #8a7a70;
-            padding: 30px 15px;
+            padding: 40px 15px;
             font-size: 14px;
         }
     </style>
@@ -233,7 +238,11 @@
     <div class="header-container">
         <div class="header-top">
             <div class="page-title">Goona Cuci Mata</div>
-            <a href="index.html" class="btn-home" title="Kembali ke Beranda">🏠</a>
+            <a href="index.html" class="btn-home" title="Kembali ke Beranda">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 10.2V20C19 20.5523 18.5523 21 18 21H14V14H10V21H6C5.44772 21 5 20.5523 5 20V10.2C5 9.87602 5.15643 9.57011 5.42149 9.3752L11.4215 4.96453C11.7651 4.71184 12.2349 4.71184 12.5785 4.96453L18.5785 9.3752C18.8436 9.57011 19 9.87602 19 10.2Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
         </div>
         
         <input type="text" id="searchBox" class="search-box" placeholder="Ketik apa yang ingin dicari...">
@@ -269,13 +278,13 @@
 
     <script type="module">
         const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMuM30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
         
-        // Inisialisasi Klien Supabase murni tanpa tabrakan variable scope
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Placeholder Gambar Default SVG
-        const fallbackImageSVG = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11" stroke="#bda38f" stroke-width="2" stroke-linecap="round"/><rect x="3" y="9" width="18" height="12" rx="3" fill="#f3ebe1" stroke="#bda38f" stroke-width="2"/></svg>`;
+        // Placeholder Gambar Default SVG Kantong Belanja Cokelat
+        const fallbackImageSVG = `<svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11" stroke="#bda38f" stroke-width="1.8" stroke-linecap="round"/><rect x="3" y="9" width="18" height="12" rx="3" fill="#fcfaf7" stroke="#bda38f" stroke-width="1.8"/></svg>`;
 
         // Event Listener Perubahan Input secara Real-Time
         document.getElementById('searchBox').addEventListener('input', fetchMarketplaceData);
@@ -290,7 +299,6 @@
             const feedContainer = document.getElementById('marketplaceFeed');
 
             try {
-                // Ambil data langsung dari tabel konten_goona
                 let query = supabaseClient.from('konten_goona').select('*');
 
                 if (kategoriValue !== "") {
@@ -326,7 +334,7 @@
 
                     const mediaElement = (item.url_foto && item.url_foto.trim() !== "" && item.url_foto !== "NULL") 
                         ? `<img class="item-image" src="${item.url_foto}" alt="Foto">`
-                        : `<div class="item-image">${fallbackImageSVG}</div>`;
+                        : `<div class="item-image-placeholder">${fallbackImageSVG}</div>`;
 
                     let displayPrice = 'Hubungi Kontak';
                     if (item.harga && item.harga !== "NULL" && item.harga !== 0) {
@@ -339,14 +347,14 @@
                     card.innerHTML = `
                         <div class="item-main">
                             ${mediaElement}
-                            <div class="item-info">
-                                <div class="item-price">${displayPrice}</div>
-                                <div class="item-title">${item.judul || 'Tanpa Judul'}</div>
-                                <span class="item-badge">${item.kategori || 'UMUM'}</span>
-                                <div class="item-location">📍 ${item.kabupaten_kota || 'Kepulauan Riau'} ${item.kecamatan ? ('- ' + item.kecamatan) : ''}</div>
-                            </div>
                         </div>
                         <div class="item-dropdown">
+                            <div class="item-price">${displayPrice}</div>
+                            <div class="item-title">${item.judul || 'Tanpa Judul'}</div>
+                            <div class="item-meta-row">
+                                <span class="item-badge">${item.kategori || 'UMUM'}</span>
+                                <span class="item-location">📍 ${item.kabupaten_kota || 'Kepri'} ${item.kecamatan ? ('- ' + item.kecamatan) : ''}</span>
+                            </div>
                             <div class="item-description">${item.deskripsi || 'Tidak ada deskripsi tambahan.'}</div>
                             <a href="https://wa.me/${item.whatsapp}" class="btn-wa" target="_blank">💬 Hubungi via WhatsApp</a>
                         </div>
@@ -360,16 +368,19 @@
             }
         }
 
-        // Fungsi Animasi Buka Tutup Akordion Dropdown
+        // Fungsi Animasi Buka Tutup Akordion Dropdown Khusus Mode Grid
         window.toggleDropdown = function(card) {
             const isActive = card.classList.contains('active');
             document.querySelectorAll('.item-card').forEach(c => c.classList.remove('active'));
             if (!isActive) {
                 card.classList.add('active');
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 200);
             }
         }
 
-        // Jalankan pemanggilan data awal saat halaman selesai di-load murni
+        // Jalankan pemanggilan data awal secara otomatis
         fetchMarketplaceData();
     </script>
 </body>
