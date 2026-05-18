@@ -174,6 +174,7 @@
             font-size: 12px;
             color: #7a6e65;
             margin-top: 4px;
+            text-transform: capitalize; /* Otomatis mempercantik visual huruf awal kapital di layar */
         }
 
         /* 4. Bagian Isi Dropdown */
@@ -267,14 +268,13 @@
     </div>
 
     <script type="module">
-        // Kredensial Asli dan Valid dari Database Supabase Anda
         const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMuM30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
         
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Placeholder Gambar Default
+        // Placeholder Gambar Default SVG
         const fallbackImageSVG = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11" stroke="#bda38f" stroke-width="2" stroke-linecap="round"/><rect x="3" y="9" width="18" height="12" rx="3" fill="#f3ebe1" stroke="#bda38f" stroke-width="2"/></svg>`;
 
         // Event Listener Perubahan Input secara Real-Time
@@ -290,20 +290,20 @@
             const feedContainer = document.getElementById('marketplaceFeed');
 
             try {
-                // SINKRONISASI: Membuka query ke nama tabel asli Anda yaitu 'konten_goona'
+                // Menarik data dari tabel asli 'konten_goona'
                 let query = supabaseClient.from('konten_goona').select('*');
 
-                // Filter Kategori (Mencocokkan string huruf besar/kecil di DB)
+                // Cocokkan filter Kategori (jika dipilih)
                 if (kategoriValue !== "") {
                     query = query.eq('kategori', kategoriValue);
                 }
 
-                // SINKRONISASI: Filter Wilayah dicocokkan dengan nama kolom asli 'kabupaten_kota'
+                // Cocokkan filter Wilayah kabupaten_kota (jika dipilih)
                 if (wilayahValue !== "") {
                     query = query.eq('kabupaten_kota', wilayahValue);
                 }
 
-                // Kolom Pencarian Kata Kunci Judul
+                // Pencarian kata kunci real-time pada kolom 'judul'
                 if (searchQuery.trim() !== "") {
                     query = query.ilike('judul', `%${searchQuery}%`);
                 }
@@ -313,12 +313,12 @@
 
                 feedContainer.innerHTML = '';
 
-                if (data.length === 0) {
+                if (!data || data.length === 0) {
                     feedContainer.innerHTML = '<div class="status-message">Tidak ada data yang cocok dengan pilihan Anda.</div>';
                     return;
                 }
 
-                // Merender kartu satu per satu ke bawah menggunakan data kolom riil Anda
+                // Mengolah hasil data menjadi barisan kartu ke bawah
                 data.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'item-card';
@@ -328,17 +328,25 @@
                         }
                     };
 
-                    // SINKRONISASI: Menggunakan nama kolom foto asli 'url_foto'
+                    // Pengecekan Foto Menggunakan Kolom 'url_foto' asli database Anda
                     const mediaElement = (item.url_foto && item.url_foto.trim() !== "" && item.url_foto !== "NULL") 
                         ? `<img class="item-image" src="${item.url_foto}" alt="Foto">`
                         : `<div class="item-image">${fallbackImageSVG}</div>`;
 
-                    // SINKRONISASI: Menggunakan nama kolom 'harga', 'judul', 'kategori', 'kabupaten_kota', 'deskripsi', dan 'whatsapp'
+                    // Format Harga Tampilan
+                    let displayPrice = 'Hubungi Kontak';
+                    if (item.harga && item.harga !== "NULL" && item.harga !== 0) {
+                        displayPrice = 'Rp ' + Number(item.harga).toLocaleString('id-ID');
+                        if (item.satuan_harga && item.satuan_harga !== "NULL") {
+                            displayPrice += ' / ' + item.satuan_harga;
+                        }
+                    }
+
                     card.innerHTML = `
                         <div class="item-main">
                             ${mediaElement}
                             <div class="item-info">
-                                <div class="item-price">${item.harga ? ('Rp ' + item.harga) : 'Hubungi Kontak'}</div>
+                                <div class="item-price">${displayPrice}</div>
                                 <div class="item-title">${item.judul || 'Tanpa Judul'}</div>
                                 <span class="item-badge">${item.kategori || 'UMUM'}</span>
                                 <div class="item-location">📍 ${item.kabupaten_kota || 'Kepulauan Riau'} ${item.kecamatan ? ('- ' + item.kecamatan) : ''}</div>
@@ -354,7 +362,7 @@
 
             } catch (error) {
                 console.error('Koneksi Supabase Bermasalah:', error.message);
-                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Silakan periksa jaringan Anda.</div>';
+                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Silakan periksa kembali database Anda.</div>';
             }
         }
 
@@ -367,7 +375,7 @@
             }
         }
 
-        // Jalankan pencarian otomatis di awal pembukaan halaman
+        // Jalankan pemanggilan data awal secara otomatis
         window.onload = function() {
             fetchMarketplaceData();
         };
