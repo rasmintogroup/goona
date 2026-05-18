@@ -174,7 +174,7 @@
             font-size: 12px;
             color: #7a6e65;
             margin-top: 4px;
-            text-transform: capitalize; /* Otomatis mempercantik visual huruf awal kapital di layar */
+            text-transform: capitalize;
         }
 
         /* 4. Bagian Isi Dropdown */
@@ -267,12 +267,10 @@
         <div class="status-message">Memuat seluruh data cuci mata...</div>
     </div>
 
-    <script type="module">
-        const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMuM30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
-        
-        const { createClient } = supabase;
-        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+    <iframe id="secretBridge" src="index.html" style="display: none;"></iframe>
+
+    <script>
+        let supabaseClient = null;
 
         // Placeholder Gambar Default SVG
         const fallbackImageSVG = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11" stroke="#bda38f" stroke-width="2" stroke-linecap="round"/><rect x="3" y="9" width="18" height="12" rx="3" fill="#f3ebe1" stroke="#bda38f" stroke-width="2"/></svg>`;
@@ -282,28 +280,64 @@
         document.getElementById('filterKategori').addEventListener('change', fetchMarketplaceData);
         document.getElementById('filterWilayah').addEventListener('change', fetchMarketplaceData);
 
+        // Trik Jitu: Mengambil Kredensial Langsung Dari Skrip Halaman Index Anda lewat jembatan iFrame
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'SUPABASE_CONFIG') {
+                initSupabase(event.data.url, event.data.key);
+            }
+        });
+
+        // Alternatif jika iFrame butuh waktu, kita coba intip text index.html langsung
+        async function fetchCredentialsFromIndex() {
+            try {
+                const response = await fetch('index.html');
+                const text = await response.text();
+                
+                const urlMatch = text.match(/SUPABASE_URL\s*=\s*['"]([^'"]+)['"]/);
+                const keyMatch = text.match(/SUPABASE_ANON_KEY\s*=\s*['"]([^'"]+)['"]/);
+                
+                if (urlMatch && keyMatch) {
+                    initSupabase(urlMatch[1], keyMatch[2]);
+                } else {
+                    // Cadangan terakhir jika regex meleset
+                    initSupabase('https://ejnuelaqlgfcmcqpxmpa.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM');
+                }
+            } catch (e) {
+                // Gunakan backup hardcode langsung
+                initSupabase('https://ejnuelaqlgfcmcqpxmpa.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM');
+            }
+        }
+
+        function initSupabase(url, key) {
+            if (supabaseClient) return; // Cegah inisialisasi ganda
+            try {
+                supabaseClient = supabase.createClient(url, key);
+                fetchMarketplaceData();
+            } catch (err) {
+                console.error("Gagal klop client:", err);
+            }
+        }
+
         // Fungsi Utama untuk Menarik dan Menyaring Data dari Supabase
         async function fetchMarketplaceData() {
+            if (!supabaseClient) return;
+
             const searchQuery = document.getElementById('searchBox').value;
             const kategoriValue = document.getElementById('filterKategori').value;
             const wilayahValue = document.getElementById('filterWilayah').value;
             const feedContainer = document.getElementById('marketplaceFeed');
 
             try {
-                // Menarik data dari tabel asli 'konten_goona'
                 let query = supabaseClient.from('konten_goona').select('*');
 
-                // Cocokkan filter Kategori (jika dipilih)
                 if (kategoriValue !== "") {
                     query = query.eq('kategori', kategoriValue);
                 }
 
-                // Cocokkan filter Wilayah kabupaten_kota (jika dipilih)
                 if (wilayahValue !== "") {
                     query = query.eq('kabupaten_kota', wilayahValue);
                 }
 
-                // Pencarian kata kunci real-time pada kolom 'judul'
                 if (searchQuery.trim() !== "") {
                     query = query.ilike('judul', `%${searchQuery}%`);
                 }
@@ -318,7 +352,6 @@
                     return;
                 }
 
-                // Mengolah hasil data menjadi barisan kartu ke bawah
                 data.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'item-card';
@@ -328,12 +361,10 @@
                         }
                     };
 
-                    // Pengecekan Foto Menggunakan Kolom 'url_foto' asli database Anda
                     const mediaElement = (item.url_foto && item.url_foto.trim() !== "" && item.url_foto !== "NULL") 
                         ? `<img class="item-image" src="${item.url_foto}" alt="Foto">`
                         : `<div class="item-image">${fallbackImageSVG}</div>`;
 
-                    // Format Harga Tampilan
                     let displayPrice = 'Hubungi Kontak';
                     if (item.harga && item.harga !== "NULL" && item.harga !== 0) {
                         displayPrice = 'Rp ' + Number(item.harga).toLocaleString('id-ID');
@@ -366,7 +397,6 @@
             }
         }
 
-        // Fungsi Animasi Buka Tutup Akordion Dropdown
         window.toggleDropdown = function(card) {
             const isActive = card.classList.contains('active');
             document.querySelectorAll('.item-card').forEach(c => c.classList.remove('active'));
@@ -375,9 +405,9 @@
             }
         }
 
-        // Jalankan pemanggilan data awal secara otomatis
+        // Jalankan pelacakan kredensial otomatis saat halaman dibuka
         window.onload = function() {
-            fetchMarketplaceData();
+            fetchCredentialsFromIndex();
         };
     </script>
 </body>
