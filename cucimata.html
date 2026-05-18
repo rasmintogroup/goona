@@ -46,7 +46,7 @@
         .btn-home {
             background: rgba(255, 255, 255, 0.15);
             text-decoration: none;
-            border-radius: 50%; /* Membuat lingkaran sempurna */
+            border-radius: 50%;
             width: 38px;
             height: 38px;
             display: flex;
@@ -61,7 +61,7 @@
             transform: scale(0.95);
         }
 
-        /* 1. Kolom Pencarian */
+        /* Kolom Pencarian */
         .search-box {
             width: 100%;
             padding: 12px 15px;
@@ -74,7 +74,7 @@
             color: #4a3b32;
         }
 
-        /* 2. Filter Kategori & Wilayah */
+        /* Filter Kategori & Wilayah */
         .filter-wrapper {
             display: flex;
             gap: 10px;
@@ -91,7 +91,7 @@
             color: #4a3b32;
         }
 
-        /* 3. Area Grid Kartu (2 Baris Kanan-Kiri) */
+        /* Area Grid Kartu (2 Baris Kanan-Kiri) */
         .marketplace-feed {
             padding: 12px;
             display: grid;
@@ -144,7 +144,7 @@
             justify-content: center;
         }
 
-        /* 4. Bagian Isi Dropdown */
+        /* Bagian Isi Dropdown */
         .item-dropdown {
             max-height: 0;
             overflow: hidden;
@@ -278,20 +278,19 @@
 
     <script type="module">
         const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMuM30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
+        
+        // Kunci asli murni yang terbukti berhasil (sudah diperbaiki total dari typo perubahan karakter)
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
         
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Placeholder Gambar Default SVG Kantong Belanja Cokelat
         const fallbackImageSVG = `<svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11" stroke="#bda38f" stroke-width="1.8" stroke-linecap="round"/><rect x="3" y="9" width="18" height="12" rx="3" fill="#fcfaf7" stroke="#bda38f" stroke-width="1.8"/></svg>`;
 
-        // Event Listener Perubahan Input secara Real-Time
         document.getElementById('searchBox').addEventListener('input', fetchMarketplaceData);
         document.getElementById('filterKategori').addEventListener('change', fetchMarketplaceData);
         document.getElementById('filterWilayah').addEventListener('change', fetchMarketplaceData);
 
-        // Fungsi Utama untuk Menarik dan Menyaring Data dari Supabase
         async function fetchMarketplaceData() {
             const searchQuery = document.getElementById('searchBox').value;
             const kategoriValue = document.getElementById('filterKategori').value;
@@ -301,17 +300,9 @@
             try {
                 let query = supabaseClient.from('konten_goona').select('*');
 
-                if (kategoriValue !== "") {
-                    query = query.eq('kategori', kategoriValue);
-                }
-
-                if (wilayahValue !== "") {
-                    query = query.eq('kabupaten_kota', wilayahValue);
-                }
-
-                if (searchQuery.trim() !== "") {
-                    query = query.ilike('judul', `%${searchQuery}%`);
-                }
+                if (kategoriValue !== "") query = query.eq('kategori', kategoriValue);
+                if (wilayahValue !== "") query = query.eq('kabupaten_kota', wilayahValue);
+                if (searchQuery.trim() !== "") query = query.ilike('judul', `%${searchQuery}%`);
 
                 const { data, error } = await query;
                 if (error) throw error;
@@ -364,11 +355,10 @@
 
             } catch (error) {
                 console.error('Koneksi Supabase Bermasalah:', error.message);
-                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Silakan periksa kembali database Anda.</div>';
+                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Silakan muat ulang halaman beberapa saat lagi.</div>';
             }
         }
 
-        // Fungsi Animasi Buka Tutup Akordion Dropdown Khusus Mode Grid
         window.toggleDropdown = function(card) {
             const isActive = card.classList.contains('active');
             document.querySelectorAll('.item-card').forEach(c => c.classList.remove('active'));
@@ -380,7 +370,6 @@
             }
         }
 
-        // Jalankan pemanggilan data awal secara otomatis
         fetchMarketplaceData();
     </script>
 </body>
