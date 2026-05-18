@@ -240,24 +240,24 @@
         <div class="filter-wrapper">
             <select id="filterKategori" class="filter-select">
                 <option value="">Semua Kategori</option>
-                <option value="jasa">Jasa / Servis</option>
-                <option value="loker">Lowongan Kerja</option>
-                <option value="jualbeli">Jual Beli Barang</option>
-                <option value="kost">Kost / Kontrakan</option>
-                <option value="kuliner">Kuliner</option>
-                <option value="wisata">Wisata</option>
-                <option value="info">Info / Pengumuman</option>
+                <option value="Jasa">Jasa / Servis</option>
+                <option value="Loker">Lowongan Kerja</option>
+                <option value="Jual Beli">Jual Beli Barang</option>
+                <option value="Kost">Kost / Kontrakan</option>
+                <option value="Kuliner">Kuliner</option>
+                <option value="Wisata">Wisata</option>
+                <option value="Info">Info / Pengumuman</option>
             </select>
 
             <select id="filterWilayah" class="filter-select">
                 <option value="">Semua Wilayah</option>
-                <option value="Tanjungpinang">Tanjungpinang</option>
-                <option value="Batam">Batam</option>
-                <option value="Bintan">Bintan</option>
-                <option value="Karimun">Karimun</option>
-                <option value="Lingga">Lingga</option>
-                <option value="Natuna">Natuna</option>
-                <option value="Anambas">Anambas</option>
+                <option value="tanjungpinang">Tanjungpinang</option>
+                <option value="batam">Batam</option>
+                <option value="bintan">Bintan</option>
+                <option value="karimun">Karimun</option>
+                <option value="lingga">Lingga</option>
+                <option value="natuna">Natuna</option>
+                <option value="anambas">Anambas</option>
             </select>
         </div>
     </div>
@@ -267,11 +267,10 @@
     </div>
 
     <script type="module">
-        // Perbaikan Token Anon Key Utama Supabase agar terbaca sempurna oleh sistem eksternal
+        // Kredensial Asli dan Valid dari Database Supabase Anda
         const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTYzMTI1MTIsImV4cCI6MjAyMTg4ODUxMn0.MjIjcXBgdmY21jcXB4bXBiWwiciWbXbXbHiiwlc';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMuM30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
         
-        // Inisialisasi Klien Menggunakan Format Modul yang Terbukti Valid di index.html
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -291,17 +290,17 @@
             const feedContainer = document.getElementById('marketplaceFeed');
 
             try {
-                // Membuka koneksi pencarian data ke tabel 'marketplace'
-                let query = supabaseClient.from('marketplace').select('*');
+                // SINKRONISASI: Membuka query ke nama tabel asli Anda yaitu 'konten_goona'
+                let query = supabaseClient.from('konten_goona').select('*');
 
-                // Sinkronisasi Filter Kategori
+                // Filter Kategori (Mencocokkan string huruf besar/kecil di DB)
                 if (kategoriValue !== "") {
                     query = query.eq('kategori', kategoriValue);
                 }
 
-                // Sinkronisasi Filter Wilayah Kabupaten/Kota Kepri
+                // SINKRONISASI: Filter Wilayah dicocokkan dengan nama kolom asli 'kabupaten_kota'
                 if (wilayahValue !== "") {
-                    query = query.eq('wilayah', wilayahValue);
+                    query = query.eq('kabupaten_kota', wilayahValue);
                 }
 
                 // Kolom Pencarian Kata Kunci Judul
@@ -319,7 +318,7 @@
                     return;
                 }
 
-                // Merender kartu satu per satu ke bawah
+                // Merender kartu satu per satu ke bawah menggunakan data kolom riil Anda
                 data.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'item-card';
@@ -329,23 +328,25 @@
                         }
                     };
 
-                    const mediaElement = (item.foto_url && item.foto_url.trim() !== "") 
-                        ? `<img class="item-image" src="${item.foto_url}" alt="Foto">`
+                    // SINKRONISASI: Menggunakan nama kolom foto asli 'url_foto'
+                    const mediaElement = (item.url_foto && item.url_foto.trim() !== "" && item.url_foto !== "NULL") 
+                        ? `<img class="item-image" src="${item.url_foto}" alt="Foto">`
                         : `<div class="item-image">${fallbackImageSVG}</div>`;
 
+                    // SINKRONISASI: Menggunakan nama kolom 'harga', 'judul', 'kategori', 'kabupaten_kota', 'deskripsi', dan 'whatsapp'
                     card.innerHTML = `
                         <div class="item-main">
                             ${mediaElement}
                             <div class="item-info">
-                                <div class="item-price">${item.harga || 'Hubungi Kontak'}</div>
-                                <div class="item-title">${item.judul}</div>
+                                <div class="item-price">${item.harga ? ('Rp ' + item.harga) : 'Hubungi Kontak'}</div>
+                                <div class="item-title">${item.judul || 'Tanpa Judul'}</div>
                                 <span class="item-badge">${item.kategori || 'UMUM'}</span>
-                                <div class="item-location">📍 ${item.wilayah || 'Kepulauan Riau'}</div>
+                                <div class="item-location">📍 ${item.kabupaten_kota || 'Kepulauan Riau'} ${item.kecamatan ? ('- ' + item.kecamatan) : ''}</div>
                             </div>
                         </div>
                         <div class="item-dropdown">
                             <div class="item-description">${item.deskripsi || 'Tidak ada deskripsi tambahan.'}</div>
-                            <a href="https://wa.me/${item.nomor_wa}" class="btn-wa" target="_blank">💬 Hubungi via WhatsApp</a>
+                            <a href="https://wa.me/${item.whatsapp}" class="btn-wa" target="_blank">💬 Hubungi via WhatsApp</a>
                         </div>
                     `;
                     feedContainer.appendChild(card);
@@ -353,7 +354,7 @@
 
             } catch (error) {
                 console.error('Koneksi Supabase Bermasalah:', error.message);
-                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Silakan periksa kembali konfigurasi database Anda atau pastikan nama tabel Anda adalah "marketplace".</div>';
+                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Silakan periksa jaringan Anda.</div>';
             }
         }
 
