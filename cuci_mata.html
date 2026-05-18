@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goona Marketplace - Halaman Cuci Mata</title>
+    <!-- Memanggil library Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            padding-bottom: 30px;
+        }
+
+        /* Header / Bagian Atas Tetap Diam (Sticky) */
+        .header-container {
+            background-color: #ffffff;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #075E54;
+            text-align: center;
+        }
+
+        /* 1. Kolom Pencarian */
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccd0d5;
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: #f0f2f5;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        /* 2. Filter Kategori & Wilayah */
+        .filter-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccd0d5;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #fff;
+            outline: none;
+            color: #555;
+        }
+
+        /* 3. Area Kartu Berjejer ke Bawah */
+        .marketplace-feed {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Desain Kartu */
+        .item-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #e4e6eb;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .item-main {
+            display: flex;
+            padding: 12px;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Foto Utama */
+        .item-image {
+            width: 80px;
+            height: 80px;
+            background-color: #ddd;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .item-info {
+            flex-grow: 1;
+        }
+
+        .item-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #25D366;
+            margin-bottom: 4px;
+        }
+
+        .item-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1c1e21;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .item-badge {
+            display: inline-block;
+            font-size: 11px;
+            background-color: #e7f3ff;
+            color: #1877f2;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .item-location {
+            font-size: 12px;
+            color: #65676b;
+            margin-top: 4px;
+        }
+
+        /* 4. Bagian Isi Dropdown (Sembunyi secara default) */
+        .item-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: #f9fafb;
+            border-top: 0 solid #eee;
+            padding: 0 15px;
+        }
+
+        /* Class Active saat kartu ditekan */
+        .item-card.active .item-dropdown {
+            max-height: 500px;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .item-description {
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: #444;
+            margin-bottom: 15px;
+            white-space: pre-line;
+        }
+
+        /* Tombol Hubungi WA */
+        .btn-wa {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Status Loading / Kosong */
+        .status-message {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bagian Atas: Cari & Filter -->
+    <div class="header-container">
+        <div class="page-title">🛍️ Goona Marketplace (Cuci Mata)</div>
+        
+        <!-- 1. Kolom Pencarian -->
+        <input type="text" id="searchBox" class="search-box" placeholder="Cari jasa, loker, atau barang terdekat...">
+
+        <!-- 2. Filter Kategori & Wilayah -->
+        <div class="filter-wrapper">
+            <select id="filterKategori" class="filter-select">
+                <option value="">Semua Kategori</option>
+                <option value="jasa">Jasa / Servis</option>
+                <option value="loker">Lowongan Kerja</option>
+                <option value="jualbeli">Jual Beli Barang</option>
+            </select>
+
+            <select id="filterWilayah" class="filter-select">
+                <option value="">Semua Wilayah</option>
+                <option value="Kecamatan A">Kecamatan A</option>
+                <option value="Kecamatan B">Kecamatan B</option>
+                <option value="Kecamatan C">Kecamatan C</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- 3. Wadah Tempat Kartu Dinamis dari Supabase Akan Muncul -->
+    <div class="marketplace-feed" id="marketplaceFeed">
+        <div class="status-message">Memuat semua data cuci mata...</div>
+    </div>
+
+    <script>
+        // ISI DENGAN KREDENSI SUPABASE ANDA NANTI
+        const SUPABASE_URL = 'https://YOUR_SUPABASE_URL.supabase.co';
+        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const supabase = typeof supabase !== 'undefined' ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+        // Event Listener untuk mendeteksi perubahan input secara real-time
+        document.getElementById('searchBox').addEventListener('input', fetchMarketplaceData);
+        document.getElementById('filterKategori').addEventListener('change', fetchMarketplaceData);
+        document.getElementById('filterWilayah').addEventListener('change', fetchMarketplaceData);
+
+        // Fungsi Utama mengambil data dari Supabase
+        async function fetchMarketplaceData() {
+            if (!supabase) return;
+
+            const searchQuery = document.getElementById('searchBox').value;
+            const kategoriValue = document.getElementById('filterKategori').value;
+            const wilayahValue = document.getElementById('filterWilayah').value;
+            const feedContainer = document.getElementById('marketplaceFeed');
+
+            try {
+                // Inisialisasi query ke nama tabel database Anda (Contoh nama tabel: 'marketplace')
+                let query = supabase.from('marketplace').select('*');
+
+                // Logika Filter Kategori (Jika bukan "Semua Kategori")
+                if (kategoriValue !== "") {
+                    query = query.eq('kategori', kategoriValue);
+                }
+
+                // Logika Filter Wilayah (Jika bukan "Semua Wilayah")
+                if (wilayahValue !== "") {
+                    query = query.eq('wilayah', wilayahValue);
+                }
+
+                // Logika Kolom Pencarian Kata Kunci (Mencari di judul atau deskripsi)
+                if (searchQuery.trim() !== "") {
+                    query = query.ilike('judul', `%${searchQuery}%`);
+                }
+
+                // Eksekusi data ke Supabase
+                const { data, error } = await query;
+
+                if (error) throw error;
+
+                // Bersihkan kontainer sebelum merender data baru
+                feedContainer.innerHTML = '';
+
+                if (data.length === 0) {
+                    feedContainer.innerHTML = '<div class="status-message">Data tidak ditemukan. Coba cari yang lain!</div>';
+                    return;
+                }
+
+                // Loop data dan buat Kartu Dropdown secara dinamis
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.onclick = function() { toggleDropdown(this); };
+
+                    // Format Badge Warna Kategori
+                    let badgeColor = 'background-color: #e7f3ff; color: #1877f2;';
+                    if (item.kategori === 'loker') badgeColor = 'background-color: #fff3cd; color: #856404;';
+                    if (item.kategori === 'jualbeli') badgeColor = 'background-color: #d4edda; color: #155724;';
+
+                    card.innerHTML = `
+                        <div class="item-main">
+                            <img class="item-image" src="${item.foto_url || 'https://via.placeholder.com/80'}" alt="Foto">
+                            <div class="item-info">
+                                <div class="item-price">${item.harga || 'Gratis / Nego'}</div>
+                                <div class="item-title">${item.judul}</div>
+                                <span class="item-badge" style="${badgeColor}">${item.kategori.toUpperCase()}</span>
+                                <div class="item-location">📍 ${item.wilayah}</div>
+                            </div>
+                        </div>
+                        <div class="item-dropdown">
+                            <div class="item-description">${item.deskripsi}</div>
+                            <a href="https://wa.me/${item.nomor_wa}" class="btn-wa" target="_blank">💬 Hubungi via WhatsApp</a>
+                        </div>
+                    `;
+                    feedContainer.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Gagal memuat data Supabase:', error.message);
+                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Periksa koneksi atau database.</div>';
+            }
+        }
+
+        // Fungsi Efek Dropdown Akordion
+        function toggleDropdown(card) {
+            const isActive = card.classList.contains('active');
+            document.querySelectorAll('.item-card').forEach(c => c.classList.remove('active'));
+            if (!isActive) {
+                card.classList.add('active');
+            }
+        }
+
+        // Otomatis jalankan fungsi saat halaman pertama kali dibuka (Menampilkan SEMUA data awal)
+        window.onload = function() {
+            fetchMarketplaceData();
+        };
+    </script>
+</body>
+</html>
