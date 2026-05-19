@@ -103,7 +103,8 @@ export const daerahQuestions = [
     "Hai Kak [Nama]! Kakak chat dari daerah apa?",
     "Halo Kak [Nama]! Lokasi chat dari mana?",
     "Hai Kak [Nama]! Asalnya dari kota apa?",
-    "Halo Kak [Nama]! Asal kotanya di mana?"
+    "Halo Kak [Nama]! Asal kotanya di mana?",
+    
     // 101-125: Menggunakan "dari" dengan variasi santai
     "Halo Kak [Nama]! Kalau boleh tahu, Kakak ini sebenarnya dari kota mana?",
     "Hai Kak [Nama]! Boleh cerita sedikit, Kakak lagi chat dari daerah mana nih?",
