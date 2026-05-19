@@ -3,320 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Goona Admin - Super Clean</title>
+    <title>Goona Admin Hub + Analytics</title>
     <link rel="icon" type="image/png" href="Pavicon_goona.png">
     
     <style>
-        /* Gaya Dasar & Warna Tema Goona */
         :root {
-            --primary-brown: #8B4513;
-            --soft-bg: #FDF5E6;
-            --card-border: #D2B48C;
-            --text-main: #3E2723;
-            --green-ok: #28a745;
-            --red-delete: #d9534f;
+            --primary-color: #8B4513;
+            --background-color: #FDF5E6;
+            --card-border-color: #D2B48C;
+            --main-text-color: #3E2723;
+            --success-color: #28a745;
+            --danger-color: #d9534f;
+            --warning-color: #f39c12;
+            --accent-blue: #2980b9;
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--soft-bg);
-            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background-color);
+            color: var(--main-text-color);
             margin: 0;
-            padding: 15px;
+            padding: 10px;
         }
 
-        .container {
-            max-width: 700px;
+        .main-container {
+            max-width: 500px;
             margin: auto;
             background: #ffffff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
 
-        h2 {
+        .title-panel {
             text-align: center;
-            color: var(--primary-brown);
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-
-        /* Form Login Minimalis */
-        #login-panel {
-            text-align: center;
-            padding: 40px 10px;
-        }
-        
-        .input-login {
-            width: 100%;
-            max-width: 280px;
-            padding: 12px;
-            border: 1.5px solid var(--card-border);
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: center;
-            margin-bottom: 15px;
-            outline: none;
-        }
-
-        /* Dashboard Area */
-        #admin-panel {
-            display: none;
-        }
-
-        .btn-refresh {
-            width: 100%;
-            background-color: #444444;
-            color: #fff;
-            border: none;
-            padding: 12px;
-            font-size: 14px;
+            color: var(--primary-color);
+            margin: 0 0 15px 0;
+            font-size: 18px;
             font-weight: bold;
+        }
+
+        #login-panel { text-align: center; padding: 30px 5px; }
+        
+        .field-input {
+            width: 100%; max-width: 240px; padding: 10px;
+            border: 1.5px solid var(--card-border-color);
+            border-radius: 6px; font-size: 15px; text-align: center;
+            margin-bottom: 12px; outline: none;
+        }
+
+        #admin-panel { display: none; }
+
+        .btn-sync {
+            width: 100%; background-color: #333333; color: #ffffff;
+            border: none; padding: 10px; font-size: 13px;
+            font-weight: bold; border-radius: 6px; cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        /* PANEL ANALISIS PASAR USER FRIENDLY */
+        .analytics-box {
+            background: #fff8f0;
+            border: 1.5px dashed var(--card-border-color);
             border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: background 0.2s;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 12px;
         }
-        .btn-refresh:active { background-color: #222; }
 
-        /* Tata Letak Kartu (User Friendly Layout) */
-        .grid-data {
+        .analytics-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 13px;
+            border-bottom: 1px solid var(--card-border-color);
+            padding-bottom: 4px;
+        }
+
+        .stat-row {
             display: flex;
-            flex-direction: column;
-            gap: 16px;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px calc(33a) solid #fbf5ef;
         }
 
-        .card-item {
+        .stat-count {
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+
+        .wrapper-list-data { display: flex; flex-direction: column; gap: 12px; }
+
+        .box-card {
             background: #ffffff;
-            border: 1.5px solid var(--card-border);
-            border-radius: 10px;
-            padding: 16px;
-            box-shadow: 0 2px 6px rgba(139, 69, 19, 0.05);
+            border: 1.5px solid var(--card-border-color);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
 
-        .info-baris {
+        .row-item {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 8px;
-            font-size: 14px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            line-height: 1.4;
         }
 
-        .info-label {
-            font-weight: bold;
-            color: #7f8c8d;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            width: 35%;
+        .label-side {
+            font-weight: bold; color: #888888;
+            font-size: 10px; text-transform: uppercase;
+            letter-spacing: 0.5px; width: 30%;
         }
 
-        .info-value {
-            width: 65%;
-            text-align: right;
-            font-weight: 500;
-            word-break: break-word;
+        .value-side { width: 70%; text-align: right; font-weight: 500; word-break: break-word; }
+        .value-side.highlight-judul { font-size: 14px; font-weight: bold; color: var(--primary-color); }
+        .whatsapp-anchor { color: #25D366; text-decoration: none; font-weight: bold; }
+
+        .footer-action-group {
+            display: flex; gap: 8px; margin-top: 12px;
+            padding-top: 10px; border-top: 1px solid #f0f0f0;
         }
 
-        /* Khusus Judul Utama Konten */
-        .info-value.judul-layanan {
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--primary-brown);
-        }
-
-        .link-wa {
-            color: #25D366;
-            text-decoration: none;
-            font-weight: bold;
-            border-bottom: 1px dashed #25D366;
-        }
-
-        /* Grup Tombol Kontrol */
-        .group-tombol {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            padding-top: 12px;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .btn-aksi {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            text-align: center;
-            transition: opacity 0.2s;
+        .action-control-btn {
+            flex: 1; padding: 9px; border: none; border-radius: 5px;
+            color: white; font-weight: bold; font-size: 12px;
+            cursor: pointer; text-align: center;
         }
         
-        .btn-aksi:active { opacity: 0.8; }
-        .btn-ok-warna { background-color: var(--green-ok); }
-        .btn-hapus-warna { background-color: var(--red-delete); }
-        .btn-aksi:disabled { background-color: #cccccc; cursor: not-allowed; }
+        .color-ok { background-color: var(--success-color); }
+        .color-delete { background-color: var(--danger-color); }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="main-container">
     <div id="login-panel">
-        <h2>Goona Chat Admin</h2>
-        <input type="password" id="sandi" class="input-login" placeholder="Masukkan Password Akun"><br>
-        <button onclick="verifikasiMasuk()" class="btn-aksi btn-ok-warna" style="max-width: 280px; width: 100%;">MASUK DASHBOARD</button>
+        <h2 class="title-panel">Goona Chat Admin</h2>
+        <input type="password" id="password-box" class="field-input" placeholder="Password Admin"><br>
+        <button onclick="kendaliLogin()" class="action-control-btn color-ok" style="max-width: 240px; width: 100%;">MASUK DASHBOARD</button>
     </div>
 
     <div id="admin-panel">
-        <h2>List Data Masuk</h2>
-        <button class="btn-refresh" onclick="muatUlangDataSupabase()">🔄 Sinkronisasi Ulang Data</button>
-        <div id="wrapper-konten" class="grid-data">Menghubungkan ke server...</div>
+        <h2 class="title-panel">Manajemen & Analisis Pasar</h2>
+        
+        <div class="analytics-box">
+            <div class="analytics-title">📊 Rangkuman Analisis Pasar Goona</div>
+            <div id="stat-total" class="stat-row"><span>Total Pendaftar Masuk:</span> <span class="stat-count">0</span></div>
+            <div id="stat-kategori" class="stat-row"><span>Kategori Terlaris:</span> <span class="stat-count">-</span></div>
+            <div id="stat-wilayah" class="stat-row"><span>Wilayah Dominan:</span> <span class="stat-count">-</span></div>
+            <div id="stat-aktif" class="stat-row"><span>Status Aktif / Pending:</span> <span class="stat-count">0 / 0</span></div>
+        </div>
+
+        <button class="btn-sync" onclick="sinkronisasiDataSupabase()">🔄 Sinkronisasi Ulang Data</button>
+        <div id="container-render-data" class="wrapper-list-data">Menghubungkan ke server...</div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    let koneksiSupabase;
-    const ENDPOINT_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
-    const KEY_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
+    let clientSupabaseInstance;
+    const INSTANCE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
+    const PUBLIC_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
 
-    // Nyalakan client database saat halaman siap
     try {
-        koneksiSupabase = window.supabase.createClient(ENDPOINT_URL, KEY_ANON);
+        clientSupabaseInstance = window.supabase.createClient(INSTANCE_URL, PUBLIC_ANON_KEY);
     } catch (e) {
-        console.error("Inisialisasi Supabase Error:", e);
+        console.error("Gagal memuat pustaka Supabase:", e);
     }
 
-    function verifikasiMasuk() {
-        const kunci = document.getElementById('sandi').value;
-        if(kunci === 'goona2026') {
+    function kendaliLogin() {
+        const inputSandi = document.getElementById('password-box').value;
+        if(inputSandi === 'goona2026') {
             document.getElementById('login-panel').style.display = 'none';
             document.getElementById('admin-panel').style.display = 'block';
-            muatUlangDataSupabase();
+            sinkronisasiDataSupabase();
         } else {
-            alert('Password salah, kawan!');
+            alert('Password salah kawan!');
         }
     }
 
-    async function muatUlangDataSupabase() {
-        const tempatData = document.getElementById('wrapper-konten');
-        tempatData.innerHTML = "Memuat data terbaru...";
+    async function sinkronisasiDataSupabase() {
+        const targetView = document.getElementById('container-render-data');
+        targetView.innerHTML = "Memperbarui data...";
 
         try {
-            const { data, error } = await koneksiSupabase
+            const { data, error } = await clientSupabaseInstance
                 .from('konten_goona')
                 .select('*')
                 .order('id', { ascending: false });
 
             if (error) throw error;
-            renderKartuUserFriendly(data);
+            
+            // Jalankan kalkulator analisis pasar internal kawan
+            hitungAnalisisPasarEksternal(data);
+            
+            bikinKomponenCardUI(data);
         } catch (err) {
-            tempatData.innerHTML = "Koneksi Bermasalah: " + err.message;
+            targetView.innerHTML = "Gagal memuat data: " + err.message;
         }
     }
 
-    function renderKartuUserFriendly(kumpulanData) {
-        const tempatData = document.getElementById('wrapper-konten');
-        tempatData.innerHTML = "";
+    // FUNGSI PENGGANTI IKON ANALISIS YANG HILANG
+    function hitungAnalisisPasarEksternal(dataArray) {
+        if(!dataArray || dataArray.length === 0) return;
 
-        if (!kumpulanData || kumpulanData.length === 0) {
-            tempatData.innerHTML = "<p style='text-align:center; color:gray;'>Tidak ada data pendaftar saat ini.</p>";
-            return;
-        }
+        let total = dataArray.length;
+        let aktifCount = 0;
+        let pendingCount = 0;
+        let petaKategori = {};
+        let petaWilayah = {};
 
-        kumpulanData.forEach(item => {
-            const statusData = (item.status || 'pending').toLowerCase();
-            const warnaStatus = statusData === 'aktif' ? 'var(--green-ok)' : '#e67e22';
+        dataArray.forEach(item => {
+            // Hitung Status
+            let st = item.status ? item.status.toLowerCase() : 'pending';
+            if(st === 'aktif') aktifCount++; else pendingCount++;
 
-            // Bersihkan format tautan WA
-            let mentahWa = item.whatsapp || '';
-            let bersihWa = mentahWa.replace(/\D/g, '');
-            if (bersihWa.startsWith('0')) bersihWa = '62' + bersihWa.slice(1);
+            // Hitung Kategori
+            let kat = item.kategori || 'Lainnya';
+            petaKategori[kat] = (petaKategori[kat] || 0) + 1;
 
-            // Bangun struktur kartu agar tidak tumpang tindih di layar kecil
-            const elemenCard = document.createElement('div');
-            elemenCard.className = 'card-item';
-            elemenCard.innerHTML = `
-                <div class="info-baris">
-                    <span class="info-label">Layanan</span>
-                    <span class="info-value judul-layanan">${item.judul || '-'}</span>
+            // Hitung Wilayah
+            let wil = item.kabupaten_kota || 'Tidak Diketahui';
+            petaWilayah[wil] = (petaWilayah[wil] || 0) + 1;
+        });
+
+        // Cari Kategori Terbanyak
+        let topKat = Object.keys(petaKategori).reduce((a, b) => petaKategori[a] > petaKategori[b] ? a : b);
+        // Cari Wilayah Terbanyak
+        let topWil = Object.keys(petaWilayah).reduce((a, b) => petaWilayah[a] > petaWilayah[b] ? a : b);
+
+        // Cetak otomatis ke Panel Atas UI Admin
+        document.getElementById('stat-total').innerHTML = `<span>Total Pendaftar Masuk:</span> <span class="stat-count">${total} Data</span>`;
+        document.getElementById('stat-kategori').innerHTML = `<span>Kategori Terlaris:</span> <span class="stat-count">${topKat} (${petaKategori[topKat]} UKM)</span>`;
+        document.getElementById('stat-wilayah').innerHTML = `<span>Wilayah Dominan:</span> <span class="stat-count">${topWil} (${petaWilayah[topWil]} Data)</span>`;
+        document.getElementById('stat-aktif').innerHTML = `<span>Status Aktif / Pending:</span> <span class="stat-count" style="color:var(--success-color)">${aktifCount}</span> / <span class="stat-count" style="color:var(--warning-color)">${pendingCount}</span>`;
+    }
+
+    function bikinKomponenCardUI(arrayData) {
+        const targetView = document.getElementById('container-render-data');
+        targetView.innerHTML = "";
+
+        arrayData.forEach(item => {
+            let statusRaw = item.status ? item.status.toLowerCase() : 'pending';
+            let colorStatusText = statusRaw === 'aktif' ? 'var(--success-color)' : 'var(--warning-color)';
+
+            let waCleanNumber = item.whatsapp || '';
+            let waClickable = waCleanNumber.replace(/\D/g, '');
+            if (waClickable.startsWith('0')) waClickable = '62' + waClickable.slice(1);
+
+            const cardComponent = document.createElement('div');
+            cardComponent.className = 'box-card';
+            cardComponent.innerHTML = `
+                <div class="row-item">
+                    <span class="label-side">Layanan</span>
+                    <span class="value-side highlight-judul">${item.judul || '-'}</span>
                 </div>
-                <div class="info-baris">
-                    <span class="info-label">Kategori</span>
-                    <span class="info-value">${item.kategori || '-'}</span>
+                <div class="row-item">
+                    <span class="label-side">Kategori</span>
+                    <span class="value-side">${item.kategori || '-'}</span>
                 </div>
-                <div class="info-baris">
-                    <span class="info-label">Lokasi</span>
-                    <span class="info-value">${item.kabupaten_kota || '-'} ${item.kecamatan ? '('+item.kecamatan+')' : ''}</span>
+                <div class="row-item">
+                    <span class="label-side">Lokasi</span>
+                    <span class="value-side">${item.kabupaten_kota || '-'}</span>
                 </div>
-                <div class="info-baris">
-                    <span class="info-label">WhatsApp</span>
-                    <span class="info-value"><a href="https://wa.me/${bersihWa}" target="_blank" class="link-wa">${mentahWa}</a></span>
+                <div class="row-item">
+                    <span class="label-side">WhatsApp</span>
+                    <span class="value-side"><a href="https://wa.me/${waClickable}" target="_blank" class="whatsapp-anchor">${waCleanNumber}</a></span>
                 </div>
-                <div class="info-baris" style="margin-bottom: 0;">
-                    <span class="info-label">Status</span>
-                    <span class="info-value" style="color: ${warnaStatus}; font-weight: bold;">${statusData.toUpperCase()}</span>
+                <div class="row-item" style="margin-bottom: 0;">
+                    <span class="label-side">Status</span>
+                    <span class="value-side" style="color: ${colorStatusText}; font-weight: bold;">${statusRaw.toUpperCase()}</span>
                 </div>
 
-                <div class="group-tombol">
-                    ${statusData !== 'aktif' ? `<button onclick="eksekusiOkAksi(${item.id}, this)" class="btn-aksi btn-ok-warna">OK</button>` : ''}
-                    <button onclick="eksekusiDeleteAksi(${item.id}, this)" class="btn-aksi btn-hapus-warna">Delete</button>
+                <div class="footer-action-group">
+                    ${statusRaw !== 'aktif' ? `<button onclick="prosesUpdateStatusKeSupabase(${item.id}, this)" class="action-control-btn color-ok">OK</button>` : ''}
+                    <button onclick="prosesDeleteDataDariSupabase(${item.id}, this)" class="action-control-btn color-delete">Delete</button>
                 </div>
             `;
-            tempatData.appendChild(elemenCard);
+            targetView.appendChild(cardComponent);
         });
     }
 
-    // Perintah Ubah Status Menjadi Aktif (Tombol OK)
-    async function eksekusiOkAksi(idData, tombol) {
-        if (!confirm("Konfirmasi pengaktifan data ini?")) return;
-        
-        tombol.innerText = "⏳ Proses...";
-        tombol.disabled = true;
-
+    async function prosesUpdateStatusKeSupabase(rowId, buttonElement) {
+        if (!confirm("Ubah status data ini menjadi AKTIF?")) return;
+        buttonElement.innerText = "⏳..."; buttonElement.disabled = true;
         try {
-            const { error } = await koneksiSupabase
-                .from('konten_goona')
-                .update({ status: 'aktif' })
-                .eq('id', idData);
-
+            const { error } = await clientSupabaseInstance.from('konten_goona').update({ status: 'aktif' }).eq('id', rowId);
             if (error) throw error;
-            muatUlangDataSupabase(); // Update otomatis visual layar
-        } catch (err) {
-            alert("Gagal memperbarui database!\n\nCatatan: Jika error, pastikan RLS POLICY tabel Anda di dashboard Supabase sudah memberikan izin UPDATE untuk peran public/anon.\n\nPesan Error: " + err.message);
-            tombol.innerText = "OK";
-            tombol.disabled = false;
-        }
+            sinkronisasiDataSupabase();
+        } catch (err) { alert("Gagal: " + err.message); buttonElement.innerText = "OK"; buttonElement.disabled = false; }
     }
 
-    // Perintah Hapus Baris Data (Tombol Delete)
-    async function eksekusiDeleteAksi(idData, tombol) {
-        if (!confirm("Hapus data ini secara permanen dari server?")) return;
-
-        tombol.innerText = "⏳ Hapus...";
-        tombol.disabled = true;
-
+    async function prosesDeleteDataDariSupabase(rowId, buttonElement) {
+        if (!confirm("Hapus data ini secara permanen?")) return;
+        buttonElement.innerText = "⏳..."; buttonElement.disabled = true;
         try {
-            const { error } = await koneksiSupabase
-                .from('konten_goona')
-                .delete()
-                .eq('id', idData);
-
+            const { error } = await clientSupabaseInstance.from('konten_goona').delete().eq('id', rowId);
             if (error) throw error;
-            muatUlangDataSupabase(); // Update otomatis visual layar
-        } catch (err) {
-            alert("Gagal menghapus data di database!\n\nCatatan: Jika error, pastikan RLS POLICY tabel Anda di dashboard Supabase sudah memberikan izin DELETE untuk peran public/anon.\n\nPesan Error: " + err.message);
-            tombol.innerText = "Delete";
-            tombol.disabled = false;
-        }
+            sinkronisasiDataSupabase();
+        } catch (err) { alert("Gagal: " + err.message); buttonElement.innerText = "Delete"; buttonElement.disabled = false; }
     }
 </script>
 </body>
