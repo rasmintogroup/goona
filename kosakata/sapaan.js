@@ -105,7 +105,7 @@ export const modul1Variations = [
     "Halo! Nama panggilan Kakak siapa nih?",
     "Hai! Boleh saya tahu nama panggilan Kakak?",
     "Halo! Selamat datang, siapa nama panggilan Kakak?",
-    "Hai! Nama panggilan Kakak siapa?"
+    "Hai! Nama panggilan Kakak siapa?",
     
     // 101-125: Sapaan penuh rasa penasaran yang manis
     "Halo! Saya penasaran nih, siapa sih nama panggilan Kakak yang bisa saya sapa?",
