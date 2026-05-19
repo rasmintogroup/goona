@@ -3,597 +3,321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Goona Admin - Mobile Optimized</title>
-    <link class="icon" type="image/png" href="Pavicon_goona.png">
+    <title>Goona Admin - Super Clean</title>
+    <link rel="icon" type="image/png" href="Pavicon_goona.png">
+    
     <style>
-        :root { 
-            --primary: #8B4513; 
-            --secondary-brown: #A0522D;
-            --light-brown: #D2B48C;
-            --bg: #FDF5E6; 
-            --white: #ffffff;
-            --danger-red: #d9534f;
-            --success-green: #28a745;
-            --accent-blue: #3498db;
+        /* Gaya Dasar & Warna Tema Goona */
+        :root {
+            --primary-brown: #8B4513;
+            --soft-bg: #FDF5E6;
+            --card-border: #D2B48C;
+            --text-main: #3E2723;
+            --green-ok: #28a745;
+            --red-delete: #d9534f;
         }
-        
-        * { 
-            box-sizing: border-box; 
+
+        * {
+            box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
 
-        body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background-color: var(--bg); 
-            margin: 0; 
-            padding: 15px; 
-            color: #3E2723;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--soft-bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 15px;
         }
 
-        .container { 
-            max-width: 1000px; 
-            margin: auto; 
-            background: white; 
-            padding: 25px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.1); 
-            border: 1px solid var(--light-brown);
-        }
-
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 3px solid var(--primary); 
-            padding-bottom: 15px; 
-            margin-bottom: 25px; 
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .header h2 { color: var(--primary); margin: 0; font-size: 24px; }
-        
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .btn-analitik-trigger {
-            background: #e67e22;
-            font-size: 18px;
-            padding: 8px 14px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.25);
-            transition: transform 0.2s;
-        }
-        .btn-analitik-trigger:active { transform: scale(0.95); }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .metric-card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.05);
-            border: 1px solid var(--light-brown);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .metric-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .metric-info { display: flex; flex-direction: column; }
-        .metric-value { font-size: 24px; font-weight: bold; color: #3E2723; line-height: 1.2; }
-        .metric-label { font-size: 12px; color: #8D6E63; font-weight: 500; }
-
-        .table-wrapper { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid #eee; }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { background-color: var(--primary); color: white; padding: 15px; font-weight: bold; }
-        td { padding: 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
-
-        .text-center { text-align: center; }
-        .text-left { text-align: left; }
-        .text-right { text-align: right; }
-
-        .btn { padding: 8px 16px; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; font-size: 13px; transition: transform 0.1s; }
-        .btn:active { transform: scale(0.96); }
-        .btn-hapus { background: var(--danger-red); }
-        .btn-ok { background: var(--success-green); }
-        
-        .wa-link { color: #25D366; font-weight: bold; text-decoration: none; border-bottom: 1px dashed #25D366; }
-        .wa-link:hover { color: #128C7E; }
-
-        #login-panel { text-align: center; padding: 60px 20px; }
-        #admin-panel { display: none; }
-        input[type="password"] { padding: 12px; width: 260px; border-radius: 8px; border: 1.5px solid var(--light-brown); margin-bottom: 15px; outline: none; background: #FFFAF0; font-size: 16px; text-align: center; }
-        input[type="password"]:focus { border-color: var(--primary); background: #fff; }
-
-        .board-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9999;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-        }
-        
-        .announcement-board {
+        .container {
+            max-width: 700px;
+            margin: auto;
             background: #ffffff;
-            width: 100%;
-            max-width: 850px;
-            max-height: 90vh;
-            border-radius: 24px;
-            border: 2px solid var(--primary);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-            overflow-y: auto;
             padding: 20px;
-            animation: slideUp 0.3s ease-out;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        h2 {
+            text-align: center;
+            color: var(--primary-brown);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 22px;
         }
 
-        .board-header {
+        /* Form Login Minimalis */
+        #login-panel {
+            text-align: center;
+            padding: 40px 10px;
+        }
+        
+        .input-login {
+            width: 100%;
+            max-width: 280px;
+            padding: 12px;
+            border: 1.5px solid var(--card-border);
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        /* Dashboard Area */
+        #admin-panel {
+            display: none;
+        }
+
+        .btn-refresh {
+            width: 100%;
+            background-color: #444444;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.2s;
+        }
+        .btn-refresh:active { background-color: #222; }
+
+        /* Tata Letak Kartu (User Friendly Layout) */
+        .grid-data {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card-item {
+            background: #ffffff;
+            border: 1.5px solid var(--card-border);
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 2px 6px rgba(139, 69, 19, 0.05);
+        }
+
+        .info-baris {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px dashed var(--light-brown);
-            padding-bottom: 12px;
-            margin-bottom: 15px;
-        }
-        .board-header h3 { margin: 0; color: var(--primary); font-size: 20px; }
-        .btn-close-board {
-            background: #eee; border: none; padding: 6px 12px; border-radius: 8px;
-            cursor: pointer; font-weight: bold; font-size: 14px;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            font-size: 14px;
         }
 
-        .analitik-section-title {
-            font-size: 14px; font-weight: bold; color: var(--secondary-brown);
-            margin: 20px 0 8px 0; border-left: 4px solid var(--primary); padding-left: 8px;
+        .info-label {
+            font-weight: bold;
+            color: #7f8c8d;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 35%;
         }
 
-        .board-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid #f3e8da;
-            background: #ffffff;
+        .info-value {
+            width: 65%;
+            text-align: right;
+            font-weight: 500;
+            word-break: break-word;
         }
 
-        .board-table {
-            width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 700px;
+        /* Khusus Judul Utama Konten */
+        .info-value.judul-layanan {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--primary-brown);
         }
-        .board-table th { background: var(--bg); color: var(--primary); padding: 12px 10px; font-size: 12px; font-weight: bold; border-bottom: 1.5px solid var(--light-brown); }
-        .board-table td { padding: 12px 10px; border-bottom: 1px solid #f3e8da; color: #3E2723; }
-        .board-table tr:last-child td { border-bottom: none; }
 
-        /* ==========================================================================
-           KUNCI UTAMA RESPONSIVE MOBILE - PERBAIKAN STRUKTUR SEJAJAR (FLEX CARD)
-           ========================================================================== */
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            .container { padding: 15px; border-radius: 16px; }
-            .header h2 { font-size: 20px; width: 100%; text-align: center; }
-            .header-actions { width: 100%; justify-content: center; }
-            
-            .table-wrapper { border: none; overflow: visible; }
-            table, tbody, tr, td { display: block; width: 100%; }
-            thead { display: none; }
-            
-            tr {
-                background: #ffffff !important;
-                border: 1px solid var(--light-brown) !important;
-                padding: 16px;
-                margin-bottom: 20px;
-                border-radius: 16px;
-                box-shadow: 0 6px 16px rgba(139, 69, 19, 0.08);
-            }
-
-            td {
-                padding: 10px 0;
-                border-bottom: 1px dashed #e2e8f0;
-                display: flex !important;
-                justify-content: space-between;
-                align-items: center;
-                text-align: right !important;
-                width: 100% !important;
-                color: #3E2723 !important;
-                font-size: 14px;
-            }
-
-            td::before {
-                content: attr(data-label);
-                font-weight: 800;
-                color: var(--secondary-brown);
-                font-size: 11px;
-                text-transform: uppercase;
-                display: inline-block;
-                letter-spacing: 0.8px;
-                text-align: left;
-                flex-shrink: 0;
-                margin-right: 15px;
-            }
-
-            /* Penanganan kolom detail layanan */
-            td[data-label="Layanan"] {
-                flex-direction: row;
-                align-items: flex-start;
-            }
-            td[data-label="Layanan"] > :last-child {
-                text-align: right;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-            }
-
-            td:nth-last-child(2) {
-                border-bottom: none;
-            }
-
-            /* Kolom Aksi Tombol Kontrol */
-            td:last-child {
-                border-bottom: none;
-                padding-top: 15px;
-                margin-top: 5px;
-                border-top: 1px solid #f1f5f9;
-                display: flex !important;
-                flex-direction: row;
-                justify-content: flex-end !important;
-                align-items: center;
-                gap: 10px;
-            }
-            td:last-child::before { display: none; }
-            
-            .btn {
-                padding: 10px 20px;
-                font-size: 14px;
-                flex: 1;
-                max-width: 120px;
-                text-align: center;
-            }
+        .link-wa {
+            color: #25D366;
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 1px dashed #25D366;
         }
+
+        /* Grup Tombol Kontrol */
+        .group-tombol {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .btn-aksi {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-aksi:active { opacity: 0.8; }
+        .btn-ok-warna { background-color: var(--green-ok); }
+        .btn-hapus-warna { background-color: var(--red-delete); }
+        .btn-aksi:disabled { background-color: #cccccc; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="login-panel">
-        <h2 style="color:var(--primary); margin-bottom: 20px;">Admin Goona Chat</h2>
-        <input type="password" id="input-password" placeholder="Masukkan Password">
-        <br>
-        <button id="btn-login-action" class="btn" style="background:var(--primary); padding: 12px 60px; border-radius: 8px;">MASUK</button>
+        <h2>Goona Chat Admin</h2>
+        <input type="password" id="sandi" class="input-login" placeholder="Masukkan Password Akun"><br>
+        <button onclick="verifikasiMasuk()" class="btn-aksi btn-ok-warna" style="max-width: 280px; width: 100%;">MASUK DASHBOARD</button>
     </div>
 
     <div id="admin-panel">
-        <div class="header">
-            <h2>Dashboard Utama Admin</h2>
-            <div class="header-actions">
-                <button id="btn-open-analitik" class="btn-analitik-trigger">📊 Analisis Pasar</button>
-                <button id="btn-refresh" class="btn" style="background:#444; border-radius: 8px;">🔄 Refresh</button>
-            </div>
-        </div>
-
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-icon" style="background: var(--accent-blue);">📋</div>
-                <div class="metric-info">
-                    <span class="metric-value" id="stat-total">0</span>
-                    <span class="metric-label" id="label-total">Total Pendaftar</span>
-                </div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon" style="background: var(--success-green);">✨</div>
-                <div class="metric-info">
-                    <span class="metric-value" id="stat-today">0</span>
-                    <span class="metric-label">Baru Hari Ini</span>
-                </div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon" style="background: #e67e22;">👥</div>
-                <div class="metric-info">
-                    <span class="metric-value" id="stat-visitors">1.246</span>
-                    <span class="metric-label">Jumlah Pengunjung</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="text-left">Layanan</th>
-                        <th class="text-center">WhatsApp</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="isi-tabel"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div id="papan-analitik-overlay" class="board-overlay">
-    <div class="announcement-board">
-        <div class="board-header">
-            <h3>📊 Papan Analisis Pasar Kepri</h3>
-            <button id="btn-close-analitik" class="btn-close-board">Tutup</button>
-        </div>
-        
-        <div class="analitik-section-title">⚓ Matriks Suplai Kategori Per Wilayah (Otomatis)</div>
-        <div class="board-wrapper">
-            <table class="board-table">
-                <thead>
-                    <tr>
-                        <th class="text-left" style="min-width: 160px; width: 160px;">Kabupaten / Kota</th>
-                        <th class="text-right">Jasa</th>
-                        <th class="text-right">Loker</th>
-                        <th class="text-right">Kuliner</th>
-                        <th class="text-right">Jual Beli</th>
-                        <th class="text-right">Properti</th>
-                        <th class="text-right">Wisata</th>
-                        <th class="text-right">Info</th>
-                        <th class="text-right" style="background: #f5e6d3; min-width: 70px;">Total</th>
-                    </tr>
-                </thead>
-                <tbody id="analitik-matriks-rows"></tbody>
-            </table>
-        </div>
-
-        <div class="analitik-section-title">📍 Breakdown Mikro Per Kecamatan</div>
-        <div class="board-wrapper">
-            <table class="board-table" style="min-width: 100%;">
-                <thead>
-                    <tr>
-                        <th class="text-left">Kecamatan</th>
-                        <th class="text-right" style="width: 120px;">Jumlah Data</th>
-                    </tr>
-                </thead>
-                <tbody id="analitik-kecamatan-rows"></tbody>
-            </table>
-        </div>
+        <h2>List Data Masuk</h2>
+        <button class="btn-refresh" onclick="muatUlangDataSupabase()">🔄 Sinkronisasi Ulang Data</button>
+        <div id="wrapper-konten" class="grid-data">Menghubungkan ke server...</div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    let supabaseClient;
-    let cacheDatabaseData = [];
-    const SB_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
-    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
+    let koneksiSupabase;
+    const ENDPOINT_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
+    const KEY_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
 
-    window.onload = () => {
-        supabaseClient = window.supabase.createClient(SB_URL, SB_KEY);
-        document.getElementById('btn-login-action').onclick = prosesMasuk;
-        document.getElementById('input-password').onkeydown = (e) => { if(e.key === 'Enter') prosesMasuk(); };
-        document.getElementById('btn-refresh').onclick = panggilDatabase;
-        
-        document.getElementById('btn-open-analitik').onclick = () => { document.getElementById('papan-analitik-overlay').style.display = 'flex'; };
-        document.getElementById('btn-close-analitik').onclick = () => { document.getElementById('papan-analitik-overlay').style.display = 'none'; };
-    };
+    // Nyalakan client database saat halaman siap
+    try {
+        koneksiSupabase = window.supabase.createClient(ENDPOINT_URL, KEY_ANON);
+    } catch (e) {
+        console.error("Inisialisasi Supabase Error:", e);
+    }
 
-    function prosesMasuk() {
-        const pass = document.getElementById('input-password').value;
-        if(pass === 'goona2026') {
+    function verifikasiMasuk() {
+        const kunci = document.getElementById('sandi').value;
+        if(kunci === 'goona2026') {
             document.getElementById('login-panel').style.display = 'none';
             document.getElementById('admin-panel').style.display = 'block';
-            document.getElementById('isi-tabel').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:#3E2723;">Memuat data awal...</td></tr>';
-            panggilDatabase();
-        } else { alert('Password Salah!'); }
+            muatUlangDataSupabase();
+        } else {
+            alert('Password salah, kawan!');
+        }
     }
 
-    async function panggilDatabase() {
+    async function muatUlangDataSupabase() {
+        const tempatData = document.getElementById('wrapper-konten');
+        tempatData.innerHTML = "Memuat data terbaru...";
+
         try {
-            const { data, error } = await supabaseClient
+            const { data, error } = await koneksiSupabase
                 .from('konten_goona')
                 .select('*')
-                .order('created_at', { ascending: false });
+                .order('id', { ascending: false });
 
-            if(error) throw error;
-
-            cacheDatabaseData = data || [];
-            hitungMetriksAnalitikDasbor(cacheDatabaseData);
-            hitungDanCetakPapanAnalitik(cacheDatabaseData);
-            cetakTabelUtama(cacheDatabaseData);
-        } catch(error) {
-            alert('Gagal memuat database: ' + error.message);
+            if (error) throw error;
+            renderKartuUserFriendly(data);
+        } catch (err) {
+            tempatData.innerHTML = "Koneksi Bermasalah: " + err.message;
         }
     }
 
-    function hitungMetriksAnalitikDasbor(dataList) {
-        document.getElementById('stat-total').innerText = dataList.length;
+    function renderKartuUserFriendly(kumpulanData) {
+        const tempatData = document.getElementById('wrapper-konten');
+        tempatData.innerHTML = "";
 
-        const hariIni = new Date().toISOString().split('T')[0];
-        const pendaftarHariIni = dataList.filter(item => item.created_at && item.created_at.startsWith(hariIni)).length;
-        document.getElementById('stat-today').innerText = pendaftarHariIni;
-
-        let vCount = localStorage.getItem('goonity_visitors') || 1246;
-        document.getElementById('stat-visitors').innerText = new Intl.NumberFormat('id-ID').format(vCount);
-    }
-
-    function hitungDanCetakPapanAnalitik(dataList) {
-        const matriksBody = document.getElementById('analitik-matriks-rows');
-        const kecBody = document.getElementById('analitik-kecamatan-rows');
-        
-        matriksBody.innerHTML = ''; kecBody.innerHTML = '';
-
-        const pemetaan7Wilayah = {
-            "Kota Batam": "batam",
-            "Kota Tanjungpinang": "tanjungpinang",
-            "Kabupaten Bintan": "bintan",
-            "Kabupaten Karimun": "karimun",
-            "Kabupaten Lingga": "lingga",
-            "Kabupaten Natuna": "natuna",
-            "Kabupaten Kepulauan Anambas": "anambas"
-        };
-
-        const daftarKategori = ["Jasa", "Loker", "Kuliner", "Jual Beli", "Properti", "Wisata", "Info/Pengumuman"];
-        const totalKolomKategori = { "Jasa": 0, "Loker": 0, "Kuliner": 0, "Jual Beli": 0, "Properti": 0, "Wisata": 0, "Info/Pengumuman": 0 };
-        let grandTotalKeseluruhan = 0;
-
-        Object.keys(pemetaan7Wilayah).forEach(namaResmi => {
-            const kataKunciDb = pemetaan7Wilayah[namaResmi];
-            const dataDaerahIni = dataList.filter(item => (item.kabupaten_kota || '').toLowerCase().includes(kataKunciDb));
-            
-            let rowHtml = `<tr><td class="text-left" style="font-weight:500;">${namaResmi}</td>`;
-            
-            daftarKategori.forEach(kat => {
-                const totalPerKatDaerah = dataDaerahIni.filter(item => item.kategori === kat).length;
-                rowHtml += `<td class="text-right">${totalPerKatDaerah}</td>`;
-                totalKolomKategori[kat] += totalPerKatDaerah;
-            });
-            
-            rowHtml += `<td class="text-right" style="background:#fffaf0; font-weight:600;">${dataDaerahIni.length}</td></tr>`;
-            matriksBody.innerHTML += rowHtml;
-            grandTotalKeseluruhan += dataDaerahIni.length;
-        });
-
-        let totalRowHtml = `<tr style="background:#f5e6d3; font-weight:bold; border-top:2px solid var(--primary);"><td class="text-left">TOTAL INFO</td>`;
-        daftarKategori.forEach(kat => {
-            totalRowHtml += `<td class="text-right">${totalKolomKategori[kat]}</td>`;
-        });
-        totalRowHtml += `<td class="text-right" style="background:#e8d0b5; color:var(--primary); font-weight:800;">${grandTotalKeseluruhan}</td></tr>`;
-        matriksBody.innerHTML += totalRowHtml;
-
-        const mapKecamatan = {};
-        dataList.forEach(item => {
-            if (item.kecamatan) {
-                const namaKec = item.kecamatan.trim();
-                mapKecamatan[namaKec] = (mapKecamatan[namaKec] || 0) + 1;
-            }
-        });
-
-        const listKecTerisi = Object.keys(mapKecamatan).sort();
-        if(listKecTerisi.length === 0) {
-            kecBody.innerHTML = '<tr><td colspan="2" style="color:gray; text-align:center; padding:15px;">Belum ada data kecamatan masuk.</td></tr>';
-        } else {
-            listKecTerisi.forEach(kec => {
-                kecBody.innerHTML += `<tr><td class="text-left">${kec}</td><td class="text-right">${mapKecamatan[kec]} Data</td></tr>`;
-            });
-        }
-    }
-
-    function cetakTabelUtama(dataList) {
-        const listBody = document.getElementById('isi-tabel');
-        listBody.innerHTML = '';
-
-        if(dataList.length === 0) {
-            listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:gray;">Tidak ada data ditemukan di database.</td></tr>';
+        if (!kumpulanData || kumpulanData.length === 0) {
+            tempatData.innerHTML = "<p style='text-align:center; color:gray;'>Tidak ada data pendaftar saat ini.</p>";
             return;
         }
 
-        dataList.forEach(item => {
-            const waNum = item.whatsapp || '-';
-            const waKlik = waNum.replace(/\D/g, '');
-            const waFinal = waKlik.startsWith('0') ? '62' + waKlik.slice(1) : waKlik;
-            
-            let lokasiInfo = item.kabupaten_kota || '-';
-            if(item.kecamatan) lokasiInfo += ` (${item.kecamatan})`;
+        kumpulanData.forEach(item => {
+            const statusData = (item.status || 'pending').toLowerCase();
+            const warnaStatus = statusData === 'aktif' ? 'var(--green-ok)' : '#e67e22';
 
-            const statusBersih = item.status ? item.status.toString().toLowerCase() : 'pending';
+            // Bersihkan format tautan WA
+            let mentahWa = item.whatsapp || '';
+            let bersihWa = mentahWa.replace(/\D/g, '');
+            if (bersihWa.startsWith('0')) bersihWa = '62' + bersihWa.slice(1);
 
-            const barisHtml = `
-                <tr>
-                    <td data-label="Layanan" class="text-left">
-                        <div>
-                            <span style="font-size:16px; font-weight:bold; color:#3E2723; display:inline-block; margin-bottom:2px;">${item.judul || '-'}</span>
-                            <div style="font-size:13px; color:#5d4037; font-weight:600;">${item.kategori || '-'} | ${lokasiInfo}</div>
-                        </div>
-                    </td>
-                    <td data-label="WhatsApp" class="text-center">
-                        <a href="https://wa.me/${waFinal}" target="_blank" class="wa-link">${waNum}</a>
-                    </td>
-                    <td data-label="Status" class="text-center" style="color:${statusBersih === 'aktif' ? 'var(--success-green)' : '#e67e22'}; font-weight:bold; letter-spacing:0.5px;">
-                        ${statusBersih.toUpperCase()}
-                    </td>
-                    <td data-label="Aksi" class="text-center">
-                        <div style="display:flex; gap:8px; justify-content:center; width:100%;">
-                            ${statusBersih === 'pending' ? `<button onclick="eksekusiAktifkan(${item.id}, this)" class="btn btn-ok">OK</button>` : ''}
-                            <button onclick="eksekusiHapus(${item.id}, this)" class="btn btn-hapus">Delete</button>
-                        </div>
-                    </td>
-                </tr>
+            // Bangun struktur kartu agar tidak tumpang tindih di layar kecil
+            const elemenCard = document.createElement('div');
+            elemenCard.className = 'card-item';
+            elemenCard.innerHTML = `
+                <div class="info-baris">
+                    <span class="info-label">Layanan</span>
+                    <span class="info-value judul-layanan">${item.judul || '-'}</span>
+                </div>
+                <div class="info-baris">
+                    <span class="info-label">Kategori</span>
+                    <span class="info-value">${item.kategori || '-'}</span>
+                </div>
+                <div class="info-baris">
+                    <span class="info-label">Lokasi</span>
+                    <span class="info-value">${item.kabupaten_kota || '-'} ${item.kecamatan ? '('+item.kecamatan+')' : ''}</span>
+                </div>
+                <div class="info-baris">
+                    <span class="info-label">WhatsApp</span>
+                    <span class="info-value"><a href="https://wa.me/${bersihWa}" target="_blank" class="link-wa">${mentahWa}</a></span>
+                </div>
+                <div class="info-baris" style="margin-bottom: 0;">
+                    <span class="info-label">Status</span>
+                    <span class="info-value" style="color: ${warnaStatus}; font-weight: bold;">${statusData.toUpperCase()}</span>
+                </div>
+
+                <div class="group-tombol">
+                    ${statusData !== 'aktif' ? `<button onclick="eksekusiOkAksi(${item.id}, this)" class="btn-aksi btn-ok-warna">OK</button>` : ''}
+                    <button onclick="eksekusiDeleteAksi(${item.id}, this)" class="btn-aksi btn-hapus-warna">Delete</button>
+                </div>
             `;
-            listBody.innerHTML += barisHtml;
+            tempatData.appendChild(elemenCard);
         });
     }
 
-    // Perbaikan scope global agar fungsi tombol terjamin terpanggil di semua browser
-    window.eksekusiAktifkan = async function(idData, elemenTombol) {
-        if(!idData) return;
-        if(!confirm('Apakah kawan yakin ingin mengaktifkan data ini?')) return;
+    // Perintah Ubah Status Menjadi Aktif (Tombol OK)
+    async function eksekusiOkAksi(idData, tombol) {
+        if (!confirm("Konfirmasi pengaktifan data ini?")) return;
         
-        elemenTombol.innerText = "⏳..."; 
-        elemenTombol.disabled = true;
-        
+        tombol.innerText = "⏳ Proses...";
+        tombol.disabled = true;
+
         try {
-            const { error } = await supabaseClient
+            const { error } = await koneksiSupabase
                 .from('konten_goona')
                 .update({ status: 'aktif' })
                 .eq('id', idData);
-                
-            if (error) throw error;
-            
-            // Berhasil, panggil database ulang untuk menyegarkan tampilan data terbaru
-            await panggilDatabase();
-        } catch (err) {
-            alert("Gagal mengaktifkan data kawan! Eror: " + err.message);
-            elemenTombol.innerText = "OK"; 
-            elemenTombol.disabled = false;
-        }
-    };
 
-    window.eksekusiHapus = async function(idData, elemenTombol) {
-        if(!idData) return;
-        if(!confirm('Apakah kawan yakin ingin menghapus permanen data ini dari server Goona Chat?')) return;
-        
-        elemenTombol.innerText = "❌..."; 
-        elemenTombol.disabled = true;
+            if (error) throw error;
+            muatUlangDataSupabase(); // Update otomatis visual layar
+        } catch (err) {
+            alert("Gagal memperbarui database!\n\nCatatan: Jika error, pastikan RLS POLICY tabel Anda di dashboard Supabase sudah memberikan izin UPDATE untuk peran public/anon.\n\nPesan Error: " + err.message);
+            tombol.innerText = "OK";
+            tombol.disabled = false;
+        }
+    }
+
+    // Perintah Hapus Baris Data (Tombol Delete)
+    async function eksekusiDeleteAksi(idData, tombol) {
+        if (!confirm("Hapus data ini secara permanen dari server?")) return;
+
+        tombol.innerText = "⏳ Hapus...";
+        tombol.disabled = true;
 
         try {
-            const { error } = await supabaseClient
+            const { error } = await koneksiSupabase
                 .from('konten_goona')
                 .delete()
                 .eq('id', idData);
-                
+
             if (error) throw error;
-            
-            // Berhasil, refresh data dari Supabase
-            await panggilDatabase();
+            muatUlangDataSupabase(); // Update otomatis visual layar
         } catch (err) {
-            alert("Gagal menghapus data kawan! Eror: " + err.message);
-            elemenTombol.innerText = "Delete"; 
-            elemenTombol.disabled = false;
+            alert("Gagal menghapus data di database!\n\nCatatan: Jika error, pastikan RLS POLICY tabel Anda di dashboard Supabase sudah memberikan izin DELETE untuk peran public/anon.\n\nPesan Error: " + err.message);
+            tombol.innerText = "Delete";
+            tombol.disabled = false;
         }
-    };
+    }
 </script>
 </body>
 </html>
