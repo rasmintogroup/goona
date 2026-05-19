@@ -286,7 +286,7 @@
 
         const fallbackImageSVG = `<svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11" stroke="#bda38f" stroke-width="1.8" stroke-linecap="round"/><rect x="3" y="9" width="18" height="12" rx="3" fill="#fcfaf7" stroke="#bda38f" stroke-width="1.8"/></svg>`;
 
-        // Ambil data daerah terdaftar user dari localStorage sebagai default wilayah awal
+        // Ambil default wilayah dari localStorage kawan
         const userDaerahDefault = localStorage.getItem('goona_daerah') || "";
         if(userDaerahDefault) {
             document.getElementById('filterWilayah').value = userDaerahDefault;
@@ -296,6 +296,48 @@
         document.getElementById('filterKategori').addEventListener('change', fetchMarketplaceData);
         document.getElementById('filterWilayah').addEventListener('change', fetchMarketplaceData);
 
+        // Fungsi bantu membuat susunan HTML Kartu Iklan
+        function buatElemenKartu(item) {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.onclick = function(e) {
+                if (e.target.tagName.toLowerCase() !== 'a') {
+                    toggleDropdown(this);
+                }
+            };
+
+            const mediaElement = (item.url_foto && item.url_foto.trim() !== "" && item.url_foto !== "NULL") 
+                ? `<img class="item-image" src="${item.url_foto}" alt="Foto">`
+                : `<div class="item-image-placeholder">${fallbackImageSVG}</div>`;
+
+            let displayPrice = 'Hubungi Kontak';
+            if (item.harga && item.harga !== "NULL" && item.harga !== 0) {
+                displayPrice = 'Rp ' + Number(item.harga).toLocaleString('id-ID');
+                if (item.satuan_harga && item.satuan_harga !== "NULL") {
+                    displayPrice += ' / ' + item.satuan_harga;
+                }
+            }
+
+            const namaKotaBersih = (item.kabupaten_kota || 'Kepri').replace('Kota ', '').replace('Kabupaten ', '');
+
+            card.innerHTML = `
+                <div class="item-main">
+                    ${mediaElement}
+                </div>
+                <div class="item-dropdown">
+                    <div class="item-price">${displayPrice}</div>
+                    <div class="item-title">${item.judul || 'Tanpa Judul'}</div>
+                    <div class="item-meta-row">
+                        <span class="item-badge">${item.kategori || 'UMUM'}</span>
+                        <span class="item-location">📍 ${namaKotaBersih} ${item.kecamatan ? ('- ' + item.kecamatan) : ''}</span>
+                    </div>
+                    <div class="item-description">${item.deskripsi || 'Tidak ada deskripsi tambahan.'}</div>
+                    <a href="https://wa.me/${item.whatsapp}" class="btn-wa" target="_blank">💬 Hubungi via WhatsApp</a>
+                </div>
+            `;
+            return card;
+        }
+
         async function fetchMarketplaceData() {
             const searchQuery = document.getElementById('searchBox').value.trim();
             const kategoriValue = document.getElementById('filterKategori').value;
@@ -303,85 +345,80 @@
             const feedContainer = document.getElementById('marketplaceFeed');
 
             try {
-                // 🚀 AMBIL DATA DENGAN SINKRONISASI FILTER STATUS (Reguler Aktif ATAU PPV sisa kuota > 0)
+                // 1. Tarik semua data yang berstatus aktif/kuota ppv tersedia
                 let query = supabaseClient
                     .from('konten_goona')
                     .select('*')
                     .or('and(status.eq.aktif,tipe_konten.eq.reguler),and(status_tayang.eq.true,tipe_konten.eq.ppv,sisa_kuota_ppv.gt.0)');
 
-                // Filter Kategori
-                if (kategoriValue !== "") {
-                    query = query.eq('kategori', kategoriValue);
-                }
-                
-                // Filter Wilayah Kabupaten/Kota
-                if (wilayahValue !== "") {
-                    query = query.eq('kabupaten_kota', wilayahValue);
-                }
+                if (kategoriValue !== "") query = query.eq('kategori', kategoriValue);
+                if (searchQuery !== "") query = query.or(`judul.ilike.*${searchQuery}*,deskripsi.ilike.*${searchQuery}*`);
 
-                // 🚀 SOLUSI CERDAS: Pencarian Otomatis Membaca Judul, Deskripsi, & Kecamatan Sekaligus!
-                if (searchQuery !== "") {
-                    query = query.or(`judul.ilike.*${searchQuery}*,deskripsi.ilike.*${searchQuery}*,kecamatan.ilike.*${searchQuery}*`);
-                }
-
-                // Urutkan info terbaru agar selalu di atas
-                query = query.order('created_at', { ascending: false });
-
-                const { data, error } = await query;
+                const { data: semuaData, error } = await query;
                 if (error) throw error;
 
                 feedContainer.innerHTML = '';
 
-                if (!data || data.length === 0) {
-                    feedContainer.innerHTML = '<div class="status-message">Tidak ada data yang cocok dengan pilihan Anda.</div>';
+                if (!semuaData || semuaData.length === 0) {
+                    feedContainer.innerHTML = '<div class="status-message">Tidak ada data yang cocok.</div>';
                     return;
                 }
 
-                data.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'item-card';
-                    card.onclick = function(e) {
-                        if (e.target.tagName.toLowerCase() !== 'a') {
-                            toggleDropdown(this);
-                        }
-                    };
+                // 🚀 PROSES PEMBAGIAN SLOT IKLAN (NASIONAL VS LOKAL)
+                
+                // Urutkan acak (Randomize) agar penayangan adil setiap halaman di-refresh
+                const dataAcak = semuaData.sort(() => 0.5 - Math.random());
 
-                    const mediaElement = (item.url_foto && item.url_foto.trim() !== "" && item.url_foto !== "NULL") 
-                        ? `<img class="item-image" src="${item.url_foto}" alt="Foto">`
-                        : `<div class="item-image-placeholder">${fallbackImageSVG}</div>`;
+                // SLOT A: Cari Maksimal 6 Slot Nasional (Tampil di semua wilayah / tanpa filter kota tertentu)
+                // Di sini kita asumsikan iklan PPV premium atau iklan tanpa batasan kota bertindak sebagai nasional
+                const slotNasional = dataAcak.slice(0, 6);
 
-                    let displayPrice = 'Hubungi Kontak';
-                    if (item.harga && item.harga !== "NULL" && item.harga !== 0) {
-                        displayPrice = 'Rp ' + Number(item.harga).toLocaleString('id-ID');
-                        if (item.satuan_harga && item.satuan_harga !== "NULL") {
-                            displayPrice += ' / ' + item.satuan_harga;
-                        }
-                    }
+                // SLOT B: Cari Maksimal 6 Slot Wilayah Lokal sesuai deteksi domisili user
+                const kotaTujuan = wilayahValue || userDaerahDefault;
+                let slotLokal = [];
+                
+                if (kotaTujuan) {
+                    // Filter sisa data yang cocok dengan kabupaten_kota si user dan bukan dari data nasional di atas
+                    const kandidatLokal = dataAcak.filter(item => 
+                        item.kabupaten_kota === kotaTujuan && !slotNasional.some(nas => nas.id === item.id)
+                    );
+                    slotLokal = kandidatLokal.slice(0, 6);
+                } else {
+                    // Jika user tidak punya deteksi kota, ambil 6 item acak berikutnya sebagai penutup slot
+                    slotLokal = dataAcak.filter(item => !slotNasional.some(nas => nas.id === item.id)).slice(0, 6);
+                }
 
-                    // Penyesuaian teks tampilan wilayah agar rapi tanpa embel-embel teks sistem database
-                    const namaKotaBersih = (item.kabupaten_kota || 'Kepri').replace('Kota ', '').replace('Kabupaten ', '');
+                // 🚀 RENDER SELEKSI KE HALAMAN UTAMA CUCI MATA
+                
+                // Tampilkan Slot Nasional Terlebih Dahulu
+                if (slotNasional.length > 0) {
+                    slotNasional.forEach(item => {
+                        feedContainer.appendChild(buatElemenKartu(item));
+                    });
+                }
 
-                    card.innerHTML = `
-                        <div class="item-main">
-                            ${mediaElement}
-                        </div>
-                        <div class="item-dropdown">
-                            <div class="item-price">${displayPrice}</div>
-                            <div class="item-title">${item.judul || 'Tanpa Judul'}</div>
-                            <div class="item-meta-row">
-                                <span class="item-badge">${item.kategori || 'UMUM'}</span>
-                                <span class="item-location">📍 ${namaKotaBersih} ${item.kecamatan ? ('- ' + item.kecamatan) : ''}</span>
-                            </div>
-                            <div class="item-description">${item.deskripsi || 'Tidak ada deskripsi tambahan.'}</div>
-                            <a href="https://wa.me/${item.whatsapp}" class="btn-wa" target="_blank">💬 Hubungi via WhatsApp</a>
-                        </div>
-                    `;
-                    feedContainer.appendChild(card);
-                });
+                // Tampilkan Pembatas Tipis Visual jika ada Slot Lokal yang menyusul
+                if (slotLokal.length > 0 && kotaTujuan) {
+                    const separator = document.createElement('div');
+                    separator.className = 'status-message';
+                    separator.style.padding = '15px 0 5px 0';
+                    separator.style.fontWeight = 'bold';
+                    separator.innerHTML = `✨ Rekomendasi Terdekat di ${kotaTujuan.replace('Kota ', '').replace('Kabupaten ', '')} ✨`;
+                    feedContainer.appendChild(separator);
+
+                    slotLokal.forEach(item => {
+                        feedContainer.appendChild(buatElemenKartu(item));
+                    });
+                }
+
+                // Failsafe jika benar-benar kosong total kawan
+                if (slotNasional.length === 0 && slotLokal.length === 0) {
+                    feedContainer.innerHTML = '<div class="status-message">Belum ada info cuci mata di area ini.</div>';
+                }
 
             } catch (error) {
                 console.error('Koneksi Supabase Bermasalah:', error.message);
-                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data. Silakan muat ulang halaman beberapa saat lagi.</div>';
+                feedContainer.innerHTML = '<div class="status-message">Gagal memuat slot info cuci mata.</div>';
             }
         }
 
@@ -396,8 +433,5 @@
             }
         }
 
-        // Panggil fungsi pengambilan data pertama kali saat halaman dibuka
         fetchMarketplaceData();
     </script>
-</body>
-</html>
