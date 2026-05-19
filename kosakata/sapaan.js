@@ -543,7 +543,8 @@ export const modul3Variations = [
     "Halo Kak [Nama]! Semoga sukses untuk rencana hari ini ya.",
     "Hai Kak [Nama]! Saya selalu ada jika Kakak membutuhkan informasi.",
     "Halo Kak [Nama]! Sampai nanti, jangan lupa tulis kata kuncinya.",
-    "Hai Kak [Nama]! Senang sekali bisa berkolaborasi dengan Kakak."
+    "Hai Kak [Nama]! Senang sekali bisa berkolaborasi dengan Kakak.",
+    
     // 101-120: Suportif & Penyemangat
     "Halo Kak [Nama]! Semangat ya buat hari ini! Ada yang bisa saya bantu cari?",
     "Hai Kak [Nama]! Jangan biarkan kesulitan menghambatmu. Apa info yang dibutuhkan?",
