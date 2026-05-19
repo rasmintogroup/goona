@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Goona Admin Hub</title>
+    <title>Goona Admin Hub + Analytics</title>
     <link rel="icon" type="image/png" href="Pavicon_goona.png">
     
     <style>
@@ -56,7 +56,7 @@
 
         #admin-panel { display: none; }
 
-        /* ==================== PANEL BOX ATAS (RANGKUMAN TETAP ADA) ==================== */
+        /* ==================== PANEL BOX ATAS (RANGKUMAN UTAMA) ==================== */
         .header-summary-box {
             background: #fff8f0;
             border: 1.5px solid var(--card-border-color);
@@ -108,9 +108,9 @@
         }
         
         .modal-content-box {
-            background: #ffffff; width: 100%; max-width: 400px;
+            background: #ffffff; width: 100%; max-width: 440px;
             border-radius: 14px; border: 2px solid var(--card-border-color);
-            padding: 16px; max-height: 80vh; overflow-y: auto;
+            padding: 16px; max-height: 85vh; overflow-y: auto;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
@@ -122,9 +122,9 @@
         }
 
         .section-sub-title {
-            font-weight: bold; color: #5c3a21; margin: 12px 0 6px 0;
+            font-weight: bold; color: #5c3a21; margin: 16px 0 6px 0;
             font-size: 11px; text-transform: uppercase; background: #f3e5ab;
-            padding: 4px 8px; border-radius: 5px; display: flex; align-items: center; gap: 6px;
+            padding: 5px 8px; border-radius: 5px; display: flex; align-items: center; gap: 6px;
         }
 
         .stat-row {
@@ -138,7 +138,7 @@
         .btn-close-modal {
             width: 100%; background-color: var(--primary-color); color: white;
             border: none; padding: 11px; font-weight: bold; border-radius: 6px;
-            margin-top: 15px; cursor: pointer; font-size: 13px;
+            margin-top: 18px; cursor: pointer; font-size: 13px;
         }
 
         /* ==================== LIST KARTU DATA DATA UTAMA ==================== */
@@ -160,7 +160,7 @@
 <div class="main-container">
     <div id="login-panel">
         <h2 class="title-panel">Goona Chat Admin</h2>
-        <input type="password" id="password-box" class="field-input" placeholder="Password Admin"><br>
+        <input type="password" id="password-box" class="field-input" placeholder="Password Admin" onkeydown="periksaTombolEnter(event)"><br>
         <button onclick="kendaliLogin()" class="action-control-btn color-ok" style="max-width: 240px; width: 100%;">MASUK DASHBOARD</button>
     </div>
 
@@ -190,6 +190,9 @@
         <div class="section-sub-title">📍 Rincian Angka Sebaran Wilayah</div>
         <div id="detail-wilayah-list">Membaca pemetaan wilayah...</div>
 
+        <div class="section-sub-title">🎯 Distribusi Kategori per Wilayah</div>
+        <div id="detail-cross-tab-list">Menghitung matriks sebaran pasar...</div>
+
         <button class="btn-close-modal" onclick="tutupJendelaAnalisisPasar()">Tutup Detail</button>
     </div>
 </div>
@@ -205,6 +208,13 @@
         clientSupabaseInstance = window.supabase.createClient(INSTANCE_URL, PUBLIC_ANON_KEY);
     } catch (e) {
         console.error("Gagal memuat pustaka Supabase:", e);
+    }
+
+    // Fungsi interceptor keyboard untuk membaca tombol Enter
+    function periksaTombolEnter(event) {
+        if (event.key === "Enter" || event.keyCode === 13) {
+            kendaliLogin();
+        }
     }
 
     function kendaliLogin() {
@@ -230,7 +240,7 @@
 
             if (error) throw error;
             
-            dataPasarTerakhir = data; // Amankan ke memori untuk dianalisis di jendela popup
+            dataPasarTerakhir = data; 
             perbaruiRingkasanAtas(data);
             bikinKomponenCardUI(data);
         } catch (err) {
@@ -260,24 +270,35 @@
         let total = dataPasarTerakhir.length;
         let petaKategori = {};
         let petaWilayah = {};
+        
+        // Peta baru untuk mencatat kombinasi: "Kategori @ Wilayah"
+        let petaIrisanKombinasi = {}; 
 
         dataPasarTerakhir.forEach(item => {
+            // Normalisasi penulisan agar rapi (huruf kapital di awal kata)
             let kat = item.kategori ? item.kategori.trim() : 'Lainnya';
+            kat = kat.charAt(0).toUpperCase() + kat.slice(1).toLowerCase();
             petaKategori[kat] = (petaKategori[kat] || 0) + 1;
 
             let wil = item.kabupaten_kota ? item.kabupaten_kota.trim() : 'Tidak Diketahui';
+            wil = wil.charAt(0).toUpperCase() + wil.slice(1).toLowerCase();
             petaWilayah[wil] = (petaWilayah[wil] || 0) + 1;
+
+            // Kunci unik gabungan (Contoh: "Jasa @ Tanjungpinang")
+            let kunciIrisan = `${kat} @ ${wil}`;
+            petaIrisanKombinasi[kunciIrisan] = (petaIrisanKombinasi[kunciIrisan] || 0) + 1;
         });
 
         // Penentu ikon khas kategori
         function dapatkanIkonKategori(namaKategori) {
             let n = namaKategori.toLowerCase();
             if (n.includes('kuliner') || n.includes('makanan') || n.includes('minuman') || n.includes('snack')) return '🍔';
-            if (n.includes('jasa') || n.includes('servis') || n.includes('akupunktur')) return '🛠️';
+            if (n.includes('jasa') || n.includes('servis')) return '🛠️';
             if (n.includes('pakaian') || n.includes('fashion') || n.includes('baju')) return '👕';
-            if (n.includes('sehat') || n.includes('klinik') || n.includes('medis')) return '⚕️';
-            if (n.includes('edukasi') || n.includes('belajar') || n.includes('kursus')) return '🎓';
-            if (n.includes('digital') || n.includes('online')) return '💻';
+            if (n.includes('sehat') || n.includes('klinik')) return '⚕️';
+            if (n.includes('jual') || n.includes('beli') || n.includes('dagang')) return '🛍️';
+            if (n.includes('properti') || n.includes('rumah')) return '🏢';
+            if (n.includes('wisata') || n.includes('jalan')) return '🏖️';
             return '📦';
         }
 
@@ -288,10 +309,11 @@
             if (w.includes('batam')) return '⚓';
             if (w.includes('bintan')) return '🏖️';
             if (w.includes('karimun')) return '🚢';
+            if (w.includes('anambas') || w.includes('natuna')) return '🏝️';
             return '📍';
         }
 
-        // Susun Baris Detail Kategori Pasar + Jumlah Angkanya
+        // 1. Susun Rincian Kategori
         let htmlKategori = "";
         let sortKategori = Object.keys(petaKategori).sort((a,b) => petaKategori[b] - petaKategori[a]);
         sortKategori.forEach(k => {
@@ -304,7 +326,7 @@
         });
         document.getElementById('detail-kategori-list').innerHTML = htmlKategori;
 
-        // Susun Baris Detail Wilayah Pasar + Jumlah Angkanya
+        // 2. Susun Rincian Wilayah
         let htmlWilayah = "";
         let sortWilayah = Object.keys(petaWilayah).sort((a,b) => petaWilayah[b] - petaWilayah[a]);
         sortWilayah.forEach(w => {
@@ -316,6 +338,38 @@
                 </div>`;
         });
         document.getElementById('detail-wilayah-list').innerHTML = htmlWilayah;
+
+        // 3. BARU 🔥: Susun Rincian Irisan Kategori di Setiap Wilayah + Total Keseluruhan
+        let htmlCrossTab = "";
+        let sortIrisan = Object.keys(petaIrisanKombinasi).sort((a, b) => petaIrisanKombinasi[b] - petaIrisanKombinasi[a]);
+        
+        sortIrisan.forEach(kunci => {
+            let komponen = kunci.split(" @ ");
+            let namaKat = komponen[0];
+            let namaWil = komponen[1];
+            let jumlah = petaIrisanKombinasi[kunci];
+            
+            htmlCrossTab += `
+                <div class="stat-row" style="background: #fafafa;">
+                    <div class="stat-label-with-icon">
+                        <span>${dapatkanIkonKategori(namaKat)}</span> 
+                        <span style="font-weight:600;">${namaKat}</span> 
+                        <span style="color:#777; font-size:11px;">di ${namaWil}</span>
+                    </div>
+                    <span class="stat-count" style="color:#27ae60;">${jumlah} UKM</span>
+                </div>`;
+        });
+
+        // Bagian baris total akhir kumulatif di bawah matriks
+        htmlCrossTab += `
+            <div class="stat-row" style="background: #f3e5ab; margin-top: 8px; border-radius: 4px; padding: 10px 6px;">
+                <div class="stat-label-with-icon" style="font-weight: bold; color: var(--primary-color);">
+                    <span>📊</span> <span>TOTAL KESELURUHAN PASAR</span>
+                </div>
+                <span class="stat-count" style="color: var(--primary-color); font-size: 15px;">${total} Data</span>
+            </div>`;
+            
+        document.getElementById('detail-cross-tab-list').innerHTML = htmlCrossTab;
 
         // Tampilkan Jendela Pop-up Modal ke layar HP kawan
         document.getElementById('analytics-modal').style.display = 'flex';
