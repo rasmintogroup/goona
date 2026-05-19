@@ -490,7 +490,7 @@ async function tanyaAI() {
         const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
         const kataKunci = semuaKata.slice(0, 3);
 
-        // LOGIKA BARU: Tarik data reguler yang AKTIF atau data PPV yang TAYANG & PUNYA KUOTA
+        // Ambil data reguler yang aktif atau data PPV yang masih punya kuota
         let query = supabase
             .from('konten_goona')
             .select('id, judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan, url_foto, tipe_konten')
@@ -516,20 +516,20 @@ async function tanyaAI() {
                 let kontenPPV = searchData.filter(item => item.tipe_konten === 'ppv');
                 let kontenFAQ = searchData.filter(item => item.kategori === 'FAQ');
 
-                // Jika ada iklan PPV yang cocok, kita acak posisinya lalu batasi maksimal hanya 2 slot iklan saja yang tampil
+                // Jika ada iklan PPV yang cocok, acak posisinya lalu batasi maksimal hanya 2 slot iklan saja
                 if (kontenPPV.length > 0) {
                     kontenPPV.sort(() => 0.5 - Math.random());
                     kontenPPV = kontenPPV.slice(0, 2);
                 }
 
-                // Gabungkan kembali: Tampilkan iklan PPV berbayar di barisan paling depan/atas
+                // Gabungkan kembali: Iklan PPV ditaruh paling atas
                 let hasilAkhirTampil = [...kontenPPV, ...kontenReguler];
 
                 const daftarPembuka = dictionary.failSafeOpen;
                 const pembukaAcak = daftarPembuka[Math.floor(Math.random() * daftarPembuka.length)];
                 appendMessage(pembukaAcak, 'ai-msg');
 
-                // Jika ada data FAQ, tampilkan teks deskripsinya langsung ke ruang chat
+                // Tampilkan FAQ jika ada
                 kontenFAQ.forEach(faq => {
                     appendMessage(faq.deskripsi, 'ai-msg');
                 });
@@ -539,13 +539,32 @@ async function tanyaAI() {
                 let containsCards = false;
                 let idIklanYangTayang = [];
 
+                // =================================================================
+                // LOGIKA JURUS EMPATI JURAGAN GOONA CHAT:
+                // =================================================================
+                // Daftar kata yang dianggap MURNI NAMA LOKASI/WILAYAH SAJA
+                const daftarKataLokasi = [
+                    'tanjungpinang', 'pinang', 'batam', 'bintan', 'karimun', 'lingga', 'anambas', 'natuna',
+                    'center', 'timur', 'barat', 'utara', 'selatan', 'kota', 'kabupaten', 'kecamatan', 'kelurahan'
+                ];
+                
+                // Cek apakah ketikan user mengandung kata spesifik (di luar daftar lokasi di atas)
+                let isSpesifik = semuaKata.some(kata => !daftarKataLokasi.includes(kata));
+                // =================================================================
+
                 hasilAkhirTampil.forEach(item => {
                     if (item.kategori !== 'FAQ') {
                         containsCards = true;
                         
-                        // Catat ID dari iklan PPV yang sukses dirender ke layar user
+                        // LOGIKA PINTAR: Atur label emas dan siapkan potong kuota HANYA JIKA pencarian spesifik
+                        let pakaiEmas = false;
                         if (item.tipe_konten === 'ppv') {
-                            idIklanYangTayang.push(item.id);
+                            if (isSpesifik) {
+                                idIklanYangTayang.push(item.id); // Masuk daftar potong kuota via RPC
+                                pakaiEmas = true;                // Mengaktifkan bingkai emas premium
+                            } else {
+                                pakaiEmas = false;               // Jadi kartu reguler biasa (Bonus tampil gratis demi kenyamanan user)
+                            }
                         }
                         
                         let cleanPhone = item.whatsapp ? item.whatsapp.replace(/[^0-9]/g, '') : '';
@@ -573,8 +592,8 @@ async function tanyaAI() {
                             komponenFoto = `<img src="${item.url_foto}" class="card-img" alt="${item.judul}" loading="lazy">`;
                         }
 
-                        // Tambahkan class penanda khusus jika tipenya PPV (untuk variasi gaya visual/opsional)
-                        const ppvClass = item.tipe_konten === 'ppv' ? 'ppv-premium' : '';
+                        // Menentukan kelas CSS kartu berdasarkan filter pakaiEmas tadi
+                        const ppvClass = pakaiEmas ? 'ppv-premium' : '';
 
                         cardWrapper.innerHTML += `
                             <div class="jasa-card ${ppvClass}">
@@ -595,7 +614,7 @@ async function tanyaAI() {
                     chatHistory.appendChild(cardWrapper);
                 }
 
-                // EKSEKUSI PEMOTONGAN KUOTA: Kirim sinyal update total_tayang ke Supabase
+                // EKSEKUSI PEMOTONGAN KUOTA: Panggil RPC database HANYA JIKA idIklanYangTayang terisi (Pencarian spesifik)
                 if (idIklanYangTayang.length > 0) {
                     const { error: rpcError } = await supabase.rpc('hitung_impresi_iklan', { iklan_ids: idIklanYangTayang });
                     if (rpcError) console.error("Gagal memperbarui impresi iklan:", rpcError);
