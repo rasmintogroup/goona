@@ -277,7 +277,7 @@
         <div class="status-message">Memuat seluruh data cuci mata...</div>
     </div>
 
-   <script type="module">
+  <script type="module">
         const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
         
@@ -286,15 +286,20 @@
 
         const fallbackImageSVG = `<svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11" stroke="#bda38f" stroke-width="1.8" stroke-linecap="round"/><rect x="3" y="9" width="18" height="12" rx="3" fill="#fcfaf7" stroke="#bda38f" stroke-width="1.8"/></svg>`;
 
-        // Event listener untuk mendeteksi perubahan input user
         document.getElementById('searchBox').addEventListener('input', fetchMarketplaceData);
         document.getElementById('filterKategori').addEventListener('change', fetchMarketplaceData);
         document.getElementById('filterWilayah').addEventListener('change', fetchMarketplaceData);
 
-        // Fungsi bantu membuat susunan HTML Kartu Iklan
-        function buatElemenKartu(item) {
+        function buatElemenKartu(item, apakahSewaSlotAktif = false) {
             const card = document.createElement('div');
             card.className = 'item-card';
+            
+            // Beri tanda visual premium tipis pada border/background jika status sewa slotnya aktif hari ini
+            if (apakahSewaSlotAktif) {
+                card.style.borderColor = '#e4a853';
+                card.style.background = '#fffdf9';
+            }
+
             card.onclick = function(e) {
                 if (e.target.tagName.toLowerCase() !== 'a') {
                     toggleDropdown(this);
@@ -314,6 +319,9 @@
             }
 
             const namaKotaBersih = (item.kabupaten_kota || 'Kepri').replace('Kota ', '').replace('Kabupaten ', '');
+            
+            // Tampilkan badge bintang khusus untuk menandai lapak sewa slot berbayar
+            const labelPremium = apakahSewaSlotAktif ? `<span class="item-badge" style="background:#8B5A2B; color:white;">⭐ Rekomendasi</span>` : '';
 
             card.innerHTML = `
                 <div class="item-main">
@@ -323,6 +331,7 @@
                     <div class="item-price">${displayPrice}</div>
                     <div class="item-title">${item.judul || 'Tanpa Judul'}</div>
                     <div class="item-meta-row">
+                        ${labelPremium}
                         <span class="item-badge">${item.kategori || 'UMUM'}</span>
                         <span class="item-location">📍 ${namaKotaBersih} ${item.kecamatan ? ('- ' + item.kecamatan) : ''}</span>
                     </div>
@@ -336,17 +345,18 @@
         async function fetchMarketplaceData() {
             const searchQuery = document.getElementById('searchBox').value.trim();
             const kategoriValue = document.getElementById('filterKategori').value;
-            const wilayahValue = document.getElementById('filterWilayah').value; // Ini filter yang ditekan user
+            const wilayahValue = document.getElementById('filterWilayah').value;
             const feedContainer = document.getElementById('marketplaceFeed');
 
             try {
-                // Tarik data iklan aktif (Reguler maupun PPV yang kuotanya masih ada)
+                // Ambil data yang berstatus aktif reguler, atau data slot berbayar (tipe_konten disesuaikan jika ada pembeda lainnya)
                 let query = supabaseClient
                     .from('konten_goona')
                     .select('*')
-                    .or('and(status.eq.aktif,tipe_konten.eq.reguler),and(status_tayang.eq.true,tipe_konten.eq.ppv,sisa_kuota_ppv.gt.0)');
+                    .eq('status', 'aktif'); // Mengambil semua data yang aktif
 
                 if (kategoriValue !== "") query = query.eq('kategori', kategoriValue);
+                if (wilayahValue !== "") query = query.eq('kabupaten_kota', wilayahValue);
                 if (searchQuery !== "") query = query.or(`judul.ilike.*${searchQuery}*,deskripsi.ilike.*${searchQuery}*,kecamatan.ilike.*${searchQuery}*`);
 
                 const { data: semuaData, error } = await query;
@@ -355,60 +365,64 @@
                 feedContainer.innerHTML = '';
 
                 if (!semuaData || semuaData.length === 0) {
-                    feedContainer.innerHTML = '<div class="status-message">Tidak ada data yang cocok.</div>';
+                    feedContainer.innerHTML = '<div class="status-message">Tidak ada data yang cocok dengan pilihan Anda.</div>';
                     return;
                 }
 
-                // Acak urutan data agar penayangan iklan adil setiap di-refresh
-                const dataAcak = semuaData.sort(() => 0.5 - Math.random());
+                // Ambil string tanggal hari ini format YYYY-MM-DD sesuai zona waktu lokal untuk dibandingkan dengan Supabase date
+                const hariIniStr = new Date().toISOString().split('T')[0];
 
-                // 🚀 SLOT 1: 6 Slot Iklan Nasional (Selalu Muncul di Paling Atas)
-                // Kita ambil 6 item pertama dari hasil data acak sebagai perwakilan nasional
-                const slotNasional = dataAcak.slice(0, 6);
+                // 🚀 PROSES SELEKSI OTOMATIS: SEWA SLOT VS REGULER
+                const kumpulanSewaSlotAktif = [];
+                const kumpulanRegulerBiasa = [];
 
-                // Tampilkan 6 Slot Nasional ke Halaman
-                if (slotNasional.length > 0) {
-                    slotNasional.forEach(item => {
-                        feedContainer.appendChild(buatElemenKartu(item));
+                semuaData.forEach(item => {
+                    // Jika ada tanggal_mulai & tanggal_selesai, dan hari ini berada di dalam jangka waktu sewa tersebut
+                    if (item.tanggal_mulai && item.tanggal_selesai && 
+                        hariIniStr >= item.tanggal_mulai && hariIniStr <= item.tanggal_selesai) {
+                        kumpulanSewaSlotAktif.push(item);
+                    } else {
+                        kumpulanRegulerBiasa.push(item);
+                    }
+                });
+
+                // Acak urutan masing-masing grup agar penayangan iklan adil setiap di-refresh kawan
+                const slotSewaAcak = kumpulanSewaSlotAktif.sort(() => 0.5 - Math.random());
+                const regulerAcak = kumpulanRegulerBiasa.sort(() => 0.5 - Math.random());
+
+                // Ambil maksimal 6 untuk menduduki barisan slot utama paling atas
+                const enamSlotTeratas = slotSewaAcak.slice(0, 6);
+
+                // Jika ada sisa iklan sewa slot yang melimpah (lebih dari 6), gabungkan sisanya ke kelompok reguler bawah
+                const sisaSlotSewa = slotSewaAcak.slice(6);
+                const seluruhKontenBawah = [...sisaSlotSewa, ...regulerAcak];
+
+                // Hitung sisa kapasitas kosong di 6 slot teratas
+                const slotKosongTeratas = 6 - enamSlotTeratas.length;
+
+                // 1. RENDER SLOT UTAMA (Bisa berisi iklan sewa slot aktif penuh, atau campuran reguler)
+                enamSlotTeratas.forEach(item => {
+                    feedContainer.appendChild(buatElemenKartu(item, true));
+                });
+
+                // Jika pengiklan sewa slot kurang dari 6, ambil dari konten reguler biasa untuk menutupi/mengisi slot kosong teratas
+                if (slotKosongTeratas > 0 && seluruhKontenBawah.length > 0) {
+                    const penambalSlot = seluruhKontenBawah.splice(0, slotKosongTeratas);
+                    penambalSlot.forEach(item => {
+                        feedContainer.appendChild(buatElemenKartu(item, false));
                     });
                 }
 
-                // 🚀 SLOT 2: 6 Slot Kabupaten/Kota (HANYA MUNCUL JIKA FILTER WILAYAH DITEKAN/DIPILIH)
-                if (wilayahValue !== "") {
-                    // Filter data yang kabupaten_kota-nya COCOK dengan pilihan user & BUKAN bagian dari 6 slot nasional di atas
-                    const kandidatLokal = dataAcak.filter(item => 
-                        item.kabupaten_kota === wilayahValue && !slotNasional.some(nas => nas.id === item.id)
-                    );
-
-                    // Ambil maksimal hanya 6 slot lokal
-                    const slotLokal = kandidatLokal.slice(0, 6);
-
-                    // Jika ada data lokal yang cocok, tampilkan di bawah slot nasional beserta judul pembatasnya
-                    if (slotLokal.length > 0) {
-                        const separator = document.createElement('div');
-                        separator.className = 'status-message';
-                        separator.style.padding = '20px 0 5px 0';
-                        separator.style.fontWeight = 'bold';
-                        separator.style.color = '#8B5A2B';
-                        separator.innerHTML = `✨ Iklan di ${wilayahValue.replace('Kota ', '').replace('Kabupaten ', '')} ✨`;
-                        feedContainer.appendChild(separator);
-
-                        slotLokal.forEach(item => {
-                            feedContainer.appendChild(buatElemenKartu(item));
-                        });
-                    } else {
-                        // Jika filter ditekan tapi kebetulan data wilayah itu kosong
-                        const noLokalMessage = document.createElement('div');
-                        noLokalMessage.className = 'status-message';
-                        noLokalMessage.style.padding = '20px 15px';
-                        noLokalMessage.innerHTML = `Belum ada info khusus untuk wilayah ${wilayahValue.replace('Kota ', '').replace('Kabupaten ', '')}.`;
-                        feedContainer.appendChild(noLokalMessage);
-                    }
+                // 2. RENDER SISA RATUSAN RIBU KONTEN REGULER DI BAWAHNYA TANPA BATAS
+                if (seluruhKontenBawah.length > 0) {
+                    seluruhKontenBawah.forEach(item => {
+                        feedContainer.appendChild(buatElemenKartu(item, false));
+                    });
                 }
 
             } catch (error) {
                 console.error('Koneksi Supabase Bermasalah:', error.message);
-                feedContainer.innerHTML = '<div class="status-message">Gagal memuat info cuci mata.</div>';
+                feedContainer.innerHTML = '<div class="status-message">Gagal memuat data cuci mata kawan.</div>';
             }
         }
 
@@ -423,6 +437,5 @@
             }
         }
 
-        // Panggil pertama kali saat halaman dibuka (Awalnya hanya meluncurkan 6 slot nasional saja)
         fetchMarketplaceData();
     </script>
