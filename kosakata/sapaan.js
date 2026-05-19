@@ -106,6 +106,7 @@ export const modul1Variations = [
     "Hai! Boleh saya tahu nama panggilan Kakak?",
     "Halo! Selamat datang, siapa nama panggilan Kakak?",
     "Hai! Nama panggilan Kakak siapa?"
+    
     // 101-125: Sapaan penuh rasa penasaran yang manis
     "Halo! Saya penasaran nih, siapa sih nama panggilan Kakak yang bisa saya sapa?",
     "Hai! Senang sekali Kakak mampir. Boleh bagi tahu nama panggilan Kakak?",
@@ -212,7 +213,7 @@ export const modul1Variations = [
     "Hai! Senang kenal Kakak. Siapa nama panggilan Kakak?",
     "Halo! Selamat beraktivitas. Nama panggilan Kakak siapa?",
     "Hai! Terima kasih sudah bergabung. Siapa nama panggilan Kakak?",
-    "Halo! Senang sekali. Nama panggilan Kakak siapa?"
+    "Halo! Senang sekali. Nama panggilan Kakak siapa?",
     ]
 ];
 
@@ -651,6 +652,6 @@ export const modul3Variations = [
     "Halo Kak [Nama]! Saya pamit, silakan lanjut aktivitasnya ya.",
     "Hai Kak [Nama]! Terima kasih sudah memberikan masukan.",
     "Halo Kak [Nama]! Semoga hari ini sangat berkesan buat Kakak.",
-    "Hai Kak [Nama]! Sampai jumpa, semoga sukses terus!"
+    "Hai Kak [Nama]! Sampai jumpa, semoga sukses terus!",
     ]
 ];
