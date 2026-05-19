@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Goona Admin - Final Stable</title>
+    <title>Goona Admin - Mobile Optimized</title>
     <link class="icon" type="image/png" href="Pavicon_goona.png">
     <style>
         :root { 
@@ -195,6 +195,7 @@
         .board-table td { padding: 12px 10px; border-bottom: 1px solid #f3e8da; color: #3E2723; }
         .board-table tr:last-child td { border-bottom: none; }
 
+        /* KUNCI UTAMA RESPONSIVE MOBILE - PERBAIKAN STRUKTUR WARNA & VISIBILITAS KARTU */
         @media (max-width: 768px) {
             body { padding: 8px; }
             .container { padding: 12px; border-radius: 15px; }
@@ -205,20 +206,21 @@
             thead { display: none; }
             
             tr {
-                background: #ffffff;
-                border: 1.5px solid var(--light-brown);
-                padding: 12px;
-                margin-bottom: 12px;
+                background: #ffffff !important;
+                border: 2px solid var(--light-brown) !important;
+                padding: 14px;
+                margin-bottom: 16px;
                 border-radius: 16px;
-                box-shadow: 0 4px 10px rgba(139, 69, 19, 0.03);
+                box-shadow: 0 5px 12px rgba(139, 69, 19, 0.06);
             }
 
             td {
-                padding: 6px 0;
+                padding: 8px 0;
                 border-bottom: 1px dashed #e2e8f0;
                 text-align: left !important;
                 display: block;
                 width: 100% !important;
+                color: #3E2723 !important; /* Memastikan font konten di HP tidak berubah putih */
             }
 
             td::before {
@@ -228,17 +230,18 @@
                 font-size: 11px;
                 text-transform: uppercase;
                 display: block;
-                margin-bottom: 2px;
+                margin-bottom: 4px;
                 letter-spacing: 0.5px;
             }
 
             td:last-child {
                 border-bottom: none;
-                padding-top: 10px;
+                padding-top: 12px;
                 display: flex;
                 flex-direction: row;
                 justify-content: flex-end;
-                gap: 8px;
+                align-items: center;
+                gap: 10px;
             }
             td:last-child::before { display: none; }
         }
@@ -367,7 +370,7 @@
         if(pass === 'goona2026') {
             document.getElementById('login-panel').style.display = 'none';
             document.getElementById('admin-panel').style.display = 'block';
-            document.getElementById('isi-tabel').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Memuat data awal...</td></tr>';
+            document.getElementById('isi-tabel').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:#3E2723;">Memuat data awal...</td></tr>';
             panggilDatabase();
         } else { alert('Password Salah!'); }
     }
@@ -459,7 +462,6 @@
         }
     }
 
-    // 🚀 SAKRAL: FUNGSI UTAMA YANG SUDAH DIPERBAIKI TOTAL KAWAN 🚀
     function cetakTabelUtama(dataList) {
         const listBody = document.getElementById('isi-tabel');
         listBody.innerHTML = '';
@@ -472,24 +474,23 @@
             let lokasiInfo = item.kabupaten_kota || '-';
             if(item.kecamatan) lokasiInfo += ` (${item.kecamatan})`;
 
-            // Failsafe pencegah crash jika data status bernilai NULL di Supabase
-            const statusBersih = item.status ? item.status.toString() : 'PENDING';
+            const statusBersih = item.status ? item.status.toString().toLowerCase() : 'pending';
 
-            // PERBAIKAN UTAMA: Tanda kutip dilepas dari item.id agar dibaca sebagai object id murni oleh Supabase
+            // PERBAIKAN RESPONSIVE: Penambahan data-label di setiap <td> agar teks tampil utuh di HP kawan!
             const barisHtml = `
                 <tr>
                     <td data-label="Layanan" class="text-left">
-                        <span style="font-size:16px; font-weight:bold; color:#3E2723;">${item.judul || '-'}</span>
-                        <div style="font-size:12px; color:#795548; margin-top:4px; font-weight:500;">${item.kategori || '-'} | ${lokasiInfo}</div>
+                        <span style="font-size:16px; font-weight:bold; color:#3E2723; display:inline-block; margin-bottom:2px;">${item.judul || '-'}</span>
+                        <div style="font-size:13px; color:#5d4037; font-weight:600;">${item.kategori || '-'} | ${lokasiInfo}</div>
                     </td>
                     <td data-label="WhatsApp" class="text-center">
                         <a href="https://wa.me/${waFinal}" target="_blank" class="wa-link">${waNum}</a>
                     </td>
-                    <td data-label="Status" class="text-center" style="color:${statusBersih === 'aktif' ? 'green' : 'orange'}; font-weight:bold; letter-spacing:0.5px;">
+                    <td data-label="Status" class="text-center" style="color:${statusBersih === 'aktif' ? 'var(--success-green)' : '#e67e22'}; font-weight:bold; letter-spacing:0.5px;">
                         ${statusBersih.toUpperCase()}
                     </td>
                     <td data-label="Aksi" class="text-center">
-                        <div style="display:flex; gap:8px; justify-content:center;">
+                        <div style="display:flex; gap:8px; justify-content:center; width:100%;">
                             ${statusBersih === 'pending' ? `<button onclick="window.eksekusiAktifkan(${item.id}, this)" class="btn btn-ok">OK</button>` : ''}
                             <button onclick="window.eksekusiHapus(${item.id}, this)" class="btn btn-hapus">Delete</button>
                         </div>
@@ -510,7 +511,7 @@
             if (error) throw error;
             panggilDatabase();
         } catch (err) {
-            alert("Gagal mengaktifkan data kawan! Periksa koneksi internet atau tipe kolom ID.");
+            alert("Gagal mengaktifkan data kawan!");
             elemenTombol.innerText = "OK"; 
             elemenTombol.disabled = false;
         }
