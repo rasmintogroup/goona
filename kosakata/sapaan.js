@@ -213,6 +213,7 @@ export const modul1Variations = [
     "Halo! Selamat beraktivitas. Nama panggilan Kakak siapa?",
     "Hai! Terima kasih sudah bergabung. Siapa nama panggilan Kakak?",
     "Halo! Senang sekali. Nama panggilan Kakak siapa?"
+    ]
 ];
 
 export const modul2Variations = [
@@ -651,4 +652,5 @@ export const modul3Variations = [
     "Hai Kak [Nama]! Terima kasih sudah memberikan masukan.",
     "Halo Kak [Nama]! Semoga hari ini sangat berkesan buat Kakak.",
     "Hai Kak [Nama]! Sampai jumpa, semoga sukses terus!"
+    ]
 ];
