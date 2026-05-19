@@ -110,7 +110,7 @@ export const dictionary = {
     "Hai kawan! Semoga rangkuman ini memberikan dampak positif bagi Anda, saya akan selalu siap membantu setiap kali Anda memerlukan bantuan pencarian informasi di masa depan:",
     "Kabar terakhir: Informasi ini telah saya siapkan dengan sebaik-baiknya, silakan dinikmati hasilnya dan semoga Anda mendapatkan banyak inspirasi dari data di bawah ini ya:",
     "Yey, semuanya sudah di tangan Anda! Sekarang saatnya bagi Anda untuk menggunakan informasi ini agar Anda dapat menjadi versi terbaik dari diri Anda setiap harinya nanti:",
-    "Asyik, mari kita akhiri sesi ini dengan sukses! Ini adalah rangkuman data terakhir untuk hari ini, semoga memberikan manfaat yang luar biasa bagi semua agenda Anda ke depannya:"
+    "Asyik, mari kita akhiri sesi ini dengan sukses! Ini adalah rangkuman data terakhir untuk hari ini, semoga memberikan manfaat yang luar biasa bagi semua agenda Anda ke depannya:",
 // 101-125: Deskriptif & Menenangkan
     "Halo Goonity! Tidak perlu terburu-buru, saya telah merangkum semua informasi yang Anda butuhkan dengan sangat rapi agar Anda bisa membacanya dengan santai dan nyaman:",
     "Hai kawan! Saya tahu mencari informasi yang tepat bisa melelahkan, oleh karena itu saya sudah melakukan semua pekerjaan berat tersebut dan menyajikan hasilnya di sini:",
@@ -326,7 +326,7 @@ export const dictionary = {
     "Terima kasih sudah mempercayai saya sebagai partner pencarian Anda! Jika ada yang kurang jelas, silakan tanyakan kembali, saya akan selalu berusaha memberikan penjelasan yang paling lengkap dan bermanfaat bagi Anda.",
     "Semoga informasi ini membuat urusan Anda jauh lebih mudah hari ini! Jika nanti butuh bantuan lagi, jangan lupa untuk menuliskan apa yang Anda cari, saya siap membantu Anda dua puluh empat jam penuh.",
     "Jika Anda merasa informasi ini belum maksimal, tolong tuliskan detail lokasi atau jenis jasa yang lebih spesifik minimal tiga kata, nanti saya akan saring kembali agar Anda mendapatkan hasil yang jauh lebih akurat.",
-    "Terima kasih kawan! Mari kita tutup sesi ini dengan catatan positif, dan jangan ragu untuk segera kembali bertanya jika Anda butuh info jasa atau hal menarik lainnya di sekitar lokasi Anda saat ini."
+    "Terima kasih kawan! Mari kita tutup sesi ini dengan catatan positif, dan jangan ragu untuk segera kembali bertanya jika Anda butuh info jasa atau hal menarik lainnya di sekitar lokasi Anda saat ini.",
 // 201-225: Pendekatan Penuh Solusi
     "Apakah ada kendala saat membaca informasi di atas? Jika ya, jangan ragu untuk menuliskan kata kunci yang lebih spesifik mengenai lokasi atau jasa minimal tiga kata agar saya bisa menyaring kembali dengan hasil yang lebih akurat.",
     "Saya ingin memastikan Anda mendapatkan jawaban yang paling tepat. Jika info yang saya berikan masih dirasa kurang, silakan berikan detail tambahan dan saya akan dengan senang hati menyaring kembali datanya khusus untuk Anda.",
@@ -433,5 +433,5 @@ export const dictionary = {
     "Saya akan selalu berusaha agar pencarian Anda menjadi lebih mudah. Jika perlu menyaring kembali info tadi dengan detail minimal tiga kata, sampaikan saja, saya akan membantu dengan senang hati.",
     "Jangan ragu untuk meminta hasil pencarian yang lebih baik. Jika perlu menyaring kembali data tadi dengan instruksi minimal tiga kata, sampaikan saja, saya siap menyajikannya untuk Anda.",
     "Saya selalu siap menjadi asisten pencarian yang dapat diandalkan. Jika perlu menyaring kembali info jasa tadi dengan kriteria minimal tiga kata, silakan sampaikan, saya akan segera membantu.",
-    "Kawan, ingatlah bahwa saya selalu siap membantu Anda sampai mendapatkan yang terbaik. Jika perlu menyaring kembali data tadi dengan instruksi minimal tiga kata, silakan sampaikan kepada saya."
+    "Kawan, ingatlah bahwa saya selalu siap membantu Anda sampai mendapatkan yang terbaik. Jika perlu menyaring kembali data tadi dengan instruksi minimal tiga kata, silakan sampaikan kepada saya.",
 ];
