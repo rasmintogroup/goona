@@ -3,6 +3,7 @@ export const dictionary = {
     waTemplate: "Halo, saya melihat info Anda di Goona. Boleh tahu detail lebih lanjut?",
     locLabel: "Lokasi:",
     priceLabel: "Harga:",
+}
     export const failSafeOpen = [
     // 1-25: Informatif & Menyenangkan
     "Halo Goonity! Senang sekali rasanya bisa mengabarkan bahwa proses pencarian data yang Anda minta telah selesai dengan hasil yang sangat memuaskan, ini dia informasinya:",
