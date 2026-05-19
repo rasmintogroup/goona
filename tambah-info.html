@@ -274,16 +274,15 @@
 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const dataWilayah = {
-            "Kota Batam": ["Batam Kota", "Batu Ampar", "Batu Aji", "Belakang Padang", "Bengkong", "Bulang", "Galang", "Lubuk Baja", "Nongsa", "Sagulung", "Sei Beduk", "Sekupang"],
-            "Kota Tanjungpinang": ["Tanjungpinang Barat", "Tanjungpinang Kota", "Tanjungpinang Timur", "Bukit Bestari"],
-            "Kabupaten Bintan": ["Bintan Pesisir", "Bintan Timur", "Bintan Utara", "Gunung Kijang", "Mantang", "Seri Kuala Lobam", "Tambelan", "Teluk Bintan", "Teluk Sebong", "Toapaya"],
-            "Kabupaten Karimun": ["Belat", "Buru", "Durai", "Karimun", "Kundur", "Kundur Barat", "Kundur Utara", "Meral", "Meral Barat", "Moro", "Selat Gelam", "Tebing", "Ungar"],
-            "Kabupaten Lingga": ["Bakung Serumpun", "Katang Bidare", "Kepulauan Posek", "Lingga", "Lingga Timur", "Lingga Utara", "Pesisir Bukit", "Selayar", "Senayang", "Singkep", "Singkep Barat", "Singkep Pesisir", "Singkep Selatan", "Temiang Pesisir"],
-            "Kabupaten Natuna": ["Bunguran Barat", "Bunguran Batubi", "Bunguran Selatan", "Bunguran Tengah", "Bunguran Timur", "Bunguran Timur Laut", "Bunguran Utara", "Midai", "Pulau Laut", "Pulau Panjang", "Pulau Tiga", "Pulau Tiga Barat", "Serasan", "Serasan Timur", "Suak Midai", "Subi"],
-            "Kabupaten Kepulauan Anambas": ["Jemaja", "Jemaja Barat", "Jemaja Timur", "Kute Siantan", "Palmatak", "Siantan", "Siantan Selatan", "Siantan Tengah", "Siantan Timur", "Siantan Utara"]
-        };
-
+       const dataWilayah = {
+    "Kota Batam": ["Batam Kota", "Batu Ampar", "Batu Aji", "Belakang Padang", "Bengkong", "Bulang", "Galang", "Lubuk Baja", "Nongsa", "Sagulung", "Sei Beduk", "Sekupang"],
+    "Kota Tanjungpinang": ["Tanjungpinang Barat", "Tanjungpinang Kota", "Tanjungpinang Timur", "Bukit Bestari"],
+    "Kabupaten Bintan": ["Bintan Pesisir", "Bintan Timur (Kijang)", "Bintan Utara (Tanjung Uban)", "Gunung Kijang", "Mantang", "Seri Kuala Lobam", "Tambelan", "Teluk Bintan", "Teluk Sebong", "Toapaya"],
+    "Kabupaten Karimun": ["Belat", "Buru", "Durai", "Karimun", "Kundur", "Kundur Barat", "Kundur Utara", "Meral", "Meral Barat", "Moro", "Selat Gelam", "Tebing", "Ungar"],
+    "Kabupaten Lingga": ["Bakung Serumpun", "Katang Bidare", "Kepulauan Posek", "Lingga", "Lingga Timur", "Lingga Utara", "Senayang", "Selayar", "Singkep", "Singkep Barat", "Singkep Pesisir", "Singkep Selatan", "Temiang Pesisir"],
+    "Kabupaten Natuna": ["Bunguran Barat", "Bunguran Batubi", "Bunguran Selatan", "Bunguran Tengah", "Bunguran Timur", "Bunguran Timur Laut", "Bunguran Utara", "Midai", "Pulau Laut", "Pulau Panjang", "Pulau Tiga", "Pulau Tiga Barat", "Serasan", "Serasan Timur", "Suak Midai", "Subi"],
+    "Kabupaten Kepulauan Anambas": ["Jemaja", "Jemaja Barat", "Jemaja Timur", "Kute Siantan", "Palmatak", "Siantan", "Siantan Selatan", "Siantan Tengah", "Siantan Timur", "Siantan Utara"]
+};
         const kabSelect = document.getElementById('kabupaten');
         const kecSelect = document.getElementById('kecamatan');
         const deskripsiInput = document.getElementById('deskripsi');
