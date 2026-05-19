@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Goona Admin Hub + Analytics</title>
+    <title>Goona Admin Hub</title>
     <link rel="icon" type="image/png" href="Pavicon_goona.png">
     
     <style>
         :root {
-            --primary-color: #8B4513;
+            --primary-color: #8B4513; /* Cokelat Khas Goona */
             --background-color: #FDF5E6;
             --card-border-color: #D2B48C;
             --main-text-color: #3E2723;
@@ -21,7 +21,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--background-color);
             color: var(--main-text-color);
             margin: 0;
@@ -56,6 +56,42 @@
 
         #admin-panel { display: none; }
 
+        /* ==================== PANEL BOX ATAS (RANGKUMAN TETAP ADA) ==================== */
+        .header-summary-box {
+            background: #fff8f0;
+            border: 1.5px solid var(--card-border-color);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .summary-text-left {
+            font-size: 13px;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        /* 📊 IKON ANALISIS KHAS GOONA WARNA COKELAT */
+        .btn-goona-analytics {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.35);
+            transition: transform 0.1s ease;
+        }
+        .btn-goona-analytics:active { transform: scale(0.92); }
+
         .btn-sync {
             width: 100%; background-color: #333333; color: #ffffff;
             border: none; padding: 10px; font-size: 13px;
@@ -63,79 +99,58 @@
             margin-bottom: 15px;
         }
 
-        /* PANEL ANALISIS PASAR USER FRIENDLY */
-        .analytics-box {
-            background: #fff8f0;
-            border: 1.5px dashed var(--card-border-color);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 15px;
-            font-size: 12px;
+        /* ==================== STYLE POP-UP JENDELA DETAIL PASAR ==================== */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); display: none;
+            align-items: center; justify-content: center; z-index: 1000;
+            padding: 15px;
+        }
+        
+        .modal-content-box {
+            background: #ffffff; width: 100%; max-width: 400px;
+            border-radius: 14px; border: 2px solid var(--card-border-color);
+            padding: 16px; max-height: 80vh; overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        .analytics-title {
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 8px;
-            text-align: center;
-            text-transform: uppercase;
-            font-size: 13px;
-            border-bottom: 1px solid var(--card-border-color);
-            padding-bottom: 4px;
+        .modal-title {
+            font-weight: bold; color: var(--primary-color);
+            text-align: center; text-transform: uppercase;
+            font-size: 14px; border-bottom: 2px solid var(--card-border-color);
+            padding-bottom: 8px; margin-bottom: 10px;
+        }
+
+        .section-sub-title {
+            font-weight: bold; color: #5c3a21; margin: 12px 0 6px 0;
+            font-size: 11px; text-transform: uppercase; background: #f3e5ab;
+            padding: 4px 8px; border-radius: 5px; display: flex; align-items: center; gap: 6px;
         }
 
         .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px calc(33a) solid #fbf5ef;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 7px 4px; border-bottom: 1px solid #fdf5e6; font-size: 13px;
         }
 
-        .stat-count {
-            font-weight: bold;
-            color: var(--accent-blue);
+        .stat-label-with-icon { display: flex; align-items: center; gap: 8px; }
+        .stat-count { font-weight: bold; color: var(--accent-blue); }
+        
+        .btn-close-modal {
+            width: 100%; background-color: var(--primary-color); color: white;
+            border: none; padding: 11px; font-weight: bold; border-radius: 6px;
+            margin-top: 15px; cursor: pointer; font-size: 13px;
         }
 
+        /* ==================== LIST KARTU DATA DATA UTAMA ==================== */
         .wrapper-list-data { display: flex; flex-direction: column; gap: 12px; }
-
-        .box-card {
-            background: #ffffff;
-            border: 1.5px solid var(--card-border-color);
-            border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-        }
-
-        .row-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 6px;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-
-        .label-side {
-            font-weight: bold; color: #888888;
-            font-size: 10px; text-transform: uppercase;
-            letter-spacing: 0.5px; width: 30%;
-        }
-
+        .box-card { background: #ffffff; border: 1.5px solid var(--card-border-color); border-radius: 8px; padding: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
+        .row-item { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; font-size: 13px; line-height: 1.4; }
+        .label-side { font-weight: bold; color: #888888; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; width: 30%; }
         .value-side { width: 70%; text-align: right; font-weight: 500; word-break: break-word; }
         .value-side.highlight-judul { font-size: 14px; font-weight: bold; color: var(--primary-color); }
         .whatsapp-anchor { color: #25D366; text-decoration: none; font-weight: bold; }
-
-        .footer-action-group {
-            display: flex; gap: 8px; margin-top: 12px;
-            padding-top: 10px; border-top: 1px solid #f0f0f0;
-        }
-
-        .action-control-btn {
-            flex: 1; padding: 9px; border: none; border-radius: 5px;
-            color: white; font-weight: bold; font-size: 12px;
-            cursor: pointer; text-align: center;
-        }
-        
+        .footer-action-group { display: flex; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid #f0f0f0; }
+        .action-control-btn { flex: 1; padding: 9px; border: none; border-radius: 5px; color: white; font-weight: bold; font-size: 12px; cursor: pointer; text-align: center; }
         .color-ok { background-color: var(--success-color); }
         .color-delete { background-color: var(--danger-color); }
     </style>
@@ -150,14 +165,14 @@
     </div>
 
     <div id="admin-panel">
-        <h2 class="title-panel">Manajemen & Analisis Pasar</h2>
+        <h2 class="title-panel">Manajemen & Data Masuk</h2>
         
-        <div class="analytics-box">
-            <div class="analytics-title">📊 Rangkuman Analisis Pasar Goona</div>
-            <div id="stat-total" class="stat-row"><span>Total Pendaftar Masuk:</span> <span class="stat-count">0</span></div>
-            <div id="stat-kategori" class="stat-row"><span>Kategori Terlaris:</span> <span class="stat-count">-</span></div>
-            <div id="stat-wilayah" class="stat-row"><span>Wilayah Dominan:</span> <span class="stat-count">-</span></div>
-            <div id="stat-aktif" class="stat-row"><span>Status Aktif / Pending:</span> <span class="stat-count">0 / 0</span></div>
+        <div class="header-summary-box">
+            <div class="summary-text-left">
+                📈 Total Masuk: <span id="total-pendaftar-badge" style="color:var(--accent-blue)">0 Data</span><br>
+                ⚙️ Status: <span id="aktif-badge" style="color:var(--success-color)">0</span> Aktif / <span id="pending-badge" style="color:var(--warning-color)">0</span> Pending
+            </div>
+            <button class="btn-goona-analytics" onclick="bukaJendelaAnalisisPasar()">📊</button>
         </div>
 
         <button class="btn-sync" onclick="sinkronisasiDataSupabase()">🔄 Sinkronisasi Ulang Data</button>
@@ -165,9 +180,24 @@
     </div>
 </div>
 
+<div id="analytics-modal" class="modal-overlay">
+    <div class="modal-content-box">
+        <div class="modal-title">🎯 Analisis Detail Pasar Goona</div>
+        
+        <div class="section-sub-title">🛍️ Rincian Angka Kategori Pasar</div>
+        <div id="detail-kategori-list">🕵️ Membaca rumpun kategori...</div>
+
+        <div class="section-sub-title">📍 Rincian Angka Sebaran Wilayah</div>
+        <div id="detail-wilayah-list">Membaca pemetaan wilayah...</div>
+
+        <button class="btn-close-modal" onclick="tutupJendelaAnalisisPasar()">Tutup Detail</button>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
     let clientSupabaseInstance;
+    let dataPasarTerakhir = [];
     const INSTANCE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
     const PUBLIC_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
 
@@ -200,49 +230,99 @@
 
             if (error) throw error;
             
-            // Jalankan kalkulator analisis pasar internal kawan
-            hitungAnalisisPasarEksternal(data);
-            
+            dataPasarTerakhir = data; // Amankan ke memori untuk dianalisis di jendela popup
+            perbaruiRingkasanAtas(data);
             bikinKomponenCardUI(data);
         } catch (err) {
-            targetView.innerHTML = "Gagal memuat data: " + err.message;
+            targetView.innerHTML = "Gagal memuat data kawan: " + err.message;
         }
     }
 
-    // FUNGSI PENGGANTI IKON ANALISIS YANG HILANG
-    function hitungAnalisisPasarEksternal(dataArray) {
-        if(!dataArray || dataArray.length === 0) return;
-
+    function perbaruiRingkasanAtas(dataArray) {
         let total = dataArray.length;
         let aktifCount = 0;
         let pendingCount = 0;
+
+        dataArray.forEach(item => {
+            let st = item.status ? item.status.toLowerCase() : 'pending';
+            if(st === 'aktif') aktifCount++; else pendingCount++;
+        });
+
+        document.getElementById('total-pendaftar-badge').innerText = `${total} Data`;
+        document.getElementById('aktif-badge').innerText = aktifCount;
+        document.getElementById('pending-badge').innerText = pendingCount;
+    }
+
+    // ==================== ENGINE DETEKSI DETAIL PASAR SAAT IKON COKELAT DIKLIK ====================
+    function bukaJendelaAnalisisPasar() {
+        if(dataPasarTerakhir.length === 0) { alert("Data pasar kosong atau belum termuat kawan!"); return; }
+        
+        let total = dataPasarTerakhir.length;
         let petaKategori = {};
         let petaWilayah = {};
 
-        dataArray.forEach(item => {
-            // Hitung Status
-            let st = item.status ? item.status.toLowerCase() : 'pending';
-            if(st === 'aktif') aktifCount++; else pendingCount++;
-
-            // Hitung Kategori
-            let kat = item.kategori || 'Lainnya';
+        dataPasarTerakhir.forEach(item => {
+            let kat = item.kategori ? item.kategori.trim() : 'Lainnya';
             petaKategori[kat] = (petaKategori[kat] || 0) + 1;
 
-            // Hitung Wilayah
-            let wil = item.kabupaten_kota || 'Tidak Diketahui';
+            let wil = item.kabupaten_kota ? item.kabupaten_kota.trim() : 'Tidak Diketahui';
             petaWilayah[wil] = (petaWilayah[wil] || 0) + 1;
         });
 
-        // Cari Kategori Terbanyak
-        let topKat = Object.keys(petaKategori).reduce((a, b) => petaKategori[a] > petaKategori[b] ? a : b);
-        // Cari Wilayah Terbanyak
-        let topWil = Object.keys(petaWilayah).reduce((a, b) => petaWilayah[a] > petaWilayah[b] ? a : b);
+        // Penentu ikon khas kategori
+        function dapatkanIkonKategori(namaKategori) {
+            let n = namaKategori.toLowerCase();
+            if (n.includes('kuliner') || n.includes('makanan') || n.includes('minuman') || n.includes('snack')) return '🍔';
+            if (n.includes('jasa') || n.includes('servis') || n.includes('akupunktur')) return '🛠️';
+            if (n.includes('pakaian') || n.includes('fashion') || n.includes('baju')) return '👕';
+            if (n.includes('sehat') || n.includes('klinik') || n.includes('medis')) return '⚕️';
+            if (n.includes('edukasi') || n.includes('belajar') || n.includes('kursus')) return '🎓';
+            if (n.includes('digital') || n.includes('online')) return '💻';
+            return '📦';
+        }
 
-        // Cetak otomatis ke Panel Atas UI Admin
-        document.getElementById('stat-total').innerHTML = `<span>Total Pendaftar Masuk:</span> <span class="stat-count">${total} Data</span>`;
-        document.getElementById('stat-kategori').innerHTML = `<span>Kategori Terlaris:</span> <span class="stat-count">${topKat} (${petaKategori[topKat]} UKM)</span>`;
-        document.getElementById('stat-wilayah').innerHTML = `<span>Wilayah Dominan:</span> <span class="stat-count">${topWil} (${petaWilayah[topWil]} Data)</span>`;
-        document.getElementById('stat-aktif').innerHTML = `<span>Status Aktif / Pending:</span> <span class="stat-count" style="color:var(--success-color)">${aktifCount}</span> / <span class="stat-count" style="color:var(--warning-color)">${pendingCount}</span>`;
+        // Penentu ikon khas wilayah
+        function dapatkanIkonWilayah(namaWilayah) {
+            let w = namaWilayah.toLowerCase();
+            if (w.includes('pinang')) return '🏛️';
+            if (w.includes('batam')) return '⚓';
+            if (w.includes('bintan')) return '🏖️';
+            if (w.includes('karimun')) return '🚢';
+            return '📍';
+        }
+
+        // Susun Baris Detail Kategori Pasar + Jumlah Angkanya
+        let htmlKategori = "";
+        let sortKategori = Object.keys(petaKategori).sort((a,b) => petaKategori[b] - petaKategori[a]);
+        sortKategori.forEach(k => {
+            let persen = ((petaKategori[k] / total) * 100).toFixed(0);
+            htmlKategori += `
+                <div class="stat-row">
+                    <div class="stat-label-with-icon"><span>${dapatkanIkonKategori(k)}</span> <span>${k}</span></div>
+                    <span class="stat-count">${petaKategori[k]} UKM <span style="color:gray; font-weight:normal; font-size:11px;">(${persen}%)</span></span>
+                </div>`;
+        });
+        document.getElementById('detail-kategori-list').innerHTML = htmlKategori;
+
+        // Susun Baris Detail Wilayah Pasar + Jumlah Angkanya
+        let htmlWilayah = "";
+        let sortWilayah = Object.keys(petaWilayah).sort((a,b) => petaWilayah[b] - petaWilayah[a]);
+        sortWilayah.forEach(w => {
+            let persen = ((petaWilayah[w] / total) * 100).toFixed(0);
+            htmlWilayah += `
+                <div class="stat-row">
+                    <div class="stat-label-with-icon"><span>${dapatkanIkonWilayah(w)}</span> <span>${w}</span></div>
+                    <span class="stat-count" style="color:#e67e22">${petaWilayah[w]} Data <span style="color:gray; font-weight:normal; font-size:11px;">(${persen}%)</span></span>
+                </div>`;
+        });
+        document.getElementById('detail-wilayah-list').innerHTML = htmlWilayah;
+
+        // Tampilkan Jendela Pop-up Modal ke layar HP kawan
+        document.getElementById('analytics-modal').style.display = 'flex';
+    }
+
+    function tutupJendelaAnalisisPasar() {
+        document.getElementById('analytics-modal').style.display = 'none';
     }
 
     function bikinKomponenCardUI(arrayData) {
@@ -291,23 +371,23 @@
     }
 
     async function prosesUpdateStatusKeSupabase(rowId, buttonElement) {
-        if (!confirm("Ubah status data ini menjadi AKTIF?")) return;
+        if (!confirm("Ubah status data ini menjadi AKTIF kawan?")) return;
         buttonElement.innerText = "⏳..."; buttonElement.disabled = true;
         try {
             const { error } = await clientSupabaseInstance.from('konten_goona').update({ status: 'aktif' }).eq('id', rowId);
             if (error) throw error;
             sinkronisasiDataSupabase();
-        } catch (err) { alert("Gagal: " + err.message); buttonElement.innerText = "OK"; buttonElement.disabled = false; }
+        } catch (err) { alert("Gagal memperbarui status: " + err.message); buttonElement.innerText = "OK"; buttonElement.disabled = false; }
     }
 
     async function prosesDeleteDataDariSupabase(rowId, buttonElement) {
-        if (!confirm("Hapus data ini secara permanen?")) return;
+        if (!confirm("Hapus data ini secara permanen dari server kawan?")) return;
         buttonElement.innerText = "⏳..."; buttonElement.disabled = true;
         try {
             const { error } = await clientSupabaseInstance.from('konten_goona').delete().eq('id', rowId);
             if (error) throw error;
             sinkronisasiDataSupabase();
-        } catch (err) { alert("Gagal: " + err.message); buttonElement.innerText = "Delete"; buttonElement.disabled = false; }
+        } catch (err) { alert("Gagal menghapus data: " + err.message); buttonElement.innerText = "Delete"; buttonElement.disabled = false; }
     }
 </script>
 </body>
