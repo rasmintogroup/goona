@@ -188,6 +188,28 @@
         }
         .btn-save-row { background-color: var(--accent-blue); }
         .btn-delete-row { background-color: var(--danger-color); }
+        /* 1. Membuat Header Tetap (Sticky) */
+    .supabase-like-table {
+        border-collapse: separate; /* Penting untuk sticky */
+        border-spacing: 0;
+    }
+
+    .supabase-like-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: #f8f9fa; /* Warna latar agar tidak tembus */
+        box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1);
+    }
+
+    /* 2. Memperbaiki Scrollbar agar terlihat di atas & bawah */
+    .table-responsive-wrapper {
+        max-height: 70vh; /* Membatasi tinggi tabel agar header bisa sticky */
+        overflow-y: auto; /* Scroll vertikal jika data banyak */
+        overflow-x: auto; /* Scroll horizontal untuk kolom */
+        border: 1px solid var(--card-border-color);
+        border-radius: 8px;
+    }
     </style>
 </head>
 <body>
@@ -211,6 +233,10 @@
         </div>
 
         <button class="btn-sync" onclick="sinkronisasiDataSupabase()">🔄 Sinkronisasi Ulang Data Table</button>
+
+<div id="top-scroll-container" style="overflow-x: auto; overflow-y: hidden; height: 15px; margin-bottom: 5px;">
+    <div id="top-scroll-content" style="width: 2000px;"></div>
+</div>
         
         <div class="table-responsive-wrapper">
             <table class="supabase-like-table">
