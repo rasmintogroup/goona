@@ -490,7 +490,13 @@ async function tanyaAI() {
         const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
         const kataKunci = semuaKata.slice(0, 3);
 
-        // Ambil data reguler yang aktif atau data PPV yang masih punya kuota
+        // Daftar kata yang dianggap murni nama lokasi/wilayah
+        const daftarKataLokasi = [
+            'tanjungpinang', 'pinang', 'batam', 'bintan', 'karimun', 'lingga', 'anambas', 'natuna',
+            'center', 'timur', 'barat', 'utara', 'selatan', 'kota', 'kabupaten', 'kecamatan', 'kelurahan'
+        ];
+
+        // 1. Ambil data mentah dasar reguler aktif & PPV aktif bertarget kuota aman
         let query = supabase
             .from('konten_goona')
             .select('id, judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan, url_foto, tipe_konten')
@@ -511,10 +517,46 @@ async function tanyaAI() {
             removeTypingIndicator();
 
             if (searchData.length > 0) {
-                // Pisahkan hasil pencarian ke kategori masing-masing
-                let kontenReguler = searchData.filter(item => item.tipe_konten === 'reguler' || !item.tipe_konten);
-                let kontenPPV = searchData.filter(item => item.tipe_konten === 'ppv');
-                let kontenFAQ = searchData.filter(item => item.kategori === 'FAQ');
+                
+                // =================================================================
+                // 🚀 UPDATE JURUS LOCK WILAYAH (TARGET MARKET FILTER)
+                // =================================================================
+                // Deteksi apakah user menyebutkan salah satu kota/daerah spesifik di dalam ketikannya
+                let userMenyebutKotaLain = semuaKata.some(kata => 
+                    ['tanjungpinang', 'pinang', 'batam', 'bintan', 'karimun', 'lingga', 'anambas', 'natuna'].includes(kata)
+                );
+
+                // Dapatkan daerah domisili user saat ini secara bersih (lowercase)
+                let daerahUser = (userIdentity.daerah || '').toLowerCase().trim();
+
+                // Saring hasil pencarian agar relevan secara lokasi wilayah target market pengiklan
+                let hasilSaringWilayah = searchData.filter(item => {
+                    // Konten FAQ tidak terikat batasan wilayah lokal, biarkan lolos filter
+                    if (item.kategori === 'FAQ') return true;
+
+                    let kabupatenKonten = (item.kabupaten_kota || '').toLowerCase();
+
+                    // Skenario A: Jika user secara tertulis mengetik nama kota di chatboxnya,
+                    // loloskan data yang kabupaten_kota-nya COCOK dengan apa yang dia ketikkan tersebut.
+                    if (userMenyebutKotaLain) {
+                        return semuaKata.some(kata => kabupatenKonten.includes(kata));
+                    }
+
+                    // Skenario B: Jika user mencari umum (tanpa sebut nama kota, misal cuma ketik "Kue"),
+                    // kunci dan tampilkan HANYA info yang satu wilayah dengan domisili terdaftar si user.
+                    if (daerahUser) {
+                        return kabupatenKonten.includes(daerahUser) || daerahUser.includes(kabupatenKonten);
+                    }
+
+                    // Failsafe jika data domisili kosong, biarkan semua lolos
+                    return true;
+                });
+                // =================================================================
+
+                // Pisahkan hasil pencarian yang sudah disaring wilayahnya ke kategori masing-masing
+                let kontenReguler = hasilSaringWilayah.filter(item => item.tipe_konten === 'reguler' || !item.tipe_konten);
+                let kontenPPV = hasilSaringWilayah.filter(item => item.tipe_konten === 'ppv');
+                let kontenFAQ = hasilSaringWilayah.filter(item => item.kategori === 'FAQ');
 
                 // Jika ada iklan PPV yang cocok, acak posisinya lalu batasi maksimal hanya 2 slot iklan saja
                 if (kontenPPV.length > 0) {
@@ -524,6 +566,13 @@ async function tanyaAI() {
 
                 // Gabungkan kembali: Iklan PPV ditaruh paling atas
                 let hasilAkhirTampil = [...kontenPPV, ...kontenReguler];
+
+                // Jika hasil penyaringan wilayah menyebabkan tidak ada info tersisa, tampilkan not found
+                if (hasilAkhirTampil.length === 0 && kontenFAQ.length === 0) {
+                    appendMessage(dictionary.notFound, 'ai-msg');
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                    return;
+                }
 
                 const daftarPembuka = dictionary.failSafeOpen;
                 const pembukaAcak = daftarPembuka[Math.floor(Math.random() * daftarPembuka.length)];
@@ -539,31 +588,21 @@ async function tanyaAI() {
                 let containsCards = false;
                 let idIklanYangTayang = [];
 
-                // =================================================================
-                // LOGIKA JURUS EMPATI JURAGAN GOONA CHAT:
-                // =================================================================
-                // Daftar kata yang dianggap MURNI NAMA LOKASI/WILAYAH SAJA
-                const daftarKataLokasi = [
-                    'tanjungpinang', 'pinang', 'batam', 'bintan', 'karimun', 'lingga', 'anambas', 'natuna',
-                    'center', 'timur', 'barat', 'utara', 'selatan', 'kota', 'kabupaten', 'kecamatan', 'kelurahan'
-                ];
-                
-                // Cek apakah ketikan user mengandung kata spesifik (di luar daftar lokasi di atas)
+                // Cek apakah ketikan user mengandung kata spesifik (di luar daftar lokasi umum)
                 let isSpesifik = semuaKata.some(kata => !daftarKataLokasi.includes(kata));
-                // =================================================================
 
                 hasilAkhirTampil.forEach(item => {
                     if (item.kategori !== 'FAQ') {
                         containsCards = true;
                         
-                        // LOGIKA PINTAR: Atur label emas dan siapkan potong kuota HANYA JIKA pencarian spesifik
+                        // Atur label emas dan siapkan potong kuota HANYA JIKA pencarian spesifik niche
                         let pakaiEmas = false;
                         if (item.tipe_konten === 'ppv') {
                             if (isSpesifik) {
                                 idIklanYangTayang.push(item.id); // Masuk daftar potong kuota via RPC
                                 pakaiEmas = true;                // Mengaktifkan bingkai emas premium
                             } else {
-                                pakaiEmas = false;               // Jadi kartu reguler biasa (Bonus tampil gratis demi kenyamanan user)
+                                pakaiEmas = false;               // Jadi kartu reguler biasa (Bonus tampil gratis)
                             }
                         }
                         
