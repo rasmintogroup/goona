@@ -323,7 +323,8 @@ export const modul2Variations = [
     "Hai Kak [Nama]! Selamat bergabung. Saya akan segera memproses.",
     "Salam kenal Kak [Nama]! Terima kasih telah bertanya pada saya.",
     "Halo Kak [Nama]! Senang sekali. Semoga sukses selalu, Kak.",
-    "Hai Kak [Nama]! Selamat datang. Sampai jumpa di lain kesempatan."
+    "Hai Kak [Nama]! Selamat datang. Sampai jumpa di lain kesempatan.",
+    
     // 101-125: Sapaan yang lebih santai & bersahabat
     "Halo Kak [Nama]! Salam hangat dari saya. Lagi sibuk apa nih di [Daerah]? Ada yang bisa saya bantu?",
     "Hai Kak [Nama]! Selamat datang! Senang sekali bisa menyapa Kakak. Mau cari apa hari ini?",
