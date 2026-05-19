@@ -350,9 +350,14 @@
     </div>
 
 </div>
-
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+// IMPORT BANK DATA KOSAKATA BARU KITA
+import { modul1Variations, modul2Variations, modul3Variations } from './kosakata/sapaan.js';
+import { daerahQuestions } from './kosakata/pertanyaan_daerah.js';
+import { emosiData } from './kosakata/ekspresi.js';
+import { dictionary } from './kosakata/kamus_tetap.js';
 
 const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
@@ -373,58 +378,6 @@ let userIdentity = {
 let currentStep = 'normal'; 
 const normalPlaceholder = "Gunakan 3 kata (Contoh: kue batam center)...";
 
-const modul1Variations = [
-    "Hallo Goonity! Selamat datang di Goona Chat. Biar makin akrab, Goona boleh tahu nama panggilan Kakak? 😁",
-    "Hai! Seru banget bisa ketemu kamu di Goona Chat. Sebelum kita mulai, kenalan dulu yuk! Nama panggilan Kakak siapa nih? ✨",
-    "Wah, selamat datang di Goona Chat! Biar Goona bisa bantu dengan maksimal, kenalan dulu dong. Nama panggilan Kakak siapa? 😉",
-    "Halo! Goona senang banget Kakak mampir ke sini. Boleh tahu siapa nama panggilan Kakak? 🌟",
-    "Eh ada tamu baru! Salam kenal ya dari Goona. Nama panggilan Kakak siapa nih? 😊",
-    ];
-
-const daerahQuestions = [
-    "Wah keren! Kalau asal daerah atau domisili Kak [Nama] saat ini di kota/kabupaten mana? 🌍",
-    "Sip deh Kak [Nama]! Oh ya, sekarang posisi Kakak lagi tinggal di kota atau daerah mana nih di Kepri? 🏝️",
-    "Salam kenal Kak [Nama]! Biar Goona bisa cariin info yang paling dekat, domisili Kakak di daerah mana ya? 📍",
-    "Noted Kak [Nama]! Sekarang Goona mau tahu dong, Kakak lagi chat dari kota atau kabupaten mana? 😊",
-    "Nama yang bagus, Kak [Nama]! Nah, kalau boleh tahu, daerah asal atau tempat tinggal Kakak sekarang di mana? 🗺️",
-   ];
-
-const modul2Variations = [
-    "Wah, salam kenal Kak [Nama] dari [Daerah]! Salken ya. Nah, sekarang ada yang bisa Goona bantu hari ini? Mau cari info apa nih? Gunakan minimal 3 kata ya biar jelas! 😁",
-    "Mantap, salam kenal ya Kak [Nama]! Semoga hari ini menyenangkan ya di [Daerah]. Oh ya, ada yang bisa Goona bantu? Biar pas, ketik nama info + lokasinya ya! ✨",
-    "Halo Kak [Nama]! Keren banget, salam buat teman-teman di [Daerah] ya. Oke deh, sekarang Goona siap bantu kamu. Ada yang bisa kita cari hari ini? Tulis 3 kata andalanmu ya!",
-    "Salam kenal Kak [Nama]! Wah, Goona suka banget sama daerah [Daerah]. Anyway, ada yang bisa Goona bantu hari ini? Gunakan format info + lokasi ya supaya pencariannya tepat! 😉",
-    "Oke dicatat, Kak [Nama] dari [Daerah]. Mantap! Sekarang yuk kita mulai pencariannya. Kakak lagi butuh info apa? Tulis detail sampai 3 kata ya! 🚀",
-   ];
-
-const modul3Variations = [
-    "Halo Kak [Nama]! Senang banget Goonity yang satu ini balik lagi ke Goona Chat. Mau cari info ter-update apa hari ini? Tulis penjelasan 3 kata ya biar cepat ketemu! ✨",
-    "Hai Kak [Nama]! Gimana kabarnya hari ini? Oh ya, mau cari info apa lagi nih di pencarian Goona? Goona siap bantu, langsung ketik kata kunci dan lokasinya ya! 🚀",
-    "Wah, ketemu lagi kita Kak [Nama]! Gimana situasi di [Daerah] hari ini, aman? Hehehe. Yuk, langsung sebutkan info yang kamu butuhkan dalam 3 kata ya! 😄",
-    "Halo Kak [Nama]! Goona kangen deh ngobrol sama Kakak. Hari ini ada hal baru apa nih yang bisa Goona bantu cari di catatan harian? 😉",
-    "Hai Kak [Nama]! Selamat datang kembali di Goona Chat. Butuh bantuan apa lagi nih buat hari ini? Gunakan minimal 3 kata agar penyaringan info di [Daerah] makin akurat ya! 🛠️",
-    ];
-
-const dictionary = {
-    notFound: "Maaf Goonity, informasi atau jawaban yang Anda cari saat ini belum tersedia di catatan kami. Coba ketik lebih spesifik menggunakan kombinasi 3 kata (Nama Jasa + Kecamatan + Kota).",
-    waTemplate: "Halo, saya melihat info Anda di Goona. Boleh tahu detail lebih lanjut?",
-    locLabel: "Lokasi:",
-    priceLabel: "Harga:",
-    failSafeOpen: [
-        "Halo Goonity! Ini dia informasi teraktif yang berhasil kami temukan khusus untuk Anda:",
-        "Hai kawan! Saya sudah menyaring catatan harian dan menemukan info terbaik ini untukmu:",
-        "Kabar baik Goonity! Info yang kamu cari sudah siap. Silakan dicek detailnya di bawah ini ya:",
-        "Yey, ketemu! Ini dia data paling cocok yang berhasil saya kumpulkan:",
-        "Asyik, pencarianmu membuahkan hasil kawan! Ini dia infonya:",
-       ],
-    failSafeClose: [
-        "Ada yang perlu disesuaikan lagi? Ketik lokasinya atau nama jasanya secara spesifik minimal 3 kata ya agar saya saring kembali!",
-        "Belum ketemu yang pas? Coba ketik nama daerah atau kata kunci lain, nanti saya bantu cari lagi!",
-        "Semoga informasinya membantu Goonity! Kalau ada info lain yang ingin dicari, langsung ketik saja di bawah.",
-        "Butuh info loker atau jasa lainnya? Tuliskan saja di sini, saya siap bantu 24 jam!",
-        "Jangan ragu untuk bertanya lagi ya kawan. Goona selalu siaga menemani harimu!",
-        ]
-};
 function showTypingIndicator() {
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-msg loading-msg';
@@ -468,60 +421,19 @@ function initWelcomeMessage() {
 function checkEmotionInterception(prompt) {
     const lowerPrompt = prompt.toLowerCase();
 
-   const keywordsA = [
-    // 9 Kata Asli dari Kamu
-    'bingung', 'pusing', 'gak tahu', 'tidak tahu', 'gimana', 'cara', 'ribet', 'bingungin', 'pusingin',
+    if (emosiData.keywordsA.some(kw => lowerPrompt.includes(kw))) {
+        const resA = emosiData.responsesA;
+        return formatResponseText(resA[Math.floor(Math.random() * resA.length)]);
+    }
+    
+    if (emosiData.keywordsB.some(kw => lowerPrompt.includes(kw))) {
+        const resB = emosiData.responsesB;
+        return formatResponseText(resB[Math.floor(Math.random() * resB.length)]);
+    }
 
-    // 41 Kata Tambahan (Total Jadi 50)
-    'gimanasi', 'bagaimana', 'tutorial', 'panduan', 'bantuan',
-    'nggak-tahu', 'gatau', 'wongser', 'blank', 'stuck'
-];
-    if (keywordsA.some(kw => lowerPrompt.includes(kw))) {
-    const responsesA = [
-        "Aduh, maaf ya Kak [Nama] kalau bikin bingung atau pusing. Tenang, biar Goona bantu jelasin pelan-pelan ya. Bagian mana yang bikin Kakak bingung? 🙏",
-        "Waduh, jangan pusing-pusing dong Kak [Nama]. Goona di sini siap bantu kok. Yuk, coba ceritain pelan-pelan, bagian mana yang dirasa ribet? 😊",
-        "Tenang Kak [Nama], jangan pusing dulu ya. Goona siap memandu langkah demi langkah kok. Coba bisikin bagian mana yang bikin Kakak mentok?",
-        "Aduh, maaf ya Kak [Nama] kalau langkahnya terasa ruwet. Yuk, kita urai pelan-pelan bareng Goona. Mana nih yang mau ditanyain duluan? 🛠️",
-        "Gak usah panik atau bingung, Kak [Nama]! Goona bakal temenin sampai Kakak benar-benar paham. Sisi mana yang paling membingungkan, Kak?",
-        ];
-    return formatResponseText(responsesA[Math.floor(Math.random() * responsesA.length)]);
-}
-    const keywordsB = [
-    // 10 Kata Asli dari Kamu
-    'kecewa', 'marah', 'kesal', 'jelek', 'mahal', 'error', 'rusak', 'lambat', 'lelet', 'parah',
-
-    // 40 Kata Tambahan (Total Jadi 50)
-    'kesel', 'kecewaa', 'sebel', 'benci', 'gagal', 
-    'bug', 'crash', 'down', 'hang', 'lemot'
-];
-    if (keywordsB.some(kw => lowerPrompt.includes(kw))) {
-    const responsesB = [
-        "Waduh, maaf banget ya Kak [Nama] atas ketidaknyamanan ini. Goona ngerti banget pasti kesel banget. Sini, biar Goona bantu cek dan selesaikan masalahnya sekarang juga. 🙏😔",
-        "Aduh... maaf ya Kak [Nama] kalau bikin kecewa atau kesal. Goona bener-bener minta maaf. Boleh ceritain detailnya biar langsung Goona perbaiki? 😢",
-        "Waduh, maaf ya Kak [Nama]. Goona ngerasa bersalah banget kalau pelayanannya seburuk itu. Boleh tolong ceritain kendalanya biar langsung Goona tindak lanjuti? 🙏",
-        "Aduh, maaf banget Kak [Nama] bikin harinya jadi gak nyaman. Jangan kesel lagi ya, Goona siap bantu beresin masalah ini kok. Ceritain sini Kak.",
-        "Waduh, lelet atau error ya Kak [Nama]? Goona minta maaf banget atas kendala teknisnya. Sini kasih tahu Goona detailnya biar cepat lancar lagi! 🛠️",
-        ];
-    return formatResponseText(responsesB[Math.floor(Math.random() * responsesB.length)]);
-}
-
-    const keywordsC = [
-    // 10 Kata Asli dari Kamu
-    'keren', 'bagus', 'puas', 'senang', 'suka', 'mantap', 'makasih', 'terima kasih', 'top', 'terbantu',
-
-    // 50 Kata Tambahan
-    'helpful', 'solutif', 'asik', 'asyik', 'gokil', 
-    'thebest', 'terbaik', 'juara', 'andal', 'andalan'
-];// MENJADI SEPERTI INI:
-if (keywordsC.some(kw => new RegExp(`(?<!tidak\\s|kurang\\s|nggak\\s|ngak\\s|gk\\s|gakk\\s|g\\s|ga\\s|ndak\\s|nda\\s|bukan\\s|belum\\s|belom\\s|jangan\\s|tanpa\\s|ogah\\s|anti\\s|gagal\\s|minim\\s|minus\\s|low\\s|bad\\s|kurang\\s|agak\\s|lumayan\\s|dikit\\s|sedikit\\s|jarang\\s|susah\\s|sulit\\s|payah\\s|parah\\s|hampir\\s|nyaris\\s|malah\\s|bukannya\\s|kok\\s|kenapa\\s|mengapa\\s|masa\\s|masak\\s|apanya\\s|sebelah\\s|mana\\s|belah\\s|jauh\\s|asing\\s|aneh\\s|zonk\\s|zero\\s|no\\s|not\\s|never\\s)${kw}`).test(lowerPrompt))) {
-        const responsesC = [
-    "Wah, asyik! Goona ikut seneng banget kalau Kak [Nama] ngerasa terbantu dan puas. Makasih banyak ya atas apresiasinya! Ramai terus pokoknya buat warga [Daerah]! 🎉🙌",
-    "Mantap! Terima kasih banyak kembali ya Kak [Nama]. Komentar positif dari Kakak bikin Goona makin semangat nih nemenin Goonity semua. Hehehe. 🥰",
-    "Sama-sama Kak [Nama]! Seneng banget Goona bisa berguna buat Kakak. Salam hangat ya buat temen-temen di [Daerah]! ✨",
-    "Yuhuuu! Terima kasih kembali Kak [Nama]. Goona siap sedia kok kapan pun Kakak butuh bantuan lagi. Semangat terus ya! 🚀",
-    "Sama-sama, Kak [Nama]! Wah, dapet pujian gini bikin Goona jadi makin betah deh nemenin warga [Daerah]. Terima kasih balik ya! 😍",
-    ];
-        return formatResponseText(responsesC[Math.floor(Math.random() * responsesC.length)]);
+    if (emosiData.keywordsC.some(kw => new RegExp(`(?<!tidak\\s|kurang\\s|nggak\\s|ngak\\s|gk\\s|gakk\\s|g\\s|ga\\s|ndak\\s|nda\\s|bukan\\s|belum\\s|belom\\s|jangan\\s|tanpa\\s|ogah\\s|anti\\s|gagal\\s|minim\\s|minus\\s|low\\s|bad\\s|kurang\\s|agak\\s|lumayan\\s|dikit\\s|sedikit\\s|jarang\\s|susah\\s|sulit\\s|payah\\s|parah\\s|hampir\\s|nyaris\\s|malah\\s|bukannya\\s|kok\\s|kenapa\\s|mengapa\\s|masa\\s|masak\\s|apanya\\s|sebelah\\s|mana\\s|belah\\s|jauh\\s|asing\\s|aneh\\s|zonk\\s|zero\\s|no\\s|not\\s|never\\s)${kw}`).test(lowerPrompt))) {
+        const resC = emosiData.responsesC;
+        return formatResponseText(resC[Math.floor(Math.random() * resC.length)]);
     }
 
     return null;
@@ -615,7 +527,6 @@ async function tanyaAI() {
                     } else {
                         containsCards = true;
                         
-                        // PERBAIKAN LINK WHATSAPP: Membersihkan spasi, simbol, dan memastikan awalan 62 atau 0 terbaca rapi oleh wa.me
                         let cleanPhone = item.whatsapp ? item.whatsapp.replace(/[^0-9]/g, '') : '';
                         if (cleanPhone.startsWith('0')) {
                             cleanPhone = '62' + cleanPhone.substring(1);
@@ -636,7 +547,6 @@ async function tanyaAI() {
                         }
                         const lokasiTeks = lokasiGabungan ? `<div class="card-desc"><b>${dictionary.locLabel}</b> ${lokasiGabungan}</div>` : "";
 
-                        // PERBAIKAN KARTU FOTO: Jika url_foto ada, sisipkan tag gambar di dalam kartu
                         let komponenFoto = "";
                         if (item.url_foto) {
                             komponenFoto = `<img src="${item.url_foto}" class="card-img" alt="${item.judul}" loading="lazy">`;
@@ -645,6 +555,7 @@ async function tanyaAI() {
                         cardWrapper.innerHTML += `
                             <div class="jasa-card">
                                 ${komponenFoto}
+                                <div class="card-title">${item.judul}</div>
                                 <div class="card-title">${item.judul}</div>
                                 <div class="card-desc">${item.deskripsi}</div>
                                 ${lokasiTeks}
@@ -705,6 +616,3 @@ window.addEventListener('DOMContentLoaded', () => {
     if (inputField) inputField.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); tanyaAI(); } };
 });
 </script>
-
-</body>
-</html>
