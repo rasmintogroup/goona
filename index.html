@@ -32,11 +32,11 @@
         }
 
         #app {
-    display: flex;
-    flex-direction: column;
-    height: 100dvh; /* <--- DIUBAH MENJADI DVH */
-    position: relative;
-}
+            display: flex;
+            flex-direction: column;
+            height: 100dvh;
+            position: relative;
+        }
 
         header {
             padding: 10px 15px;
@@ -61,15 +61,14 @@
         }
 
         #chat-window {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    /* Membuat ruang obrolan kembali melebar penuh tanpa batas kaku di tengah */
-    width: 100%;
-}
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
 
         .ai-msg,
         .user-msg {
@@ -144,7 +143,6 @@
             font-weight: bold;
         }
 
-        /* MENU HAMBURGER */
         .menu-btn {
             cursor: pointer;
             display: flex;
@@ -161,7 +159,6 @@
             transition: 0.3s;
         }
 
-        /* SIDEBAR DRAWER */
         .sidebar {
             position: absolute;
             top: 0;
@@ -198,27 +195,31 @@
             text-align: justify;
         }
 
-        /* TAMPILAN KARTU JASA DENGAN KOMPONEN FOTO */
         .card-container {
-    display: flex;
-    flex-direction: row; /* Membuat kartu menyusun ke samping di layar lebar */
-    flex-wrap: wrap;     /* Jika barisan kartu sudah penuh, otomatis turun ke bawahnya */
-    gap: 15px;
-    width: 100%;
-    margin: 5px 0;
-}
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 15px;
+            width: 100%;
+            margin: 5px 0;
+        }
 
         .jasa-card {
-    background: #fff;
-    border: 1px solid var(--light-brown);
-    border-left: 5px solid var(--primary-brown);
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    /* Mengunci lebar kartu: maksimal 320px di komputer PC, dan otomatis 100% penuh jika di HP */
-    width: 100%;
-    max-width: 320px; 
-}
+            background: #fff;
+            border: 1px solid var(--light-brown);
+            border-left: 5px solid var(--primary-brown);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 320px; 
+        }
+
+        /* Border penanda khusus untuk iklan PPV premium */
+        .jasa-card.ppv-premium {
+            border-left: 5px solid #FFD700; /* Warna Emas */
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+        }
 
         .card-title {
             font-weight: bold;
@@ -227,17 +228,15 @@
             margin-bottom: 6px;
         }
 
-        /* STYLING COCOK UNTUK GAMBAR PRODUK DI MOBILE */
         .card-img {
-    width: 100%;
-    /* PERBAIKAN DESKTOP: Mengunci tinggi foto agar proporsional di PC & HP */
-    height: 250px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #eee;
-    display: block;
-}
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+            display: block;
+        }
 
         .card-desc {
             font-size: 13px;
@@ -267,7 +266,6 @@
             background: #20ba56;
         }
 
-        /* LOADING ANIMATION */
         .loading-msg {
             width: 70px;
             padding: 14px 18px;
@@ -333,7 +331,7 @@
 
     <main id="chat-window">
         <div id="chat-history" style="display:flex; flex-direction:column; gap:15px; width: 100%;">
-            </div>
+        </div>
     </main>
 
     <div class="input-container">
@@ -350,10 +348,10 @@
     </div>
 
 </div>
+
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-// IMPORT BANK DATA KOSAKATA BARU KITA
 import { modul1Variations, modul2Variations, modul3Variations } from './kosakata/sapaan.js';
 import { daerahQuestions } from './kosakata/pertanyaan_daerah.js';
 import { emosiData } from './kosakata/ekspresi.js';
@@ -370,7 +368,6 @@ const sendBtn = document.getElementById('send-btn');
 const menuBtn = document.getElementById('menu-btn');
 const sidebar = document.getElementById('sidebar');
 
-// STATE IDENTITAS 
 let userIdentity = {
     nama: localStorage.getItem('goona_nama') || '',
     daerah: localStorage.getItem('goona_daerah') || ''
@@ -493,13 +490,14 @@ async function tanyaAI() {
         const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
         const kataKunci = semuaKata.slice(0, 3);
 
+        // LOGIKA BARU: Tarik data reguler yang AKTIF atau data PPV yang TAYANG & PUNYA KUOTA
         let query = supabase
             .from('konten_goona')
-            .select('judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan, url_foto')
-            .eq('status', 'aktif');
+            .select('id, judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan, url_foto, tipe_konten')
+            .or('and(status.eq.aktif,tipe_konten.eq.reguler),and(status_tayang.eq.true,tipe_konten.eq.ppv,sisa_kuota_ppv.gt.0)');
             
         kataKunci.forEach(kata => {
-            query = query.or(`judul.ilike.*${kata}*,deskripsi.ilike.*${kata}*,kabupaten_kota.ilike.*${kata}*,kecamatan.ilike.*${kata}*`);
+            query = query.or(`judul.ilike.*${kata}*,deskripsi.ilike.*${kata}*,kabupaten_kota.ilike.*${kata}*,kecamatan.ilike.*${kata}*`, { foreignTable: '' });
         });
         
         const { data, error } = await query;
@@ -509,23 +507,46 @@ async function tanyaAI() {
             searchData = data || [];
         }
 
-        setTimeout(() => {
+        setTimeout(async () => {
             removeTypingIndicator();
 
             if (searchData.length > 0) {
+                // Pisahkan hasil pencarian ke kategori masing-masing
+                let kontenReguler = searchData.filter(item => item.tipe_konten === 'reguler' || !item.tipe_konten);
+                let kontenPPV = searchData.filter(item => item.tipe_konten === 'ppv');
+                let kontenFAQ = searchData.filter(item => item.kategori === 'FAQ');
+
+                // Jika ada iklan PPV yang cocok, kita acak posisinya lalu batasi maksimal hanya 2 slot iklan saja yang tampil
+                if (kontenPPV.length > 0) {
+                    kontenPPV.sort(() => 0.5 - Math.random());
+                    kontenPPV = kontenPPV.slice(0, 2);
+                }
+
+                // Gabungkan kembali: Tampilkan iklan PPV berbayar di barisan paling depan/atas
+                let hasilAkhirTampil = [...kontenPPV, ...kontenReguler];
+
                 const daftarPembuka = dictionary.failSafeOpen;
                 const pembukaAcak = daftarPembuka[Math.floor(Math.random() * daftarPembuka.length)];
                 appendMessage(pembukaAcak, 'ai-msg');
 
+                // Jika ada data FAQ, tampilkan teks deskripsinya langsung ke ruang chat
+                kontenFAQ.forEach(faq => {
+                    appendMessage(faq.deskripsi, 'ai-msg');
+                });
+
                 const cardWrapper = document.createElement('div');
                 cardWrapper.className = 'card-container';
                 let containsCards = false;
+                let idIklanYangTayang = [];
 
-                searchData.forEach(item => {
-                    if (item.kategori === 'FAQ') {
-                        appendMessage(item.deskripsi, 'ai-msg');
-                    } else {
+                hasilAkhirTampil.forEach(item => {
+                    if (item.kategori !== 'FAQ') {
                         containsCards = true;
+                        
+                        // Catat ID dari iklan PPV yang sukses dirender ke layar user
+                        if (item.tipe_konten === 'ppv') {
+                            idIklanYangTayang.push(item.id);
+                        }
                         
                         let cleanPhone = item.whatsapp ? item.whatsapp.replace(/[^0-9]/g, '') : '';
                         if (cleanPhone.startsWith('0')) {
@@ -552,10 +573,12 @@ async function tanyaAI() {
                             komponenFoto = `<img src="${item.url_foto}" class="card-img" alt="${item.judul}" loading="lazy">`;
                         }
 
+                        // Tambahkan class penanda khusus jika tipenya PPV (untuk variasi gaya visual/opsional)
+                        const ppvClass = item.tipe_konten === 'ppv' ? 'ppv-premium' : '';
+
                         cardWrapper.innerHTML += `
-                            <div class="jasa-card">
+                            <div class="jasa-card ${ppvClass}">
                                 ${komponenFoto}
-                                <div class="card-title">${item.judul}</div>
                                 <div class="card-title">${item.judul}</div>
                                 <div class="card-desc">${item.deskripsi}</div>
                                 ${lokasiTeks}
@@ -570,6 +593,12 @@ async function tanyaAI() {
 
                 if (containsCards) {
                     chatHistory.appendChild(cardWrapper);
+                }
+
+                // EKSEKUSI PEMOTONGAN KUOTA: Kirim sinyal update total_tayang ke Supabase
+                if (idIklanYangTayang.length > 0) {
+                    const { error: rpcError } = await supabase.rpc('hitung_impresi_iklan', { iklan_ids: idIklanYangTayang });
+                    if (rpcError) console.error("Gagal memperbarui impresi iklan:", rpcError);
                 }
 
                 const daftarPenutup = dictionary.failSafeClose;
@@ -616,3 +645,5 @@ window.addEventListener('DOMContentLoaded', () => {
     if (inputField) inputField.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); tanyaAI(); } };
 });
 </script>
+</body>
+</html>
