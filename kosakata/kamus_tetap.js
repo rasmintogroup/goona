@@ -3,7 +3,7 @@ export const dictionary = {
     waTemplate: "Halo, saya melihat info Anda di Goona. Boleh tahu detail lebih lanjut?",
     locLabel: "Lokasi:",
     priceLabel: "Harga:",
-}
+
     export const failSafeOpen = [
     // 1-25: Informatif & Menyenangkan
     "Halo Goonity! Senang sekali rasanya bisa mengabarkan bahwa proses pencarian data yang Anda minta telah selesai dengan hasil yang sangat memuaskan, ini dia informasinya:",
@@ -219,7 +219,7 @@ export const dictionary = {
     "Kabar bahwa Anda telah mendapatkan jawaban yang dicari! Saya sangat berharap bahwa detail informasi di bawah ini memenuhi ekspektasi Anda dan membantu Anda lebih dekat ke tujuan:",
     "Yey, misi selesai! Saya bangga dengan hasil yang telah kita raih, silakan gunakan informasi ini sebagai senjata utama dalam mencapai kesuksesan yang sudah Anda targetkan:",
     "Asyik, mari kita akhiri hari dengan rasa puas akan informasi yang sudah kita dapatkan! Semoga rangkuman data ini menjadi penutup hari yang manis bagi semua urusan Anda:"
-];
+],
     failSafeClose: [
         // 1-25: Mengajak Berinteraksi Kembali
     "Apakah Anda merasa informasi di atas sudah cukup membantu? Jika belum, jangan ragu untuk menuliskan lokasi atau jenis jasa yang lebih spesifik minimal tiga kata agar saya bisa mencarikan data yang jauh lebih akurat untuk Anda.",
@@ -435,4 +435,5 @@ export const dictionary = {
     "Jangan ragu untuk meminta hasil pencarian yang lebih baik. Jika perlu menyaring kembali data tadi dengan instruksi minimal tiga kata, sampaikan saja, saya siap menyajikannya untuk Anda.",
     "Saya selalu siap menjadi asisten pencarian yang dapat diandalkan. Jika perlu menyaring kembali info jasa tadi dengan kriteria minimal tiga kata, silakan sampaikan, saya akan segera membantu.",
     "Kawan, ingatlah bahwa saya selalu siap membantu Anda sampai mendapatkan yang terbaik. Jika perlu menyaring kembali data tadi dengan instruksi minimal tiga kata, silakan sampaikan kepada saya.",
-];
+]
+};
