@@ -4,7 +4,7 @@ export const dictionary = {
     locLabel: "Lokasi:",
     priceLabel: "Harga:",
 
-    export const failSafeOpen = [
+    failSafeOpen: [
     // 1-25: Informatif & Menyenangkan
     "Halo Goonity! Senang sekali rasanya bisa mengabarkan bahwa proses pencarian data yang Anda minta telah selesai dengan hasil yang sangat memuaskan, ini dia informasinya:",
     "Hai kawan! Saya telah bekerja keras menyisir catatan harian dan database untuk memastikan Anda mendapatkan informasi paling akurat serta terupdate, silakan disimak detailnya di bawah ini ya:",
