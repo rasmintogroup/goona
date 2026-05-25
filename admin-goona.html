@@ -469,8 +469,8 @@
                 <td><input type="number" class="cell-input" id="cell-totaltayang-${item.id}" value="${item.total_tayang !== null ? item.total_tayang : 0}"></td>
                 <td><input type="date" class="cell-input" id="cell-mulai-${item.id}" value="${item.tanggal_mulai || ''}"></td>
                 <td><input type="date" class="cell-input" id="cell-selesai-${item.id}" value="${item.tanggal_selesai || ''}"></td>
-                <td><input type="number" class="cell-input" id="cell-sisappv-${item.id}" value="${item.sisa_kuota_ppv !== null ? item.sisa_kuota_ppv : ''}"></td>
-            `;
+                <td><input type="number" class="cell-input" id="cell-sisappv-${item.id}" value="${item.sisa_kuota_ppv !== null ? item.sisa_kuota_ppv : ''}" readonly></td>
+                `;
             tbody.appendChild(tr);
         });
     }
