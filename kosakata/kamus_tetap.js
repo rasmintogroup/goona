@@ -1,6 +1,6 @@
 export const dictionary = {
-    notFound: "Maaf Goonity, informasi atau jawaban yang Anda cari saat ini belum tersedia di catatan kami. Coba ketik lebih spesifik menggunakan kombinasi 3 kata (Nama Jasa + Kecamatan + Kota).",
-    waTemplate: "Halo, saya melihat info Anda di Goona. Boleh tahu detail lebih lanjut?",
+    notFound: "Maaf Kak, informasi atau jawaban yang Anda cari saat ini belum tersedia di catatan kami. Coba ketik lebih spesifik menggunakan kombinasi 3 kata (Jasa yang dicari + Kota / Kecamatan).",
+    waTemplate: "Halo Kak, saya melihat info Anda di Goona. Boleh tahu detail lebih lanjut?",
     locLabel: "Lokasi:",
     priceLabel: "Harga:",
 
