@@ -28,5 +28,5 @@ export const modul2Variations = [
   "Halo Kak [Nama]! Senang berkenalan dengan Kakak. Cukup tuliskan kata kunci atau apa pun yang Kakak butuhkan, saya akan langsung membantu mencarikan infonya. Semoga layanan ini bisa membuat hari Kakak di [Daerah] menjadi lebih produktif dan jauh lebih nyaman.",
   "Salam kenal Kak [Nama]! Supaya lebih cepat, yuk tuliskan apa yang ingin Kakak cari di [Daerah]. Saya sudah siap sedia untuk membantu Kakak menemukan informasi tersebut dengan cara yang paling efektif agar hasil yang Kakak dapatkan benar-benar memuaskan.",
   "Hai Kak [Nama]! Selamat datang. Saya siap membantu menyortir informasi terbaik untuk Kakak hari ini. Apa yang sedang Kakak butuhkan di [Daerah]? Sampaikan saja, saya akan segera mencarikannya agar Kakak bisa mendapatkan jawaban yang tepat tanpa harus membuang waktu.",
-  "Halo Kak [Nama]! Senang sekali bisa membantu Kakak hari ini. Apa kata kunci pencarian Kakak? Jangan ragu untuk memberitahu saya detail informasinya ya, saya akan berusaha keras memberikan yang terbaik agar Kakak merasa sangat terbantu dalam setiap urusan Kakak."
+  "Halo Kak [Nama]! Senang sekali bisa membantu Kakak hari ini. Apa kata kunci pencarian Kakak? Jangan ragu untuk memberitahu saya detail informasinya ya, saya akan berusaha keras memberikan yang terbaik agar Kakak merasa sangat terbantu dalam setiap urusan Kakak.",
 ];
