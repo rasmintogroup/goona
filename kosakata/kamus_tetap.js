@@ -1,13 +1,13 @@
 export const dictionary = {
-    notFound: "Maaf Kak, informasi atau jawaban yang Anda cari saat ini belum tersedia di catatan kami. Coba ketik lebih spesifik menggunakan kombinasi 3 kata (Jasa yang dicari + Kota / Kecamatan).",
+    notFound: "Maaf Kak, informasi atau jawaban yang Anda cari saat ini belum tersedi. Mohon ketik lebih spesifik menggunakan kombinasi 3 kata (Jasa yang dicari + Kota / Kecamatan).",
     waTemplate: "Halo Kak, saya melihat info Anda di Goona. Boleh tahu detail lebih lanjut?",
     locLabel: "Lokasi:",
     priceLabel: "Harga:",
 
     failSafeOpen: [
     // 1-25: Informatif & Menyenangkan
-    "Halo Goonity! Senang sekali rasanya bisa mengabarkan bahwa proses pencarian data yang Anda minta telah selesai dengan hasil yang sangat memuaskan, ini dia informasinya:",
-    "Hai kawan! Saya telah bekerja keras menyisir catatan harian dan database untuk memastikan Anda mendapatkan informasi paling akurat serta terupdate, silakan disimak detailnya di bawah ini ya:",
+    "Halo Kak! Senang sekali rasanya bisa mengabarkan bahwa proses pencarian data yang Anda minta telah selesai, ini dia informasinya:",
+    "Hai Kak! Saya telah bekerja keras menyisir catatan harian dan database untuk memastikan Anda mendapatkan informasi paling akurat serta terupdate, silakan disimak detailnya di bawah ini ya:",
     "Kabar gembira buat Goonity semua! Setelah melalui proses penyaringan data yang cukup mendalam, akhirnya saya berhasil menemukan informasi yang paling tepat dan relevan untuk Anda:",
     "Yey, kabar baik datang lagi! Berkat kata kunci yang Anda berikan, saya berhasil memilah dan memilih data terbaik yang saat ini bisa langsung Anda gunakan sebagai referensi:",
     "Asyik, pencarianmu membuahkan hasil yang manis kawan! Setelah saya tinjau kembali, ini adalah rangkuman informasi paling istimewa yang berhasil saya kumpulkan khusus untuk kebutuhan Anda:",
@@ -97,7 +97,7 @@ export const dictionary = {
     "Kabar baik buat Anda semua! Pencarian yang Anda lakukan telah membawa hasil yang sangat bagus, mari kita simak bersama apa saja informasi yang telah saya temukan tadi:",
     "Yey, semuanya telah terpenuhi! Saya sangat berharap informasi ini dapat menjawab rasa penasaran Anda dan memberikan panduan yang jelas bagi langkah Anda selanjutnya ya:",
     "Asyik! Jika Anda merasa terbantu, itu adalah kebahagiaan terbesar bagi saya, silakan pelajari hasil pencarian ini yang telah saya rangkum dengan sangat mendalam bagi Anda:",
-    "Halo Goonity! Teruslah bereksplorasi dan mencari ilmu, saya akan selalu di sini setiap kali Anda membutuhkan bantuan untuk menemukan informasi yang sangat penting bagi Anda:",
+    "Halo Goonity! saya akan selalu di sini setiap kali Anda membutuhkan bantuan untuk menemukan informasi yang sangat penting bagi Anda:",
     "Hai kawan! Semoga hari Anda menjadi lebih produktif setelah membaca rangkuman informasi ini, saya sudah menyiapkannya agar Anda bisa segera mempraktikkan hasilnya segera:",
     "Kabar penuh harapan! Saya senang bisa memberikan solusi melalui data ini, silakan gunakan informasinya untuk melangkah lebih pasti dalam rencana besar Anda selanjutnya:",
     "Yey, misi pencarian berhasil! Saya sangat menghargai kerja sama kita hari ini, silakan disimak baik-baik karena data ini adalah kunci untuk membantu Anda lebih jauh lagi:",
