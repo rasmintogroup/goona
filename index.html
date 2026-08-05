@@ -488,7 +488,12 @@ async function tanyaAI() {
     let searchData = [];
     try {
         const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
-        const kataKunci = semuaKata.slice(0, 3);
+       const kataKunci = [...new Set(
+    semuaKata.filter(kata =>
+        kata.length > 2 &&
+        !["yang","dan","atau","dari","untuk","dengan","di","ke","ada","saya","aku","lagi","sedang","mau","ingin","bang","kak","nih","dong","ya"].includes(kata)
+    )
+)];
 
         // Daftar kata yang dianggap murni nama lokasi/wilayah
         const daftarKataLokasi = [
