@@ -6,22 +6,44 @@
     <title>Goona - Platform Informasi Lokal Kepulauan Riau</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Menggunakan SVG Icon lokal / inline untuk menghindari pemblokiran Cloudflare CDN -->
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: #f0fdf4; color: #064e3b; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         .app-container { width: 100%; max-width: 480px; background: #ffffff; min-height: 100vh; box-shadow: 0 4px 25px rgba(4, 120, 87, 0.1); display: flex; flex-direction: column; position: relative; }
         
-        /* Header */
-        .app-header { background: #047857; color: #ffffff; padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #34d399; }
+        /* Header Baru dengan Ikon di Kanan */
+        .app-header { background: #047857; color: #ffffff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #34d399; }
         .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; letter-spacing: 0.5px; }
-
-        /* Banner Slider - Ukuran Diperbesar */
-        .banner-slider { position: relative; width: 100%; height: 190px; overflow: hidden; background: #a7f3d0; }
         
-        /* Wadah opsional untuk gambar banner kustom */
-        .banner-custom-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; display: none; }
+        /* Grup Aksi Header Kanan (Kaca Pembesar, Tombol +, Hamburger Ombak) */
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .header-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+        .header-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        .header-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
+        /* Desain Khusus Tombol Hamburger Bergelombang/Ombak */
+        .wave-hamburger {
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; /* Efek lengkung organik seperti ombak */
+            background: #059669;
+            border: 1px solid #6ee7b7;
+            position: relative;
+            animation: waveMorph 4s ease-in-out infinite alternate;
+        }
+        @keyframes waveMorph {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            100% { border-radius: 60% 40% 30% 70% / 50% 40% 50% 60%; }
+        }
+
+        /* Kotak Pencarian Interaktif (Tersembunyi Awalnya, Muncul saat Kaca Pembesar diklik) */
+        .search-dropdown-section { background: #047857; padding: 0 16px 14px 16px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out; }
+        .search-dropdown-section.active { max-height: 70px; padding: 0 16px 14px 16px; }
+        .search-box { display: flex; align-items: center; background: #ffffff; border-radius: 30px; padding: 8px 14px; border: 1px solid #34d399; }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 0.88rem; margin-left: 8px; background: transparent; color: #064e3b; }
+        .search-box svg { width: 15px; height: 15px; fill: #047857; }
+
+        /* Banner Slider */
+        .banner-slider { position: relative; width: 100%; height: 190px; overflow: hidden; background: #a7f3d0; }
+        .banner-custom-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; display: none; }
         .slides-container { display: flex; width: 300%; height: 100%; transition: transform 0.5s ease-in-out; position: relative; z-index: 1; }
         .slide { width: 33.333%; height: 100%; color: white; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
         .slide:nth-child(1) { background: linear-gradient(135deg, #047857, #065f46); }
@@ -34,14 +56,8 @@
         .dot { width: 7px; height: 7px; background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; }
         .dot.active { background: #ffffff; }
 
-        /* Search Bar */
-        .search-section { padding: 14px 16px; background: #047857; }
-        .search-box { display: flex; align-items: center; background: #ffffff; border-radius: 30px; padding: 10px 16px; border: 1px solid #34d399; }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 0.9rem; margin-left: 8px; background: transparent; color: #064e3b; }
-        .search-box svg { width: 16px; height: 16px; fill: #047857; }
-
         /* Content Body */
-        .content-body { padding: 16px; flex: 1; overflow-y: auto; padding-bottom: 90px; }
+        .content-body { padding: 16px; flex: 1; overflow-y: auto; padding-bottom: 40px; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; margin-top: 15px; }
         .section-title { font-size: 0.95rem; font-weight: 700; color: #064e3b; }
         .reset-btn { font-size: 0.8rem; color: #0d9488; background: none; border: none; font-weight: 600; cursor: pointer; display: none; }
@@ -63,16 +79,10 @@
         .info-location { font-size: 0.73rem; color: #4b5563; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
         .badge { background: #d1fae5; color: #065f46; font-size: 0.62rem; padding: 2px 7px; border-radius: 5px; font-weight: 700; border: 1px solid #34d399; display: inline-block; }
 
-        /* Floating Button Pasang Info (Mengambang di Bawah) */
-        .btn-fab-pasang { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #047857, #0d9488); color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.6rem; text-decoration: none; box-shadow: 0 4px 15px rgba(4,120,87,0.4); z-index: 99; transition: transform 0.2s; border: 2px solid #34d399; }
-        .btn-fab-pasang:hover { transform: scale(1.05); }
-
         /* Modal Umum */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
         .modal-content { background: white; width: 100%; max-width: 380px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-weight: 700; color: #047857; font-size: 0.95rem; }
-        
-        /* Modal Wilayah */
         .region-list { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
         .region-item { padding: 10px 12px; background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; color: #065f46; }
         .region-item:hover { background: #047857; color: white; }
@@ -88,16 +98,37 @@
 <body>
 
     <div class="app-container">
-        <!-- Header -->
+        <!-- Header Baru -->
         <div class="app-header">
             <div class="logo-area">GOONA</div>
+            <!-- Urutan: Kaca Pembesar, Tombol +, Ikon Hamburger Bergelombang -->
+            <div class="header-actions">
+                <!-- 1. Tombol Kaca Pembesar (Memicu Kotak Pencarian) -->
+                <button class="header-btn" onclick="toggleSearch()" title="Cari Informasi">
+                    <svg viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208zM208 352a144 144 10 1 0 0 -288 144 144 10 1 0 0 288z"/></svg>
+                </button>
+                <!-- 2. Tombol Tambah (+) -->
+                <a href="tambah-info.html" class="header-btn" title="Pasang Info">
+                    <span style="font-size: 1.2rem; font-weight: bold;">+</span>
+                </a>
+                <!-- 3. Ikon Hamburger Bergelombang (Menu Ombak) -->
+                <button class="header-btn wave-hamburger" onclick="bukaMenuOmbak()" title="Menu Utama">
+                    <svg viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+                </button>
+            </div>
         </div>
 
-        <!-- Banner Slider (Ukuran Diperbesar & Mendukung Gambar Kustom) -->
+        <!-- Kolom Pencarian Dropdown (Muncul saat ikon kaca pembesar diklik) -->
+        <div class="search-dropdown-section" id="searchDropdown">
+            <div class="search-box">
+                <svg viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208zM208 352a144 144 10 1 0 0 -288 144 144 10 1 0 0 288z"/></svg>
+                <input type="text" id="searchInput" placeholder="Cari info, jasa, barang, atau wilayah...">
+            </div>
+        </div>
+
+        <!-- Banner Slider -->
         <div class="banner-slider">
-            <!-- Jika ingin pakai gambar sendiri, masukkan file ke direktori dan ubah src-nya atau biarkan kosong -->
             <img id="customBannerImg" class="banner-custom-img" src="" alt="Banner Kustom">
-            
             <div class="slides-container" id="sliderContainer">
                 <div class="slide">
                     <h2>Informasi Lokal Kepri</h2>
@@ -119,22 +150,12 @@
             </div>
         </div>
 
-        <!-- Pencarian -->
-        <div class="search-section">
-            <div class="search-box">
-                <svg viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208zM208 352a144 144 10 1 0 0 -288 144 144 10 1 0 0 288z"/></svg>
-                <!-- Kolom pencarian dengan dukungan tombol Enter -->
-                <input type="text" id="searchInput" placeholder="Cari info, jasa, barang, atau wilayah...">
-            </div>
-        </div>
-
         <!-- Konten Utama -->
         <div class="content-body">
             <div class="section-header" style="margin-top: 0;">
                 <span class="section-title">Kategori Pilihan</span>
             </div>
             
-            <!-- Grid Kategori -->
             <div class="categories-grid">
                 <div class="cat-item" onclick="pilihKategori('Jasa')">
                     <div class="cat-icon">🛠️</div>
@@ -166,7 +187,7 @@
                 </div>
             </div>
 
-            <!-- BAGIAN 1: INFO TERBARU (Hanya muncul 3 item teratas saat halaman awal) -->
+            <!-- Info Terbaru -->
             <div id="sectionInfoTerbaru">
                 <div class="section-header">
                     <span class="section-title">Info Terbaru</span>
@@ -176,7 +197,7 @@
                 </div>
             </div>
 
-            <!-- BAGIAN 2: HASIL PENCARIAN / FILTER (Muncul di bawah Info Terbaru jika ada pencarian/filter) -->
+            <!-- Hasil Filter / Pencarian -->
             <div id="sectionHasilFilter" style="display: none; margin-top: 20px;">
                 <div class="section-header">
                     <span class="section-title" id="listTitle">Hasil Pencarian</span>
@@ -184,15 +205,10 @@
                 </div>
                 <div id="dataContainer"></div>
             </div>
-
-            <!-- Tombol Mengambang (Floating Action Button) Pasang Info -->
-            <a href="tambah-info.html" class="btn-fab-pasang" title="Pasang Info Gratis">
-                +
-            </a>
         </div>
     </div>
 
-    <!-- Modal Pilihan Wilayah -->
+    <!-- Modal Wilayah -->
     <div class="modal-overlay" id="modalWilayah">
         <div class="modal-content">
             <div class="modal-header">
@@ -214,7 +230,22 @@
         </div>
     </div>
 
-    <!-- Skrip Supabase & Logika Utama -->
+    <!-- Modal Menu Ombak (Untuk Halaman Masa Depan) -->
+    <div class="modal-overlay" id="modalMenuOmbak">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>🌊 Menu Utama Goona</span>
+                <span style="cursor:pointer; font-weight:bold;" onclick="tutupMenuOmbak()">✕</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="region-item" onclick="alert('Halaman Tentang Kami (Segera Hadir)')">ℹ️ Tentang Goona</div>
+                <div class="region-item" onclick="alert('Halaman Bantuan / FAQ (Segera Hadir)')">❓ Pusat Bantuan</div>
+                <div class="region-item" onclick="alert('Pengaturan Aplikasi (Segera Hadir)')">⚙️ Pengaturan</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skrip Supabase & Logika -->
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
@@ -228,39 +259,34 @@
         let cacheInfoTerbaru = [];
 
         const daftarKabKotaKepri = [
-            "Semua Wilayah",
-            "Kota Batam",
-            "Kota Tanjungpinang",
-            "Kabupaten Bintan",
-            "Kabupaten Karimun",
-            "Kabupaten Lingga",
-            "Kabupaten Natuna",
-            "Kabupaten Kepulauan Anambas"
+            "Semua Wilayah", "Kota Batam", "Kota Tanjungpinang", 
+            "Kabupaten Bintan", "Kabupaten Karimun", "Kabupaten Lingga", 
+            "Kabupaten Natuna", "Kabupaten Kepulauan Anambas"
         ];
 
         window.addEventListener('DOMContentLoaded', () => {
             muatDataAwal();
-            cekBannerKustom();
         });
 
-        // Fungsi opsional untuk menampilkan gambar banner Anda sendiri jika file-nya sudah ada
-        function cekBannerKustom() {
-            const customImg = document.getElementById('customBannerImg');
-            const namaFileBanner = 'banner-goona.jpg'; // Ubah ke nama file gambar banner Anda jika ada
-            
-            const imgTest = new Image();
-            imgTest.src = namaFileBanner;
-            imgTest.onload = function() {
-                customImg.src = namaFileBanner;
-                customImg.style.display = 'block';
-            };
+        // Fungsi Membuka/Menutup Kotak Pencarian Interaktif
+        window.toggleSearch = function() {
+            const dropdown = document.getElementById('searchDropdown');
+            dropdown.classList.toggle('active');
+            if(dropdown.classList.contains('active')) {
+                document.getElementById('searchInput').focus();
+            }
         }
 
-        // Memuat data awal khusus status 'aktif' dan membatasi hanya 3 item untuk info terbaru
+        // Fungsi Membuka Menu Ombak (Hamburger bergelombang)
+        window.bukaMenuOmbak = function() {
+            document.getElementById('modalMenuOmbak').style.display = 'flex';
+        }
+        window.tutupMenuOmbak = function() {
+            document.getElementById('modalMenuOmbak').style.display = 'none';
+        }
+
         async function muatDataAwal() {
             const containerTerbaru = document.getElementById('containerInfoTerbaru');
-            containerTerbaru.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Memuat info terbaru...</p>';
-
             let { data, error } = await supabase
                 .from('konten_goona')
                 .select('*')
@@ -268,7 +294,6 @@
                 .order('created_at', { ascending: false });
 
             if (error) {
-                console.error(error);
                 containerTerbaru.innerHTML = '<p style="text-align: center; color: red; font-size: 0.85rem; padding: 15px;">Gagal memuat data.</p>';
                 return;
             }
@@ -304,16 +329,10 @@
             container.innerHTML = html;
         }
 
-        // Fungsi pencarian dan filter kategori/wilayah
         window.jalankanPencarianFilter = function(keyword = '', kategori = null, wilayah = null) {
             let hasil = [...cacheData];
-
-            if (kategori) {
-                hasil = hasil.filter(item => item.kategori === kategori);
-            }
-            if (wilayah && wilayah !== "Semua Wilayah") {
-                hasil = hasil.filter(item => item.kabupaten_kota === wilayah);
-            }
+            if (kategori) hasil = hasil.filter(item => item.kategori === kategori);
+            if (wilayah && wilayah !== "Semua Wilayah") hasil = hasil.filter(item => item.kabupaten_kota === wilayah);
             if (keyword) {
                 const kw = keyword.toLowerCase();
                 hasil = hasil.filter(item => 
@@ -330,17 +349,7 @@
                 sectionTerbaru.style.display = 'none';
                 sectionFilter.style.display = 'block';
                 document.getElementById('resetBtn').style.display = 'inline-block';
-
-                let subJudul = 'Hasil Pencarian';
-                if (kategori && wilayah && wilayah !== "Semua Wilayah") {
-                    subJudul = `Kategori: ${kategori} di ${wilayah}`;
-                } else if (kategori) {
-                    subJudul = `Kategori: ${kategori}`;
-                } else if (keyword) {
-                    subJudul = `Pencarian: "${keyword}"`;
-                }
-                document.getElementById('listTitle').innerText = subJudul;
-
+                document.getElementById('listTitle').innerText = keyword ? `Pencarian: "${keyword}"` : `Kategori: ${kategori}`;
                 tampilkanHasilFilter(hasil);
             } else {
                 sectionTerbaru.style.display = 'block';
@@ -352,15 +361,13 @@
         function tampilkanHasilFilter(data) {
             const container = document.getElementById('dataContainer');
             if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Tidak ada data yang cocok dengan kriteria.</p>';
+                container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Tidak ada data yang cocok.</p>';
                 return;
             }
-
             let html = '';
             data.forEach((item) => {
                 let realIndex = cacheData.findIndex(d => d.id === item.id);
                 let tampilanMedia = item.url_foto ? `<img src="${item.url_foto}" class="info-img" alt="Foto">` : '📌';
-
                 html += `
                     <div class="info-card" onclick="bukaDetail(${realIndex})">
                         <div class="info-img-container">${tampilanMedia}</div>
@@ -378,49 +385,35 @@
         window.bukaDetail = function(index) {
             const item = cacheData[index];
             if (!item) return;
-
             let mediaHtml = item.url_foto ? `<img src="${item.url_foto}" alt="Foto">` : `<div style="width:100%; height:140px; background:#e6f4ea; border-radius:10px; display:flex; justify-content:center; align-items:center; font-size:2rem; color:#047857; margin-bottom:12px;">📌</div>`;
-
             const pesanWa = encodeURIComponent(`Halo, saya tertarik dengan info "${item.judul}" di Goona.`);
             let linkWa = `https://api.whatsapp.com/send?text=${pesanWa}`;
-
-            let rawKontak = item.whatsapp || '';
-            if (rawKontak) {
-                let cleanNo = String(rawKontak).replace(/[^0-9]/g, '');
-                if (cleanNo.startsWith('0')) {
-                    cleanNo = '62' + cleanNo.slice(1);
-                }
+            if (item.whatsapp) {
+                let cleanNo = String(item.whatsapp).replace(/[^0-9]/g, '');
+                if (cleanNo.startsWith('0')) cleanNo = '62' + cleanNo.slice(1);
                 linkWa = `https://wa.me/${cleanNo}?text=${pesanWa}`;
             }
 
-            const detailContainer = document.getElementById('detailContent');
-            detailContainer.innerHTML = `
+            document.getElementById('detailContent').innerHTML = `
                 ${mediaHtml}
                 <h3>${item.judul || 'Tanpa Judul'}</h3>
                 <div class="detail-meta">
                     <span>📍 ${item.kabupaten_kota || 'Kepri'}</span>
                     <span class="badge">${item.kategori || 'Umum'}</span>
                 </div>
-                <div class="detail-desc">${item.deskripsi || 'Tidak ada deskripsi lengkap.'}</div>
-                <a href="${linkWa}" target="_blank" class="btn-whatsapp">
-                    Hubungi via WhatsApp
-                </a>
+                <div class="detail-desc">${item.deskripsi || 'Tidak ada deskripsi.'}</div>
+                <a href="${linkWa}" target="_blank" class="btn-whatsapp">Hubungi via WhatsApp</a>
             `;
-
             document.getElementById('modalDetail').style.display = 'flex';
         };
 
-        window.tutupModalDetail = function() {
-            document.getElementById('modalDetail').style.display = 'none';
-        };
+        window.tutupModalDetail = function() { document.getElementById('modalDetail').style.display = 'none'; };
 
         window.pilihKategori = function(kategori) {
             kategoriAktif = kategori;
             document.getElementById('modalTitle').innerText = `Pilih Wilayah: ${kategori}`;
-            
             const listContainer = document.getElementById('listWilayah');
             listContainer.innerHTML = '';
-
             daftarKabKotaKepri.forEach(wil => {
                 const div = document.createElement('div');
                 div.className = 'region-item';
@@ -432,13 +425,10 @@
                 };
                 listContainer.appendChild(div);
             });
-
             document.getElementById('modalWilayah').style.display = 'flex';
         };
 
-        window.tutupModalWilayah = function() {
-            document.getElementById('modalWilayah').style.display = 'none';
-        };
+        window.tutupModalWilayah = function() { document.getElementById('modalWilayah').style.display = 'none'; };
 
         window.resetFilter = function() {
             kategoriAktif = null;
@@ -449,8 +439,6 @@
 
         let timeoutCari;
         const inputSearch = document.getElementById('searchInput');
-
-        // Mendukung input secara langsung (live search)
         inputSearch.addEventListener('input', (e) => {
             clearTimeout(timeoutCari);
             const keyword = e.target.value;
@@ -459,26 +447,23 @@
             }, 300);
         });
 
-        // Menambahkan fungsionalitas agar tombol Enter pada keyboard berfungsi langsung
         inputSearch.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 clearTimeout(timeoutCari);
                 jalankanPencarianFilter(inputSearch.value, kategoriAktif, wilayahAktif);
-                inputSearch.blur(); // Menyembunyikan keyboard virtual di HP setelah enter
+                inputSearch.blur();
             }
         });
 
         let idxSlide = 0;
         const contSlide = document.getElementById('sliderContainer');
         const dots = document.querySelectorAll('.dot');
-
         window.pindahSlide = function(n) {
             idxSlide = n;
             contSlide.style.transform = `translateX(-${idxSlide * 33.333}%)`;
             dots.forEach((d, i) => d.classList.toggle('active', i === idxSlide));
         };
-
         setInterval(() => {
             idxSlide = (idxSlide + 1) % 3;
             pindahSlide(idxSlide);
