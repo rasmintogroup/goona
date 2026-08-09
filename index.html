@@ -186,16 +186,14 @@
         </div>
     </div>
 
-    <!-- Modal Detail Info (Popup saat Kartu diklik) -->
+    <!-- Modal Detail Info -->
     <div class="modal-overlay" id="modalDetail">
         <div class="modal-content">
             <div class="modal-header">
                 <span>Detail Informasi</span>
                 <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="tutupModalDetail()"></i>
             </div>
-            <div class="detail-body" id="detailContent">
-                <!-- Konten detail dinamis -->
-            </div>
+            <div class="detail-body" id="detailContent"></div>
         </div>
     </div>
 
@@ -209,7 +207,7 @@
 
         let kategoriAktif = null;
         let wilayahAktif = null;
-        let cacheData = []; // Menyimpan data sementara untuk popup detail
+        let cacheData = [];
 
         const daftarKabKotaKepri = [
             "Semua Wilayah",
@@ -222,7 +220,6 @@
             "Kabupaten Kepulauan Anambas"
         ];
 
-        // Pemetaan Ikon Kategori jika foto tidak ada
         function dapatkanIconKategori(kat) {
             switch(kat) {
                 case 'Jasa': return 'fa-wrench';
@@ -307,7 +304,6 @@
             container.innerHTML = html;
         }
 
-        // Fungsi Buka Modal Detail saat Kartu Diklik
         window.bukaDetail = function(index) {
             const item = cacheData[index];
             if (!item) return;
@@ -320,17 +316,16 @@
                 mediaHtml = `<div style="width:100%; height:140px; background:#e6f4ea; border-radius:10px; display:flex; justify-content:center; align-items:center; font-size:2.5rem; color:#047857; margin-bottom:12px;"><i class="fa-solid ${iconClass}"></i></div>`;
             }
 
-            // Tombol WhatsApp (jika ada nomor kontak di deskripsi atau format standar)
-            // Mengambil nomor HP otomatis jika ada format angka di deskripsi atau sediakan tombol umum
-            let tombolWaHtml = '';
-            const noWa = item.no_whatsapp || item.kontak || ''; // Sesuaikan jika ada kolom nomor, atau ambil dari deskripsi
-            // Jika tidak ada kolom khusus kontak, kita buat tombol WA mengarah ke chat dengan teks judul
-            const pesanWa = encodeURIComponent(`Halo, saya tertarik dengan info "${item.judul}" yang ada di Goona.`);
-            // Jika pemasang menyertakan nomor, gunakan nomor tersebut (ciedz format angka), kalau tidak sediakan placeholder/umum
+            // Membentuk Link WhatsApp berdasarkan kolom 'whatsapp' dari tabel Supabase
+            const pesanWa = encodeURIComponent(`Halo, saya tertarik dengan info "${item.judul}" di Goona.`);
             let linkWa = `https://api.whatsapp.com/send?text=${pesanWa}`;
-            if (noWa) {
-                let cleanNo = noWa.replace(/[^0-9]/g, '');
-                if (cleanNo.startsWith('0')) cleanNo = '62' + cleanNo.slice(1);
+
+            let rawKontak = item.whatsapp || '';
+            if (rawKontak) {
+                let cleanNo = String(rawKontak).replace(/[^0-9]/g, '');
+                if (cleanNo.startsWith('0')) {
+                    cleanNo = '62' + cleanNo.slice(1);
+                }
                 linkWa = `https://wa.me/${cleanNo}?text=${pesanWa}`;
             }
 
