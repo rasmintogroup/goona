@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Goona - Platform Informasi Lokal Kepulauan Riau</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Menggunakan SVG Icon lokal / inline untuk menghindari pemblokiran Cloudflare CDN -->
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: #f0fdf4; color: #064e3b; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -34,16 +34,16 @@
         .search-section { padding: 14px 16px; background: #047857; }
         .search-box { display: flex; align-items: center; background: #ffffff; border-radius: 30px; padding: 10px 16px; border: 1px solid #34d399; }
         .search-box input { border: none; outline: none; width: 100%; font-size: 0.9rem; margin-left: 8px; background: transparent; color: #064e3b; }
-        .search-box i { color: #047857; }
+        .search-box svg { width: 16px; height: 16px; fill: #047857; }
 
         /* Content Body */
-        .content-body { padding: 16px; flex: 1; overflow-y: auto; padding-bottom: 30px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .content-body { padding: 16px; flex: 1; overflow-y: auto; padding-bottom: 90px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; margin-top: 15px; }
         .section-title { font-size: 0.95rem; font-weight: 700; color: #064e3b; }
         .reset-btn { font-size: 0.8rem; color: #0d9488; background: none; border: none; font-weight: 600; cursor: pointer; display: none; }
 
         /* Kategori Grid */
-        .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+        .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
         .cat-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
         .cat-icon { width: 48px; height: 48px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: #047857; font-size: 1.1rem; margin-bottom: 4px; transition: 0.2s; }
         .cat-item:hover .cat-icon { background: #047857; color: white; }
@@ -52,15 +52,16 @@
         /* List Kartu Data */
         .info-card { background: #ffffff; border: 1px solid #a7f3d0; border-radius: 12px; padding: 12px; display: flex; gap: 12px; align-items: center; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(4,120,87,0.03); cursor: pointer; transition: 0.2s; }
         .info-card:hover { border-color: #047857; background: #f9fbf9; }
-        .info-img-container { width: 55px; height: 55px; background: #d1fae5; border-radius: 8px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; overflow: hidden; border: 1px solid #a7f3d0; color: #047857; font-size: 1.2rem; }
+        .info-img-container { width: 55px; height: 55px; background: #d1fae5; border-radius: 8px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; overflow: hidden; border: 1px solid #a7f3d0; color: #047857; }
         .info-img { width: 100%; height: 100%; object-fit: cover; }
         .info-desc { flex: 1; }
         .info-desc h4 { font-size: 0.85rem; font-weight: 600; color: #064e3b; margin-bottom: 3px; }
-        .info-location { font-size: 0.73rem; color: #4b5563; margin-bottom: 4px; }
+        .info-location { font-size: 0.73rem; color: #4b5563; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
         .badge { background: #d1fae5; color: #065f46; font-size: 0.62rem; padding: 2px 7px; border-radius: 5px; font-weight: 700; border: 1px solid #34d399; display: inline-block; }
 
-        /* Tombol Pasang Info */
-        .btn-pasang { background: linear-gradient(135deg, #047857, #0d9488); color: white; border: none; width: 100%; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; margin-top: 20px; box-shadow: 0 4px 10px rgba(4,120,87,0.2); box-sizing: border-box; }
+        /* Floating Button Pasang Info (Mengambang di Bawah) */
+        .btn-fab-pasang { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #047857, #0d9488); color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.6rem; text-decoration: none; box-shadow: 0 4px 15px rgba(4,120,87,0.4); z-index: 99; transition: transform 0.2s; border: 2px solid #34d399; }
+        .btn-fab-pasang:hover { transform: scale(1.05); }
 
         /* Modal Umum */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
@@ -85,8 +86,7 @@
     <div class="app-container">
         <!-- Header -->
         <div class="app-header">
-            <div class="logo-area"><i class="fa-solid fa-water"></i> GOONA</div>
-            <i class="fa-solid fa-bars" style="cursor:pointer;"></i>
+            <div class="logo-area">GOONA</div>
         </div>
 
         <!-- Banner Slider -->
@@ -115,62 +115,71 @@
         <!-- Pencarian -->
         <div class="search-section">
             <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <svg viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208zM208 352a144 144 10 1 0 0 -288 144 144 0 1 0 0 288z"/></svg>
                 <input type="text" id="searchInput" placeholder="Cari info, jasa, barang, atau wilayah...">
             </div>
         </div>
 
         <!-- Konten Utama -->
         <div class="content-body">
-            <div class="section-header">
+            <div class="section-header" style="margin-top: 0;">
                 <span class="section-title">Kategori Pilihan</span>
-                <button id="resetBtn" class="reset-btn" onclick="resetFilter()">Reset Filter x</button>
             </div>
             
-            <!-- Grid 7 Kategori -->
+            <!-- Grid Kategori -->
             <div class="categories-grid">
                 <div class="cat-item" onclick="pilihKategori('Jasa')">
-                    <div class="cat-icon"><i class="fa-solid fa-wrench"></i></div>
+                    <div class="cat-icon">🛠️</div>
                     <span class="cat-name">Jasa</span>
                 </div>
                 <div class="cat-item" onclick="pilihKategori('Jual Beli')">
-                    <div class="cat-icon"><i class="fa-solid fa-store"></i></div>
+                    <div class="cat-icon">🏪</div>
                     <span class="cat-name">Jual Beli</span>
                 </div>
                 <div class="cat-item" onclick="pilihKategori('Kos')">
-                    <div class="cat-icon"><i class="fa-solid fa-house"></i></div>
+                    <div class="cat-icon">🏠</div>
                     <span class="cat-name">Kos</span>
                 </div>
                 <div class="cat-item" onclick="pilihKategori('Kuliner')">
-                    <div class="cat-icon"><i class="fa-solid fa-utensils"></i></div>
+                    <div class="cat-icon">🍲</div>
                     <span class="cat-name">Kuliner</span>
                 </div>
                 <div class="cat-item" onclick="pilihKategori('Wisata')">
-                    <div class="cat-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                    <div class="cat-icon">🌄</div>
                     <span class="cat-name">Wisata</span>
                 </div>
                 <div class="cat-item" onclick="pilihKategori('Loker')">
-                    <div class="cat-icon"><i class="fa-solid fa-briefcase"></i></div>
+                    <div class="cat-icon">💼</div>
                     <span class="cat-name">Loker</span>
                 </div>
                 <div class="cat-item" onclick="pilihKategori('Info')">
-                    <div class="cat-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                    <div class="cat-icon">📢</div>
                     <span class="cat-name">Info</span>
                 </div>
             </div>
 
-            <!-- Daftar Data -->
-            <div class="section-header">
-                <span class="section-title" id="listTitle">Info Terbaru</span>
-            </div>
-            
-            <div id="dataContainer">
-                <p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 20px;">Memuat data...</p>
+            <!-- BAGIAN 1: INFO TERBARU (Hanya muncul 3 item teratas saat halaman awal) -->
+            <div id="sectionInfoTerbaru">
+                <div class="section-header">
+                    <span class="section-title">Info Terbaru</span>
+                </div>
+                <div id="containerInfoTerbaru">
+                    <p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Memuat info terbaru...</p>
+                </div>
             </div>
 
-            <!-- Tombol Tambah Info -->
-            <a href="tambah-info.html" class="btn-pasang">
-                <i class="fa-solid fa-plus"></i> Pasang Info Gratis
+            <!-- BAGIAN 2: HASIL PENCARIAN / FILTER (Muncul di bawah Info Terbaru jika ada pencarian/filter) -->
+            <div id="sectionHasilFilter" style="display: none; margin-top: 20px;">
+                <div class="section-header">
+                    <span class="section-title" id="listTitle">Hasil Pencarian</span>
+                    <button id="resetBtn" class="reset-btn" onclick="resetFilter()">Reset Filter x</button>
+                </div>
+                <div id="dataContainer"></div>
+            </div>
+
+            <!-- Tombol Mengambang (Floating Action Button) Pasang Info -->
+            <a href="tambah-info.html" class="btn-fab-pasang" title="Pasang Info Gratis">
+                +
             </a>
         </div>
     </div>
@@ -180,7 +189,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span id="modalTitle">Pilih Wilayah</span>
-                <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="tutupModalWilayah()"></i>
+                <span style="cursor:pointer; font-weight:bold;" onclick="tutupModalWilayah()">✕</span>
             </div>
             <div class="region-list" id="listWilayah"></div>
         </div>
@@ -191,7 +200,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span>Detail Informasi</span>
-                <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="tutupModalDetail()"></i>
+                <span style="cursor:pointer; font-weight:bold;" onclick="tutupModalDetail()">✕</span>
             </div>
             <div class="detail-body" id="detailContent"></div>
         </div>
@@ -208,6 +217,7 @@
         let kategoriAktif = null;
         let wilayahAktif = null;
         let cacheData = [];
+        let cacheInfoTerbaru = [];
 
         const daftarKabKotaKepri = [
             "Semua Wilayah",
@@ -220,82 +230,125 @@
             "Kabupaten Kepulauan Anambas"
         ];
 
-        function dapatkanIconKategori(kat) {
-            switch(kat) {
-                case 'Jasa': return 'fa-wrench';
-                case 'Jual Beli': return 'fa-store';
-                case 'Kos': return 'fa-house';
-                case 'Kuliner': return 'fa-utensils';
-                case 'Wisata': return 'fa-mountain-sun';
-                case 'Loker': return 'fa-briefcase';
-                default: return 'fa-bullhorn';
-            }
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
-            muatDataSupabase();
+            muatDataAwal();
         });
 
-        async function muatDataSupabase(keyword = '', kategori = null, wilayah = null) {
-            const container = document.getElementById('dataContainer');
-            container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 20px;">Memuat data...</p>';
+        // Memuat data awal khusus status 'aktif' dan membatasi hanya 3 item untuk info terbaru
+        async function muatDataAwal() {
+            const containerTerbaru = document.getElementById('containerInfoTerbaru');
+            containerTerbaru.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Memuat info terbaru...</p>';
 
-            let query = supabase.from('konten_goona').select('*').order('created_at', { ascending: false });
-
-            if (kategori) {
-                query = query.eq('kategori', kategori);
-            }
-            if (wilayah && wilayah !== "Semua Wilayah") {
-                query = query.eq('kabupaten_kota', wilayah);
-            }
-
-            let { data, error } = await query;
+            // Hanya ambil data yang statusnya 'aktif'
+            let { data, error } = await supabase
+                .from('konten_goona')
+                .select('*')
+                .eq('status', 'aktif')
+                .order('created_at', { ascending: false });
 
             if (error) {
                 console.error(error);
-                container.innerHTML = '<p style="text-align: center; color: red; font-size: 0.85rem; padding: 20px;">Gagal memuat data dari database.</p>';
+                containerTerbaru.innerHTML = '<p style="text-align: center; color: red; font-size: 0.85rem; padding: 15px;">Gagal memuat data.</p>';
                 return;
             }
 
             cacheData = data || [];
+            // Ambil 3 data terbaru untuk halaman utama
+            cacheInfoTerbaru = cacheData.slice(0, 3);
+            tampilkanInfoTerbaru(cacheInfoTerbaru);
+        }
 
+        function tampilkanInfoTerbaru(data) {
+            const container = document.getElementById('containerInfoTerbaru');
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Belum ada info aktif.</p>';
+                return;
+            }
+
+            let html = '';
+            data.forEach((item) => {
+                // Cari index asli di cacheData untuk tombol detail
+                let realIndex = cacheData.findIndex(d => d.id === item.id);
+                let tampilanMedia = item.url_foto ? `<img src="${item.url_foto}" class="info-img" alt="Foto">` : '📌';
+
+                html += `
+                    <div class="info-card" onclick="bukaDetail(${realIndex})">
+                        <div class="info-img-container">${tampilanMedia}</div>
+                        <div class="info-desc">
+                            <h4>${item.judul || 'Tanpa Judul'}</h4>
+                            <div class="info-location">📍 ${item.kabupaten_kota || 'Kepri'}</div>
+                            <span class="badge">${item.kategori || 'Umum'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // Fungsi pencarian dan filter kategori/wilayah
+        window.jalankanPencarianFilter = function(keyword = '', kategori = null, wilayah = null) {
+            let hasil = [...cacheData];
+
+            if (kategori) {
+                hasil = hasil.filter(item => item.kategori === kategori);
+            }
+            if (wilayah && wilayah !== "Semua Wilayah") {
+                hasil = hasil.filter(item => item.kabupaten_kota === wilayah);
+            }
             if (keyword) {
                 const kw = keyword.toLowerCase();
-                cacheData = cacheData.filter(item => 
+                hasil = hasil.filter(item => 
                     (item.judul || '').toLowerCase().includes(kw) ||
                     (item.kabupaten_kota || '').toLowerCase().includes(kw) ||
                     (item.deskripsi || '').toLowerCase().includes(kw)
                 );
             }
 
-            tampilkanKeLayar(cacheData);
+            const sectionFilter = document.getElementById('sectionHasilFilter');
+            const sectionTerbaru = document.getElementById('sectionInfoTerbaru');
+            
+            // Jika sedang melakukan pencarian/filter, sembunyikan info terbaru dan tampilkan hasil filter di bawahnya
+            if (keyword || kategori || (wilayah && wilayah !== "Semua Wilayah")) {
+                sectionTerbaru.style.display = 'none';
+                sectionFilter.style.display = 'block';
+                document.getElementById('resetBtn').style.display = 'inline-block';
+
+                let subJudul = 'Hasil Pencarian';
+                if (kategori && wilayah && wilayah !== "Semua Wilayah") {
+                    subJudul = `Kategori: ${kategori} di ${wilayah}`;
+                } else if (kategori) {
+                    subJudul = `Kategori: ${kategori}`;
+                } else if (keyword) {
+                    subJudul = `Pencarian: "${keyword}"`;
+                }
+                document.getElementById('listTitle').innerText = subJudul;
+
+                tampilkanHasilFilter(hasil);
+            } else {
+                sectionTerbaru.style.display = 'block';
+                sectionFilter.style.display = 'none';
+                document.getElementById('resetBtn').style.display = 'none';
+            }
         }
 
-        function tampilkanKeLayar(data) {
+        function tampilkanHasilFilter(data) {
             const container = document.getElementById('dataContainer');
             if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 20px;">Belum ada info atau data ditemukan.</p>';
+                container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Tidak ada data yang cocok dengan kriteria.</p>';
                 return;
             }
 
             let html = '';
-            data.forEach((item, index) => {
-                let tampilanMedia = '';
-                if (item.url_foto && item.url_foto.trim() !== '') {
-                    tampilanMedia = `<img src="${item.url_foto}" class="info-img" alt="Foto">`;
-                } else {
-                    const iconClass = dapatkanIconKategori(item.kategori);
-                    tampilanMedia = `<i class="fa-solid ${iconClass}"></i>`;
-                }
+            data.forEach((item) => {
+                let realIndex = cacheData.findIndex(d => d.id === item.id);
+                let tampilanMedia = item.url_foto ? `<img src="${item.url_foto}" class="info-img" alt="Foto">` : '📌';
 
                 html += `
-                    <div class="info-card" onclick="bukaDetail(${index})">
-                        <div class="info-img-container">
-                            ${tampilanMedia}
-                        </div>
+                    <div class="info-card" onclick="bukaDetail(${realIndex})">
+                        <div class="info-img-container">${tampilanMedia}</div>
                         <div class="info-desc">
                             <h4>${item.judul || 'Tanpa Judul'}</h4>
-                            <div class="info-location"><i class="fa-solid fa-location-dot" style="color: #047857;"></i> ${item.kabupaten_kota || 'Kepri'}</div>
+                            <div class="info-location">📍 ${item.kabupaten_kota || 'Kepri'}</div>
                             <span class="badge">${item.kategori || 'Umum'}</span>
                         </div>
                     </div>
@@ -308,15 +361,8 @@
             const item = cacheData[index];
             if (!item) return;
 
-            let mediaHtml = '';
-            if (item.url_foto && item.url_foto.trim() !== '') {
-                mediaHtml = `<img src="${item.url_foto}" alt="Foto">`;
-            } else {
-                const iconClass = dapatkanIconKategori(item.kategori);
-                mediaHtml = `<div style="width:100%; height:140px; background:#e6f4ea; border-radius:10px; display:flex; justify-content:center; align-items:center; font-size:2.5rem; color:#047857; margin-bottom:12px;"><i class="fa-solid ${iconClass}"></i></div>`;
-            }
+            let mediaHtml = item.url_foto ? `<img src="${item.url_foto}" alt="Foto">` : `<div style="width:100%; height:140px; background:#e6f4ea; border-radius:10px; display:flex; justify-content:center; align-items:center; font-size:2rem; color:#047857; margin-bottom:12px;">📌</div>`;
 
-            // Membentuk Link WhatsApp berdasarkan kolom 'whatsapp' dari tabel Supabase
             const pesanWa = encodeURIComponent(`Halo, saya tertarik dengan info "${item.judul}" di Goona.`);
             let linkWa = `https://api.whatsapp.com/send?text=${pesanWa}`;
 
@@ -334,12 +380,12 @@
                 ${mediaHtml}
                 <h3>${item.judul || 'Tanpa Judul'}</h3>
                 <div class="detail-meta">
-                    <span><i class="fa-solid fa-location-dot" style="color: #047857;"></i> ${item.kabupaten_kota || 'Kepri'}</span>
+                    <span>📍 ${item.kabupaten_kota || 'Kepri'}</span>
                     <span class="badge">${item.kategori || 'Umum'}</span>
                 </div>
                 <div class="detail-desc">${item.deskripsi || 'Tidak ada deskripsi lengkap.'}</div>
                 <a href="${linkWa}" target="_blank" class="btn-whatsapp">
-                    <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> Hubungi via WhatsApp
+                    Hubungi via WhatsApp
                 </a>
             `;
 
@@ -364,9 +410,7 @@
                 div.onclick = () => {
                     wilayahAktif = wil;
                     tutupModalWilayah();
-                    document.getElementById('listTitle').innerText = `${kategoriAktif} (${wilayahAktif})`;
-                    document.getElementById('resetBtn').style.display = 'inline-block';
-                    muatDataSupabase('', kategoriAktif, wilayahAktif);
+                    jalankanPencarianFilter(document.getElementById('searchInput').value, kategoriAktif, wilayahAktif);
                 };
                 listContainer.appendChild(div);
             });
@@ -382,9 +426,7 @@
             kategoriAktif = null;
             wilayahAktif = null;
             document.getElementById('searchInput').value = '';
-            document.getElementById('listTitle').innerText = 'Info Terbaru';
-            document.getElementById('resetBtn').style.display = 'none';
-            muatDataSupabase();
+            jalankanPencarianFilter();
         };
 
         let timeoutCari;
@@ -392,7 +434,7 @@
             clearTimeout(timeoutCari);
             const keyword = e.target.value;
             timeoutCari = setTimeout(() => {
-                muatDataSupabase(keyword, kategoriAktif, wilayahAktif);
+                jalankanPencarianFilter(keyword, kategoriAktif, wilayahAktif);
             }, 300);
         });
 
