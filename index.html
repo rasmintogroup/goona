@@ -2,511 +2,373 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Goona - Belajar • Promosi • Berkembang</title>
-    <link rel="icon" type="image/png" href="Pavicon_goona.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goona - Platform Informasi Lokal Kepulauan Riau</title>
+    <!-- Google Fonts & FontAwesome untuk Ikon -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        :root {
-            --primary-brown: #8B4513;
-            --secondary-brown: #A0522D;
-            --light-brown: #D2B48C;
-            --bg-brown: #FDF5E6;
-            --wa-green: #25D366;
-        }
-
-        * { box-sizing: border-box; }
-
-        body, html {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg-brown);
-            color: #2c2c2c;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-
-        #app {
+        body {
+            background-color: #f4f6f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            min-height: 100dvh;
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
             position: relative;
         }
-
-        header {
-            padding: 16px 20px;
+        /* Header */
+        .app-header {
+            background: #0b4f2a;
+            color: white;
+            padding: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #fff;
-            border-bottom: 1px solid var(--light-brown);
-            position: sticky;
-            top: 0;
-            z-index: 10;
         }
-
-        .logo {
-            font-weight: bold;
-            color: var(--primary-brown);
-            font-size: 20px;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-post-main {
-            text-decoration: none;
-            background: var(--wa-green);
-            color: #fff;
-            padding: 10px 18px;
-            border-radius: 25px;
-            font-size: 13.5px;
-            font-weight: bold;
-            display: inline-flex;
+        .logo-area {
+            display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 6px;
-            box-shadow: 0 2px 5px rgba(37, 211, 102, 0.3);
-            transition: opacity 0.2s;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        .menu-icon {
+            font-size: 1.4rem;
+            cursor: pointer;
         }
 
-        .btn-post-main:hover { opacity: 0.9; }
-
-        #content-viewport {
-            flex: 1;
+        /* Banner Slider Otomatis (Maks 3 Slide) */
+        .banner-slider {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            background: #e2e8f0;
+        }
+        .slides-container {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            width: 33.333%;
+            height: 100%;
+            color: white;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            justify-content: center;
+        }
+        .slide:nth-child(1) { background: linear-gradient(135deg, #0b4f2a, #137547); }
+        .slide:nth-child(2) { background: linear-gradient(135deg, #1b6ca8, #0b4f2a); }
+        .slide:nth-child(3) { background: linear-gradient(135deg, #d97706, #0b4f2a); }
+        .slide h2 { font-size: 1.1rem; margin-bottom: 5px; }
+        .slide p { font-size: 0.85rem; opacity: 0.9; }
+        
+        /* Indikator Slider */
+        .slider-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .dot.active {
+            background: white;
+        }
+
+        /* Search Bar */
+        .search-section {
+            padding: 16px;
+            background: #0b4f2a;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 30px;
+            padding: 10px 16px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 0.9rem;
+            margin-left: 8px;
+        }
+        .search-box i {
+            color: #0b4f2a;
+        }
+
+        /* Kategori */
+        .content-body {
+            padding: 16px;
+            flex: 1;
             overflow-y: auto;
         }
-
-        /* Banner Ajakan / Headline */
-        .promo-banner {
-            background: linear-gradient(135deg, #FFF8DC, #FAEBD7);
-            border: 1px solid var(--light-brown);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .promo-banner h1 {
-            font-size: 18px;
-            color: var(--primary-brown);
-            margin: 0 0 10px 0;
-            line-height: 1.4;
-        }
-
-        .promo-banner p {
-            font-size: 13.5px;
-            color: #555;
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        /* Kotak Pencarian */
-        .search-control-box {
-            background: #fff;
-            border: 1px solid var(--light-brown);
-            padding: 14px;
-            border-radius: 12px;
+        .section-header {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
         }
-
-        .search-input-wrapper {
-            display: flex;
-            gap: 8px;
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #333;
         }
-
-        input {
-            flex: 1;
-            padding: 12px 16px;
-            border-radius: 8px;
-            border: 1px solid var(--light-brown);
-            outline: none;
-            font-size: 14px;
-            background: #FFFAF0;
+        .see-all {
+            font-size: 0.8rem;
+            color: #0b4f2a;
+            text-decoration: none;
+            font-weight: 600;
         }
-
-        input:focus {
-            border-color: var(--primary-brown);
-            box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
-        }
-
-        button.search-btn {
-            background: var(--primary-brown);
-            color: #fff;
-            border: none;
-            padding: 0 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 13.5px;
-            transition: background 0.2s;
-        }
-
-        button.search-btn:hover { background: var(--secondary-brown); }
-
-        /* Grid Kategori Ikon */
-        .category-grid {
+        .categories-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
-
         .cat-item {
-            background: #FFFAF0;
-            border: 1px solid var(--light-brown);
-            border-radius: 10px;
-            padding: 10px 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
         }
-
-        .cat-item:hover {
-            background: var(--light-brown);
-            color: #fff;
-        }
-
         .cat-icon {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
-
-        .cat-label {
-            font-size: 11.5px;
-            font-weight: 600;
-            color: var(--primary-brown);
-        }
-
-        .cat-item:hover .cat-label {
-            color: #fff;
-        }
-
-        /* Daftar Kartu Hasil */
-        .card-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .jasa-card {
-            background: #fff;
-            border: 1px solid var(--light-brown);
-            border-left: 5px solid var(--primary-brown);
+            width: 50px;
+            height: 50px;
+            background: #f0f7f4;
             border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .jasa-card.ppv-premium {
-            border-left: 5px solid #FFD700;
-            background: linear-gradient(to right, #fffdf5, #fff);
-        }
-
-        .card-title {
-            font-weight: bold;
-            font-size: 16px;
-            color: var(--primary-brown);
-        }
-
-        .card-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-top: 4px;
-            border: 1px solid #eee;
-        }
-
-        .card-desc {
-            font-size: 13.5px;
-            color: #444;
-            line-height: 1.5;
-            white-space: pre-line;
-        }
-
-        .card-meta {
-            font-size: 13px;
-            color: #666;
-            margin-top: 2px;
-        }
-
-        .btn-wa {
-            display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 8px;
-            background: var(--wa-green);
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 8px;
+            align-items: center;
+            color: #0b4f2a;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
             transition: background 0.2s;
         }
-
-        .btn-wa:hover { background: #20ba56; }
-
-        .info-msg {
-            background: #fff;
-            border: 1px dashed var(--light-brown);
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 13.5px;
+        .cat-item:hover .cat-icon {
+            background: #0b4f2a;
+            color: white;
+        }
+        .cat-name {
+            font-size: 0.75rem;
             color: #555;
-            text-align: center;
+            font-weight: 500;
         }
 
-        /* Footer */
-        footer {
-            background: #2c1d11;
-            color: #d2b48c;
-            padding: 24px 20px;
-            text-align: center;
+        /* Info Terbaru */
+        .latest-info-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-size: 12.5px;
-            margin-top: auto;
+            gap: 12px;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            margin-bottom: 20px;
+        }
+        .latest-img {
+            width: 60px;
+            height: 60px;
+            background: #cbd5e1;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .latest-desc h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 4px;
+        }
+        .badge {
+            background: #d1fae5;
+            color: #065f46;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
         }
 
-        footer .footer-logo {
-            font-weight: bold;
-            color: #fff;
-            font-size: 16px;
-            letter-spacing: 1px;
-        }
-
-        footer .footer-tagline {
-            font-style: italic;
-            color: #ebd3bc;
-        }
-
-        footer .footer-features {
+        /* Tombol Pasang Info */
+        .btn-pasang {
+            background: #0b4f2a;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
             display: flex;
             justify-content: center;
-            gap: 12px;
-            font-size: 12px;
-            color: #bbb;
-            margin: 4px 0;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(11, 79, 42, 0.3);
+            margin-top: auto;
         }
-
-        footer a {
-            color: #d2b48c;
-            text-decoration: none;
-        }
-
-        footer a:hover { text-decoration: underline; }
     </style>
 </head>
-
 <body>
 
-<div id="app">
-    <header>
-        <div class="logo">GOONA</div>
-        <a href="tambah-info.html" class="btn-post-main">+ Pasang Info Gratis</a>
-    </header>
-
-    <main id="content-viewport">
-        <!-- Banner Headline Sesuai Panduan -->
-        <div class="promo-banner">
-            <h1>PUNYA USAHA?<br>JANGAN HANYA MENUNGGU ORANG MENEMUKANMU!</h1>
-            <p>Promosikan usahamu di Goona secara GRATIS dan jangkau lebih banyak orang di Kepulauan Riau. Semakin mudah ditemukan, semakin besar peluangmu!</p>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="app-header">
+            <div class="logo-area">
+                <i class="fa-solid fa-globe"></i> GOONA
+            </div>
+            <i class="fa-solid fa-bars menu-icon"></i>
         </div>
 
-        <!-- Kolom Pencarian -->
-        <div class="search-control-box">
-            <div style="font-size: 13px; font-weight: bold; color: var(--primary-brown);">Cari Jasa, Kuliner, Kos, atau Kebutuhan Lainnya:</div>
-            <div class="search-input-wrapper">
-                <input type="text" id="user-input" placeholder="Cari jasa, jual beli, kos, kuliner, wisata, loker...">
-                <button class="search-btn" id="send-btn">Cari</button>
+        <!-- Banner Slider Otomatis (Maksimal 3 Slide) -->
+        <div class="banner-slider">
+            <div class="slides-container" id="sliderContainer">
+                <div class="slide">
+                    <h2>Temukan Info Lokal Kepri</h2>
+                    <p>Mudah, cepat, dan terpercaya untuk seluruh masyarakat Kepulauan Riau.</p>
+                </div>
+                <div class="slide">
+                    <h2>Promosi Usaha 100% Gratis</h2>
+                    <p>Jangkau lebih banyak pelanggan potensial di wilayahmu sekarang juga.</p>
+                </div>
+                <div class="slide">
+                    <h2>Dukung Ekonomi Lokal</h2>
+                    <p>Tumbuh dan maju bersama membangun Kepri yang lebih baik.</p>
+                </div>
             </div>
-        </div>
-
-        <!-- Ikon Kategori Cepat -->
-        <div class="category-grid">
-            <div class="cat-item" onclick="searchByCategory('Jasa')">
-                <div class="cat-icon">🛠️</div>
-                <div class="cat-label">Jasa</div>
-            </div>
-            <div class="cat-item" onclick="searchByCategory('Jual Beli')">
-                <div class="cat-icon">🛒</div>
-                <div class="cat-label">Jual Beli</div>
-            </div>
-            <div class="cat-item" onclick="searchByCategory('Kos')">
-                <div class="cat-icon">🏠</div>
-                <div class="cat-label">Kos</div>
-            </div>
-            <div class="cat-item" onclick="searchByCategory('Kuliner')">
-                <div class="cat-icon">🍜</div>
-                <div class="cat-label">Kuliner</div>
-            </div>
-            <div class="cat-item" onclick="searchByCategory('Wisata')">
-                <div class="cat-icon">🌴</div>
-                <div class="cat-label">Wisata</div>
-            </div>
-            <div class="cat-item" onclick="searchByCategory('Loker')">
-                <div class="cat-icon">💼</div>
-                <div class="cat-label">Loker</div>
-            </div>
-            <div class="cat-item" onclick="searchByCategory('Pengumuman')">
-                <div class="cat-icon">📢</div>
-                <div class="cat-label">Pengumuman</div>
-            </div>
-            <div class="cat-item" onclick="searchByCategory('')">
-                <div class="cat-icon">✨</div>
-                <div class="cat-label">Semua</div>
+            <div class="slider-dots" id="sliderDots">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
             </div>
         </div>
 
-        <!-- Hasil Pencarian / Direktori Kartu -->
-        <div id="result-container" class="card-grid">
-            <div class="info-msg">Silakan masukkan kata kunci atau pilih kategori di atas untuk mulai melihat informasi usaha di Kepulauan Riau.</div>
+        <!-- Search Bar -->
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Cari jasa, jual beli, kos, kuliner, wisata, loker...">
+            </div>
         </div>
-    </main>
 
-    <footer>
-        <div class="footer-logo">GOONA</div>
-        <div class="footer-tagline">Belajar • Promosi • Berkembang</div>
-        <div class="footer-features">
-            <span>Edukasi</span> • 
-            <span>Keuangan</span> • 
-            <span>Relasi</span> • 
-            <span>Inspirasi</span>
+        <!-- Body Content -->
+        <div class="content-body">
+            <!-- Kategori -->
+            <div class="section-header">
+                <span class="section-title">Kategori</span>
+                <a href="#" class="see-all">Lihat semua ></a>
+            </div>
+            <div class="categories-grid">
+                <div class="cat-item">
+                    <div class="cat-icon"><i class="fa-solid fa-wrench"></i></div>
+                    <span class="cat-name">Jasa</span>
+                </div>
+                <div class="cat-item">
+                    <div class="cat-icon"><i class="fa-solid fa-store"></i></div>
+                    <span class="cat-name">Jual Beli</span>
+                </div>
+                <div class="cat-item">
+                    <div class="cat-icon"><i class="fa-solid fa-house"></i></div>
+                    <span class="cat-name">Kos</span>
+                </div>
+                <div class="cat-item">
+                    <div class="cat-icon"><i class="fa-solid fa-utensils"></i></div>
+                    <span class="cat-name">Kuliner</span>
+                </div>
+                <div class="cat-item">
+                    <div class="cat-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                    <span class="cat-name">Wisata</span>
+                </div>
+                <div class="cat-item">
+                    <div class="cat-icon"><i class="fa-solid fa-briefcase"></i></div>
+                    <span class="cat-name">Loker</span>
+                </div>
+                <div class="cat-item">
+                    <div class="cat-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                    <span class="cat-name">Pengumuman</span>
+                </div>
+            </div>
+
+            <!-- Info Terbaru -->
+            <div class="section-header">
+                <span class="section-title">Info Terbaru</span>
+            </div>
+            <div class="latest-info-card">
+                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=150&q=80" alt="Service AC" class="latest-img">
+                <div class="latest-desc">
+                    <h4>Jasa Service AC Batam Cepat, Bersih, Bergaransi</h4>
+                    <span class="badge">Jasa</span>
+                </div>
+            </div>
+
+            <!-- Tombol Pasang Info -->
+            <button class="btn-pasang">
+                <i class="fa-solid fa-plus"></i> Pasang Info Gratis
+            </button>
         </div>
-        <div>Website: <a href="https://www.goona.my.id" target="_blank">www.goona.my.id</a></div>
-        <div style="font-size: 11px; opacity: 0.8;">Platform khusus untuk masyarakat Kepulauan Riau</div>
-    </footer>
-</div>
+    </div>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
-import { dictionary } from './kosakata/kamus_tetap.js';
+    <!-- Script Slider Otomatis (Maks 3 Slide) -->
+    <script>
+        let slideIndex = 0;
+        const slides = document.getElementById('sliderContainer');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = 3;
 
-const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        function showSlide(index) {
+            if (index >= totalSlides) slideIndex = 0;
+            else if (index < 0) slideIndex = totalSlides - 1;
+            else slideIndex = index;
 
-const inputField = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
-const resultContainer = document.getElementById('result-container');
-
-window.searchByCategory = function(categoryKeyword) {
-    inputField.value = categoryKeyword;
-    performSearch();
-};
-
-async function performSearch() {
-    const prompt = inputField.value.trim();
-    resultContainer.innerHTML = `<div class="info-msg">Mencari direktori...</div>`;
-
-    try {
-        const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
-        const kataKunci = [...new Set(semuaKata.filter(kata => kata.length > 1))];
-
-        let query = supabase
-            .from('konten_goona')
-            .select('id, judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan, url_foto, tipe_konten')
-            .or('and(status.eq.aktif,tipe_konten.eq.reguler),and(status_tayang.eq.true,tipe_konten.eq.ppv,sisa_kuota_ppv.gt.0)');
+            slides.style.transform = `translateX(-${slideIndex * 33.333}%)`;
             
-        if (kataKunci.length > 0) {
-            kataKunci.forEach(kata => {
-                query = query.or(`judul.ilike.*${kata}*,deskripsi.ilike.*${kata}*,kategori.ilike.*${kata}*,kabupaten_kota.ilike.*${kata}*,kecamatan.ilike.*${kata}*`);
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === slideIndex);
             });
         }
-        
-        const { data, error } = await query;
-        let searchData = error ? [] : (data || []);
 
-        resultContainer.innerHTML = '';
-
-        if (searchData.length === 0) {
-            resultContainer.innerHTML = `<div class="info-msg">${dictionary.notFound}</div>`;
-            return;
+        function currentSlide(index) {
+            showSlide(index);
         }
 
-        let kontenReguler = searchData.filter(item => item.tipe_konten === 'reguler' || !item.tipe_konten);
-        let kontenPPV = searchData.filter(item => item.tipe_konten === 'ppv');
-        let kontenFAQ = searchData.filter(item => item.kategori === 'FAQ');
-
-        if (kontenPPV.length > 0) {
-            kontenPPV.sort(() => 0.5 - Math.random());
-            kontenPPV = kontenPPV.slice(0, 2);
-        }
-
-        let hasilAkhirTampil = [...kontenPPV, ...kontenReguler];
-        let idIklanYangTayang = [];
-
-        kontenFAQ.forEach(faq => {
-            const faqDiv = document.createElement('div');
-            faqDiv.className = 'info-msg';
-            faqDiv.innerText = faq.deskripsi;
-            resultContainer.appendChild(faqDiv);
-        });
-
-        hasilAkhirTampil.forEach(item => {
-            let pakaiEmas = item.tipe_konten === 'ppv';
-            if (pakaiEmas) idIklanYangTayang.push(item.id);
-
-            let cleanPhone = item.whatsapp ? item.whatsapp.replace(/[^0-9]/g, '') : '';
-            if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
-            
-            const encodedMsg = encodeURIComponent(`${dictionary.waTemplate} (${item.judul})`);
-            
-            let hargaTeks = "";
-            if (item.harga) {
-                const formatHarga = new Intl.NumberFormat('id-ID').format(item.harga);
-                const satuan = item.satuan_harga ? ` / ${item.satuan_harga}` : "";
-                hargaTeks = `<div class="card-meta"><b>${dictionary.priceLabel}</b> Rp ${formatHarga}${satuan}</div>`;
-            }
-
-            let lokasiGabungan = item.kabupaten_kota || "";
-            if (item.kecamatan) lokasiGabungan += `, ${item.kecamatan}`;
-            const lokasiTeks = lokasiGabungan ? `<div class="card-meta"><b>${dictionary.locLabel}</b> ${lokasiGabungan}</div>` : "";
-
-            let komponenFoto = item.url_foto ? `<img src="${item.url_foto}" class="card-img" alt="${item.judul}" loading="lazy">` : "";
-
-            const card = document.createElement('div');
-            card.className = `jasa-card ${pakaiEmas ? 'ppv-premium' : ''}`;
-            card.innerHTML = `
-                ${komponenFoto}
-                <div class="card-title">${item.judul}</div>
-                <div class="card-desc">${item.deskripsi}</div>
-                ${lokasiTeks}
-                ${hargaTeks}
-                <a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" class="btn-wa">
-                    💬 Hubungi via WhatsApp
-                </a>
-            `;
-            resultContainer.appendChild(card);
-        });
-
-        if (idIklanYangTayang.length > 0) {
-            await supabase.rpc('hitung_impresi_iklan', { iklan_ids: idIklanYangTayang });
-        }
-
-    } catch (err) {
-        resultContainer.innerHTML = `<div class="info-msg">Maaf, terjadi kendala saat memuat direktori.</div>`;
-        console.error(err);
-    }
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-    sendBtn.onclick = (e) => { e.preventDefault(); performSearch(); };
-    inputField.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); performSearch(); } };
-});
-</script>
+        // Auto slide setiap 4 detik
+        setInterval(() => {
+            slideIndex++;
+            showSlide(slideIndex);
+        }, 4000);
+    </script>
 </body>
 </html>
