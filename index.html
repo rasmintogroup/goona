@@ -2,456 +2,477 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goona - Platform Informasi Lokal Kepulauan Riau</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Menggunakan SVG Icon lokal / inline untuk menghindari pemblokiran Cloudflare CDN -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pasang Info - Goona AI</title>
+    <link rel="icon" type="image/png" href="Pavicon_goona.png">
+
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: #f0fdf4; color: #064e3b; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 480px; background: #ffffff; min-height: 100vh; box-shadow: 0 4px 25px rgba(4, 120, 87, 0.1); display: flex; flex-direction: column; position: relative; }
+        :root {
+            --primary-green: #047857;
+            --secondary-green: #065f46;
+            --light-green: #a7f3d0;
+            --bg-green: #ecfdf5;
+            --white: #ffffff;
+            --success-green: #2ecc71;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: var(--bg-green); 
+            margin: 0; 
+            padding: 10px; 
+            color: #064e3b; 
+            line-height: 1.5;
+        }
+
+        .container { 
+            max-width: 600px; 
+            margin: 10px auto; 
+            background: var(--white); 
+            padding: 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(4, 120, 87, 0.1); 
+            border: 1px solid var(--light-green); 
+        }
+
+        /* STYLING BANNER BARU */
+        .banner-container {
+            width: 100%;
+            height: 180px; /* Ukuran tinggi banner diperbesar */
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(4, 120, 87, 0.15);
+        }
+
+        .banner-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Menyesuaikan gambar agar pas tanpa distorsi */
+            display: block;
+        }
+
+        /* Fallback teks banner jika gambar belum diisi */
+        .banner-placeholder {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 15px;
+            text-align: center;
+            padding: 0 15px;
+            letter-spacing: 0.5px;
+        }
+
+        h2 { 
+            color: var(--primary-green); 
+            margin: 0 0 5px 0;
+            font-size: 22px; 
+            text-align: center;
+        }
+
+        .sub-title {
+            text-align: center;
+            font-size: 13px;
+            color: #047857;
+            margin-bottom: 20px;
+        }
+
+        form { display: flex; flex-direction: column; gap: 15px; }
+
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+        label { 
+            font-weight: bold; 
+            font-size: 14px; 
+            color: var(--primary-green); 
+            margin-left: 5px;
+        }
         
-        /* Header */
-        .app-header { background: #047857; color: #ffffff; padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #34d399; }
-        .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; letter-spacing: 0.5px; }
+        textarea, input, select { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border-radius: 12px; 
+            border: 1.5px solid var(--light-green); 
+            outline: none; 
+            font-size: 16px; /* Ukuran 16px mencegah auto-zoom di iPhone */
+            background-color: #f0fdf4;
+            transition: all 0.3s ease;
+            color: #064e3b;
+        }
 
-        /* Banner Slider */
-        .banner-slider { position: relative; width: 100%; height: 140px; overflow: hidden; background: #a7f3d0; }
-        .slides-container { display: flex; width: 300%; height: 100%; transition: transform 0.5s ease-in-out; }
-        .slide { width: 33.333%; height: 100%; color: white; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
-        .slide:nth-child(1) { background: linear-gradient(135deg, #047857, #065f46); }
-        .slide:nth-child(2) { background: linear-gradient(135deg, #0d9488, #0f766e); }
-        .slide:nth-child(3) { background: linear-gradient(135deg, #0284c7, #0369a1); }
-        .slide h2 { font-size: 1.05rem; margin-bottom: 4px; font-weight: 700; }
-        .slide p { font-size: 0.82rem; opacity: 0.95; }
+        textarea { height: 120px; resize: none; }
         
-        .slider-dots { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
-        .dot { width: 7px; height: 7px; background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; }
-        .dot.active { background: #ffffff; }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-green);
+            background-color: var(--white);
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.15);
+        }
 
-        /* Search Bar */
-        .search-section { padding: 14px 16px; background: #047857; }
-        .search-box { display: flex; align-items: center; background: #ffffff; border-radius: 30px; padding: 10px 16px; border: 1px solid #34d399; }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 0.9rem; margin-left: 8px; background: transparent; color: #064e3b; }
-        .search-box svg { width: 16px; height: 16px; fill: #047857; }
+        .row { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+        }
 
-        /* Content Body */
-        .content-body { padding: 16px; flex: 1; overflow-y: auto; padding-bottom: 90px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; margin-top: 15px; }
-        .section-title { font-size: 0.95rem; font-weight: 700; color: #064e3b; }
-        .reset-btn { font-size: 0.8rem; color: #0d9488; background: none; border: none; font-weight: 600; cursor: pointer; display: none; }
+        #char-count { 
+            text-align: right; 
+            font-size: 11px; 
+            color: #047857; 
+            margin-top: -10px;
+        }
 
-        /* Kategori Grid */
-        .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
-        .cat-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
-        .cat-icon { width: 48px; height: 48px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: #047857; font-size: 1.1rem; margin-bottom: 4px; transition: 0.2s; }
-        .cat-item:hover .cat-icon { background: #047857; color: white; }
-        .cat-name { font-size: 0.72rem; color: #065f46; font-weight: 600; }
+        button { 
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: #fff; 
+            border: none; 
+            padding: 16px; 
+            width: 100%; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold; 
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
+            transition: transform 0.2s;
+        }
 
-        /* List Kartu Data */
-        .info-card { background: #ffffff; border: 1px solid #a7f3d0; border-radius: 12px; padding: 12px; display: flex; gap: 12px; align-items: center; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(4,120,87,0.03); cursor: pointer; transition: 0.2s; }
-        .info-card:hover { border-color: #047857; background: #f9fbf9; }
-        .info-img-container { width: 55px; height: 55px; background: #d1fae5; border-radius: 8px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; overflow: hidden; border: 1px solid #a7f3d0; color: #047857; }
-        .info-img { width: 100%; height: 100%; object-fit: cover; }
-        .info-desc { flex: 1; }
-        .info-desc h4 { font-size: 0.85rem; font-weight: 600; color: #064e3b; margin-bottom: 3px; }
-        .info-location { font-size: 0.73rem; color: #4b5563; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
-        .badge { background: #d1fae5; color: #065f46; font-size: 0.62rem; padding: 2px 7px; border-radius: 5px; font-weight: 700; border: 1px solid #34d399; display: inline-block; }
+        button:active { transform: scale(0.98); }
+        button:disabled { background: #a7f3d0; cursor: not-allowed; box-shadow: none; }
 
-        /* Floating Button Pasang Info (Mengambang di Bawah) */
-        .btn-fab-pasang { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #047857, #0d9488); color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.6rem; text-decoration: none; box-shadow: 0 4px 15px rgba(4,120,87,0.4); z-index: 99; transition: transform 0.2s; border: 2px solid #34d399; }
-        .btn-fab-pasang:hover { transform: scale(1.05); }
+        .back-link { 
+            display: block; 
+            margin-top: 20px; 
+            text-align: center; 
+            color: var(--secondary-green); 
+            text-decoration: none; 
+            font-size: 14px; 
+            font-weight: 500;
+        }
 
-        /* Modal Umum */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: white; width: 100%; max-width: 380px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-weight: 700; color: #047857; font-size: 0.95rem; }
-        
-        /* Modal Wilayah */
-        .region-list { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
-        .region-item { padding: 10px 12px; background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; color: #065f46; }
-        .region-item:hover { background: #047857; color: white; }
+        /* STYLING NOTIFIKASI SUKSES MENGAMBANG (TOAST COCOK UNTUK MOBILE) */
+        .toast-notification {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e2e8f0;
+            z-index: 9999;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+            opacity: 0;
+            width: 90%;
+            max-width: 450px;
+        }
 
-        /* Modal Detail Info */
-        .detail-body img { width: 100%; height: 160px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; }
-        .detail-body h3 { font-size: 1rem; color: #064e3b; margin-bottom: 6px; }
-        .detail-meta { font-size: 0.8rem; color: #4b5563; margin-bottom: 10px; display: flex; gap: 10px; align-items: center; }
-        .detail-desc { font-size: 0.85rem; color: #1f2937; line-height: 1.5; margin-bottom: 16px; white-space: pre-line; max-height: 150px; overflow-y: auto; background: #f9fbf9; padding: 10px; border-radius: 8px; border: 1px solid #e5e7eb; }
-        .btn-whatsapp { background: #25d366; color: white; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 8px; text-decoration: none; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2); }
+        .toast-notification.show {
+            top: 25px;
+            opacity: 1;
+        }
+
+        .toast-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--success-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .toast-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        @media (max-width: 480px) {
+            .row { grid-template-columns: 1fr; }
+            .container { padding: 15px; border-radius: 15px; }
+            h2 { font-size: 18px; }
+            .banner-container { height: 150px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <!-- Header -->
-        <div class="app-header">
-            <div class="logo-area">GOONA</div>
+    <div id="toast" class="toast-notification">
+        <div class="toast-icon">✓</div>
+        <div class="toast-text" id="toast-message">Informasi berhasil dikirim!</div>
+    </div>
+
+    <div class="container">
+        <!-- AREA BANNER UTAMA -->
+        <div class="banner-container">
+            <!-- Ganti atribut src dengan nama file gambar Anda nanti, misal: src="banner-goona.jpg" -->
+            <img id="banner-img" src="" alt="Banner Goona AI" style="display: none;">
+            <div id="banner-text" class="banner-placeholder">Goona AI Banner Area</div>
         </div>
 
-        <!-- Banner Slider -->
-        <div class="banner-slider">
-            <div class="slides-container" id="sliderContainer">
-                <div class="slide">
-                    <h2>Informasi Lokal Kepri</h2>
-                    <p>Menghubungkan seluruh pulau dan wilayah dengan cepat.</p>
-                </div>
-                <div class="slide">
-                    <h2>Promosi Usaha Gratis</h2>
-                    <p>Jangkau lebih banyak pelanggan di seluruh Kepulauan Riau.</p>
-                </div>
-                <div class="slide">
-                    <h2>Platform Terpercaya</h2>
-                    <p>Solusi digital praktis untuk masyarakat pesisir & kota.</p>
-                </div>
+        <h2>Pasang Informasi</h2>
+        <p class="sub-title">Info Anda akan tampil di jaringan Goona AI</p>
+        
+        <form id="upload-form">
+            <div class="form-group">
+                <label>Kategori</label>
+                <select id="kategori" required>
+                    <option value="">-- Pilih Kategori --</option>
+                    <option value="Jasa">Jasa</option>
+                    <option value="Loker">Loker</option>
+                    <option value="Jual Beli">Jual Beli</option>
+                    <option value="Kuliner">Kuliner</option>
+                    <option value="Properti">Properti (Sewa/Kos)</option>
+                    <option value="Wisata">Wisata</option>
+                    <option value="Info/Pengumuman">Info/Pengumuman</option>
+                </select>
             </div>
-            <div class="slider-dots">
-                <span class="dot active" onclick="pindahSlide(0)"></span>
-                <span class="dot" onclick="pindahSlide(1)"></span>
-                <span class="dot" onclick="pindahSlide(2)"></span>
-            </div>
-        </div>
 
-        <!-- Pencarian -->
-        <div class="search-section">
-            <div class="search-box">
-                <svg viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208zM208 352a144 144 10 1 0 0 -288 144 144 0 1 0 0 288z"/></svg>
-                <input type="text" id="searchInput" placeholder="Cari info, jasa, barang, atau wilayah...">
+            <div class="form-group">
+                <label>Judul Informasi (Maks 50 Karakter)</label>
+                <!-- Menambahkan dukungan tombol Enter untuk pencarian/submit cepat -->
+                <input type="text" id="judul-info" placeholder="Contoh: Jual Motor Bekas Mulus" required maxlength="50">
             </div>
-        </div>
 
-        <!-- Konten Utama -->
-        <div class="content-body">
-            <div class="section-header" style="margin-top: 0;">
-                <span class="section-title">Kategori Pilihan</span>
+            <div class="row">
+                <div class="form-group">
+                    <label>Kabupaten/Kota</label>
+                    <select id="kabupaten" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Kecamatan</label>
+                    <select id="kecamatan" required disabled>
+                        <option value="">-- Pilih --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Harga (Rp) - <small>Opsional</small></label>
+                    <input type="number" id="harga" placeholder="Contoh: 150000">
+                </div>
+                <div class="form-group">
+                    <label>Satuan Harga</label>
+                    <select id="satuan_harga">
+                        <option value="">-- Tanpa Satuan --</option>
+                        <option value="Porsi">/ Porsi</option>
+                        <option value="Bulan">/ Bulan</option>
+                        <option value="Hari">/ Hari</option>
+                        <option value="Jam">/ Jam</option>
+                        <option value="Unit">/ Unit</option>
+                        <option value="Borongan">/ Borongan</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Deskripsi Singkat (Maks 200 Karakter)</label>
+                <textarea id="deskripsi" maxlength="200" placeholder="Jelaskan detail ringkas di sini..." required></textarea>
+                <div id="char-count">Sisa: <span id="count">200</span> karakter</div>
             </div>
             
-            <!-- Grid Kategori -->
-            <div class="categories-grid">
-                <div class="cat-item" onclick="pilihKategori('Jasa')">
-                    <div class="cat-icon">🛠️</div>
-                    <span class="cat-name">Jasa</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Jual Beli')">
-                    <div class="cat-icon">🏪</div>
-                    <span class="cat-name">Jual Beli</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Kos')">
-                    <div class="cat-icon">🏠</div>
-                    <span class="cat-name">Kos</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Kuliner')">
-                    <div class="cat-icon">🍲</div>
-                    <span class="cat-name">Kuliner</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Wisata')">
-                    <div class="cat-icon">🌄</div>
-                    <span class="cat-name">Wisata</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Loker')">
-                    <div class="cat-icon">💼</div>
-                    <span class="cat-name">Loker</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Info')">
-                    <div class="cat-icon">📢</div>
-                    <span class="cat-name">Info</span>
-                </div>
+            <div class="form-group">
+                <label>Nomor WhatsApp</label>
+                <input type="tel" id="wa-number" placeholder="Contoh: 081234567890" required autocomplete="off">
             </div>
 
-            <!-- BAGIAN 1: INFO TERBARU (Hanya muncul 3 item teratas saat halaman awal) -->
-            <div id="sectionInfoTerbaru">
-                <div class="section-header">
-                    <span class="section-title">Info Terbaru</span>
-                </div>
-                <div id="containerInfoTerbaru">
-                    <p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Memuat info terbaru...</p>
-                </div>
+            <div class="form-group">
+                <label>Foto Jasa/Produk <small>(Opsional - Otomatis Dikompres)</small></label>
+                <input type="file" id="input-foto" accept="image/*">
             </div>
 
-            <!-- BAGIAN 2: HASIL PENCARIAN / FILTER (Muncul di bawah Info Terbaru jika ada pencarian/filter) -->
-            <div id="sectionHasilFilter" style="display: none; margin-top: 20px;">
-                <div class="section-header">
-                    <span class="section-title" id="listTitle">Hasil Pencarian</span>
-                    <button id="resetBtn" class="reset-btn" onclick="resetFilter()">Reset Filter x</button>
-                </div>
-                <div id="dataContainer"></div>
-            </div>
-
-            <!-- Tombol Mengambang (Floating Action Button) Pasang Info -->
-            <a href="tambah-info.html" class="btn-fab-pasang" title="Pasang Info Gratis">
-                +
-            </a>
-        </div>
+            <button type="submit" id="submit-btn">Kirim Informasi Sekarang</button>
+        </form>
+        
+        <a href="index.html" class="back-link">← Kembali ke Chat</a>
     </div>
 
-    <!-- Modal Pilihan Wilayah -->
-    <div class="modal-overlay" id="modalWilayah">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span id="modalTitle">Pilih Wilayah</span>
-                <span style="cursor:pointer; font-weight:bold;" onclick="tutupModalWilayah()">✕</span>
-            </div>
-            <div class="region-list" id="listWilayah"></div>
-        </div>
-    </div>
-
-    <!-- Modal Detail Info -->
-    <div class="modal-overlay" id="modalDetail">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>Detail Informasi</span>
-                <span style="cursor:pointer; font-weight:bold;" onclick="tutupModalDetail()">✕</span>
-            </div>
-            <div class="detail-body" id="detailContent"></div>
-        </div>
-    </div>
-
-    <!-- Skrip Supabase & Logika Utama -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.min.js"></script>
+    
     <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-        const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
+        const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co'; 
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let kategoriAktif = null;
-        let wilayahAktif = null;
-        let cacheData = [];
-        let cacheInfoTerbaru = [];
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const daftarKabKotaKepri = [
-            "Semua Wilayah",
-            "Kota Batam",
-            "Kota Tanjungpinang",
-            "Kabupaten Bintan",
-            "Kabupaten Karimun",
-            "Kabupaten Lingga",
-            "Kabupaten Natuna",
-            "Kabupaten Kepulauan Anambas"
-        ];
+        const dataWilayah = {
+            "Kota Batam": ["Batam Kota", "Batu Ampar", "Batu Aji", "Belakang Padang", "Bengkong", "Bulang", "Galang", "Lubuk Baja", "Nongsa", "Sagulung", "Sei Beduk", "Sekupang"],
+            "Kota Tanjungpinang": ["Tanjungpinang Barat", "Tanjungpinang Kota", "Tanjungpinang Timur", "Bukit Bestari"],
+            "Kabupaten Bintan": ["Bintan Pesisir", "Bintan Timur (Kijang)", "Bintan Utara (Tanjung Uban)", "Gunung Kijang", "Mantang", "Seri Kuala Lobam", "Tambelan", "Teluk Bintan", "Teluk Sebong", "Toapaya"],
+            "Kabupaten Karimun": ["Belat", "Buru", "Durai", "Karimun", "Kundur", "Kundur Barat", "Kundur Utara", "Meral", "Meral Barat", "Moro", "Selat Gelam", "Tebing", "Ungar"],
+            "Kabupaten Lingga": ["Bakung Serumpun", "Katang Bidare", "Kepulauan Posek", "Lingga", "Lingga Timur", "Lingga Utara", "Senayang", "Selayar", "Singkep", "Singkep Barat", "Singkep Pesisir", "Singkep Selatan", "Temiang Pesisir"],
+            "Kabupaten Natuna": ["Bunguran Barat", "Bunguran Batubi", "Bunguran Selatan", "Bunguran Tengah", "Bunguran Timur", "Bunguran Timur Laut", "Bunguran Utara", "Midai", "Pulau Laut", "Pulau Panjang", "Pulau Tiga", "Pulau Tiga Barat", "Serasan", "Serasan Timur", "Suak Midai", "Subi"],
+            "Kabupaten Kepulauan Anambas": ["Jemaja", "Jemaja Barat", "Jemaja Timur", "Kute Siantan", "Palmatak", "Siantan", "Siantan Selatan", "Siantan Tengah", "Siantan Timur", "Siantan Utara"]
+        };
+        const kabSelect = document.getElementById('kabupaten');
+        const kecSelect = document.getElementById('kecamatan');
+        const deskripsiInput = document.getElementById('deskripsi');
+        const countSpan = document.getElementById('count');
+        const form = document.getElementById('upload-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        const fileInput = document.getElementById('input-foto');
+        const judulInput = document.getElementById('judul-info');
 
-        window.addEventListener('DOMContentLoaded', () => {
-            muatDataAwal();
+        // FUNGSI UNTUK MENGAKTIFKAN TOMBOL ENTER PADA KOLOM JUDUL/PENCARIAN
+        judulInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Mencegah reload form mendadak
+                // Jika kolom berfungsi sebagai filter/pencarian, Anda bisa memicu aksi pencarian di sini.
+                // Jika ingin langsung fokus ke elemen berikutnya atau submit, jalankan validasi:
+                document.getElementById('kabupaten').focus();
+            }
         });
 
-        // Memuat data awal khusus status 'aktif' dan membatasi hanya 3 item untuk info terbaru
-        async function muatDataAwal() {
-            const containerTerbaru = document.getElementById('containerInfoTerbaru');
-            containerTerbaru.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Memuat info terbaru...</p>';
-
-            // Hanya ambil data yang statusnya 'aktif'
-            let { data, error } = await supabase
-                .from('konten_goona')
-                .select('*')
-                .eq('status', 'aktif')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                console.error(error);
-                containerTerbaru.innerHTML = '<p style="text-align: center; color: red; font-size: 0.85rem; padding: 15px;">Gagal memuat data.</p>';
-                return;
-            }
-
-            cacheData = data || [];
-            // Ambil 3 data terbaru untuk halaman utama
-            cacheInfoTerbaru = cacheData.slice(0, 3);
-            tampilkanInfoTerbaru(cacheInfoTerbaru);
-        }
-
-        function tampilkanInfoTerbaru(data) {
-            const container = document.getElementById('containerInfoTerbaru');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Belum ada info aktif.</p>';
-                return;
-            }
-
-            let html = '';
-            data.forEach((item) => {
-                // Cari index asli di cacheData untuk tombol detail
-                let realIndex = cacheData.findIndex(d => d.id === item.id);
-                let tampilanMedia = item.url_foto ? `<img src="${item.url_foto}" class="info-img" alt="Foto">` : '📌';
-
-                html += `
-                    <div class="info-card" onclick="bukaDetail(${realIndex})">
-                        <div class="info-img-container">${tampilanMedia}</div>
-                        <div class="info-desc">
-                            <h4>${item.judul || 'Tanpa Judul'}</h4>
-                            <div class="info-location">📍 ${item.kabupaten_kota || 'Kepri'}</div>
-                            <span class="badge">${item.kategori || 'Umum'}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        // Fungsi pencarian dan filter kategori/wilayah
-        window.jalankanPencarianFilter = function(keyword = '', kategori = null, wilayah = null) {
-            let hasil = [...cacheData];
-
-            if (kategori) {
-                hasil = hasil.filter(item => item.kategori === kategori);
-            }
-            if (wilayah && wilayah !== "Semua Wilayah") {
-                hasil = hasil.filter(item => item.kabupaten_kota === wilayah);
-            }
-            if (keyword) {
-                const kw = keyword.toLowerCase();
-                hasil = hasil.filter(item => 
-                    (item.judul || '').toLowerCase().includes(kw) ||
-                    (item.kabupaten_kota || '').toLowerCase().includes(kw) ||
-                    (item.deskripsi || '').toLowerCase().includes(kw)
-                );
-            }
-
-            const sectionFilter = document.getElementById('sectionHasilFilter');
-            const sectionTerbaru = document.getElementById('sectionInfoTerbaru');
+        // SKrip opsional untuk menampilkan gambar banner Anda jika filenya sudah ada
+        function muatBanner() {
+            const bannerImg = document.getElementById('banner-img');
+            const bannerText = document.getElementById('banner-text');
             
-            // Jika sedang melakukan pencarian/filter, sembunyikan info terbaru dan tampilkan hasil filter di bawahnya
-            if (keyword || kategori || (wilayah && wilayah !== "Semua Wilayah")) {
-                sectionTerbaru.style.display = 'none';
-                sectionFilter.style.display = 'block';
-                document.getElementById('resetBtn').style.display = 'inline-block';
+            // Contoh mengecek apakah file banner lokal tersedia (bisa diganti nama filenya nanti)
+            const imgFile = new Image();
+            imgFile.src = 'banner-goona.jpg'; // Ganti dengan nama file gambar banner Anda jika ada
+            imgFile.onload = function() {
+                bannerImg.src = imgFile.src;
+                bannerImg.style.display = 'block';
+                bannerText.style.display = 'none';
+            };
+        }
 
-                let subJudul = 'Hasil Pencarian';
-                if (kategori && wilayah && wilayah !== "Semua Wilayah") {
-                    subJudul = `Kategori: ${kategori} di ${wilayah}`;
-                } else if (kategori) {
-                    subJudul = `Kategori: ${kategori}`;
-                } else if (keyword) {
-                    subJudul = `Pencarian: "${keyword}"`;
-                }
-                document.getElementById('listTitle').innerText = subJudul;
+        function tunjukkanToast(pesan, warnaIcon = '#2ecc71') {
+            toastMessage.innerText = pesan;
+            document.querySelector('.toast-icon').style.background = warnaIcon;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
 
-                tampilkanHasilFilter(hasil);
+        function initKabupaten() {
+            kabSelect.innerHTML = '<option value="">-- Pilih Kota --</option>';
+            Object.keys(dataWilayah).sort().forEach(kab => {
+                const opt = document.createElement('option');
+                opt.value = kab;
+                opt.text = kab;
+                kabSelect.add(opt);
+            });
+        }
+
+        kabSelect.addEventListener('change', () => {
+            const val = kabSelect.value;
+            kecSelect.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+            if (val) {
+                kecSelect.disabled = false;
+                dataWilayah[val].sort().forEach(kec => {
+                    const opt = document.createElement('option');
+                    opt.value = kec;
+                    opt.text = kec;
+                    kecSelect.add(opt);
+                });
             } else {
-                sectionTerbaru.style.display = 'block';
-                sectionFilter.style.display = 'none';
-                document.getElementById('resetBtn').style.display = 'none';
+                kecSelect.disabled = true;
             }
-        }
-
-        function tampilkanHasilFilter(data) {
-            const container = document.getElementById('dataContainer');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Tidak ada data yang cocok dengan kriteria.</p>';
-                return;
-            }
-
-            let html = '';
-            data.forEach((item) => {
-                let realIndex = cacheData.findIndex(d => d.id === item.id);
-                let tampilanMedia = item.url_foto ? `<img src="${item.url_foto}" class="info-img" alt="Foto">` : '📌';
-
-                html += `
-                    <div class="info-card" onclick="bukaDetail(${realIndex})">
-                        <div class="info-img-container">${tampilanMedia}</div>
-                        <div class="info-desc">
-                            <h4>${item.judul || 'Tanpa Judul'}</h4>
-                            <div class="info-location">📍 ${item.kabupaten_kota || 'Kepri'}</div>
-                            <span class="badge">${item.kategori || 'Umum'}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        window.bukaDetail = function(index) {
-            const item = cacheData[index];
-            if (!item) return;
-
-            let mediaHtml = item.url_foto ? `<img src="${item.url_foto}" alt="Foto">` : `<div style="width:100%; height:140px; background:#e6f4ea; border-radius:10px; display:flex; justify-content:center; align-items:center; font-size:2rem; color:#047857; margin-bottom:12px;">📌</div>`;
-
-            const pesanWa = encodeURIComponent(`Halo, saya tertarik dengan info "${item.judul}" di Goona.`);
-            let linkWa = `https://api.whatsapp.com/send?text=${pesanWa}`;
-
-            let rawKontak = item.whatsapp || '';
-            if (rawKontak) {
-                let cleanNo = String(rawKontak).replace(/[^0-9]/g, '');
-                if (cleanNo.startsWith('0')) {
-                    cleanNo = '62' + cleanNo.slice(1);
-                }
-                linkWa = `https://wa.me/${cleanNo}?text=${pesanWa}`;
-            }
-
-            const detailContainer = document.getElementById('detailContent');
-            detailContainer.innerHTML = `
-                ${mediaHtml}
-                <h3>${item.judul || 'Tanpa Judul'}</h3>
-                <div class="detail-meta">
-                    <span>📍 ${item.kabupaten_kota || 'Kepri'}</span>
-                    <span class="badge">${item.kategori || 'Umum'}</span>
-                </div>
-                <div class="detail-desc">${item.deskripsi || 'Tidak ada deskripsi lengkap.'}</div>
-                <a href="${linkWa}" target="_blank" class="btn-whatsapp">
-                    Hubungi via WhatsApp
-                </a>
-            `;
-
-            document.getElementById('modalDetail').style.display = 'flex';
-        };
-
-        window.tutupModalDetail = function() {
-            document.getElementById('modalDetail').style.display = 'none';
-        };
-
-        window.pilihKategori = function(kategori) {
-            kategoriAktif = kategori;
-            document.getElementById('modalTitle').innerText = `Pilih Wilayah: ${kategori}`;
-            
-            const listContainer = document.getElementById('listWilayah');
-            listContainer.innerHTML = '';
-
-            daftarKabKotaKepri.forEach(wil => {
-                const div = document.createElement('div');
-                div.className = 'region-item';
-                div.innerText = wil;
-                div.onclick = () => {
-                    wilayahAktif = wil;
-                    tutupModalWilayah();
-                    jalankanPencarianFilter(document.getElementById('searchInput').value, kategoriAktif, wilayahAktif);
-                };
-                listContainer.appendChild(div);
-            });
-
-            document.getElementById('modalWilayah').style.display = 'flex';
-        };
-
-        window.tutupModalWilayah = function() {
-            document.getElementById('modalWilayah').style.display = 'none';
-        };
-
-        window.resetFilter = function() {
-            kategoriAktif = null;
-            wilayahAktif = null;
-            document.getElementById('searchInput').value = '';
-            jalankanPencarianFilter();
-        };
-
-        let timeoutCari;
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            clearTimeout(timeoutCari);
-            const keyword = e.target.value;
-            timeoutCari = setTimeout(() => {
-                jalankanPencarianFilter(keyword, kategoriAktif, wilayahAktif);
-            }, 300);
         });
 
-        let idxSlide = 0;
-        const contSlide = document.getElementById('sliderContainer');
-        const dots = document.querySelectorAll('.dot');
+        deskripsiInput.addEventListener('input', () => {
+            countSpan.innerText = 200 - deskripsiInput.value.length;
+        });
 
-        window.pindahSlide = function(n) {
-            idxSlide = n;
-            contSlide.style.transform = `translateX(-${idxSlide * 33.333}%)`;
-            dots.forEach((d, i) => d.classList.toggle('active', i === idxSlide));
-        };
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.innerText = "Memproses & Mengompres Foto...";
+            submitBtn.disabled = true;
 
-        setInterval(() => {
-            idxSlide = (idxSlide + 1) % 3;
-            pindahSlide(idxSlide);
-        }, 4000);
+            let finalFotoUrl = null;
+            const fileMentah = fileInput.files[0];
+
+            try {
+                if (fileMentah) {
+                    const opsiKompresi = {
+                        maxSizeMB: 0.2,         
+                        maxWidthOrHeight: 1024,  
+                        useWebWorker: true       
+                    };
+
+                    const fileKompres = await imageCompression(fileMentah, opsiKompresi);
+                    submitBtn.innerText = "Mengunggah Foto...";
+
+                    const ekstensi = fileMentah.name.split('.').pop();
+                    const namaFileUnik = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${ekstensi}`;
+
+                    const { data: storageData, error: storageError } = await supabase
+                        .storage
+                        .from('foto_goona')
+                        .upload(namaFileUnik, fileKompres);
+
+                    if (storageError) throw new Error("Gagal mengunggah gambar ke storage: " + storageError.message);
+
+                    const { data: urlData } = supabase
+                        .storage
+                        .from('foto_goona')
+                        .getPublicUrl(namaFileUnik);
+
+                    finalFotoUrl = urlData.publicUrl;
+                }
+
+                submitBtn.innerText = "Mengirim Data...";
+
+                const payload = {
+                    kategori: document.getElementById('kategori').value,
+                    judul: judulInput.value, 
+                    kabupaten_kota: kabSelect.value,
+                    kecamatan: kecSelect.value,
+                    harga: document.getElementById('harga').value ? parseInt(document.getElementById('harga').value) : null,
+                    satuan_harga: document.getElementById('satuan_harga').value || null,
+                    deskripsi: deskripsiInput.value,
+                    whatsapp: document.getElementById('wa-number').value,
+                    url_foto: finalFotoUrl,
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                };
+
+                const { error: insertError } = await supabase.from('konten_goona').insert([payload]);
+                if (insertError) throw insertError;
+                
+                tunjukkanToast("Sukses! Informasi Goonity diajukan untuk ditinjau.");
+                
+                form.reset();
+                document.getElementById('wa-number').value = '';
+                kecSelect.disabled = true;
+                countSpan.innerText = "200";
+
+            } catch (err) {
+                console.error("Kesalahan sistem:", err);
+                tunjukkanToast(err.message || "Gagal mengirim. Periksa jaringan Anda.", "#e74c3c");
+            } finally {
+                submitBtn.innerText = "Kirim Informasi Sekarang";
+                submitBtn.disabled = false;
+            }
+        });
+
+        initKabupaten();
+        muatBanner();
     </script>
 </body>
 </html>
