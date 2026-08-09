@@ -39,7 +39,7 @@
         }
 
         header {
-            padding: 10px 15px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -52,28 +52,30 @@
             font-weight: bold;
             color: var(--primary-brown);
             font-size: 18px;
+            letter-spacing: 0.5px;
         }
 
         .header-right {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         #chat-window {
             flex: 1;
             overflow-y: auto;
-            padding: 20px 15px;
+            padding: 20px 16px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
             width: 100%;
+            scroll-behavior: smooth;
         }
 
         .ai-msg,
         .user-msg {
-            max-width: 80%;
-            padding: 10px 15px;
+            max-width: 82%;
+            padding: 12px 16px;
             font-size: 14px;
             line-height: 1.5;
             position: relative;
@@ -83,9 +85,10 @@
         .ai-msg {
             background: #fff;
             align-self: flex-start;
-            border-radius: 0 15px 15px 15px;
+            border-radius: 4px 16px 16px 16px;
             border: 1px solid var(--light-brown);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            color: #2c2c2c;
         }
 
         .user-msg {
@@ -93,22 +96,22 @@
             color: #fff;
             align-self: flex-end;
             text-align: left;
-            border-radius: 15px 0 15px 15px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            border-radius: 16px 4px 16px 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
 
         .input-container {
-            padding: 10px 15px;
+            padding: 12px 16px;
             background: #fff;
             border-top: 1px solid var(--light-brown);
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
         }
 
         .input-wrapper {
             max-width: 600px;
             margin: 0 auto;
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
         }
 
@@ -120,27 +123,43 @@
             outline: none;
             font-size: 14px;
             background: #FFFAF0;
+            color: #333;
+        }
+
+        input:focus {
+            border-color: var(--primary-brown);
+            box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
         }
 
         button {
             background: var(--primary-brown);
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 22px;
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
             font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: var(--secondary-brown);
         }
 
         .btn-post {
             text-decoration: none;
             background: var(--secondary-brown);
             color: #fff;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 11px;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 12px;
             font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .btn-post:hover {
+            opacity: 0.9;
         }
 
         .menu-btn {
@@ -148,12 +167,12 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
-            padding: 5px;
+            padding: 6px;
         }
 
         .menu-btn span {
-            width: 20px;
-            height: 3px;
+            width: 22px;
+            height: 2px;
             background: var(--primary-brown);
             border-radius: 2px;
             transition: 0.3s;
@@ -162,17 +181,17 @@
         .sidebar {
             position: absolute;
             top: 0;
-            right: -260px;
-            width: 260px;
+            right: -280px;
+            width: 280px;
             height: 100%;
             background: #fff;
-            box-shadow: -2px 0 8px rgba(0,0,0,0.15);
-            transition: right 0.3s ease;
+            box-shadow: -4px 0 12px rgba(0,0,0,0.15);
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 99;
-            padding: 60px 20px 20px 20px;
+            padding: 70px 20px 20px 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
         .sidebar.open {
@@ -180,28 +199,27 @@
         }
 
         .sidebar h3 {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--primary-brown);
             margin: 0 0 5px 0;
             border-bottom: 1px solid var(--light-brown);
-            padding-bottom: 5px;
+            padding-bottom: 8px;
         }
 
         .sidebar p {
-            font-size: 12px;
-            color: #666;
-            line-height: 1.5;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
             margin: 0;
             text-align: justify;
         }
 
         .card-container {
             display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 15px;
+            flex-direction: column;
+            gap: 12px;
             width: 100%;
-            margin: 5px 0;
+            margin: 4px 0;
         }
 
         .jasa-card {
@@ -209,40 +227,39 @@
             border: 1px solid var(--light-brown);
             border-left: 5px solid var(--primary-brown);
             border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
             width: 100%;
-            max-width: 320px; 
         }
 
-        /* Border penanda khusus untuk iklan PPV premium */
         .jasa-card.ppv-premium {
-            border-left: 5px solid #FFD700; /* Warna Emas */
-            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+            border-left: 5px solid #FFD700;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.25);
+            background: linear-gradient(to right, #fffdf5, #fff);
         }
 
         .card-title {
             font-weight: bold;
-            font-size: 15px;
+            font-size: 16px;
             color: var(--primary-brown);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .card-img {
             width: 100%;
-            height: 250px;
+            height: 200px;
             object-fit: cover;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border: 1px solid #eee;
             display: block;
         }
 
         .card-desc {
-            font-size: 13px;
+            font-size: 13.5px;
             color: #444;
-            line-height: 1.4;
-            margin-bottom: 12px;
+            line-height: 1.5;
+            margin-bottom: 10px;
             white-space: pre-line;
         }
 
@@ -250,20 +267,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             background: var(--wa-green);
             color: #fff;
             text-decoration: none;
-            padding: 10px;
+            padding: 10px 16px;
             border-radius: 20px;
+            font-size: 135px;
             font-size: 13px;
             font-weight: bold;
             text-align: center;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 12px;
         }
 
         .btn-wa:hover {
             background: #20ba56;
+        }
+
+        .btn-wa:active {
+            transform: scale(0.98);
         }
 
         .loading-msg {
@@ -273,35 +296,25 @@
 
         .typing {
             display: flex;
-            gap: 5px;
+            gap: 6px;
             align-items: center;
+            justify-content: center;
         }
 
         .typing span {
-            width: 8px;
-            height: 8px;
-            background: #8B4513;
+            width: 7px;
+            height: 7px;
+            background: var(--primary-brown);
             border-radius: 50%;
-            animation: bounce 1.3s infinite;
+            animation: bounce 1.4s infinite ease-in-out both;
         }
 
-        .typing span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
+        .typing span:nth-child(1) { animation-delay: -0.32s; }
+        .typing span:nth-child(2) { animation-delay: -0.16s; }
 
         @keyframes bounce {
-            0%, 80%, 100% {
-                transform: scale(0.7);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1);
-                opacity: 1;
-            }
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
         }
     </style>
 </head>
@@ -309,12 +322,11 @@
 <body>
 
 <div id="app">
-
     <header>
         <div class="logo">GOONA</div>
         <div class="header-right">
-            <a href="tambah-info.html" class="btn-post" id="ui-btn-post">+ Posting </a>
-            <div class="menu-btn" id="menu-btn">
+            <a href="tambah-info.html" class="btn-post" id="ui-btn-post">+ Posting</a>
+            <div class="menu-btn" id="menu-btn" aria-label="Menu">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -330,23 +342,15 @@
     </div>
 
     <main id="chat-window">
-        <div id="chat-history" style="display:flex; flex-direction:column; gap:15px; width: 100%;">
-        </div>
+        <div id="chat-history" style="display:flex; flex-direction:column; gap:16px; width: 100%;"></div>
     </main>
 
     <div class="input-container">
         <div class="input-wrapper">
-            <input
-                type="text"
-                id="user-input"
-                placeholder="Tanya di sini..."
-            >
-            <button id="send-btn">
-                Tanya
-            </button>
+            <input type="text" id="user-input" placeholder="Tanya di sini...">
+            <button id="send-btn">Tanya</button>
         </div>
     </div>
-
 </div>
 
 <script type="module">
@@ -412,7 +416,7 @@ function initWelcomeMessage() {
         }
         
         appendMessage(selectedText, 'ai-msg');
-    }, 1600);
+    }, 1200);
 }
 
 function checkEmotionInterception(prompt) {
@@ -453,7 +457,7 @@ async function tanyaAI() {
             let rawQuestion = daerahQuestions[Math.floor(Math.random() * daerahQuestions.length)];
             appendMessage(formatResponseText(rawQuestion), 'ai-msg');
             inputField.placeholder = "Ketik kota/kabupaten domisili Anda...";
-        }, 1500);
+        }, 1200);
         return;
     }
 
@@ -470,7 +474,7 @@ async function tanyaAI() {
             let successText = modul2Variations[Math.floor(Math.random() * modul2Variations.length)];
             appendMessage(formatResponseText(successText), 'ai-msg');
             inputField.placeholder = normalPlaceholder;
-        }, 1700);
+        }, 1200);
         return;
     }
 
@@ -481,27 +485,25 @@ async function tanyaAI() {
         setTimeout(() => {
             removeTypingIndicator();
             appendMessage(emosiResponse, 'ai-msg');
-        }, 1600);
+        }, 1200);
         return;
     }
 
     let searchData = [];
     try {
         const semuaKata = prompt.toLowerCase().split(/\s+/).filter(word => word.length > 0);
-       const kataKunci = [...new Set(
-    semuaKata.filter(kata =>
-        kata.length > 2 &&
-        !["yang","dan","atau","dari","untuk","dengan","di","ke","ada","saya","aku","lagi","sedang","mau","ingin","bang","kak","nih","dong","ya"].includes(kata)
-    )
-)];
+        const kataKunci = [...new Set(
+            semuaKata.filter(kata =>
+                kata.length > 2 &&
+                !["yang","dan","atau","dari","untuk","dengan","di","ke","ada","saya","aku","lagi","sedang","mau","ingin","bang","kak","nih","dong","ya"].includes(kata)
+            )
+        )];
 
-        // Daftar kata yang dianggap murni nama lokasi/wilayah
         const daftarKataLokasi = [
             'tanjungpinang', 'pinang', 'batam', 'bintan', 'karimun', 'lingga', 'anambas', 'natuna',
             'center', 'timur', 'barat', 'utara', 'selatan', 'kota', 'kabupaten', 'kecamatan', 'kelurahan'
         ];
 
-        // 1. Ambil data mentah dasar reguler aktif & PPV aktif bertarget kuota aman
         let query = supabase
             .from('konten_goona')
             .select('id, judul, deskripsi, whatsapp, kategori, kabupaten_kota, harga, satuan_harga, kecamatan, url_foto, tipe_konten')
@@ -522,57 +524,39 @@ async function tanyaAI() {
             removeTypingIndicator();
 
             if (searchData.length > 0) {
-                
-                // =================================================================
-                // 🚀 UPDATE JURUS LOCK WILAYAH (TARGET MARKET FILTER)
-                // =================================================================
-                // Deteksi apakah user menyebutkan salah satu kota/daerah spesifik di dalam ketikannya
                 let userMenyebutKotaLain = semuaKata.some(kata => 
                     ['tanjungpinang', 'pinang', 'batam', 'bintan', 'karimun', 'lingga', 'anambas', 'natuna'].includes(kata)
                 );
 
-                // Dapatkan daerah domisili user saat ini secara bersih (lowercase)
                 let daerahUser = (userIdentity.daerah || '').toLowerCase().trim();
 
-                // Saring hasil pencarian agar relevan secara lokasi wilayah target market pengiklan
                 let hasilSaringWilayah = searchData.filter(item => {
-                    // Konten FAQ tidak terikat batasan wilayah lokal, biarkan lolos filter
                     if (item.kategori === 'FAQ') return true;
 
                     let kabupatenKonten = (item.kabupaten_kota || '').toLowerCase();
 
-                    // Skenario A: Jika user secara tertulis mengetik nama kota di chatboxnya,
-                    // loloskan data yang kabupaten_kota-nya COCOK dengan apa yang dia ketikkan tersebut.
                     if (userMenyebutKotaLain) {
                         return semuaKata.some(kata => kabupatenKonten.includes(kata));
                     }
 
-                    // Skenario B: Jika user mencari umum (tanpa sebut nama kota, misal cuma ketik "Kue"),
-                    // kunci dan tampilkan HANYA info yang satu wilayah dengan domisili terdaftar si user.
                     if (daerahUser) {
                         return kabupatenKonten.includes(daerahUser) || daerahUser.includes(kabupatenKonten);
                     }
 
-                    // Failsafe jika data domisili kosong, biarkan semua lolos
                     return true;
                 });
-                // =================================================================
 
-                // Pisahkan hasil pencarian yang sudah disaring wilayahnya ke kategori masing-masing
                 let kontenReguler = hasilSaringWilayah.filter(item => item.tipe_konten === 'reguler' || !item.tipe_konten);
                 let kontenPPV = hasilSaringWilayah.filter(item => item.tipe_konten === 'ppv');
                 let kontenFAQ = hasilSaringWilayah.filter(item => item.kategori === 'FAQ');
 
-                // Jika ada iklan PPV yang cocok, acak posisinya lalu batasi maksimal hanya 2 slot iklan saja
                 if (kontenPPV.length > 0) {
                     kontenPPV.sort(() => 0.5 - Math.random());
                     kontenPPV = kontenPPV.slice(0, 2);
                 }
 
-                // Gabungkan kembali: Iklan PPV ditaruh paling atas
                 let hasilAkhirTampil = [...kontenPPV, ...kontenReguler];
 
-                // Jika hasil penyaringan wilayah menyebabkan tidak ada info tersisa, tampilkan not found
                 if (hasilAkhirTampil.length === 0 && kontenFAQ.length === 0) {
                     appendMessage(dictionary.notFound, 'ai-msg');
                     chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -583,7 +567,6 @@ async function tanyaAI() {
                 const pembukaAcak = daftarPembuka[Math.floor(Math.random() * daftarPembuka.length)];
                 appendMessage(pembukaAcak, 'ai-msg');
 
-                // Tampilkan FAQ jika ada
                 kontenFAQ.forEach(faq => {
                     appendMessage(faq.deskripsi, 'ai-msg');
                 });
@@ -593,21 +576,19 @@ async function tanyaAI() {
                 let containsCards = false;
                 let idIklanYangTayang = [];
 
-                // Cek apakah ketikan user mengandung kata spesifik (di luar daftar lokasi umum)
                 let isSpesifik = semuaKata.some(kata => !daftarKataLokasi.includes(kata));
 
                 hasilAkhirTampil.forEach(item => {
                     if (item.kategori !== 'FAQ') {
                         containsCards = true;
                         
-                        // Atur label emas dan siapkan potong kuota HANYA JIKA pencarian spesifik niche
                         let pakaiEmas = false;
                         if (item.tipe_konten === 'ppv') {
                             if (isSpesifik) {
-                                idIklanYangTayang.push(item.id); // Masuk daftar potong kuota via RPC
-                                pakaiEmas = true;                // Mengaktifkan bingkai emas premium
+                                idIklanYangTayang.push(item.id); 
+                                pakaiEmas = true;             
                             } else {
-                                pakaiEmas = false;               // Jadi kartu reguler biasa (Bonus tampil gratis)
+                                pakaiEmas = false;            
                             }
                         }
                         
@@ -636,7 +617,6 @@ async function tanyaAI() {
                             komponenFoto = `<img src="${item.url_foto}" class="card-img" alt="${item.judul}" loading="lazy">`;
                         }
 
-                        // Menentukan kelas CSS kartu berdasarkan filter pakaiEmas tadi
                         const ppvClass = pakaiEmas ? 'ppv-premium' : '';
 
                         cardWrapper.innerHTML += `
@@ -658,7 +638,6 @@ async function tanyaAI() {
                     chatHistory.appendChild(cardWrapper);
                 }
 
-                // EKSEKUSI PEMOTONGAN KUOTA: Panggil RPC database HANYA JIKA idIklanYangTayang terisi (Pencarian spesifik)
                 if (idIklanYangTayang.length > 0) {
                     const { error: rpcError } = await supabase.rpc('hitung_impresi_iklan', { iklan_ids: idIklanYangTayang });
                     if (rpcError) console.error("Gagal memperbarui impresi iklan:", rpcError);
@@ -673,7 +652,7 @@ async function tanyaAI() {
             }
 
             chatWindow.scrollTop = chatWindow.scrollHeight;
-        }, 1500);
+        }, 1200);
 
     } catch (err) {
         removeTypingIndicator();
