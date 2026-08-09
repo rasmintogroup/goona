@@ -9,37 +9,87 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: #f0fdf4; color: #064e3b; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 480px; background: #ffffff; min-height: 100vh; box-shadow: 0 4px 25px rgba(4, 120, 87, 0.1); display: flex; flex-direction: column; position: relative; }
+        .app-container { width: 100%; max-width: 480px; background: #ffffff; min-height: 100vh; box-shadow: 0 4px 25px rgba(4, 120, 87, 0.1); display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
         
-        /* Header Baru dengan Ikon di Kanan */
-        .app-header { background: #047857; color: #ffffff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #34d399; }
-        .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; letter-spacing: 0.5px; }
-        
-        /* Grup Aksi Header Kanan (Kaca Pembesar, Tombol +, Hamburger Ombak) */
-        .header-actions { display: flex; align-items: center; gap: 10px; }
-        .header-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+        /* Header */
+        .app-header { background: #047857; color: #ffffff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #34d399; position: relative; z-index: 20; }
+        .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; letter-spacing: 0.5px; transition: opacity 0.3s ease; }
+        .logo-area.hidden { opacity: 0; pointer-events: none; width: 0; overflow: hidden; }
+
+        /* Grup Aksi Header Kanan */
+        .header-actions { display: flex; align-items: center; gap: 10px; position: relative; }
+        .header-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: white; width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; text-decoration: none; transition: 0.2s; flex-shrink: 0; }
         .header-btn:hover { background: rgba(255, 255, 255, 0.3); }
         .header-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
-        /* Desain Khusus Tombol Hamburger Bergelombang/Ombak */
-        .wave-hamburger {
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; /* Efek lengkung organik seperti ombak */
-            background: #059669;
-            border: 1px solid #6ee7b7;
-            position: relative;
-            animation: waveMorph 4s ease-in-out infinite alternate;
-        }
-        @keyframes waveMorph {
-            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-            100% { border-radius: 60% 40% 30% 70% / 50% 40% 50% 60%; }
+        /* Tombol Plus di Tengah Lingkaran & Agak Tebal */
+        .btn-plus-bold {
+            font-size: 1.4rem;
+            font-weight: 800;
+            line-height: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 2px; /* Penyelaras optik agar benar-benar di tengah */
         }
 
-        /* Kotak Pencarian Interaktif (Tersembunyi Awalnya, Muncul saat Kaca Pembesar diklik) */
-        .search-dropdown-section { background: #047857; padding: 0 16px 14px 16px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out; }
-        .search-dropdown-section.active { max-height: 70px; padding: 0 16px 14px 16px; }
-        .search-box { display: flex; align-items: center; background: #ffffff; border-radius: 30px; padding: 8px 14px; border: 1px solid #34d399; }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 0.88rem; margin-left: 8px; background: transparent; color: #064e3b; }
-        .search-box svg { width: 15px; height: 15px; fill: #047857; }
+        /* Ikon 3 Garis Bergelombang (Ombak) */
+        .wave-hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            width: 18px;
+            height: 18px;
+        }
+        .wave-line {
+            display: block;
+            height: 2.5px;
+            background-color: white;
+            border-radius: 2px;
+            width: 100%;
+        }
+        /* Bentuk gelombang organik pada garis */
+        .wave-line:nth-child(1) { transform: skewX(-15deg); width: 85%; align-self: flex-start; }
+        .wave-line:nth-child(2) { transform: skewX(15deg); width: 100%; }
+        .wave-line:nth-child(3) { transform: skewX(-15deg); width: 90%; align-self: flex-end; }
+
+        /* Efek Gulungan / Pop-Up Pencarian dari Kanan ke Kiri (Menutupi Header) */
+        .search-popup-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: #047857;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 30;
+            opacity: 0;
+            pointer-events: none;
+            transform-origin: right center;
+            transform: scaleX(0);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+        }
+        .search-popup-container.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scaleX(1);
+        }
+        .search-box-popup {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 8px 14px;
+            border: 1px solid #34d399;
+            width: 100%;
+        }
+        .search-box-popup input { border: none; outline: none; width: 100%; font-size: 0.88rem; margin-left: 8px; background: transparent; color: #064e3b; }
+        .search-box-popup svg { width: 15px; height: 15px; fill: #047857; flex-shrink: 0; }
+        .close-search-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; margin-left: 12px; padding: 4px; }
 
         /* Banner Slider */
         .banner-slider { position: relative; width: 100%; height: 190px; overflow: hidden; background: #a7f3d0; }
@@ -98,31 +148,39 @@
 <body>
 
     <div class="app-container">
-        <!-- Header Baru -->
+        <!-- Header -->
         <div class="app-header">
-            <div class="logo-area">GOONA</div>
-            <!-- Urutan: Kaca Pembesar, Tombol +, Ikon Hamburger Bergelombang -->
+            <div class="logo-area" id="logoArea">GOONA</div>
+            
+            <!-- Urutan: Kaca Pembesar, Tombol +, Ikon 3 Garis Bergelombang Ombak -->
             <div class="header-actions">
-                <!-- 1. Tombol Kaca Pembesar (Memicu Kotak Pencarian) -->
-                <button class="header-btn" onclick="toggleSearch()" title="Cari Informasi">
+                <!-- 1. Tombol Kaca Pembesar -->
+                <button class="header-btn" onclick="bukaPencarian()" title="Cari Informasi">
                     <svg viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208zM208 352a144 144 10 1 0 0 -288 144 144 10 1 0 0 288z"/></svg>
                 </button>
-                <!-- 2. Tombol Tambah (+) -->
-                <a href="tambah-info.html" class="header-btn" title="Pasang Info">
-                    <span style="font-size: 1.2rem; font-weight: bold;">+</span>
+                
+                <!-- 2. Tombol Tambah (+) di Tengah, Tebal, dan Rapi -->
+                <a href="tambah-info.html" class="header-btn btn-plus-bold" title="Pasang Info">
+                    +
                 </a>
-                <!-- 3. Ikon Hamburger Bergelombang (Menu Ombak) -->
-                <button class="header-btn wave-hamburger" onclick="bukaMenuOmbak()" title="Menu Utama">
-                    <svg viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+                
+                <!-- 3. Ikon 3 Garis Bergelombang (Ombak) -->
+                <button class="header-btn" onclick="bukaMenuOmbak()" title="Menu Utama">
+                    <div class="wave-hamburger-icon">
+                        <span class="wave-line"></span>
+                        <span class="wave-line"></span>
+                        <span class="wave-line"></span>
+                    </div>
                 </button>
             </div>
-        </div>
 
-        <!-- Kolom Pencarian Dropdown (Muncul saat ikon kaca pembesar diklik) -->
-        <div class="search-dropdown-section" id="searchDropdown">
-            <div class="search-box">
-                <svg viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208zM208 352a144 144 10 1 0 0 -288 144 144 10 1 0 0 288z"/></svg>
-                <input type="text" id="searchInput" placeholder="Cari info, jasa, barang, atau wilayah...">
+            <!-- Pop-Up Gulungan Pencarian (Tersembunyi Awalnya, Membuka dari Kanan ke Kiri) -->
+            <div class="search-popup-container" id="searchPopup">
+                <div class="search-box-popup">
+                    <svg viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208zM208 352a144 144 10 1 0 0 -288 144 144 10 1 0 0 288z"/></svg>
+                    <input type="text" id="searchInput" placeholder="Cari info, jasa, barang, wilayah...">
+                </div>
+                <button class="close-search-btn" onclick="tutupPencarian()" title="Tutup">✕</button>
             </div>
         </div>
 
@@ -268,13 +326,23 @@
             muatDataAwal();
         });
 
-        // Fungsi Membuka/Menutup Kotak Pencarian Interaktif
-        window.toggleSearch = function() {
-            const dropdown = document.getElementById('searchDropdown');
-            dropdown.classList.toggle('active');
-            if(dropdown.classList.contains('active')) {
-                document.getElementById('searchInput').focus();
-            }
+        // Efek Membuka Pencarian seperti Gulungan dari Kanan ke Kiri
+        window.bukaPencarian = function() {
+            const popup = document.getElementById('searchPopup');
+            const logo = document.getElementById('logoArea');
+            popup.classList.add('active');
+            logo.classList.add('hidden');
+            document.getElementById('searchInput').focus();
+        }
+
+        // Efek Menutup Pencarian
+        window.tutupPencarian = function() {
+            const popup = document.getElementById('searchPopup');
+            const logo = document.getElementById('logoArea');
+            popup.classList.remove('active');
+            logo.classList.remove('hidden');
+            document.getElementById('searchInput').value = '';
+            jalankanPencarianFilter();
         }
 
         // Fungsi Membuka Menu Ombak (Hamburger bergelombang)
