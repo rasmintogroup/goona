@@ -389,7 +389,6 @@
             </div>
             
             <div id="dataContainer">
-                <!-- Data dari Supabase akan dimuat secara dinamis di sini -->
                 <p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 20px;">Memuat data...</p>
             </div>
 
@@ -407,25 +406,23 @@
                 <span id="modalCategoryTitle">Pilih Wilayah</span>
                 <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="closeModal()"></i>
             </div>
-            <div class="region-list" id="regionListContainer">
-                <!-- Daftar wilayah dimasukkan via JS -->
-            </div>
+            <div class="region-list" id="regionListContainer"></div>
         </div>
     </div>
 
-    <!-- Pustaka Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <script>
-        // --- KONFIGURASI SUPABASE ---
-        const SUPABASE_URL = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM'; // Ganti dengan URL Supabase Anda
-        const SUPABASE_KEY = 'sb_publishable_nhT50xz0BEobLU8yIGs48g_O7nqn6gM';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <!-- Skrip Inisialisasi Supabase SDK -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        // --- KONFIGURASI SUPABASE ANDA ---
+        const SUPABASE_URL = 'https://ejnuelaqlgfcmcqpxmpa.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqbnVlbGFxbGdmY21jcXB4bXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzIzMjcsImV4cCI6MjA5MzMwODMyN30.32tG2nN1a3cDa6M__qe7PNWG5ZzeF7zs1eDZSxXviNM';
+        
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let activeCategory = null;
         let activeRegion = null;
 
-        // 7 Kabupaten/Kota di Kepri + Semua Wilayah
         const daftarWilayah = [
             "Semua Wilayah",
             "Kota Batam",
@@ -437,25 +434,20 @@
             "Kabupaten Kepulauan Anambas"
         ];
 
-        // Ambil data pertama kali saat halaman dibuka
         window.addEventListener('DOMContentLoaded', () => {
             ambilDataSupabase();
         });
 
-        // 1. Fungsi Utama Mengambil Data dari Supabase
         async function ambilDataSupabase(keyword = '', kategori = null, wilayah = null) {
             const container = document.getElementById('dataContainer');
             container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 20px;">Mencari data...</p>';
 
-            // Menggunakan tabel 'listings' (sesuaikan jika nama tabel Anda berbeda di Supabase)
             let query = _supabase.from('listings').select('*').order('created_at', { ascending: false });
 
-            // Filter Kategori
             if (kategori) {
                 query = query.eq('kategori', kategori);
             }
 
-            // Filter Wilayah (Jika bukan "Semua Wilayah")
             if (wilayah && wilayah !== "Semua Wilayah") {
                 query = query.eq('kabupaten_kota', wilayah);
             }
@@ -468,7 +460,6 @@
                 return;
             }
 
-            // Filter Pencarian (Membaca judul, kabupaten_kota, atau deskripsi secara lokal dari hasil query)
             if (keyword) {
                 const lowerKeyword = keyword.toLowerCase();
                 data = data.filter(item => {
@@ -482,7 +473,6 @@
             tampilkanDataKeHTML(data);
         }
 
-        // 2. Render Data ke Tampilan HTML
         function tampilkanDataKeHTML(data) {
             const container = document.getElementById('dataContainer');
             
@@ -513,8 +503,7 @@
             container.innerHTML = htmlContent;
         }
 
-        // 3. Logika Saat Kategori Ditekan (Muncul Menu Wilayah Dulu)
-        function pilihKategori(kategori) {
+        window.pilihKategori = function(kategori) {
             activeCategory = kategori;
             document.getElementById('modalCategoryTitle').innerText = `Pilih Wilayah untuk: ${kategori}`;
             
@@ -536,36 +525,32 @@
             });
 
             document.getElementById('regionModal').style.display = 'flex';
-        }
+        };
 
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('regionModal').style.display = 'none';
-        }
+        };
 
-        // 4. Reset Filter Pencarian/Kategori
-        function resetData() {
+        window.resetData = function() {
             activeCategory = null;
             activeRegion = null;
-            document.getElementById('searchInput.value') = '';
+            document.getElementById('searchInput').value = '';
             document.getElementById('listTitle').innerText = 'Info Terbaru';
             document.getElementById('resetFilter').style.display = 'none';
             ambilDataSupabase();
-        }
+        };
 
-        // 5. Fitur Input Search (Membaca judul, kabupaten_kota, deskripsi secara *real-time*)
         const searchInput = document.getElementById('searchInput');
         let searchTimeout;
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             const keyword = e.target.value;
-            
-            // Beri jeda sedikit agar tidak terlalu sering request saat mengetik
             searchTimeout = setTimeout(() => {
                 ambilDataSupabase(keyword, activeCategory, activeRegion);
             }, 300);
         });
 
-        // Script Slider Otomatis (Maks 3 Slide)
+        // Slider Otomatis
         let slideIndex = 0;
         const slides = document.getElementById('sliderContainer');
         const dots = document.querySelectorAll('.dot');
@@ -583,9 +568,9 @@
             });
         }
 
-        function currentSlide(index) {
+        window.currentSlide = function(index) {
             showSlide(index);
-        }
+        };
 
         setInterval(() => {
             slideIndex++;
