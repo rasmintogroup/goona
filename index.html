@@ -32,7 +32,7 @@
             flex-direction: column;
             position: relative;
         }
-        /* Header - Nuansa Laut & Kepulauan (Hijau Toska/Emerald) */
+        /* Header */
         .app-header {
             background: #047857;
             color: #ffffff;
@@ -55,7 +55,7 @@
             cursor: pointer;
         }
 
-        /* Banner Slider Otomatis (Maks 3 Slide) - Nuansa Laut Kepri */
+        /* Banner Slider */
         .banner-slider {
             position: relative;
             width: 100%;
@@ -81,11 +81,9 @@
         .slide:nth-child(1) { background: linear-gradient(135deg, #047857, #065f46); }
         .slide:nth-child(2) { background: linear-gradient(135deg, #0d9488, #0f766e); }
         .slide:nth-child(3) { background: linear-gradient(135deg, #0284c7, #0369a1); }
-        
         .slide h2 { font-size: 1.1rem; margin-bottom: 5px; font-weight: 700; }
         .slide p { font-size: 0.85rem; opacity: 0.95; }
         
-        /* Indikator Slider */
         .slider-dots {
             position: absolute;
             bottom: 8px;
@@ -102,9 +100,7 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        .dot.active {
-            background: #ffffff;
-        }
+        .dot.active { background: #ffffff; }
 
         /* Search Bar */
         .search-section {
@@ -129,18 +125,15 @@
             background: transparent;
             color: #064e3b;
         }
-        .search-box input::placeholder {
-            color: #6b7280;
-        }
-        .search-box i {
-            color: #047857;
-        }
+        .search-box input::placeholder { color: #6b7280; }
+        .search-box i { color: #047857; }
 
-        /* Kategori */
+        /* Kategori & Konten */
         .content-body {
             padding: 16px;
             flex: 1;
             overflow-y: auto;
+            padding-bottom: 30px;
         }
         .section-header {
             display: flex;
@@ -158,6 +151,7 @@
             color: #0d9488;
             text-decoration: none;
             font-weight: 600;
+            cursor: pointer;
         }
         .categories-grid {
             display: grid;
@@ -196,7 +190,7 @@
             font-weight: 600;
         }
 
-        /* Info Terbaru */
+        /* Card List Item Dinamis */
         .latest-info-card {
             background: #ffffff;
             border: 1px solid #a7f3d0;
@@ -206,7 +200,7 @@
             gap: 12px;
             align-items: center;
             box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         .latest-img {
             width: 60px;
@@ -219,6 +213,11 @@
             font-size: 0.85rem;
             font-weight: 600;
             color: #064e3b;
+            margin-bottom: 4px;
+        }
+        .location-text {
+            font-size: 0.75rem;
+            color: #4b5563;
             margin-bottom: 4px;
         }
         .badge {
@@ -248,7 +247,59 @@
             gap: 8px;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
-            margin-top: auto;
+            margin-top: 20px;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+
+        /* Modal Wilayah Sederhana */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #047857;
+        }
+        .region-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .region-item {
+            padding: 10px 14px;
+            background: #f0fdf4;
+            border: 1px solid #a7f3d0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #065f46;
+            transition: background 0.2s;
+        }
+        .region-item:hover {
+            background: #047857;
+            color: white;
         }
     </style>
 </head>
@@ -263,7 +314,7 @@
             <i class="fa-solid fa-bars menu-icon"></i>
         </div>
 
-        <!-- Banner Slider Otomatis (Maks 3 Slide) -->
+        <!-- Banner Slider Otomatis -->
         <div class="banner-slider">
             <div class="slides-container" id="sliderContainer">
                 <div class="slide">
@@ -290,7 +341,7 @@
         <div class="search-section">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Cari jasa, jual beli, kos, kuliner, wisata, loker...">
+                <input type="text" id="searchInput" placeholder="Cari judul, kabupaten/kota, atau deskripsi...">
             </div>
         </div>
 
@@ -299,60 +350,222 @@
             <!-- Kategori -->
             <div class="section-header">
                 <span class="section-title">Kategori Pilihan</span>
-                <a href="#" class="see-all">Lihat semua ></a>
+                <a id="resetFilter" class="see-all" style="display:none;" onclick="resetData()">Reset Filter x</a>
             </div>
             <div class="categories-grid">
-                <div class="cat-item">
+                <div class="cat-item" onclick="pilihKategori('Jasa')">
                     <div class="cat-icon"><i class="fa-solid fa-wrench"></i></div>
                     <span class="cat-name">Jasa</span>
                 </div>
-                <div class="cat-item">
+                <div class="cat-item" onclick="pilihKategori('Jual Beli')">
                     <div class="cat-icon"><i class="fa-solid fa-store"></i></div>
                     <span class="cat-name">Jual Beli</span>
                 </div>
-                <div class="cat-item">
+                <div class="cat-item" onclick="pilihKategori('Kos')">
                     <div class="cat-icon"><i class="fa-solid fa-house"></i></div>
                     <span class="cat-name">Kos</span>
                 </div>
-                <div class="cat-item">
+                <div class="cat-item" onclick="pilihKategori('Kuliner')">
                     <div class="cat-icon"><i class="fa-solid fa-utensils"></i></div>
                     <span class="cat-name">Kuliner</span>
                 </div>
-                <div class="cat-item">
+                <div class="cat-item" onclick="pilihKategori('Wisata')">
                     <div class="cat-icon"><i class="fa-solid fa-mountain-sun"></i></div>
                     <span class="cat-name">Wisata</span>
                 </div>
-                <div class="cat-item">
+                <div class="cat-item" onclick="pilihKategori('Loker')">
                     <div class="cat-icon"><i class="fa-solid fa-briefcase"></i></div>
                     <span class="cat-name">Loker</span>
                 </div>
-                <div class="cat-item">
+                <div class="cat-item" onclick="pilihKategori('Info')">
                     <div class="cat-icon"><i class="fa-solid fa-bullhorn"></i></div>
                     <span class="cat-name">Info</span>
                 </div>
             </div>
 
-            <!-- Info Terbaru -->
+            <!-- Daftar Hasil / Info Terbaru -->
             <div class="section-header">
-                <span class="section-title">Info Terbaru</span>
+                <span class="section-title" id="listTitle">Info Terbaru</span>
             </div>
-            <div class="latest-info-card">
-                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=150&q=80" alt="Service AC" class="latest-img">
-                <div class="latest-desc">
-                    <h4>Jasa Service AC Batam Cepat, Bersih, Bergaransi</h4>
-                    <span class="badge">Jasa</span>
-                </div>
+            
+            <div id="dataContainer">
+                <!-- Data dari Supabase akan dimuat secara dinamis di sini -->
+                <p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 20px;">Memuat data...</p>
             </div>
 
             <!-- Tombol Pasang Info -->
-            <button class="btn-pasang">
+            <a href="tambah-info.html" class="btn-pasang">
                 <i class="fa-solid fa-plus"></i> Pasang Info Gratis
-            </button>
+            </a>
         </div>
     </div>
 
-    <!-- Script Slider Otomatis (Maks 3 Slide) -->
+    <!-- Modal Pilihan Wilayah -->
+    <div class="modal-overlay" id="regionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modalCategoryTitle">Pilih Wilayah</span>
+                <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="closeModal()"></i>
+            </div>
+            <div class="region-list" id="regionListContainer">
+                <!-- Daftar wilayah dimasukkan via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Pustaka Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <script>
+        // --- KONFIGURASI SUPABASE ---
+        const SUPABASE_URL = 'https://URL_PROYEK_ANDA.supabase.co'; // Ganti dengan URL Supabase Anda
+        const SUPABASE_KEY = 'sb_publishable_nhT50xz0BEobLU8yIGs48g_O7nqn6gM';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let activeCategory = null;
+        let activeRegion = null;
+
+        // 7 Kabupaten/Kota di Kepri + Semua Wilayah
+        const daftarWilayah = [
+            "Semua Wilayah",
+            "Kota Batam",
+            "Kota Tanjungpinang",
+            "Kabupaten Bintan",
+            "Kabupaten Karimun",
+            "Kabupaten Lingga",
+            "Kabupaten Natuna",
+            "Kabupaten Kepulauan Anambas"
+        ];
+
+        // Ambil data pertama kali saat halaman dibuka
+        window.addEventListener('DOMContentLoaded', () => {
+            ambilDataSupabase();
+        });
+
+        // 1. Fungsi Utama Mengambil Data dari Supabase
+        async function ambilDataSupabase(keyword = '', kategori = null, wilayah = null) {
+            const container = document.getElementById('dataContainer');
+            container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 20px;">Mencari data...</p>';
+
+            // Menggunakan tabel 'listings' (sesuaikan jika nama tabel Anda berbeda di Supabase)
+            let query = _supabase.from('listings').select('*').order('created_at', { ascending: false });
+
+            // Filter Kategori
+            if (kategori) {
+                query = query.eq('kategori', kategori);
+            }
+
+            // Filter Wilayah (Jika bukan "Semua Wilayah")
+            if (wilayah && wilayah !== "Semua Wilayah") {
+                query = query.eq('kabupaten_kota', wilayah);
+            }
+
+            let { data, error } = await query;
+
+            if (error) {
+                console.error('Gagal memuat:', error);
+                container.innerHTML = '<p style="text-align: center; color: red; font-size: 0.85rem; padding: 20px;">Gagal memuat data dari database.</p>';
+                return;
+            }
+
+            // Filter Pencarian (Membaca judul, kabupaten_kota, atau deskripsi secara lokal dari hasil query)
+            if (keyword) {
+                const lowerKeyword = keyword.toLowerCase();
+                data = data.filter(item => {
+                    const judul = (item.judul || '').toLowerCase();
+                    const kabKota = (item.kabupaten_kota || '').toLowerCase();
+                    const deskripsi = (item.deskripsi || '').toLowerCase();
+                    return judul.includes(lowerKeyword) || kabKota.includes(lowerKeyword) || deskripsi.includes(lowerKeyword);
+                });
+            }
+
+            tampilkanDataKeHTML(data);
+        }
+
+        // 2. Render Data ke Tampilan HTML
+        function tampilkanDataKeHTML(data) {
+            const container = document.getElementById('dataContainer');
+            
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 20px;">Tidak ada info atau data ditemukan.</p>';
+                return;
+            }
+
+            let htmlContent = '';
+            data.forEach(item => {
+                const foto = item.url_foto || 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=150&q=80';
+                const judul = item.judul || 'Tanpa Judul';
+                const kategori = item.kategori || 'Umum';
+                const wilayah = item.kabupaten_kota || 'Kepulauan Riau';
+
+                htmlContent += `
+                    <div class="latest-info-card">
+                        <img src="${foto}" alt="${judul}" class="latest-img">
+                        <div class="latest-desc" style="flex: 1;">
+                            <h4>${judul}</h4>
+                            <div class="location-text"><i class="fa-solid fa-location-dot" style="color: #047857;"></i> ${wilayah}</div>
+                            <span class="badge">${kategori}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = htmlContent;
+        }
+
+        // 3. Logika Saat Kategori Ditekan (Muncul Menu Wilayah Dulu)
+        function pilihKategori(kategori) {
+            activeCategory = kategori;
+            document.getElementById('modalCategoryTitle').innerText = `Pilih Wilayah untuk: ${kategori}`;
+            
+            const regionContainer = document.getElementById('regionListContainer');
+            regionContainer.innerHTML = '';
+
+            daftarWilayah.forEach(wilayah => {
+                const div = document.createElement('div');
+                div.className = 'region-item';
+                div.innerText = wilayah;
+                div.onclick = () => {
+                    activeRegion = wilayah;
+                    closeModal();
+                    document.getElementById('listTitle').innerText = `${activeCategory} (${activeRegion})`;
+                    document.getElementById('resetFilter').style.display = 'inline-block';
+                    ambilDataSupabase('', activeCategory, activeRegion);
+                };
+                regionContainer.appendChild(div);
+            });
+
+            document.getElementById('regionModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('regionModal').style.display = 'none';
+        }
+
+        // 4. Reset Filter Pencarian/Kategori
+        function resetData() {
+            activeCategory = null;
+            activeRegion = null;
+            document.getElementById('searchInput.value') = '';
+            document.getElementById('listTitle').innerText = 'Info Terbaru';
+            document.getElementById('resetFilter').style.display = 'none';
+            ambilDataSupabase();
+        }
+
+        // 5. Fitur Input Search (Membaca judul, kabupaten_kota, deskripsi secara *real-time*)
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            const keyword = e.target.value;
+            
+            // Beri jeda sedikit agar tidak terlalu sering request saat mengetik
+            searchTimeout = setTimeout(() => {
+                ambilDataSupabase(keyword, activeCategory, activeRegion);
+            }, 300);
+        });
+
+        // Script Slider Otomatis (Maks 3 Slide)
         let slideIndex = 0;
         const slides = document.getElementById('sliderContainer');
         const dots = document.querySelectorAll('.dot');
