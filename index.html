@@ -8,11 +8,13 @@
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: #f0fdf4; color: #064e3b; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 480px; background: #ffffff; min-height: 100vh; box-shadow: 0 4px 25px rgba(4, 120, 87, 0.1); display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
+        body { background-color: #f0fdf4; color: #064e3b; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
         
-        /* Header */
-        .app-header { background: #047857; color: #ffffff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #34d399; position: relative; z-index: 20; }
+        /* Kontainer Utama Aplikasi terkunci setinggi layar */
+        .app-container { width: 100%; max-width: 480px; background: #ffffff; height: 100vh; box-shadow: 0 4px 25px rgba(4, 120, 87, 0.1); display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        
+        /* Header Dikunci di Atas (Sticky/Fixed) */
+        .app-header { background: #047857; color: #ffffff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #34d399; position: relative; z-index: 20; flex-shrink: 0; }
         .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; letter-spacing: 0.5px; transition: opacity 0.3s ease; }
         .logo-area.hidden { opacity: 0; pointer-events: none; width: 0; overflow: hidden; }
 
@@ -30,7 +32,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-bottom: 2px; /* Penyelaras optik agar benar-benar di tengah */
+            padding-bottom: 2px;
         }
 
         /* Ikon 3 Garis Bergelombang (Ombak) */
@@ -50,12 +52,11 @@
             border-radius: 2px;
             width: 100%;
         }
-        /* Bentuk gelombang organik pada garis */
         .wave-line:nth-child(1) { transform: skewX(-15deg); width: 85%; align-self: flex-start; }
         .wave-line:nth-child(2) { transform: skewX(15deg); width: 100%; }
         .wave-line:nth-child(3) { transform: skewX(-15deg); width: 90%; align-self: flex-end; }
 
-        /* Efek Gulungan / Pop-Up Pencarian dari Kanan ke Kiri (Menutupi Header) */
+        /* Efek Gulungan / Pop-Up Pencarian dari Kanan ke Kiri */
         .search-popup-container {
             position: absolute;
             top: 0;
@@ -91,8 +92,16 @@
         .search-box-popup svg { width: 15px; height: 15px; fill: #047857; flex-shrink: 0; }
         .close-search-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; margin-left: 12px; padding: 4px; }
 
+        /* Area Scroll Utama (Hanya bagian ini yang bisa digulung ke bawah) */
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
         /* Banner Slider */
-        .banner-slider { position: relative; width: 100%; height: 190px; overflow: hidden; background: #a7f3d0; }
+        .banner-slider { position: relative; width: 100%; height: 190px; overflow: hidden; background: #a7f3d0; flex-shrink: 0; }
         .banner-custom-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; display: none; }
         .slides-container { display: flex; width: 300%; height: 100%; transition: transform 0.5s ease-in-out; position: relative; z-index: 1; }
         .slide { width: 33.333%; height: 100%; color: white; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
@@ -107,7 +116,7 @@
         .dot.active { background: #ffffff; }
 
         /* Content Body */
-        .content-body { padding: 16px; flex: 1; overflow-y: auto; padding-bottom: 40px; }
+        .content-body { padding: 16px; padding-bottom: 40px; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; margin-top: 15px; }
         .section-title { font-size: 0.95rem; font-weight: 700; color: #064e3b; }
         .reset-btn { font-size: 0.8rem; color: #0d9488; background: none; border: none; font-weight: 600; cursor: pointer; display: none; }
@@ -148,11 +157,10 @@
 <body>
 
     <div class="app-container">
-        <!-- Header -->
+        <!-- Header (Diam di Atas / Tidak Ikut Ter-scroll) -->
         <div class="app-header">
             <div class="logo-area" id="logoArea">GOONA</div>
             
-            <!-- Urutan: Kaca Pembesar, Tombol +, Ikon 3 Garis Bergelombang Ombak -->
             <div class="header-actions">
                 <!-- 1. Tombol Kaca Pembesar -->
                 <button class="header-btn" onclick="bukaPencarian()" title="Cari Informasi">
@@ -174,7 +182,7 @@
                 </button>
             </div>
 
-            <!-- Pop-Up Gulungan Pencarian (Tersembunyi Awalnya, Membuka dari Kanan ke Kiri) -->
+            <!-- Pop-Up Gulungan Pencarian -->
             <div class="search-popup-container" id="searchPopup">
                 <div class="search-box-popup">
                     <svg viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208zM208 352a144 144 10 1 0 0 -288 144 144 10 1 0 0 288z"/></svg>
@@ -184,84 +192,87 @@
             </div>
         </div>
 
-        <!-- Banner Slider -->
-        <div class="banner-slider">
-            <img id="customBannerImg" class="banner-custom-img" src="" alt="Banner Kustom">
-            <div class="slides-container" id="sliderContainer">
-                <div class="slide">
-                    <h2>Informasi Lokal Kepri</h2>
-                    <p>Menghubungkan seluruh pulau dan wilayah dengan cepat.</p>
+        <!-- Bagian Konten yang Bisa Digulung (Scrollable) -->
+        <div class="scrollable-content">
+            <!-- Banner Slider -->
+            <div class="banner-slider">
+                <img id="customBannerImg" class="banner-custom-img" src="" alt="Banner Kustom">
+                <div class="slides-container" id="sliderContainer">
+                    <div class="slide">
+                        <h2>Informasi Lokal Kepri</h2>
+                        <p>Menghubungkan seluruh pulau dan wilayah dengan cepat.</p>
+                    </div>
+                    <div class="slide">
+                        <h2>Promosi Usaha Gratis</h2>
+                        <p>Jangkau lebih banyak pelanggan di seluruh Kepulauan Riau.</p>
+                    </div>
+                    <div class="slide">
+                        <h2>Platform Terpercaya</h2>
+                        <p>Solusi digital praktis untuk masyarakat pesisir & kota.</p>
+                    </div>
                 </div>
-                <div class="slide">
-                    <h2>Promosi Usaha Gratis</h2>
-                    <p>Jangkau lebih banyak pelanggan di seluruh Kepulauan Riau.</p>
-                </div>
-                <div class="slide">
-                    <h2>Platform Terpercaya</h2>
-                    <p>Solusi digital praktis untuk masyarakat pesisir & kota.</p>
-                </div>
-            </div>
-            <div class="slider-dots">
-                <span class="dot active" onclick="pindahSlide(0)"></span>
-                <span class="dot" onclick="pindahSlide(1)"></span>
-                <span class="dot" onclick="pindahSlide(2)"></span>
-            </div>
-        </div>
-
-        <!-- Konten Utama -->
-        <div class="content-body">
-            <div class="section-header" style="margin-top: 0;">
-                <span class="section-title">Kategori Pilihan</span>
-            </div>
-            
-            <div class="categories-grid">
-                <div class="cat-item" onclick="pilihKategori('Jasa')">
-                    <div class="cat-icon">🛠️</div>
-                    <span class="cat-name">Jasa</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Jual Beli')">
-                    <div class="cat-icon">🏪</div>
-                    <span class="cat-name">Jual Beli</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Kos')">
-                    <div class="cat-icon">🏠</div>
-                    <span class="cat-name">Kos</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Kuliner')">
-                    <div class="cat-icon">🍲</div>
-                    <span class="cat-name">Kuliner</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Wisata')">
-                    <div class="cat-icon">🌄</div>
-                    <span class="cat-name">Wisata</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Loker')">
-                    <div class="cat-icon">💼</div>
-                    <span class="cat-name">Loker</span>
-                </div>
-                <div class="cat-item" onclick="pilihKategori('Info')">
-                    <div class="cat-icon">📢</div>
-                    <span class="cat-name">Info</span>
+                <div class="slider-dots">
+                    <span class="dot active" onclick="pindahSlide(0)"></span>
+                    <span class="dot" onclick="pindahSlide(1)"></span>
+                    <span class="dot" onclick="pindahSlide(2)"></span>
                 </div>
             </div>
 
-            <!-- Info Terbaru -->
-            <div id="sectionInfoTerbaru">
-                <div class="section-header">
-                    <span class="section-title">Info Terbaru</span>
+            <!-- Konten Utama -->
+            <div class="content-body">
+                <div class="section-header" style="margin-top: 0;">
+                    <span class="section-title">Kategori Pilihan</span>
                 </div>
-                <div id="containerInfoTerbaru">
-                    <p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Memuat info terbaru...</p>
+                
+                <div class="categories-grid">
+                    <div class="cat-item" onclick="pilihKategori('Jasa')">
+                        <div class="cat-icon">🛠️</div>
+                        <span class="cat-name">Jasa</span>
+                    </div>
+                    <div class="cat-item" onclick="pilihKategori('Jual Beli')">
+                        <div class="cat-icon">🏪</div>
+                        <span class="cat-name">Jual Beli</span>
+                    </div>
+                    <div class="cat-item" onclick="pilihKategori('Kos')">
+                        <div class="cat-icon">🏠</div>
+                        <span class="cat-name">Kos</span>
+                    </div>
+                    <div class="cat-item" onclick="pilihKategori('Kuliner')">
+                        <div class="cat-icon">🍲</div>
+                        <span class="cat-name">Kuliner</span>
+                    </div>
+                    <div class="cat-item" onclick="pilihKategori('Wisata')">
+                        <div class="cat-icon">🌄</div>
+                        <span class="cat-name">Wisata</span>
+                    </div>
+                    <div class="cat-item" onclick="pilihKategori('Loker')">
+                        <div class="cat-icon">💼</div>
+                        <span class="cat-name">Loker</span>
+                    </div>
+                    <div class="cat-item" onclick="pilihKategori('Info')">
+                        <div class="cat-icon">📢</div>
+                        <span class="cat-name">Info</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Hasil Filter / Pencarian -->
-            <div id="sectionHasilFilter" style="display: none; margin-top: 20px;">
-                <div class="section-header">
-                    <span class="section-title" id="listTitle">Hasil Pencarian</span>
-                    <button id="resetBtn" class="reset-btn" onclick="resetFilter()">Reset Filter x</button>
+                <!-- Info Terbaru -->
+                <div id="sectionInfoTerbaru">
+                    <div class="section-header">
+                        <span class="section-title">Info Terbaru</span>
+                    </div>
+                    <div id="containerInfoTerbaru">
+                        <p style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 15px;">Memuat info terbaru...</p>
+                    </div>
                 </div>
-                <div id="dataContainer"></div>
+
+                <!-- Hasil Filter / Pencarian -->
+                <div id="sectionHasilFilter" style="display: none; margin-top: 20px;">
+                    <div class="section-header">
+                        <span class="section-title" id="listTitle">Hasil Pencarian</span>
+                        <button id="resetBtn" class="reset-btn" onclick="resetFilter()">Reset Filter x</button>
+                    </div>
+                    <div id="dataContainer"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -288,7 +299,7 @@
         </div>
     </div>
 
-    <!-- Modal Menu Ombak (Untuk Halaman Masa Depan) -->
+    <!-- Modal Menu Ombak -->
     <div class="modal-overlay" id="modalMenuOmbak">
         <div class="modal-content">
             <div class="modal-header">
@@ -326,7 +337,6 @@
             muatDataAwal();
         });
 
-        // Efek Membuka Pencarian seperti Gulungan dari Kanan ke Kiri
         window.bukaPencarian = function() {
             const popup = document.getElementById('searchPopup');
             const logo = document.getElementById('logoArea');
@@ -335,7 +345,6 @@
             document.getElementById('searchInput').focus();
         }
 
-        // Efek Menutup Pencarian
         window.tutupPencarian = function() {
             const popup = document.getElementById('searchPopup');
             const logo = document.getElementById('logoArea');
@@ -345,7 +354,6 @@
             jalankanPencarianFilter();
         }
 
-        // Fungsi Membuka Menu Ombak (Hamburger bergelombang)
         window.bukaMenuOmbak = function() {
             document.getElementById('modalMenuOmbak').style.display = 'flex';
         }
