@@ -8,10 +8,10 @@
 
     <style>
         :root {
-            --primary-brown: #8B4513;
-            --secondary-brown: #A0522D;
-            --light-brown: #D2B48C;
-            --bg-brown: #FDF5E6;
+            --primary-green: #047857;
+            --secondary-green: #065f46;
+            --light-green: #a7f3d0;
+            --bg-green: #ecfdf5;
             --white: #ffffff;
             --success-green: #2ecc71;
         }
@@ -23,10 +23,10 @@
 
         body { 
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background: var(--bg-brown); 
+            background: var(--bg-green); 
             margin: 0; 
             padding: 10px; 
-            color: #3E2723; 
+            color: #064e3b; 
             line-height: 1.5;
         }
 
@@ -36,12 +36,12 @@
             background: var(--white); 
             padding: 20px; 
             border-radius: 20px; 
-            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.1); 
-            border: 1px solid var(--light-brown); 
+            box-shadow: 0 10px 25px rgba(4, 120, 87, 0.1); 
+            border: 1px solid var(--light-green); 
         }
 
         h2 { 
-            color: var(--primary-brown); 
+            color: var(--primary-green); 
             margin: 0 0 5px 0;
             font-size: 22px; 
             text-align: center;
@@ -50,7 +50,7 @@
         .sub-title {
             text-align: center;
             font-size: 13px;
-            color: #795548;
+            color: #047857;
             margin-bottom: 20px;
         }
 
@@ -61,7 +61,7 @@
         label { 
             font-weight: bold; 
             font-size: 14px; 
-            color: var(--primary-brown); 
+            color: var(--primary-green); 
             margin-left: 5px;
         }
         
@@ -69,20 +69,20 @@
             width: 100%; 
             padding: 12px 15px; 
             border-radius: 12px; 
-            border: 1.5px solid var(--light-brown); 
+            border: 1.5px solid var(--light-green); 
             outline: none; 
             font-size: 16px; /* Ukuran 16px mencegah auto-zoom di iPhone */
-            background-color: #FFFAF0;
+            background-color: #f0fdf4;
             transition: all 0.3s ease;
-            color: #3E2723;
+            color: #064e3b;
         }
 
         textarea { height: 120px; resize: none; }
         
         input:focus, select:focus, textarea:focus {
-            border-color: var(--primary-brown);
+            border-color: var(--primary-green);
             background-color: var(--white);
-            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.15);
         }
 
         .row { 
@@ -94,12 +94,12 @@
         #char-count { 
             text-align: right; 
             font-size: 11px; 
-            color: #8D6E63; 
+            color: #047857; 
             margin-top: -10px;
         }
 
         button { 
-            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
             color: #fff; 
             border: none; 
             padding: 16px; 
@@ -109,18 +109,18 @@
             font-size: 16px; 
             font-weight: bold; 
             margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+            box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
             transition: transform 0.2s;
         }
 
         button:active { transform: scale(0.98); }
-        button:disabled { background: #D7CCC8; cursor: not-allowed; box-shadow: none; }
+        button:disabled { background: #a7f3d0; cursor: not-allowed; box-shadow: none; }
 
         .back-link { 
             display: block; 
             margin-top: 20px; 
             text-align: center; 
-            color: var(--secondary-brown); 
+            color: var(--secondary-green); 
             text-decoration: none; 
             font-size: 14px; 
             font-weight: 500;
@@ -274,15 +274,15 @@
 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-       const dataWilayah = {
-    "Kota Batam": ["Batam Kota", "Batu Ampar", "Batu Aji", "Belakang Padang", "Bengkong", "Bulang", "Galang", "Lubuk Baja", "Nongsa", "Sagulung", "Sei Beduk", "Sekupang"],
-    "Kota Tanjungpinang": ["Tanjungpinang Barat", "Tanjungpinang Kota", "Tanjungpinang Timur", "Bukit Bestari"],
-    "Kabupaten Bintan": ["Bintan Pesisir", "Bintan Timur (Kijang)", "Bintan Utara (Tanjung Uban)", "Gunung Kijang", "Mantang", "Seri Kuala Lobam", "Tambelan", "Teluk Bintan", "Teluk Sebong", "Toapaya"],
-    "Kabupaten Karimun": ["Belat", "Buru", "Durai", "Karimun", "Kundur", "Kundur Barat", "Kundur Utara", "Meral", "Meral Barat", "Moro", "Selat Gelam", "Tebing", "Ungar"],
-    "Kabupaten Lingga": ["Bakung Serumpun", "Katang Bidare", "Kepulauan Posek", "Lingga", "Lingga Timur", "Lingga Utara", "Senayang", "Selayar", "Singkep", "Singkep Barat", "Singkep Pesisir", "Singkep Selatan", "Temiang Pesisir"],
-    "Kabupaten Natuna": ["Bunguran Barat", "Bunguran Batubi", "Bunguran Selatan", "Bunguran Tengah", "Bunguran Timur", "Bunguran Timur Laut", "Bunguran Utara", "Midai", "Pulau Laut", "Pulau Panjang", "Pulau Tiga", "Pulau Tiga Barat", "Serasan", "Serasan Timur", "Suak Midai", "Subi"],
-    "Kabupaten Kepulauan Anambas": ["Jemaja", "Jemaja Barat", "Jemaja Timur", "Kute Siantan", "Palmatak", "Siantan", "Siantan Selatan", "Siantan Tengah", "Siantan Timur", "Siantan Utara"]
-};
+        const dataWilayah = {
+            "Kota Batam": ["Batam Kota", "Batu Ampar", "Batu Aji", "Belakang Padang", "Bengkong", "Bulang", "Galang", "Lubuk Baja", "Nongsa", "Sagulung", "Sei Beduk", "Sekupang"],
+            "Kota Tanjungpinang": ["Tanjungpinang Barat", "Tanjungpinang Kota", "Tanjungpinang Timur", "Bukit Bestari"],
+            "Kabupaten Bintan": ["Bintan Pesisir", "Bintan Timur (Kijang)", "Bintan Utara (Tanjung Uban)", "Gunung Kijang", "Mantang", "Seri Kuala Lobam", "Tambelan", "Teluk Bintan", "Teluk Sebong", "Toapaya"],
+            "Kabupaten Karimun": ["Belat", "Buru", "Durai", "Karimun", "Kundur", "Kundur Barat", "Kundur Utara", "Meral", "Meral Barat", "Moro", "Selat Gelam", "Tebing", "Ungar"],
+            "Kabupaten Lingga": ["Bakung Serumpun", "Katang Bidare", "Kepulauan Posek", "Lingga", "Lingga Timur", "Lingga Utara", "Senayang", "Selayar", "Singkep", "Singkep Barat", "Singkep Pesisir", "Singkep Selatan", "Temiang Pesisir"],
+            "Kabupaten Natuna": ["Bunguran Barat", "Bunguran Batubi", "Bunguran Selatan", "Bunguran Tengah", "Bunguran Timur", "Bunguran Timur Laut", "Bunguran Utara", "Midai", "Pulau Laut", "Pulau Panjang", "Pulau Tiga", "Pulau Tiga Barat", "Serasan", "Serasan Timur", "Suak Midai", "Subi"],
+            "Kabupaten Kepulauan Anambas": ["Jemaja", "Jemaja Barat", "Jemaja Timur", "Kute Siantan", "Palmatak", "Siantan", "Siantan Selatan", "Siantan Tengah", "Siantan Timur", "Siantan Utara"]
+        };
         const kabSelect = document.getElementById('kabupaten');
         const kecSelect = document.getElementById('kecamatan');
         const deskripsiInput = document.getElementById('deskripsi');
@@ -332,7 +332,6 @@
             countSpan.innerText = 200 - deskripsiInput.value.length;
         });
 
-        // ACTION UTAMA PENGIRIMAN DATA FORMULIR + FOTO TERKOMPRES
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             submitBtn.innerText = "Memproses & Mengompres Foto...";
@@ -342,27 +341,19 @@
             const fileMentah = fileInput.files[0];
 
             try {
-                // 1. JIKA ADA BERSKAS FOTO, JALANKAN PROSES KOMPRESI OTOMATIS DI SINI
                 if (fileMentah) {
                     const opsiKompresi = {
-                        maxSizeMB: 0.2,          // Target ukuran maksimal ~200 KB
-                        maxWidthOrHeight: 1024,  // Lebar/tinggi maksimal gambar agar tidak merusak kualitas mata
-                        useWebWorker: true       // Memakai thread latar belakang browser agar HP tidak lag
+                        maxSizeMB: 0.2,         
+                        maxWidthOrHeight: 1024,  
+                        useWebWorker: true       
                     };
 
-                    console.log("Ukuran file asli:", (fileMentah.size / 1024 / 1024).toFixed(2), "MB");
-                    
-                    // Eksekusi kompresi otomatis via library
                     const fileKompres = await imageCompression(fileMentah, opsiKompresi);
-                    console.log("Ukuran file setelah kompres:", (fileKompres.size / 1024).toFixed(2), "KB");
-
                     submitBtn.innerText = "Mengunggah Foto...";
 
-                    // Membuat nama acak file yang unik agar tidak saling bertabrakan di storage
                     const ekstensi = fileMentah.name.split('.').pop();
                     const namaFileUnik = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${ekstensi}`;
 
-                    // Kirim ke Bucket Storage Supabase bernama 'foto_goona'
                     const { data: storageData, error: storageError } = await supabase
                         .storage
                         .from('foto_goona')
@@ -370,7 +361,6 @@
 
                     if (storageError) throw new Error("Gagal mengunggah gambar ke storage: " + storageError.message);
 
-                    // Ambil URL Publik tautan fotonya
                     const { data: urlData } = supabase
                         .storage
                         .from('foto_goona')
@@ -381,7 +371,6 @@
 
                 submitBtn.innerText = "Mengirim Data...";
 
-                // 2. MASUKKAN SEMUA PAYLOAD LENGKAP KE TABEL INTI
                 const payload = {
                     kategori: document.getElementById('kategori').value,
                     judul: document.getElementById('judul-info').value, 
@@ -391,7 +380,7 @@
                     satuan_harga: document.getElementById('satuan_harga').value || null,
                     deskripsi: deskripsiInput.value,
                     whatsapp: document.getElementById('wa-number').value,
-                    url_foto: finalFotoUrl, // Menyimpan link URL dari hasil upload storage di atas
+                    url_foto: finalFotoUrl,
                     status: 'pending',
                     created_at: new Date().toISOString()
                 };
