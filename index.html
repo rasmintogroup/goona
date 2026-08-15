@@ -105,7 +105,12 @@
         .banner-custom-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; display: none; }
         .slides-container { display: flex; width: 300%; height: 100%; transition: transform 0.5s ease-in-out; position: relative; z-index: 1; }
         .slide { width: 33.333%; height: 100%; color: white; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
-        .slide:nth-child(1) { background: linear-gradient(135deg, #047857, #065f46); }
+        .slide:nth-child(1) {
+    background-image: url('Slide 1.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
         .slide:nth-child(2) { background: linear-gradient(135deg, #0d9488, #0f766e); }
         .slide:nth-child(3) { background: linear-gradient(135deg, #0284c7, #0369a1); }
         .slide h2 { font-size: 1.15rem; margin-bottom: 6px; font-weight: 700; }
