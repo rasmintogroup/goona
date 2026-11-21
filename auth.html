@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <!-- Metadata dasar & viewport responsif untuk HP dan PC -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Masuk atau daftar akun Reviewer Freelance maupun Perusahaan Pengiklan di goona.my.id." />
+  <title>Masuk &amp; Daftar Akun — goona.my.id</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Konfigurasi tema & font Inter selaras dengan index.html
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#4f46e5',
+              600: '#4338ca',
+              700: '#3730a3',
+              900: '#1e1b4b',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased flex flex-col justify-between selection:bg-brand-100 selection:text-brand-700">
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+      <!-- Logo Brand -->
+      <a href="index.html" class="flex items-center gap-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+          G
+        </div>
+        <div>
+          <span class="font-extrabold text-lg tracking-tight text-slate-900">goona<span class="text-brand-600">.my.id</span></span>
+          <span class="hidden sm:block text-[11px] font-medium text-slate-500 -mt-1">Portal Akun &amp; Verifikasi</span>
+        </div>
+      </a>
+
+      <!-- Tombol Kembali ke Beranda -->
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Kembali ke Beranda</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN AUTH CONTAINER ==================== -->
+  <main class="flex-1 py-8 sm:py-12 px-4 sm:px-6">
+    <div class="max-w-2xl mx-auto">
+
+      <!-- Judul Ringkas -->
+      <div class="text-center mb-6 sm:mb-8">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          Akses Akun <span class="text-brand-600">goona.my.id</span>
+        </h1>
+        <p class="mt-2 text-xs sm:text-sm text-slate-600">
+          Pilih mode masuk atau pendaftaran sesuai peran Anda sebagai Reviewer Freelance maupun Perusahaan Pengiklan.
+        </p>
+      </div>
+
+      <!-- Notifikasi Inline Error/Info (Pengganti alert) -->
+      <div id="form-feedback" class="hidden mb-5 rounded-2xl p-4 border text-xs sm:text-sm flex items-start gap-3" role="alert">
+        <i id="feedback-icon" data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
+        <div class="flex-1">
+          <p id="feedback-title" class="font-bold"></p>
+          <p id="feedback-message" class="mt-0.5 leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- Card Utama Autentikasi -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+
+        <!-- Role Selector Tabs -->
+        <div class="grid grid-cols-3 bg-slate-100 p-1.5 border-b border-slate-200 gap-1" role="tablist" aria-label="Pilih Jenis Autentikasi">
+          <button
+            type="button"
+            id="tab-btn-login"
+            role="tab"
+            aria-selected="true"
+            class="py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-900 shadow-sm transition flex items-center justify-center gap-1.5"
+          >
+            <i data-lucide="log-in" class="w-4 h-4 text-brand-600 shrink-0"></i>
+            <span>Masuk</span>
+          </button>
+
+          <button
+            type="button"
+            id="tab-btn-reviewer"
+            role="tab"
+            aria-selected="false"
+            class="py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5"
+          >
+            <i data-lucide="user-check" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+            <span>Daftar Reviewer</span>
+          </button>
+
+          <button
+            type="button"
+            id="tab-btn-company"
+            role="tab"
+            aria-selected="false"
+            class="py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5"
+          >
+            <i data-lucide="building-2" class="w-4 h-4 text-brand-600 shrink-0"></i>
+            <span>Perusahaan</span>
+          </button>
+        </div>
+
+        <!-- ==================== TAB 1: FORM MASUK (LOGIN) ==================== -->
+        <section id="section-login" class="p-6 sm:p-8 space-y-6">
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-900">Masuk ke Dasbor Anda</h2>
+            <p class="mt-1 text-xs sm:text-sm text-slate-500">
+              Gunakan email terdaftar untuk mengakses misi review atau mengelola kampanye iklan perusahaan.
+            </p>
+          </div>
+
+          <form id="login-form" class="space-y-4" novalidate>
+            <div>
+              <label for="login-email" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                Email / Username Terdaftar
+              </label>
+              <div class="relative">
+                <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                <input
+                  type="email"
+                  id="login-email"
+                  required
+                  placeholder="nama@email.com"
+                  class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="login-password" class="block text-xs sm:text-sm font-semibold text-slate-800">
+                  Kata Sandi
+                </label>
+                <span class="text-xs text-slate-400">Minimal 6 karakter</span>
+              </div>
+              <div class="relative">
+                <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                <input
+                  type="password"
+                  id="login-password"
+                  required
+                  placeholder="Masukkan kata sandi"
+                  class="w-full pl-10 pr-12 py-3 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                />
+                <button
+                  type="button"
+                  data-toggle-pw="login-password"
+                  class="toggle-pw-btn absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+                  aria-label="Tampilkan atau sembunyikan kata sandi"
+                >
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full py-3 px-5 rounded-xl text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-sm transition flex items-center justify-center gap-2"
+            >
+              <span>Masuk Sekarang</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </form>
+
+          <!-- Simulasi Akses Cepat Demo -->
+          <div class="pt-5 border-t border-slate-200">
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
+              Simulasi Masuk Cepat (Pratinjau Halaman)
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <a
+                href="reviewer.html"
+                class="p-3 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100/80 text-emerald-900 transition flex items-center justify-between gap-2"
+              >
+                <div class="flex items-center gap-2.5">
+                  <i data-lucide="user-check" class="w-4 h-4 text-emerald-700 shrink-0"></i>
+                  <div class="text-left">
+                    <span class="block text-xs font-bold">Demo Reviewer</span>
+                    <span class="block text-[11px] text-emerald-700">Buka reviewer.html</span>
+                  </div>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-emerald-700"></i>
+              </a>
+
+              <a
+                href="perusahaan.html"
+                class="p-3 rounded-xl border border-brand-200 bg-brand-50/70 hover:bg-brand-100/80 text-brand-900 transition flex items-center justify-between gap-2"
+              >
+                <div class="flex items-center gap-2.5">
+                  <i data-lucide="building-2" class="w-4 h-4 text-brand-700 shrink-0"></i>
+                  <div class="text-left">
+                    <span class="block text-xs font-bold">Demo Perusahaan</span>
+                    <span class="block text-[11px] text-brand-700">Buka perusahaan.html</span>
+                  </div>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-brand-700"></i>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB 2: DAFTAR REVIEWER ==================== -->
+        <section id="section-reviewer" class="hidden p-6 sm:p-8 space-y-6">
+          <div class="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 mb-2">
+                <i data-lucide="coins" class="w-3.5 h-3.5"></i>
+                Fee Rp 1.200 (60%) / Review Valid
+              </span>
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900">Pendaftaran Reviewer Freelance</h2>
+              <p class="mt-1 text-xs sm:text-sm text-slate-500">
+                Data kriteria di bawah menentukan iklan mana yang dapat Anda buka dan kerjakan.
+              </p>
+            </div>
+          </div>
+
+          <!-- Peringatan Kesesuaian Nama & Rekening -->
+          <div class="rounded-2xl bg-amber-50 border border-amber-200 p-4 flex items-start gap-3">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+            <div class="text-xs text-amber-900 space-y-1 leading-relaxed">
+              <p class="font-bold">Wajib Diperhatikan Sebelum Mendaftar:</p>
+              <p>
+                <strong>Nama Lengkap wajib sama persis dengan nama pemilik rekening bank / e-wallet</strong>. Demi privasi &amp; keamanan data (UU PDP), kami tidak meminta foto atau nomor NIK KTP—cukup tanggal lahir sesuai KTP untuk validasi usia.
+              </p>
+            </div>
+          </div>
+
+          <form id="reviewer-form" class="space-y-5" novalidate>
+            <!-- 1. Nama Lengkap Sesuai Rekening -->
+            <div>
+              <label for="rev-fullname" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                Nama Lengkap (Wajib Sesuai Rekening Bank / E-Wallet) <span class="text-rose-600">*</span>
+              </label>
+              <input
+                type="text"
+                id="rev-fullname"
+                required
+                placeholder="Contoh: Siti Aminah"
+                class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              />
+              <p class="mt-1 text-[11px] text-slate-500">
+                Nama ini otomatis dikunci sebagai nama penerima pencairan dana di halaman dompet.
+              </p>
+            </div>
+
+            <!-- 2. Tanggal Lahir (KTP) & Jenis Kelamin -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                  <label for="rev-dob" class="block text-xs sm:text-sm font-semibold text-slate-800">
+                    Tanggal Lahir (Sesuai KTP) <span class="text-rose-600">*</span>
+                  </label>
+                </div>
+                <input
+                  type="date"
+                  id="rev-dob"
+                  required
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                />
+                <!-- Badge Usia Real-time -->
+                <div id="age-badge-wrapper" class="mt-2 flex items-center gap-1.5">
+                  <span id="age-badge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                    <span>Pilih tanggal lahir (min. 17 tahun)</span>
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <span class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                  Jenis Kelamin <span class="text-rose-600">*</span>
+                </span>
+                <div class="grid grid-cols-2 gap-2.5">
+                  <label class="cursor-pointer">
+                    <input type="radio" name="rev-gender" value="Laki-laki" class="peer sr-only" required />
+                    <div class="py-2.5 px-3 rounded-xl border border-slate-300 text-center text-xs sm:text-sm font-semibold text-slate-700 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 peer-checked:text-emerald-800 transition">
+                      Laki-laki
+                    </div>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="radio" name="rev-gender" value="Perempuan" class="peer sr-only" required />
+                    <div class="py-2.5 px-3 rounded-xl border border-slate-300 text-center text-xs sm:text-sm font-semibold text-slate-700 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 peer-checked:text-emerald-800 transition">
+                      Perempuan
+                    </div>
+                  </label>
+                </div>
+                <p class="mt-2 text-[11px] text-slate-500">
+                  Digunakan untuk mencocokkan target audiens iklan.
+                </p>
+              </div>
+            </div>
+
+            <!-- 3. Lokasi Domisili (Provinsi & Kota/Kabupaten) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="rev-province" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                  Provinsi Domisili <span class="text-rose-600">*</span>
+                </label>
+                <select
+                  id="rev-province"
+                  required
+                  class="w-full px-3.5 py-3 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                >
+                  <option value="">-- Pilih Provinsi --</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="rev-city" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                  Kota / Kabupaten <span class="text-rose-600">*</span>
+                </label>
+                <select
+                  id="rev-city"
+                  required
+                  disabled
+                  class="w-full px-3.5 py-3 rounded-xl border border-slate-300 bg-slate-100 text-sm text-slate-900 disabled:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                >
+                  <option value="">-- Pilih Provinsi Dahulu --</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 4. Informasi Rekening / E-Wallet Pencairan -->
+            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 sm:p-5 space-y-4">
+              <div class="flex items-center gap-2">
+                <i data-lucide="wallet" class="w-4 h-4 text-emerald-700"></i>
+                <h3 class="text-xs sm:text-sm font-bold text-slate-900">Rekening Pencairan Fee Review</h3>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="rev-bank" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                    Bank / E-Wallet <span class="text-rose-600">*</span>
+                  </label>
+                  <select
+                    id="rev-bank"
+                    required
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="">-- Pilih Tujuan --</option>
+                    <option value="BCA">Bank BCA</option>
+                    <option value="BRI">Bank BRI</option>
+                    <option value="BNI">Bank BNI</option>
+                    <option value="Mandiri">Bank Mandiri</option>
+                    <option value="SeaBank">SeaBank</option>
+                    <option value="DANA">E-Wallet DANA</option>
+                    <option value="OVO">E-Wallet OVO</option>
+                    <option value="GoPay">E-Wallet GoPay</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="rev-account-number" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                    Nomor Rekening / No. HP E-Wallet <span class="text-rose-600">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="rev-account-number"
+                    inputmode="numeric"
+                    required
+                    placeholder="Contoh: 1234567890"
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <!-- Kotak Konfirmasi Nama Pemilik Rekening Terkunci -->
+              <div class="rounded-xl bg-white border border-emerald-200 px-3.5 py-2.5 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <i data-lucide="lock" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+                  <span class="text-xs text-slate-600 truncate">
+                    Nama Pemilik Rekening: <strong id="locked-account-holder" class="text-slate-900">(Isi Nama Lengkap di atas)</strong>
+                  </span>
+                </div>
+                <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 shrink-0">
+                  Terkunci
+                </span>
+              </div>
+            </div>
+
+            <!-- 5. Kredensial Akun -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="rev-email" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                  Email Aktif <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="rev-email"
+                  required
+                  placeholder="reviewer@email.com"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div>
+                <label for="rev-password" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                  Kata Sandi Akun <span class="text-rose-600">*</span>
+                </label>
+                <div class="relative">
+                  <input
+                    type="password"
+                    id="rev-password"
+                    required
+                    minlength="6"
+                    placeholder="Minimal 6 karakter"
+                    class="w-full pl-3.5 pr-11 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                  <button
+                    type="button"
+                    data-toggle-pw="rev-password"
+                    class="toggle-pw-btn absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+                    aria-label="Tampilkan atau sembunyikan kata sandi"
+                  >
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Persetujuan Data -->
+            <label class="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <input type="checkbox" id="rev-agree" required class="mt-0.5 w-4 h-4 rounded accent-emerald-600" />
+              <span class="text-xs text-slate-600 leading-relaxed">
+                Saya menyatakan data tanggal lahir (sesuai KTP), jenis kelamin, lokasi, serta <strong>kesesuaian nama dengan nomor rekening</strong> adalah benar, hanya membuat 1 akun pribadi, dan menyetujui kebijakan privasi (UU PDP) <strong>goona.my.id</strong>.
+              </span>
+            </label>
+
+            <button
+              type="submit"
+              class="w-full py-3.5 px-5 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition flex items-center justify-center gap-2"
+            >
+              <span>Daftar &amp; Simpan Profil Reviewer</span>
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+            </button>
+          </form>
+        </section>
+
+        <!-- ==================== TAB 3: DAFTAR PERUSAHAAN ==================== -->
+        <section id="section-company" class="hidden p-6 sm:p-8 space-y-6">
+          <div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-brand-100 text-brand-800 mb-2">
+              <i data-lucide="megaphone" class="w-3.5 h-3.5"></i>
+              Mitra Pengiklan &amp; Riset Produk
+            </span>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-900">Pendaftaran Akun Perusahaan</h2>
+            <p class="mt-1 text-xs sm:text-sm text-slate-500">
+              Pasang kampanye iklan dengan target demografi spesifik, 3 soal wajib pilihan A–E, dan link referral penjualan.
+            </p>
+          </div>
+
+          <!-- Ringkasan Mekanisme Pengiklan -->
+          <div class="rounded-2xl bg-brand-50/80 border border-brand-200 p-4 space-y-2 text-xs text-brand-950">
+            <p class="font-bold text-brand-900 flex items-center gap-1.5">
+              <i data-lucide="info" class="w-4 h-4 text-brand-600"></i>
+              Ketentuan Kampanye Perusahaan:
+            </p>
+            <ul class="space-y-1 text-slate-700 list-disc pl-5">
+              <li>Limit tayang iklan dihitung dari saldo Top-Up (<strong>Rp 2.000 per review valid</strong>).</li>
+              <li>Setiap iklan wajib mencantumkan <strong>kriteria lokasi, rentang usia, jenis kelamin</strong>, <strong>link referral</strong>, serta <strong>3 soal pilihan A–E</strong> beserta 3 kunci jawaban.</li>
+              <li>Kuota iklan <strong>tidak berkurang</strong> apabila reviewer menjawab salah salah satu atau lebih dari 3 soal tersebut.</li>
+            </ul>
+          </div>
+
+          <form id="company-form" class="space-y-4" novalidate>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="comp-brand" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                  Nama Perusahaan / Brand <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="comp-brand"
+                  required
+                  placeholder="Contoh: PT Nusantara Digital / Kopi Kita"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                />
+              </div>
+
+              <div>
+                <label for="comp-pic" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                  Nama Penanggung Jawab (PIC) <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="comp-pic"
+                  required
+                  placeholder="Contoh: Budi Santoso"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="comp-email" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                  Email Bisnis / Pengiklan <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="comp-email"
+                  required
+                  placeholder="marketing@perusahaan.co.id"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                />
+              </div>
+
+              <div>
+                <label for="comp-phone" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                  Nomor WhatsApp Aktif <span class="text-rose-600">*</span>
+                </label>
+                <input
+                  type="tel"
+                  id="comp-phone"
+                  required
+                  placeholder="Contoh: 081234567890"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="comp-password" class="block text-xs sm:text-sm font-semibold text-slate-800 mb-1.5">
+                Kata Sandi Akun Perusahaan <span class="text-rose-600">*</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="password"
+                  id="comp-password"
+                  required
+                  minlength="6"
+                  placeholder="Minimal 6 karakter"
+                  class="w-full pl-3.5 pr-11 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                />
+                <button
+                  type="button"
+                  data-toggle-pw="comp-password"
+                  class="toggle-pw-btn absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+                  aria-label="Tampilkan atau sembunyikan kata sandi"
+                >
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <label class="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <input type="checkbox" id="comp-agree" required class="mt-0.5 w-4 h-4 rounded accent-brand-600" />
+              <span class="text-xs text-slate-600 leading-relaxed">
+                Saya menyetujui ketentuan iklan di <strong>goona.my.id</strong> (tidak memuat konten terlarang/penipuan) serta mekanisme pembagian biaya Rp 2.000 per review valid dan pelacakan link referral.
+              </span>
+            </label>
+
+            <button
+              type="submit"
+              class="w-full py-3.5 px-5 rounded-xl text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-sm transition flex items-center justify-center gap-2"
+            >
+              <span>Buat Akun Perusahaan</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </form>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== MODAL KONFIRMASI BERHASIL ==================== -->
+  <div id="success-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-xl border border-slate-200 space-y-5">
+      <div class="flex items-center gap-3">
+        <div id="modal-icon-box" class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+          <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Verifikasi Berhasil</span>
+          <h3 id="modal-title" class="text-lg font-extrabold text-slate-900">Akun Siap Digunakan</h3>
+        </div>
+      </div>
+
+      <p id="modal-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
+
+      <!-- Ringkasan Data Tersimpan -->
+      <div id="modal-summary" class="rounded-xl bg-slate-50 border border-slate-200 p-3.5 space-y-1.5 text-xs text-slate-700"></div>
+
+      <div class="flex flex-col sm:flex-row gap-2.5 pt-1">
+        <button
+          type="button"
+          id="modal-close-btn"
+          class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+        >
+          Tutup
+        </button>
+        <a
+          id="modal-next-link"
+          href="reviewer.html"
+          class="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition"
+        >
+          <span id="modal-next-label">Lanjut ke Dasbor</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER RINGKAS ==================== -->
+  <footer class="bg-white border-t border-slate-200 py-6">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <p>&copy; <span id="year-now">2026</span> www.goona.my.id • Validasi Profil &amp; Pembayaran Terpadu</p>
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="hover:text-brand-600 transition">Beranda</a>
+        <a href="reviewer.html" class="hover:text-brand-600 transition">Reviewer</a>
+        <a href="perusahaan.html" class="hover:text-brand-600 transition">Perusahaan</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+
+    const yearEl = document.getElementById('year-now');
+    if (yearEl) {
+      yearEl.textContent = new Date().getFullYear();
+    }
+
+    // Data Wilayah Indonesia Utama (termasuk Kepulauan Riau - Tanjung Pinang & Batam)
+    const INDONESIA_REGIONS = {
+      'Kepulauan Riau': ['Kota Tanjung Pinang', 'Kota Batam', 'Kab. Bintan', 'Kab. Karimun', 'Kab. Natuna', 'Kab. Lingga'],
+      'DKI Jakarta': ['Jakarta Pusat', 'Jakarta Selatan', 'Jakarta Barat', 'Jakarta Timur', 'Jakarta Utara'],
+      'Jawa Barat': ['Kota Bandung', 'Kota Bekasi', 'Kota Depok', 'Kota Bogor', 'Kab. Karawang', 'Kota Cirebon'],
+      'Banten': ['Kota Tangerang', 'Kota Tangerang Selatan', 'Kota Serang', 'Kota Cilegon'],
+      'Jawa Tengah': ['Kota Semarang', 'Kota Surakarta (Solo)', 'Kab. Banyumas', 'Kota Magelang', 'Kota Tegal'],
+      'DI Yogyakarta': ['Kota Yogyakarta', 'Kab. Sleman', 'Kab. Bantul'],
+      'Jawa Timur': ['Kota Surabaya', 'Kota Malang', 'Kab. Sidoarjo', 'Kota Kediri', 'Kab. Banyuwangi'],
+      'Sumatera Utara': ['Kota Medan', 'Kota Binjai', 'Kota Pematangsiantar', 'Kab. Deli Serdang'],
+      'Riau': ['Kota Pekanbaru', 'Kota Dumai', 'Kab. Kampar', 'Kab. Bengkalis'],
+      'Sumatera Selatan': ['Kota Palembang', 'Kota Lubuklinggau', 'Kota Prabumulih'],
+      'Sulawesi Selatan': ['Kota Makassar', 'Kota Parepare', 'Kab. Gowa'],
+      'Kalimantan Timur': ['Kota Balikpapan', 'Kota Samarinda', 'Kota Bontang'],
+      'Bali': ['Kota Denpasar', 'Kab. Badung', 'Kab. Gianyar']
+    };
+
+    // Elemen Tab & Section
+    const tabs = {
+      login: {
+        btn: document.getElementById('tab-btn-login'),
+        section: document.getElementById('section-login')
+      },
+      reviewer: {
+        btn: document.getElementById('tab-btn-reviewer'),
+        section: document.getElementById('section-reviewer')
+      },
+      company: {
+        btn: document.getElementById('tab-btn-company'),
+        section: document.getElementById('section-company')
+      }
+    };
+
+    const feedbackBox = document.getElementById('form-feedback');
+    const feedbackIcon = document.getElementById('feedback-icon');
+    const feedbackTitle = document.getElementById('feedback-title');
+    const feedbackMessage = document.getElementById('feedback-message');
+
+    function hideFeedback() {
+      if (feedbackBox) feedbackBox.classList.add('hidden');
+    }
+
+    function showFeedback(type, title, message) {
+      if (!feedbackBox) return;
+      feedbackBox.classList.remove('hidden');
+
+      if (type === 'error') {
+        feedbackBox.className = 'mb-5 rounded-2xl p-4 border border-rose-200 bg-rose-50 text-rose-900 text-xs sm:text-sm flex items-start gap-3';
+        feedbackIcon.setAttribute('data-lucide', 'alert-circle');
+      } else {
+        feedbackBox.className = 'mb-5 rounded-2xl p-4 border border-emerald-200 bg-emerald-50 text-emerald-900 text-xs sm:text-sm flex items-start gap-3';
+        feedbackIcon.setAttribute('data-lucide', 'check-circle-2');
+      }
+
+      feedbackTitle.textContent = title;
+      feedbackMessage.textContent = message;
+      if (window.lucide) window.lucide.createIcons();
+      feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Ganti Tab Aktif
+    function switchAuthTab(targetKey) {
+      hideFeedback();
+      Object.keys(tabs).forEach((key) => {
+        const isActive = key === targetKey;
+        const { btn, section } = tabs[key];
+        if (!btn || !section) return;
+
+        section.classList.toggle('hidden', !isActive);
+        btn.setAttribute('aria-selected', String(isActive));
+
+        if (isActive) {
+          btn.className = 'py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-900 shadow-sm transition flex items-center justify-center gap-1.5';
+        } else {
+          btn.className = 'py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5';
+        }
+      });
+    }
+
+    tabs.login.btn.addEventListener('click', () => switchAuthTab('login'));
+    tabs.reviewer.btn.addEventListener('click', () => switchAuthTab('reviewer'));
+    tabs.company.btn.addEventListener('click', () => switchAuthTab('company'));
+
+    // Cek parameter URL ?tab=reviewer atau ?tab=company jika diakses dari halaman lain
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialTab = urlParams.get('tab');
+    if (initialTab && tabs[initialTab]) {
+      switchAuthTab(initialTab);
+    }
+
+    // Toggle Lihat/Sembunyikan Kata Sandi
+    document.querySelectorAll('.toggle-pw-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-toggle-pw');
+        const input = document.getElementById(targetId);
+        if (!input) return;
+
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        btn.innerHTML = isPassword
+          ? '<i data-lucide="eye-off" class="w-4 h-4"></i>'
+          : '<i data-lucide="eye" class="w-4 h-4"></i>';
+        if (window.lucide) window.lucide.createIcons();
+      });
+    });
+
+    // Populate Dropdown Provinsi & Kota
+    const provinceSelect = document.getElementById('rev-province');
+    const citySelect = document.getElementById('rev-city');
+
+    Object.keys(INDONESIA_REGIONS).forEach((prov) => {
+      const opt = document.createElement('option');
+      opt.value = prov;
+      opt.textContent = prov;
+      provinceSelect.appendChild(opt);
+    });
+
+    provinceSelect.addEventListener('change', () => {
+      const selectedProv = provinceSelect.value;
+      citySelect.innerHTML = '';
+
+      if (!selectedProv || !INDONESIA_REGIONS[selectedProv]) {
+        citySelect.disabled = true;
+        citySelect.classList.add('bg-slate-100');
+        citySelect.classList.remove('bg-white');
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.textContent = '-- Pilih Provinsi Dahulu --';
+        citySelect.appendChild(defaultOpt);
+        return;
+      }
+
+      citySelect.disabled = false;
+      citySelect.classList.remove('bg-slate-100');
+      citySelect.classList.add('bg-white');
+
+      const placeholderOpt = document.createElement('option');
+      placeholderOpt.value = '';
+      placeholderOpt.textContent = '-- Pilih Kota / Kabupaten --';
+      citySelect.appendChild(placeholderOpt);
+
+      INDONESIA_REGIONS[selectedProv].forEach((city) => {
+        const opt = document.createElement('option');
+        opt.value = city;
+        opt.textContent = city;
+        citySelect.appendChild(opt);
+      });
+    });
+
+    // Sinkronisasi Nama Lengkap -> Nama Pemilik Rekening Terkunci
+    const fullnameInput = document.getElementById('rev-fullname');
+    const lockedHolderEl = document.getElementById('locked-account-holder');
+
+    fullnameInput.addEventListener('input', () => {
+      const cleanName = fullnameInput.value.trim();
+      lockedHolderEl.textContent = cleanName ? cleanName.toUpperCase() : '(Isi Nama Lengkap di atas)';
+    });
+
+    // Hitung Usia Real-Time dari Tanggal Lahir (KTP)
+    const dobInput = document.getElementById('rev-dob');
+    const ageBadge = document.getElementById('age-badge');
+
+    function calculateAge(birthDateString) {
+      if (!birthDateString) return null;
+      const today = new Date();
+      const birthDate = new Date(birthDateString);
+      if (Number.isNaN(birthDate.getTime())) return null;
+
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    dobInput.addEventListener('change', () => {
+      const age = calculateAge(dobInput.value);
+      if (age === null) {
+        ageBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600';
+        ageBadge.innerHTML = '<i data-lucide="calendar" class="w-3.5 h-3.5"></i><span>Pilih tanggal lahir (min. 17 tahun)</span>';
+      } else if (age < 17) {
+        ageBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-100 text-rose-800';
+        ageBadge.innerHTML = `<i data-lucide="x-circle" class="w-3.5 h-3.5"></i><span>Usia terdeteksi: ${age} Tahun (Belum memenuhi syarat min. 17 tahun)</span>`;
+      } else if (age > 95) {
+        ageBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-800';
+        ageBadge.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i><span>Periksa kembali tahun lahir (${age} Tahun)</span>`;
+      } else {
+        ageBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800';
+        ageBadge.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i><span>Usia terdeteksi: ${age} Tahun (Memenuhi Syarat)</span>`;
+      }
+      if (window.lucide) window.lucide.createIcons();
+    });
+
+    // Modal Konfirmasi
+    const successModal = document.getElementById('success-modal');
+    const modalIconBox = document.getElementById('modal-icon-box');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalSummary = document.getElementById('modal-summary');
+    const modalNextLink = document.getElementById('modal-next-link');
+    const modalNextLabel = document.getElementById('modal-next-label');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    function openSuccessModal({ role, title, description, summaryRows, nextHref, nextText }) {
+      modalTitle.textContent = title;
+      modalDesc.textContent = description;
+      modalNextLink.href = nextHref;
+      modalNextLabel.textContent = nextText;
+
+      if (role === 'reviewer') {
+        modalIconBox.className = 'w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0';
+        modalNextLink.className = 'w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition';
+      } else {
+        modalIconBox.className = 'w-11 h-11 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center shrink-0';
+        modalNextLink.className = 'w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 transition';
+      }
+
+      modalSummary.innerHTML = summaryRows
+        .map(
+          (row) =>
+            `<div class="flex items-center justify-between gap-3 py-1 border-b border-slate-200/70 last:border-b-0">
+              <span class="text-slate-500">${row.label}</span>
+              <span class="font-bold text-slate-900 text-right">${row.value}</span>
+            </div>`
+        )
+        .join('');
+
+      successModal.classList.remove('hidden');
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    modalCloseBtn.addEventListener('click', () => {
+      successModal.classList.add('hidden');
+    });
+
+    // Submit Form Login
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideFeedback();
+
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !email.includes('@')) {
+        showFeedback('error', 'Email Tidak Valid', 'Silakan masukkan alamat email terdaftar dengan format yang benar.');
+        return;
+      }
+      if (!password || password.length < 6) {
+        showFeedback('error', 'Kata Sandi Terlalu Pendek', 'Masukkan kata sandi minimal 6 karakter.');
+        return;
+      }
+
+      const isCompanyEmail = email.toLowerCase().includes('perusahaan') || email.toLowerCase().includes('pt') || email.toLowerCase().includes('bisnis');
+      openSuccessModal({
+        role: isCompanyEmail ? 'company' : 'reviewer',
+        title: 'Berhasil Masuk ke Akun',
+        description: 'Sesi login terverifikasi. Anda dapat langsung melanjutkan ke dasbor utama.',
+        summaryRows: [
+          { label: 'Email Akun', value: email },
+          { label: 'Status Sesi', value: 'Aktif (Simulasi MVP)' }
+        ],
+        nextHref: isCompanyEmail ? 'perusahaan.html' : 'reviewer.html',
+        nextText: isCompanyEmail ? 'Buka Dasbor Perusahaan' : 'Buka Dasbor Reviewer'
+      });
+    });
+
+    // Submit Form Daftar Reviewer
+    document.getElementById('reviewer-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideFeedback();
+
+      const fullName = fullnameInput.value.trim();
+      const dob = dobInput.value;
+      const age = calculateAge(dob);
+      const genderRadio = document.querySelector('input[name="rev-gender"]:checked');
+      const province = provinceSelect.value;
+      const city = citySelect.value;
+      const bank = document.getElementById('rev-bank').value;
+      const accountNumber = document.getElementById('rev-account-number').value.replace(/\s+/g, '');
+      const email = document.getElementById('rev-email').value.trim();
+      const password = document.getElementById('rev-password').value;
+      const agreed = document.getElementById('rev-agree').checked;
+
+      if (fullName.length < 3) {
+        showFeedback('error', 'Nama Lengkap Wajib Diisi', 'Masukkan nama lengkap sesuai yang tertera pada buku rekening bank / e-wallet Anda.');
+        return;
+      }
+      if (age === null || age < 17 || age > 95) {
+        showFeedback('error', 'Tanggal Lahir / Usia Tidak Valid', 'Reviewer wajib berusia minimal 17 tahun sesuai tanggal lahir KTP.');
+        return;
+      }
+      if (!genderRadio) {
+        showFeedback('error', 'Jenis Kelamin Belum Dipilih', 'Pilih jenis kelamin Laki-laki atau Perempuan untuk pencocokan kriteria iklan.');
+        return;
+      }
+      if (!province || !city) {
+        showFeedback('error', 'Lokasi Domisili Belum Lengkap', 'Pilih Provinsi dan Kota/Kabupaten tempat tinggal Anda saat ini.');
+        return;
+      }
+      if (!bank || !/^\d{6,20}$/.test(accountNumber)) {
+        showFeedback('error', 'Data Rekening Tidak Valid', 'Pilih Bank/E-Wallet dan masukkan nomor rekening/HP berupa 6–20 digit angka.');
+        return;
+      }
+      if (!email || !email.includes('@') || password.length < 6) {
+        showFeedback('error', 'Email atau Kata Sandi Belum Sesuai', 'Pastikan format email benar dan kata sandi minimal 6 karakter.');
+        return;
+      }
+      if (!agreed) {
+        showFeedback('error', 'Persetujuan Belum Dicentang', 'Centang pernyataan kebenaran data dan kesesuaian nama rekening terlebih dahulu.');
+        return;
+      }
+
+      // Simpan profil demo ke localStorage agar bisa langsung dipakai di reviewer.html & dompet.html
+      const reviewerProfile = {
+        role: 'reviewer',
+        fullName: fullName.toUpperCase(),
+        birthDate: dob,
+        age,
+        gender: genderRadio.value,
+        province,
+        city,
+        bank,
+        accountNumber,
+        email,
+        walletBalance: 0
+      };
+
+      try {
+        localStorage.setItem('goona_current_user', JSON.stringify(reviewerProfile));
+      } catch (err) {
+        console.warn('Penyimpanan lokal tidak tersedia:', err);
+      }
+
+      openSuccessModal({
+        role: 'reviewer',
+        title: 'Profil Reviewer Terdaftar!',
+        description: 'Kriteria demografi dan kunci nama rekening Anda telah disimpan. Iklan yang cocok dengan profil Anda siap dikerjakan.',
+        summaryRows: [
+          { label: 'Nama & Pemilik Rekening', value: reviewerProfile.fullName },
+          { label: 'Usia & Gender', value: `${age} Tahun • ${reviewerProfile.gender}` },
+          { label: 'Lokasi Domisili', value: `${city}, ${province}` },
+          { label: 'Tujuan Pencairan', value: `${bank} (${accountNumber})` }
+        ],
+        nextHref: 'reviewer.html',
+        nextText: 'Mulai Kerjakan Misi'
+      });
+    });
+
+    // Submit Form Daftar Perusahaan
+    document.getElementById('company-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideFeedback();
+
+      const brandName = document.getElementById('comp-brand').value.trim();
+      const picName = document.getElementById('comp-pic').value.trim();
+      const email = document.getElementById('comp-email').value.trim();
+      const phone = document.getElementById('comp-phone').value.replace(/\s+/g, '');
+      const password = document.getElementById('comp-password').value;
+      const agreed = document.getElementById('comp-agree').checked;
+
+      if (brandName.length < 2 || picName.length < 2) {
+        showFeedback('error', 'Data Perusahaan Belum Lengkap', 'Isi Nama Perusahaan/Brand dan Nama Penanggung Jawab (PIC).');
+        return;
+      }
+      if (!email || !email.includes('@') || !/^\d{9,15}$/.test(phone) || password.length < 6) {
+        showFeedback('error', 'Kontak atau Sandi Belum Valid', 'Periksa email bisnis, nomor WhatsApp (9–15 digit angka), dan kata sandi minimal 6 karakter.');
+        return;
+      }
+      if (!agreed) {
+        showFeedback('error', 'Persetujuan Belum Dicentang', 'Centang persetujuan ketentuan kampanye pengiklan terlebih dahulu.');
+        return;
+      }
+
+      const companyProfile = {
+        role: 'company',
+        brandName,
+        picName,
+        email,
+        phone,
+        quotaBalance: 0
+      };
+
+      try {
+        localStorage.setItem('goona_current_company', JSON.stringify(companyProfile));
+      } catch (err) {
+        console.warn('Penyimpanan lokal tidak tersedia:', err);
+      }
+
+      openSuccessModal({
+        role: 'company',
+        title: 'Akun Perusahaan Aktif!',
+        description: 'Silakan lanjut ke dasbor perusahaan untuk melakukan top-up kuota (Rp 2.000/review) dan membuat iklan dengan 3 soal pilihan A–E.',
+        summaryRows: [
+          { label: 'Perusahaan / Brand', value: brandName },
+          { label: 'PIC', value: picName },
+          { label: 'Email Bisnis', value: email }
+        ],
+        nextHref: 'perusahaan.html',
+        nextText: 'Buka Dasbor Perusahaan'
+      });
+    });
+  </script>
+</body>
+</html>
