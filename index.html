@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
-  <!-- Metadata dasar & viewport responsif untuk HP dan PC -->
+  <!-- Metadata dasar & viewport responsif untuk perangkat seluler (HP) dan komputer (PC) -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="goona.my.id — Platform review iklan berbayar untuk reviewer freelance (Rp 1.200 per review valid) dan promosi tepat sasaran berbasis demografi serta link referral untuk perusahaan." />
-  <title>goona.my.id — Platform Review Iklan & Promosi Tepat Sasaran</title>
+  <meta name="description" content="goona.my.id — Layanan terverifikasi yang menghubungkan perusahaan dengan audiens nyata untuk melihat iklan produk, mengunjungi tautan resmi, dan memberikan ulasan terstruktur." />
+  <title>goona.my.id — Layanan Audiens Terverifikasi &amp; Ulasan Produk</title>
 
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,7 +15,7 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Konfigurasi tema & font Inter untuk goona.my.id
+    // Konfigurasi palet korporat bersih (Slate, Emerald-Teal, dan White)
     tailwind.config = {
       theme: {
         extend: {
@@ -23,17 +23,13 @@
             sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
           },
           colors: {
-            brand: {
-              50: '#eef2ff',
-              100: '#e0e7ff',
-              500: '#4f46e5',
-              600: '#4338ca',
-              700: '#3730a3',
-              900: '#1e1b4b',
-            },
-            accent: {
-              500: '#10b981',
-              600: '#059669',
+            primary: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
             }
           }
         }
@@ -44,48 +40,52 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-100 selection:text-brand-700">
+<body class="min-h-screen bg-white text-slate-800 font-sans antialiased flex flex-col selection:bg-primary-100 selection:text-primary-900">
 
-  <!-- ==================== NAVIGATION BAR ==================== -->
+  <!-- ==================== HEADER / NAVIGASI UTAMA ==================== -->
   <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <!-- Brand Logo -->
-        <a href="index.html" class="flex items-center gap-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
-          <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+      <div class="flex items-center justify-between h-16 gap-4">
+
+        <!-- Logo Brand -->
+        <a href="index.html" class="flex items-center gap-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600">
+          <div class="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-extrabold text-lg">
             G
           </div>
-          <div>
-            <span class="font-extrabold text-lg tracking-tight text-slate-900">goona<span class="text-brand-600">.my.id</span></span>
-            <span class="hidden sm:block text-[11px] font-medium text-slate-500 -mt-1">Review & Referral Hub</span>
+          <div class="leading-tight">
+            <span class="font-extrabold text-lg tracking-tight text-slate-900">goona<span class="text-primary-600">.my.id</span></span>
+            <span class="hidden sm:block text-[11px] font-medium text-slate-500">Verified Audience &amp; Product Review</span>
           </div>
         </a>
 
-        <!-- Desktop Navigation Links -->
-        <nav class="hidden lg:flex items-center gap-1" aria-label="Navigasi Utama">
-          <a href="#aturan-main" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Aturan Main</a>
-          <a href="#kalkulator" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Kalkulator</a>
-          <a href="reviewer.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Reviewer</a>
-          <a href="dompet.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Dompet</a>
-          <a href="perusahaan.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Perusahaan</a>
-          <a href="admin.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition">Admin</a>
+        <!-- Menu Navigasi Desktop -->
+        <nav class="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Navigasi Utama">
+          <a href="#cara-kerja" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
+            Cara Kerja
+          </a>
+          <a href="#untuk-perusahaan" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
+            Untuk Perusahaan
+          </a>
+          <a href="#untuk-reviewer" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
+            Untuk Reviewer
+          </a>
         </nav>
 
-        <!-- Desktop CTA Buttons -->
-        <div class="hidden lg:flex items-center gap-2.5">
+        <!-- Tombol Aksi Desktop -->
+        <div class="hidden md:flex items-center gap-2.5">
           <a href="auth.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-700 border border-slate-300 hover:bg-slate-50 transition">
-            Masuk / Daftar
+            Masuk
           </a>
-          <a href="perusahaan.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 shadow-sm transition">
-            Pasang Iklan
+          <a href="auth.html?mode=register" class="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-primary-700 hover:bg-primary-800 shadow-sm transition">
+            Daftar
           </a>
         </div>
 
-        <!-- Mobile Menu Toggle Button -->
+        <!-- Tombol Menu Mobile -->
         <button
           id="mobile-menu-btn"
           type="button"
-          class="lg:hidden p-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          class="md:hidden p-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-600"
           aria-label="Buka menu navigasi"
           aria-expanded="false"
         >
@@ -95,402 +95,291 @@
       </div>
     </div>
 
-    <!-- Mobile Navigation Drawer -->
-    <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-5 space-y-1">
-      <a href="#aturan-main" class="mobile-nav-link block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Aturan 3 Soal & Kriteria</a>
-      <a href="#kalkulator" class="mobile-nav-link block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Kalkulator Kuota & Fee</a>
-      <a href="reviewer.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Dasbor Reviewer</a>
-      <a href="dompet.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Dompet & Penarikan</a>
-      <a href="perusahaan.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Dasbor Perusahaan</a>
-      <a href="admin.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-100">Panel Admin</a>
-      <div class="pt-3 flex flex-col sm:flex-row gap-2">
+    <!-- Drawer Navigasi Mobile -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-5 space-y-1.5">
+      <a href="#cara-kerja" class="mobile-nav-link block px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">
+        Cara Kerja
+      </a>
+      <a href="#untuk-perusahaan" class="mobile-nav-link block px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">
+        Untuk Perusahaan
+      </a>
+      <a href="#untuk-reviewer" class="mobile-nav-link block px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">
+        Untuk Reviewer
+      </a>
+      <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row gap-2">
         <a href="auth.html" class="w-full text-center px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 border border-slate-300 hover:bg-slate-50">
-          Masuk / Daftar Akun
+          Masuk
         </a>
-        <a href="perusahaan.html" class="w-full text-center px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700">
-          Mulai Top-Up Iklan
+        <a href="auth.html?mode=register" class="w-full text-center px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary-700 hover:bg-primary-800">
+          Daftar Akun
         </a>
       </div>
     </div>
   </header>
 
-  <main>
+  <main class="flex-1">
+
     <!-- ==================== HERO SECTION ==================== -->
-    <section class="relative overflow-hidden bg-gradient-to-b from-brand-50/80 via-white to-slate-50 pt-10 pb-16 sm:pt-14 sm:pb-20 border-b border-slate-200/70">
+    <section class="bg-slate-50 border-b border-slate-200 py-12 sm:py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-100/80 text-brand-700 text-xs sm:text-sm font-semibold mb-5">
-            <i data-lucide="sparkles" class="w-4 h-4"></i>
-            <span>Tarif Dasar Rp 2.000 / Review Valid • 60% Reviewer &amp; 40% Porsi Sistem/Perusahaan</span>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+
+          <!-- Kolom Kiri: Pesan Utama -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium shadow-2xs">
+              <span class="w-2 h-2 rounded-full bg-primary-600"></span>
+              <span>Platform Riset Iklan &amp; Ulasan Audiens Terverifikasi</span>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+              Perkenalkan Produk Anda kepada <span class="text-primary-700">Audiens Nyata</span> yang Tepat Sasaran.
+            </h1>
+
+            <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+              <strong>goona.my.id</strong> menghubungkan perusahaan dengan pengguna terverifikasi yang bersedia menyimak materi iklan Anda, mengunjungi tautan produk resmi, dan memberikan ulasan terstruktur sesuai kriteria demografi yang Anda tentukan.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
+              <a
+                href="perusahaan.html"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-sm transition"
+              >
+                <i data-lucide="building-2" class="w-4 h-4"></i>
+                <span>Pasang Iklan Perusahaan</span>
+              </a>
+              <a
+                href="auth.html?mode=register"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-primary-800 bg-primary-50 hover:bg-primary-100 border border-primary-200 transition"
+              >
+                <i data-lucide="user-check" class="w-4 h-4"></i>
+                <span>Daftar Sebagai Reviewer</span>
+              </a>
+            </div>
           </div>
 
-          <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Review Iklan Terarah, <span class="text-brand-600">Penghasilan Nyata</span> &amp; Penjualan Lebih Terukur
-          </h1>
-
-          <p class="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
-            <strong>goona.my.id</strong> menghubungkan reviewer freelance dengan perusahaan yang ingin memperkenalkan produk ke target demografi spesifik (lokasi, usia, jenis kelamin), lengkap dengan <strong>3 soal pilihan A–E</strong> dan <strong>link referral penjualan</strong>.
-          </p>
-        </div>
-
-        <!-- Dual Value Cards for Reviewer & Advertiser -->
-        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          <!-- Kartu Reviewer -->
-          <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between gap-3 mb-4">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-                  <i data-lucide="user-check" class="w-4 h-4"></i>
-                  UNTUK REVIEWER FREELANCE
-                </span>
-                <span class="text-sm font-bold text-emerald-600">Rp 1.200 / Review</span>
+          <!-- Kolom Kanan: Kartu Transparansi Data Sistem (Real Counter Mulai dari 0) -->
+          <div class="lg:col-span-5">
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+              <div class="flex items-start justify-between gap-4 border-b border-slate-100 pb-5">
+                <div>
+                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Transparansi Jaringan</span>
+                  <h2 class="mt-1 text-lg font-bold text-slate-900">Reviewer Terdaftar Aktif</h2>
+                  <p class="mt-1 text-xs text-slate-500">
+                    Menampilkan jumlah akun reviewer terverifikasi yang tercatat di sistem saat ini.
+                  </p>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-primary-50 text-primary-700 border border-primary-100 flex items-center justify-center shrink-0">
+                  <i data-lucide="users" class="w-5 h-5"></i>
+                </div>
               </div>
 
-              <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Jawab 3 Soal Tepat, Saldo Bertambah</h2>
-              <p class="mt-2 text-sm sm:text-base text-slate-600">
-                Cocok untuk ibu rumah tangga, pencari kerja, atau siapa saja yang ingin penghasilan tambahan fleksibel dari HP maupun PC.
-              </p>
-
-              <ul class="mt-5 space-y-2.5 text-sm text-slate-700">
-                <li class="flex items-start gap-2.5">
-                  <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
-                  <span>Misi iklan tampil otomatis sesuai <strong>lokasi, usia (tanggal lahir), dan jenis kelamin</strong> Anda.</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
-                  <span>Wajib menjawab <strong>3 pertanyaan pilihan A–E dengan benar semua</strong> untuk mendapatkan fee 60% (Rp 1.200).</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
-                  <span>Pencairan saldo ke rekening atas nama yang sama dengan profil terdaftar.</span>
-                </li>
-              </ul>
-            </div>
-
-            <div class="mt-7 pt-5 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
-              <a href="auth.html" class="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 transition">
-                <span>Daftar Jadi Reviewer</span>
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              </a>
-              <a href="reviewer.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition">
-                <span>Lihat Misi</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Kartu Perusahaan -->
-          <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between gap-3 mb-4">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800">
-                  <i data-lucide="building-2" class="w-4 h-4"></i>
-                  UNTUK PERUSAHAAN / PENGIKLAN
+              <!-- Angka Real Reviewer (Default 0, otomatis terbaca saat ada pendaftaran) -->
+              <div class="flex items-baseline gap-3">
+                <span id="registered-reviewer-count" class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+                  0
                 </span>
-                <span class="text-sm font-bold text-brand-600">Kuota Berbasis Top-Up</span>
+                <span class="text-sm font-medium text-slate-500">Orang Terverifikasi</span>
               </div>
 
-              <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Targetkan Audiens &amp; Dorong Penjualan</h2>
-              <p class="mt-2 text-sm sm:text-base text-slate-600">
-                Pastikan iklan Anda dibaca dan dipahami calon pembeli sesuai kriteria demografi, serta hubungkan langsung dengan link referral penjualan.
-              </p>
-
-              <ul class="mt-5 space-y-2.5 text-sm text-slate-700">
-                <li class="flex items-start gap-2.5">
-                  <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-600 shrink-0 mt-0.5"></i>
-                  <span>Atur target <strong>lokasi, rentang usia, dan jenis kelamin</strong>—iklan tidak bisa ditekan oleh profil yang tidak sesuai.</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-600 shrink-0 mt-0.5"></i>
-                  <span>Buat <strong>3 soal pilihan A–E beserta kunci jawaban</strong>; kuota hanya terpotong jika semua jawaban benar.</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <i data-lucide="check-circle-2" class="w-5 h-5 text-brand-600 shrink-0 mt-0.5"></i>
-                  <span>Sematkan <strong>link referral</strong> agar penjualan sukses memberi nilai tambah komisi pada alur perusahaan.</span>
-                </li>
-              </ul>
-            </div>
-
-            <div class="mt-7 pt-5 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
-              <a href="perusahaan.html" class="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 transition">
-                <span>Buat Iklan &amp; Top-Up</span>
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              </a>
-              <a href="auth.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition">
-                <span>Akun Perusahaan</span>
-              </a>
+              <!-- Ringkasan Kualitas Verifikasi -->
+              <div class="space-y-3 pt-2 border-t border-slate-100 text-xs sm:text-sm text-slate-600">
+                <div class="flex items-center gap-2.5">
+                  <i data-lucide="check" class="w-4 h-4 text-primary-600 shrink-0"></i>
+                  <span>Terfilter berdasarkan lokasi, rentang usia, dan jenis kelamin</span>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <i data-lucide="check" class="w-4 h-4 text-primary-600 shrink-0"></i>
+                  <span>Kesesuaian nama profil dengan rekening pencairan dana</span>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <i data-lucide="check" class="w-4 h-4 text-primary-600 shrink-0"></i>
+                  <span>Bebas pengulangan oleh orang yang sama selama 3 bulan</span>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- ==================== ATURAN MAIN INTI ==================== -->
-    <section id="aturan-main" class="py-14 sm:py-20 bg-white border-b border-slate-200/70">
+    <!-- ==================== CARA KERJA PLATFORM ==================== -->
+    <section id="cara-kerja" class="py-16 sm:py-24 bg-white border-b border-slate-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-2xl">
-          <span class="text-xs font-bold uppercase tracking-wider text-brand-600">Mekanisme Transparan</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-primary-700">Alur Layanan</span>
           <h2 class="mt-2 text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Aturan 3 Soal (A–E), Filter Kriteria &amp; Validitas Data
+            Bagaimana goona.my.id Bekerja
           </h2>
-          <p class="mt-3 text-sm sm:text-base text-slate-600">
-            Setiap iklan di <strong>goona.my.id</strong> dirancang agar jawaban reviewer benar-benar berasal dari pemahaman materi iklan dan kecocokan profil.
+          <p class="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Proses sederhana dan terukur untuk memastikan materi promosi perusahaan benar-benar disimak oleh target audiens yang relevan.
           </p>
         </div>
 
-        <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Aturan 1: 3 Soal Pilihan A-E -->
-          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-6">
-            <div class="w-11 h-11 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center mb-4">
-              <i data-lucide="list-checks" class="w-6 h-6"></i>
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <!-- Langkah 1 -->
+          <div class="rounded-2xl border border-slate-200 p-6 sm:p-7 bg-white space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
+              01
             </div>
-            <h3 class="text-lg font-bold text-slate-900">1. Wajib 3 Soal Pilihan A–E</h3>
-            <p class="mt-2 text-sm text-slate-600 leading-relaxed">
-              Saat memasang iklan, perusahaan wajib menyusun <strong>3 pertanyaan</strong> dengan pilihan ganda <strong>A, B, C, D, dan E</strong> beserta <strong>3 kunci jawaban benar</strong>.
+            <h3 class="text-lg font-bold text-slate-900">Tentukan Target &amp; Deposit</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Perusahaan memilih paket deposit sesuai jangkauan audiens yang diinginkan (misalnya deposit Rp 100.000 untuk menjangkau 100 orang nyata), mengatur kriteria lokasi, usia, dan jenis kelamin, serta menyematkan tautan produk.
             </p>
-            <div class="mt-4 p-3.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 space-y-1.5">
-              <p><strong class="text-emerald-700">3/3 Jawaban Benar:</strong> Review sah, kuota iklan berkurang 1, dan fee <strong>Rp 1.200 (60%)</strong> masuk ke saldo reviewer.</p>
-              <p><strong class="text-rose-600">Ada Jawaban Salah:</strong> Fee reviewer <strong>tidak bertambah</strong> dan kuota/saldo iklan perusahaan <strong>tidak berkurang</strong>.</p>
-            </div>
           </div>
 
-          <!-- Aturan 2: Filter Lokasi, Usia & Gender -->
-          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-6">
-            <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center mb-4">
-              <i data-lucide="filter" class="w-6 h-6"></i>
+          <!-- Langkah 2 -->
+          <div class="rounded-2xl border border-slate-200 p-6 sm:p-7 bg-white space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
+              02
             </div>
-            <h3 class="text-lg font-bold text-slate-900">2. Kunci Kriteria Lokasi, Usia &amp; Gender</h3>
-            <p class="mt-2 text-sm text-slate-600 leading-relaxed">
-              Perusahaan wajib menentukan kriteria <strong>lokasi</strong>, <strong>usia</strong> (dihitung dari tanggal lahir), dan <strong>jenis kelamin</strong> untuk mengisi iklan.
+            <h3 class="text-lg font-bold text-slate-900">Penayangan &amp; Ulasan Terstruktur</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Iklan hanya dapat dibuka oleh reviewer yang memenuhi kriteria target perusahaan. Reviewer menyimak materi iklan, mengunjungi tautan produk yang tersedia, dan menjawab 3 pertanyaan ulasan dari perusahaan dengan tepat.
             </p>
-            <div class="mt-4 p-3.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 space-y-1.5">
-              <p><strong>Akses Terkunci Otomatis:</strong> Reviewer yang lokasi, usia, atau jenis kelaminnya tidak sesuai kriteria <strong>tidak dapat menekan/mengerjakan</strong> iklan tersebut.</p>
-              <p><strong>Link Referral:</strong> Perusahaan mengisi link referral pada iklan; setiap penjualan sukses tercatat pada porsi perusahaan.</p>
-            </div>
           </div>
 
-          <!-- Aturan 3: Kesesuaian Nama & Rekening -->
-          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-6">
-            <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-4">
-              <i data-lucide="shield-check" class="w-6 h-6"></i>
+          <!-- Langkah 3 -->
+          <div class="rounded-2xl border border-slate-200 p-6 sm:p-7 bg-white space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
+              03
             </div>
-            <h3 class="text-lg font-bold text-slate-900">3. Nama Wajib Sesuai Nomor Rekening</h3>
-            <p class="mt-2 text-sm text-slate-600 leading-relaxed">
-              Pendaftaran menggunakan data <strong>lokasi, jenis kelamin, usia berdasarkan tanggal lahir (KTP)</strong>, serta <strong>nama lengkap yang wajib sesuai dengan nomor rekening</strong>.
+            <h3 class="text-lg font-bold text-slate-900">Distribusi Otomatis &amp; Jeda 3 Bulan</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Ulasan yang terverifikasi masuk ke laporan perusahaan, imbalan otomatis tercatat ke saldo masing-masing reviewer untuk ditarik setelah mencapai batas minimal Rp 50.000, dan iklan otomatis terkunci selama 3 bulan (90 hari) bagi reviewer yang sudah mengerjakannya.
             </p>
-            <div class="mt-4 p-3.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 space-y-1.5">
-              <p><strong>Anti Akun Ganda:</strong> Pencairan dana hanya diproses ke rekening dengan nama yang sama persis dengan nama akun.</p>
-              <p><strong>Privasi Terjaga:</strong> Sistem memproses tanggal lahir untuk usia tanpa menyimpan file mentah KTP.</p>
-            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== INTERACTIVE CALCULATOR ==================== -->
-    <section id="kalkulator" class="py-14 sm:py-20 bg-slate-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto mb-10">
-          <span class="text-xs font-bold uppercase tracking-wider text-brand-600">Simulasi Transparan</span>
-          <h2 class="mt-2 text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Kalkulator Kuota Iklan &amp; Estimasi Fee Reviewer
-          </h2>
-          <p class="mt-3 text-sm sm:text-base text-slate-600">
-            Tarif dasar tetap <strong>Rp 2.000 per review valid</strong> — terbagi <strong>60% (Rp 1.200)</strong> untuk reviewer dan <strong>40% (Rp 800)</strong> porsi perusahaan/sistem.
-          </p>
-        </div>
+    <!-- ==================== DUA PILAR PENGGUNA (PERUSAHAAN & REVIEWER) ==================== -->
+    <section class="py-16 sm:py-24 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 lg:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <!-- Kolom Input Kalkulator (7 kolom di desktop) -->
-          <div class="lg:col-span-7 space-y-6">
-            <!-- Mode Tab -->
-            <div class="inline-flex p-1 rounded-xl bg-slate-100 border border-slate-200 w-full sm:w-auto">
-              <button
-                type="button"
-                id="tab-company"
-                class="flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white text-brand-700 shadow-sm transition"
-              >
-                Top-Up Kuota Perusahaan
-              </button>
-              <button
-                type="button"
-                id="tab-reviewer"
-                class="flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition"
-              >
-                Estimasi Fee Reviewer
-              </button>
-            </div>
+        <!-- Bagian Untuk Perusahaan -->
+        <div id="untuk-perusahaan" class="bg-white rounded-2xl border border-slate-200 p-7 sm:p-9 flex flex-col justify-between space-y-8">
+          <div class="space-y-4">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800">
+              <i data-lucide="briefcase" class="w-3.5 h-3.5 text-slate-700"></i>
+              Solusi Untuk Perusahaan
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              Jangkau Konsumen Nyata &amp; Tingkatkan Kunjungan Produk
+            </h2>
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Pilih anggaran kampanye secara fleksibel saat memasang iklan. Kuota penayangan sebanding langsung dengan jumlah orang nyata yang berhasil menyelesaikan ulasan produk Anda.
+            </p>
 
-            <!-- Input Nominal Top-Up Perusahaan -->
-            <div id="panel-company" class="space-y-4">
-              <div>
-                <label for="topup-input" class="block text-sm font-semibold text-slate-800 mb-2">
-                  Nominal Top-Up Saldo Iklan Perusahaan (Rp)
-                </label>
-                <div class="relative">
-                  <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500">Rp</span>
-                  <input
-                    type="number"
-                    id="topup-input"
-                    min="2000"
-                    step="2000"
-                    value="200000"
-                    class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-300 text-base font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-                  />
-                </div>
-                <p id="topup-note" class="mt-1.5 text-xs text-slate-500">
-                  Kelipatan Rp 2.000 menghasilkan kuota review valid tepat (sisa di bawah Rp 2.000 tidak dihitung 1 kuota penuh).
-                </p>
-              </div>
-
-              <!-- Preset Tombol Cepat -->
-              <div class="flex flex-wrap gap-2">
-                <button type="button" data-topup="100000" class="preset-topup px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition">Rp 100.000</button>
-                <button type="button" data-topup="200000" class="preset-topup px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-brand-100 text-brand-700 transition">Rp 200.000</button>
-                <button type="button" data-topup="500000" class="preset-topup px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition">Rp 500.000</button>
-                <button type="button" data-topup="1000000" class="preset-topup px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition">Rp 1.000.000</button>
-              </div>
-            </div>
-
-            <!-- Input Jumlah Review Valid Reviewer -->
-            <div id="panel-reviewer" class="hidden space-y-4">
-              <div>
-                <div class="flex items-center justify-between mb-2">
-                  <label for="review-count-input" class="text-sm font-semibold text-slate-800">
-                    Jumlah Review Valid (3/3 Soal Benar)
-                  </label>
-                  <span id="review-count-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700">
-                    100 Review
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  id="review-count-range"
-                  min="1"
-                  max="500"
-                  value="100"
-                  class="w-full accent-emerald-600 cursor-pointer"
-                />
-                <div class="mt-2">
-                  <input
-                    type="number"
-                    id="review-count-input"
-                    min="1"
-                    max="10000"
-                    value="100"
-                    class="w-full sm:w-48 px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
-                </div>
-              </div>
-
-              <!-- Preset Jumlah Review -->
-              <div class="flex flex-wrap gap-2">
-                <button type="button" data-reviews="10" class="preset-reviews px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 transition">10 Review</button>
-                <button type="button" data-reviews="50" class="preset-reviews px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 transition">50 Review</button>
-                <button type="button" data-reviews="100" class="preset-reviews px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-100 text-emerald-700 transition">100 Review</button>
-                <button type="button" data-reviews="250" class="preset-reviews px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 transition">250 Review</button>
-              </div>
-            </div>
-
-            <!-- Rincian Formula Per Review -->
-            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
-              <div class="p-2.5 rounded-lg bg-white border border-slate-100">
-                <span class="block text-[11px] font-medium text-slate-500">Tarif / Review</span>
-                <span class="text-sm font-extrabold text-slate-900">Rp 2.000</span>
-              </div>
-              <div class="p-2.5 rounded-lg bg-white border border-slate-100">
-                <span class="block text-[11px] font-medium text-emerald-600">Reviewer (60%)</span>
-                <span class="text-sm font-extrabold text-emerald-700">Rp 1.200</span>
-              </div>
-              <div class="p-2.5 rounded-lg bg-white border border-slate-100">
-                <span class="block text-[11px] font-medium text-brand-600">Perusahaan / Sistem (40%)</span>
-                <span class="text-sm font-extrabold text-brand-700">Rp 800</span>
-              </div>
-            </div>
+            <ul class="space-y-3 pt-2 text-sm text-slate-700">
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
+                <span><strong>Pilihan Anggaran Fleksibel:</strong> Deposit Rp 100.000 menjangkau 100 orang terverifikasi; kuota hanya terpakai jika ulasan valid.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
+                <span><strong>Filter Demografi Ketat:</strong> Iklan tidak dapat diakses oleh pengguna di luar kriteria lokasi, rentang usia, dan jenis kelamin pilihan Anda.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
+                <span><strong>Tautan Produk &amp; Perlindungan 3 Bulan:</strong> Arahkan pengunjung ke halaman produk Anda, dengan jaminan satu reviewer tidak mengulang iklan yang sama dalam masa 3 bulan.</span>
+              </li>
+            </ul>
           </div>
 
-          <!-- Kolom Hasil Perhitungan (5 kolom di desktop) -->
-          <div class="lg:col-span-5 rounded-2xl bg-slate-900 text-white p-6 sm:p-7 space-y-5">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Ringkasan Hitungan</span>
-                <h3 id="result-heading" class="text-lg font-bold text-white mt-0.5">Kuota &amp; Alokasi Dana</h3>
-              </div>
-              <i data-lucide="calculator" class="w-6 h-6 text-brand-400"></i>
-            </div>
-
-            <div class="space-y-4">
-              <div class="flex items-baseline justify-between gap-2">
-                <span class="text-sm text-slate-300">Total Kuota Review Valid</span>
-                <span id="out-quota" class="text-2xl font-extrabold text-white">100 Kuota</span>
-              </div>
-
-              <div class="flex items-baseline justify-between gap-2">
-                <span class="text-sm text-slate-300">Estimasi Fee Reviewer (60%)</span>
-                <span id="out-reviewer-fee" class="text-xl font-bold text-emerald-400">Rp 120.000</span>
-              </div>
-
-              <div class="flex items-baseline justify-between gap-2">
-                <span class="text-sm text-slate-300">Porsi Perusahaan / Sistem (40%)</span>
-                <span id="out-company-share" class="text-xl font-bold text-indigo-300">Rp 80.000</span>
-              </div>
-
-              <div id="out-remainder-row" class="hidden pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-amber-300">
-                <span>Sisa saldo belum genap 1 kuota</span>
-                <span id="out-remainder" class="font-semibold">Rp 0</span>
-              </div>
-            </div>
-
-            <div class="pt-2">
-              <a id="calc-cta" href="perusahaan.html" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold bg-brand-600 hover:bg-brand-500 text-white transition">
-                <span>Lanjut ke Dasbor Perusahaan</span>
-                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
-              </a>
-            </div>
+          <div class="pt-4 border-t border-slate-100">
+            <a href="perusahaan.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 transition">
+              <span>Masuk ke Portal Perusahaan</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
           </div>
         </div>
+
+        <!-- Bagian Untuk Reviewer -->
+        <div id="untuk-reviewer" class="bg-white rounded-2xl border border-slate-200 p-7 sm:p-9 flex flex-col justify-between space-y-8">
+          <div class="space-y-4">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-50 text-primary-800">
+              <i data-lucide="user-check" class="w-3.5 h-3.5 text-primary-700"></i>
+              Peluan Untuk Reviewer
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              Berikan Ulasan Iklan yang Sesuai Profil Anda
+            </h2>
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Daftarkan data diri Anda secara jujur dan akurat. Setiap kali ada perusahaan yang membutuhkan opini sesuai lokasi, usia, dan jenis kelamin Anda, iklan akan tersedia untuk dikerjakan.
+            </p>
+
+            <ul class="space-y-3 pt-2 text-sm text-slate-700">
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
+                <span><strong>Verifikasi Identitas &amp; Rekening:</strong> Pendaftaran menggunakan tanggal lahir, jenis kelamin, lokasi domisili, dan nama lengkap yang wajib sesuai dengan rekening bank/e-wallet.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
+                <span><strong>Ulasan Berbasis Pemahaman:</strong> Simak materi iklan perusahaan dan jawab 3 pertanyaan pilihan dengan benar untuk mencatat ulasan sah.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
+                <span><strong>Penarikan Saldo Terjadwal:</strong> Imbalan otomatis terakumulasi di dompet akun dan dapat ditarik ke rekening Anda setelah mencapai minimal Rp 50.000.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100">
+            <a href="auth.html?mode=register" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white bg-primary-700 hover:bg-primary-800 transition">
+              <span>Daftar Sebagai Reviewer</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
       </div>
     </section>
+
   </main>
 
   <!-- ==================== FOOTER ==================== -->
   <footer class="bg-white border-t border-slate-200 pt-12 pb-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-200">
-        <!-- Info Brand -->
+
+        <!-- Kolom 1: Identitas Website -->
         <div class="lg:col-span-2 space-y-3">
-          <a href="index.html" class="inline-flex items-center gap-2">
-            <span class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-extrabold text-base">G</span>
-            <span class="font-extrabold text-lg text-slate-900">goona<span class="text-brand-600">.my.id</span></span>
+          <a href="index.html" class="inline-flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-extrabold text-base">G</span>
+            <span class="font-extrabold text-lg text-slate-900">goona<span class="text-primary-600">.my.id</span></span>
           </a>
           <p class="text-sm text-slate-600 max-w-md leading-relaxed">
-            Website khusus reviewer freelance dan perusahaan pengiklan dengan sistem 3 soal pilihan A–E, penyaringan kriteria demografi, serta integrasi link referral untuk mendorong penjualan.
+            Layanan penghubung perusahaan dengan audiens terverifikasi untuk penayangan iklan tepat sasaran dan ulasan produk terstruktur di Indonesia.
           </p>
         </div>
 
-        <!-- Navigasi Halaman -->
+        <!-- Kolom 2: Akses Halaman -->
         <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Halaman Utama</h4>
-          <ul class="space-y-2 text-sm text-slate-600">
-            <li><a href="index.html" class="hover:text-brand-600 transition">Beranda (index.html)</a></li>
-            <li><a href="auth.html" class="hover:text-brand-600 transition">Masuk &amp; Profil (auth.html)</a></li>
-            <li><a href="reviewer.html" class="hover:text-brand-600 transition">Dasbor Reviewer (reviewer.html)</a></li>
-            <li><a href="dompet.html" class="hover:text-brand-600 transition">Dompet Reviewer (dompet.html)</a></li>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Akses Layanan</h3>
+          <ul class="space-y-2.5 text-sm text-slate-600">
+            <li><a href="auth.html" class="hover:text-primary-700 transition">Masuk / Daftar Akun</a></li>
+            <li><a href="reviewer.html" class="hover:text-primary-700 transition">Dasbor Reviewer</a></li>
+            <li><a href="dompet.html" class="hover:text-primary-700 transition">Dompet &amp; Penarikan</a></li>
+            <li><a href="perusahaan.html" class="hover:text-primary-700 transition">Portal Perusahaan</a></li>
           </ul>
         </div>
 
-        <!-- Navigasi Pengiklan & Admin -->
+        <!-- Kolom 3: Legal & Kebijakan -->
         <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Mitra &amp; Pengelola</h4>
-          <ul class="space-y-2 text-sm text-slate-600">
-            <li><a href="perusahaan.html" class="hover:text-brand-600 transition">Dasbor Perusahaan (perusahaan.html)</a></li>
-            <li><a href="admin.html" class="hover:text-brand-600 transition">Panel Admin (admin.html)</a></li>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Legal &amp; Kebijakan</h3>
+          <ul class="space-y-2.5 text-sm text-slate-600">
+            <li><a href="syarat-ketentuan.html" class="hover:text-primary-700 transition">Syarat &amp; Ketentuan</a></li>
+            <li><a href="kebijakan-privasi.html" class="hover:text-primary-700 transition">Kebijakan Privasi</a></li>
+            <li><a href="kebijakan-dana.html" class="hover:text-primary-700 transition">Kebijakan Dana &amp; Refund</a></li>
           </ul>
         </div>
+
       </div>
 
       <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-        <p>&copy; <span id="year-now">2026</span> www.goona.my.id. Seluruh hak cipta dilindungi.</p>
-        <p>Tarif dasar Rp 2.000 / review valid • 60% Reviewer &amp; 40% Porsi Perusahaan/Sistem</p>
+        <p>&copy; <span id="year-now">2026</span> www.goona.my.id. Seluruh hak cipta dilindungi undang-undang.</p>
+        <p>Kepatuhan Perlindungan Data Pribadi &amp; Verifikasi Rekening Terpadu</p>
       </div>
     </div>
   </footer>
@@ -502,196 +391,60 @@
       window.lucide.createIcons();
     }
 
-    // Set tahun footer secara otomatis
+    // Tahun otomatis pada footer
     const yearEl = document.getElementById('year-now');
     if (yearEl) {
       yearEl.textContent = new Date().getFullYear();
     }
 
-    // Konstanta bisnis utama goona.my.id
-    const REVIEW_BASE_RATE = 2000;
-    const REVIEWER_SHARE_RATIO = 0.6; // 60% = Rp 1.200
-    const COMPANY_SHARE_RATIO = 0.4;  // 40% = Rp 800
-
-    // Format angka ke mata uang Rupiah
-    function formatRupiah(amount) {
-      return 'Rp ' + Math.round(amount).toLocaleString('id-ID');
-    }
-
-    // Toggle menu navigasi mobile
+    // Toggle navigasi mobile
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     const iconOpen = document.getElementById('menu-icon-open');
     const iconClose = document.getElementById('menu-icon-close');
 
-    function setMobileMenuState(isOpen) {
+    function toggleMobileNav(forceState) {
       if (!mobileMenu || !mobileMenuBtn) return;
-      mobileMenu.classList.toggle('hidden', !isOpen);
-      mobileMenuBtn.setAttribute('aria-expanded', String(isOpen));
-      if (iconOpen) iconOpen.classList.toggle('hidden', isOpen);
-      if (iconClose) iconClose.classList.toggle('hidden', !isOpen);
+      const nextState = typeof forceState === 'boolean'
+        ? forceState
+        : mobileMenuBtn.getAttribute('aria-expanded') !== 'true';
+
+      mobileMenu.classList.toggle('hidden', !nextState);
+      mobileMenuBtn.setAttribute('aria-expanded', String(nextState));
+      if (iconOpen) iconOpen.classList.toggle('hidden', nextState);
+      if (iconClose) iconClose.classList.toggle('hidden', !nextState);
     }
 
     if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener('click', () => {
-        const isCurrentlyOpen = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
-        setMobileMenuState(!isCurrentlyOpen);
-      });
+      mobileMenuBtn.addEventListener('click', () => toggleMobileNav());
     }
 
-    // Tutup menu mobile saat klik link anchor internal
     document.querySelectorAll('.mobile-nav-link').forEach((link) => {
-      link.addEventListener('click', () => setMobileMenuState(false));
+      link.addEventListener('click', () => toggleMobileNav(false));
     });
 
-    // Elemen Kalkulator
-    const tabCompany = document.getElementById('tab-company');
-    const tabReviewer = document.getElementById('tab-reviewer');
-    const panelCompany = document.getElementById('panel-company');
-    const panelReviewer = document.getElementById('panel-reviewer');
+    // Membaca jumlah reviewer terdaftar secara jujur (default 0 jika belum ada pendaftaran)
+    function renderRegisteredReviewerCount() {
+      const countEl = document.getElementById('registered-reviewer-count');
+      if (!countEl) return;
 
-    const topupInput = document.getElementById('topup-input');
-    const reviewCountInput = document.getElementById('review-count-input');
-    const reviewCountRange = document.getElementById('review-count-range');
-    const reviewCountBadge = document.getElementById('review-count-badge');
-
-    const resultHeading = document.getElementById('result-heading');
-    const outQuota = document.getElementById('out-quota');
-    const outReviewerFee = document.getElementById('out-reviewer-fee');
-    const outCompanyShare = document.getElementById('out-company-share');
-    const outRemainderRow = document.getElementById('out-remainder-row');
-    const outRemainder = document.getElementById('out-remainder');
-    const calcCta = document.getElementById('calc-cta');
-
-    let activeCalcMode = 'company'; // 'company' | 'reviewer'
-
-    // Perbarui tampilan kalkulator berdasarkan mode & input
-    function updateCalculator() {
+      let totalRegistered = 0;
       try {
-        if (activeCalcMode === 'company') {
-          const rawTopup = Math.max(0, Number(topupInput.value) || 0);
-          const quota = Math.floor(rawTopup / REVIEW_BASE_RATE);
-          const validVolume = quota * REVIEW_BASE_RATE;
-          const remainder = rawTopup - validVolume;
-
-          const reviewerFee = validVolume * REVIEWER_SHARE_RATIO;
-          const companyShare = validVolume * COMPANY_SHARE_RATIO;
-
-          resultHeading.textContent = 'Kuota & Alokasi Dana';
-          outQuota.textContent = `${quota.toLocaleString('id-ID')} Kuota`;
-          outReviewerFee.textContent = formatRupiah(reviewerFee);
-          outCompanyShare.textContent = formatRupiah(companyShare);
-
-          if (remainder > 0) {
-            outRemainderRow.classList.remove('hidden');
-            outRemainder.textContent = formatRupiah(remainder);
-          } else {
-            outRemainderRow.classList.add('hidden');
+        const storedCount = localStorage.getItem('goona_registered_reviewers');
+        if (storedCount !== null) {
+          const parsed = parseInt(storedCount, 10);
+          if (!Number.isNaN(parsed) && parsed >= 0) {
+            totalRegistered = parsed;
           }
-
-          calcCta.href = 'perusahaan.html';
-          calcCta.innerHTML = '<span>Lanjut ke Dasbor Perusahaan</span><i data-lucide="arrow-up-right" class="w-4 h-4"></i>';
-        } else {
-          const count = Math.max(1, Math.min(10000, Math.floor(Number(reviewCountInput.value) || 1)));
-          const totalVolume = count * REVIEW_BASE_RATE;
-          const reviewerFee = totalVolume * REVIEWER_SHARE_RATIO;
-          const companyShare = totalVolume * COMPANY_SHARE_RATIO;
-
-          reviewCountInput.value = String(count);
-          reviewCountRange.value = String(Math.min(500, count));
-          reviewCountBadge.textContent = `${count.toLocaleString('id-ID')} Review`;
-
-          resultHeading.textContent = 'Estimasi Penghasilan Reviewer';
-          outQuota.textContent = `${count.toLocaleString('id-ID')} Review Valid`;
-          outReviewerFee.textContent = formatRupiah(reviewerFee);
-          outCompanyShare.textContent = formatRupiah(companyShare);
-          outRemainderRow.classList.add('hidden');
-
-          calcCta.href = 'reviewer.html';
-          calcCta.innerHTML = '<span>Mulai Kerjakan Misi Reviewer</span><i data-lucide="arrow-up-right" class="w-4 h-4"></i>';
-        }
-
-        if (window.lucide) {
-          window.lucide.createIcons();
         }
       } catch (err) {
-        console.error('Kesalahan perhitungan kalkulator:', err);
-      }
-    }
-
-    // Switch tab mode kalkulator
-    function switchCalcMode(mode) {
-      activeCalcMode = mode;
-      const isCompany = mode === 'company';
-
-      panelCompany.classList.toggle('hidden', !isCompany);
-      panelReviewer.classList.toggle('hidden', isCompany);
-
-      if (isCompany) {
-        tabCompany.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white text-brand-700 shadow-sm transition';
-        tabReviewer.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition';
-      } else {
-        tabReviewer.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white text-emerald-700 shadow-sm transition';
-        tabCompany.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition';
+        console.warn('Tidak dapat membaca data penghitung lokal:', err);
       }
 
-      updateCalculator();
+      countEl.textContent = totalRegistered.toLocaleString('id-ID');
     }
 
-    if (tabCompany && tabReviewer) {
-      tabCompany.addEventListener('click', () => switchCalcMode('company'));
-      tabReviewer.addEventListener('click', () => switchCalcMode('reviewer'));
-    }
-
-    if (topupInput) {
-      topupInput.addEventListener('input', updateCalculator);
-    }
-
-    if (reviewCountInput && reviewCountRange) {
-      reviewCountInput.addEventListener('input', () => {
-        const val = Math.max(1, Number(reviewCountInput.value) || 1);
-        reviewCountRange.value = String(Math.min(500, val));
-        updateCalculator();
-      });
-
-      reviewCountRange.addEventListener('input', () => {
-        reviewCountInput.value = reviewCountRange.value;
-        updateCalculator();
-      });
-    }
-
-    // Tombol preset nominal top-up
-    document.querySelectorAll('.preset-topup').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const val = btn.getAttribute('data-topup');
-        if (val && topupInput) {
-          topupInput.value = val;
-          document.querySelectorAll('.preset-topup').forEach((b) => {
-            b.className = 'preset-topup px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition';
-          });
-          btn.className = 'preset-topup px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-brand-100 text-brand-700 transition';
-          updateCalculator();
-        }
-      });
-    });
-
-    // Tombol preset jumlah review
-    document.querySelectorAll('.preset-reviews').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const val = btn.getAttribute('data-reviews');
-        if (val && reviewCountInput) {
-          reviewCountInput.value = val;
-          document.querySelectorAll('.preset-reviews').forEach((b) => {
-            b.className = 'preset-reviews px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 transition';
-          });
-          btn.className = 'preset-reviews px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-100 text-emerald-700 transition';
-          updateCalculator();
-        }
-      });
-    });
-
-    // Jalankan kalkulasi awal saat halaman dimuat
-    updateCalculator();
+    renderRegisteredReviewerCount();
   </script>
 </body>
 </html>
