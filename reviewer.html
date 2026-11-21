@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <!-- Metadata dasar & viewport responsif untuk HP dan PC -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dasbor Misi Reviewer goona.my.id — Kerjakan review iklan sesuai kriteria lokasi, usia, dan jenis kelamin, jawab 3 soal pilihan A–E, dan dapatkan fee Rp 1.200 per review valid." />
+  <title>Dasbor Reviewer — goona.my.id</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Konfigurasi tema & font Inter selaras dengan halaman goona.my.id
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#4f46e5',
+              600: '#4338ca',
+              700: '#3730a3',
+              900: '#1e1b4b',
+            },
+            accent: {
+              500: '#10b981',
+              600: '#059669',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased flex flex-col selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- ==================== NAVIGATION BAR ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-3">
+        <!-- Brand Logo -->
+        <a href="index.html" class="flex items-center gap-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+            G
+          </div>
+          <div>
+            <span class="font-extrabold text-lg tracking-tight text-slate-900">goona<span class="text-brand-600">.my.id</span></span>
+            <span class="hidden sm:block text-[11px] font-medium text-emerald-700 -mt-1">Dasbor Misi Reviewer</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex items-center gap-1" aria-label="Navigasi Halaman">
+          <a href="index.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Beranda</a>
+          <a href="auth.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Akun / Profil</a>
+          <a href="reviewer.html" class="px-3 py-2 rounded-lg text-sm font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 transition">Reviewer</a>
+          <a href="dompet.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Dompet</a>
+          <a href="perusahaan.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Perusahaan</a>
+          <a href="admin.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition">Admin</a>
+        </nav>
+
+        <!-- Ringkasan Saldo Cepat di Desktop -->
+        <div class="hidden lg:flex items-center gap-3">
+          <a href="dompet.html" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 hover:bg-emerald-100 transition">
+            <i data-lucide="wallet" class="w-4 h-4 text-emerald-700"></i>
+            <span class="text-xs font-semibold text-emerald-700">Saldo:</span>
+            <span id="header-wallet-balance" class="text-sm font-extrabold text-emerald-800">Rp 0</span>
+          </a>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          class="lg:hidden p-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          aria-label="Buka menu navigasi"
+          aria-expanded="false"
+        >
+          <i data-lucide="menu" id="menu-icon-open" class="w-6 h-6"></i>
+          <i data-lucide="x" id="menu-icon-close" class="w-6 h-6 hidden"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-5 space-y-1">
+      <a href="index.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Beranda (index.html)</a>
+      <a href="auth.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Masuk &amp; Daftar (auth.html)</a>
+      <a href="reviewer.html" class="block px-3 py-2.5 rounded-xl text-sm font-bold text-emerald-800 bg-emerald-50">Dasbor Reviewer (reviewer.html)</a>
+      <a href="dompet.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Dompet &amp; Tarik Dana (dompet.html)</a>
+      <a href="perusahaan.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Dasbor Perusahaan (perusahaan.html)</a>
+      <a href="admin.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-100">Panel Admin (admin.html)</a>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-1 py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto space-y-6 sm:space-y-8">
+
+    <!-- Banner Status & Aturan Inti -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div class="space-y-2 max-w-3xl">
+          <div class="inline-flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+              <i data-lucide="badge-check" class="w-3.5 h-3.5"></i>
+              Fee Valid: Rp 1.200 (60% dari Rp 2.000)
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+              <i data-lucide="lock" class="w-3.5 h-3.5 text-brand-600"></i>
+              Kunci Otomatis Lokasi, Usia &amp; Gender
+            </span>
+          </div>
+
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Misi Review Iklan Aktif
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Pilih kampanye yang sesuai profil Anda, kunjungi <strong>link referral</strong> produk, lalu jawab <strong>3 pertanyaan pilihan A–E</strong>. Saldo bertambah <strong>Rp 1.200</strong> dan kuota iklan berkurang <strong>1</strong> hanya jika <strong>ketiga jawaban benar</strong> serta kuota &gt; 0. Jika ada 1 jawaban saja yang salah, saldo <strong>tidak bertambah</strong> dan kuota <strong>tidak berkurang</strong>.
+          </p>
+        </div>
+
+        <!-- Ringkasan Metrik Reviewer -->
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 shrink-0">
+          <div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-3.5 sm:p-4 text-center">
+            <span class="block text-[11px] font-semibold text-emerald-700">Saldo Reviewer</span>
+            <span id="stat-wallet" class="mt-1 block text-base sm:text-xl font-extrabold text-emerald-900">Rp 0</span>
+          </div>
+          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-3.5 sm:p-4 text-center">
+            <span class="block text-[11px] font-semibold text-slate-500">Review Valid</span>
+            <span id="stat-valid-count" class="mt-1 block text-base sm:text-xl font-extrabold text-slate-900">0</span>
+          </div>
+          <div class="rounded-2xl bg-brand-50 border border-brand-200 p-3.5 sm:p-4 text-center">
+            <span class="block text-[11px] font-semibold text-brand-700">Misi Cocok</span>
+            <span id="stat-eligible-count" class="mt-1 block text-base sm:text-xl font-extrabold text-brand-900">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PROFIL AKTIF & SIMULATOR KRITERIA ==================== -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center shrink-0 mt-0.5">
+            <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900">
+              Profil Reviewer Aktif &amp; Simulator Uji Kriteria
+            </h2>
+            <p class="text-xs text-slate-500">
+              Ubah data profil di bawah (Nama sesuai rekening, Tanggal Lahir/Usia, Jenis Kelamin, Kota) untuk menguji kunci akses iklan secara langsung.
+            </p>
+          </div>
+        </div>
+
+        <!-- Preset Profil Uji Cepat -->
+        <div class="flex flex-wrap gap-2">
+          <button type="button" id="preset-prof-1" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-100 text-emerald-800 hover:bg-emerald-200 transition">
+            Profil 1: Wanita • 26 Thn • Tanjung Pinang
+          </button>
+          <button type="button" id="preset-prof-2" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            Profil 2: Pria • 19 Thn • Jakarta Pusat
+          </button>
+          <button type="button" id="preset-prof-3" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            Profil 3: Wanita • 42 Thn • Kota Bandung
+          </button>
+        </div>
+      </div>
+
+      <!-- Baris Status Profil Terkunci -->
+      <div class="rounded-xl bg-slate-50 border border-slate-200 p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+          <span>
+            <strong class="text-slate-500">Nama Rekening:</strong>
+            <span id="display-prof-name" class="font-bold text-slate-900">-</span>
+          </span>
+          <span>
+            <strong class="text-slate-500">Usia (Tgl Lahir):</strong>
+            <span id="display-prof-age" class="font-bold text-emerald-700">-</span>
+          </span>
+          <span>
+            <strong class="text-slate-500">Jenis Kelamin:</strong>
+            <span id="display-prof-gender" class="font-bold text-slate-900">-</span>
+          </span>
+          <span>
+            <strong class="text-slate-500">Lokasi:</strong>
+            <span id="display-prof-city" class="font-bold text-brand-700">-</span>
+          </span>
+        </div>
+        <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+          Nama Sama dg Rekening
+        </span>
+      </div>
+
+      <!-- Form Simulator Ubah Kriteria -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <label for="sim-name" class="block text-xs font-semibold text-slate-700 mb-1">
+            Nama Lengkap (Sesuai Rekening)
+          </label>
+          <input
+            type="text"
+            id="sim-name"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          />
+        </div>
+
+        <div>
+          <label for="sim-dob" class="block text-xs font-semibold text-slate-700 mb-1">
+            Tanggal Lahir (Hitung Usia Otomatis)
+          </label>
+          <input
+            type="date"
+            id="sim-dob"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          />
+        </div>
+
+        <div>
+          <label for="sim-gender" class="block text-xs font-semibold text-slate-700 mb-1">
+            Jenis Kelamin
+          </label>
+          <select
+            id="sim-gender"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          >
+            <option value="Perempuan">Perempuan</option>
+            <option value="Laki-laki">Laki-laki</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="sim-city" class="block text-xs font-semibold text-slate-700 mb-1">
+            Kota / Kabupaten Domisili
+          </label>
+          <select
+            id="sim-city"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          >
+            <option value="Kota Tanjung Pinang">Kota Tanjung Pinang</option>
+            <option value="Kota Batam">Kota Batam</option>
+            <option value="Jakarta Pusat">Jakarta Pusat</option>
+            <option value="Jakarta Selatan">Jakarta Selatan</option>
+            <option value="Kota Bandung">Kota Bandung</option>
+            <option value="Kota Surabaya">Kota Surabaya</option>
+            <option value="Kota Medan">Kota Medan</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FILTER & DAFTAR KAMPANYE IKLAN ==================== -->
+    <section class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Daftar Iklan Tersedia</h2>
+          <p class="text-xs sm:text-sm text-slate-500">
+            Tombol kerjakan hanya aktif jika Lokasi, Usia, Jenis Kelamin cocok, serta sisa kuota lebih dari 0.
+          </p>
+        </div>
+
+        <!-- Filter Tampilan -->
+        <div class="inline-flex p-1 rounded-xl bg-white border border-slate-200 shadow-sm self-start sm:self-auto">
+          <button type="button" id="filter-all" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white transition">
+            Semua Iklan
+          </button>
+          <button type="button" id="filter-eligible" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+            Bisa Dikerjakan
+          </button>
+          <button type="button" id="filter-locked" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+            Terkunci / Habis
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid Kartu Kampanye -->
+      <div id="campaigns-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- ==================== RIWAYAT PENGERJAAN REVIEW ==================== -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
+      <div class="flex items-center justify-between gap-2">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Riwayat Pengiriman Jawaban Sesi Ini</h2>
+          <p class="text-xs text-slate-500">
+            Menampilkan hasil validasi 3 soal (A–E) dan pengaruhnya terhadap saldo reviewer serta kuota perusahaan.
+          </p>
+        </div>
+        <a href="dompet.html" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1">
+          <span>Lihat Dompet</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <div id="submissions-log" class="space-y-2.5 text-xs">
+        <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-4 text-slate-500 text-center">
+          Belum ada percobaan jawaban review pada sesi ini. Pilih iklan yang terbuka dan jawab 3 soal pilihan A–E.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== MODAL KUIS 3 SOAL (PILIHAN A–E) ==================== -->
+  <div id="quiz-modal" class="hidden fixed inset-0 z-50 bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="quiz-modal-title">
+    <div class="bg-white rounded-2xl max-w-2xl w-full my-auto shadow-2xl border border-slate-200 overflow-hidden max-h-[92vh] flex flex-col">
+
+      <!-- Modal Header -->
+      <div class="px-5 sm:px-7 py-4 bg-slate-50 border-b border-slate-200 flex items-start justify-between gap-3">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-1">
+            <span id="quiz-badge-brand" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-brand-100 text-brand-800">Brand</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">Fee Valid: Rp 1.200</span>
+            <span id="quiz-badge-quota" class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-200 text-slate-700">Sisa Kuota: 0</span>
+          </div>
+          <h3 id="quiz-modal-title" class="text-lg sm:text-xl font-extrabold text-slate-900">Judul Kampanye</h3>
+        </div>
+
+        <button
+          type="button"
+          id="close-quiz-btn"
+          class="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/70 transition"
+          aria-label="Tutup jendela review"
+        >
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-5 sm:p-7 overflow-y-auto space-y-6 flex-1">
+        <!-- Ringkasan Materi Iklan -->
+        <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
+            <span id="quiz-criteria-info" class="font-semibold text-slate-700">Kriteria: -</span>
+            <span id="referral-status-badge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+              Link Referral Belum Diklik
+            </span>
+          </div>
+
+          <p id="quiz-description" class="text-xs sm:text-sm text-slate-700 leading-relaxed"></p>
+
+          <!-- Tombol Link Referral Perusahaan -->
+          <div class="pt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <a
+              id="quiz-referral-link"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 transition"
+            >
+              <i data-lucide="external-link" class="w-4 h-4"></i>
+              <span>Kunjungi Link Referral Produk</span>
+            </a>
+            <span class="text-[11px] text-slate-500">
+              Klik link referral untuk melihat detail produk &amp; peluang komisi penjualan perusahaan.
+            </span>
+          </div>
+        </div>
+
+        <!-- Hasil Evaluasi Jawaban (Muncul setelah Submit) -->
+        <div id="quiz-result-box" class="hidden rounded-2xl p-4 border text-xs sm:text-sm space-y-1.5"></div>
+
+        <!-- Form 3 Pertanyaan Pilihan A–E -->
+        <form id="quiz-form" class="space-y-5" novalidate>
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm sm:text-base font-bold text-slate-900">
+              Jawab 3 Pertanyaan Wajib (Pilihan A – E)
+            </h4>
+            <span class="text-[11px] font-semibold text-slate-500">3/3 Wajib Benar</span>
+          </div>
+
+          <div id="quiz-questions-container" class="space-y-5"></div>
+
+          <div class="pt-2 flex flex-col sm:flex-row gap-3">
+            <button
+              type="button"
+              id="cancel-quiz-btn"
+              class="w-full sm:w-auto px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              id="submit-quiz-btn"
+              class="w-full sm:flex-1 py-3 px-6 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition flex items-center justify-center gap-2"
+            >
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span>Kirim 3 Jawaban &amp; Klaim Fee Rp 1.200</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <p>&copy; <span id="year-now">2026</span> www.goona.my.id • Tarif Dasar Rp 2.000 (60% Reviewer / 40% Perusahaan &amp; Sistem)</p>
+      <div class="flex flex-wrap items-center gap-4">
+        <a href="index.html" class="hover:text-brand-600 transition">Beranda</a>
+        <a href="auth.html" class="hover:text-brand-600 transition">Akun</a>
+        <a href="dompet.html" class="hover:text-brand-600 transition">Dompet</a>
+        <a href="perusahaan.html" class="hover:text-brand-600 transition">Perusahaan</a>
+        <a href="admin.html" class="hover:text-brand-600 transition">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+
+    const yearEl = document.getElementById('year-now');
+    if (yearEl) {
+      yearEl.textContent = new Date().getFullYear();
+    }
+
+    // Konstanta aturan bisnis goona.my.id
+    const REVIEW_BASE_RATE = 2000;
+    const REVIEWER_FEE = REVIEW_BASE_RATE * 0.6; // Rp 1.200 (60%)
+    const NON_REVIEWER_SHARE = REVIEW_BASE_RATE * 0.4; // Rp 800 (40%)
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        const isOpen = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+        mobileMenu.classList.toggle('hidden', isOpen);
+        mobileMenuBtn.setAttribute('aria-expanded', String(!isOpen));
+        if (iconOpen) iconOpen.classList.toggle('hidden', !isOpen);
+        if (iconClose) iconClose.classList.toggle('hidden', isOpen);
+      });
+    }
+
+    // Helper format Rupiah
+    function formatRupiah(num) {
+      return 'Rp ' + Math.round(Number(num) || 0).toLocaleString('id-ID');
+    }
+
+    // Hitung usia secara akurat berdasarkan tanggal lahir (KTP)
+    function calculateAge(birthDateStr) {
+      if (!birthDateStr) return 0;
+      const dob = new Date(birthDateStr);
+      if (Number.isNaN(dob.getTime())) return 0;
+      const now = new Date();
+      let age = now.getFullYear() - dob.getFullYear();
+      const mDiff = now.getMonth() - dob.getMonth();
+      if (mDiff < 0 || (mDiff === 0 && now.getDate() < dob.getDate())) {
+        age--;
+      }
+      return Math.max(0, age);
+    }
+
+    // Profil default reviewer (mengambil data dari localStorage jika baru daftar di auth.html)
+    function getInitialReviewerProfile() {
+      try {
+        const saved = localStorage.getItem('goona_current_user');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.role === 'reviewer' && parsed.fullName && parsed.birthDate) {
+            return {
+              fullName: parsed.fullName,
+              birthDate: parsed.birthDate,
+              gender: parsed.gender || 'Perempuan',
+              city: parsed.city || 'Kota Tanjung Pinang',
+              bank: parsed.bank || 'BCA',
+              accountNumber: parsed.accountNumber || '1234567890',
+              walletBalance: Number(parsed.walletBalance) || 0,
+              validReviewsCount: Number(parsed.validReviewsCount) || 0
+            };
+          }
+        }
+      } catch (err) {
+        console.warn('Gagal membaca profil lokal:', err);
+      }
+
+      // Default: Wanita, usia ~26 tahun (lahir 2000-05-15), Kota Tanjung Pinang
+      return {
+        fullName: 'SITI AMINAH',
+        birthDate: '2000-05-15',
+        gender: 'Perempuan',
+        city: 'Kota Tanjung Pinang',
+        bank: 'BCA',
+        accountNumber: '7890123456',
+        walletBalance: 0,
+        validReviewsCount: 0
+      };
+    }
+
+    let reviewerProfile = getInitialReviewerProfile();
+    let activeFilterMode = 'all'; // 'all' | 'eligible' | 'locked'
+    let currentModalCampaignId = null;
+    let referralClickedInModal = false;
+    let submissionsHistory = [];
+
+    // Data kampanye contoh mencakup: cocok (eligible), beda usia, beda gender, beda lokasi, dan kuota habis
+    let campaigns = [
+      {
+        id: 'cmp-01',
+        brand: 'Kopi Rempah Kepri',
+        title: 'Kopi Susu Rempah Botol Dingin — Promo Spesial Pesisir',
+        description: 'Minuman kopi susu rempah asli racikan lokal tanpa pengawet buatan. Cocok untuk teman kerja dan santai sore hari. Kunjungi link referral resmi untuk melihat paket bundling hemat.',
+        referralUrl: 'https://goona.my.id/ref/kopi-rempah-kepri',
+        criteria: {
+          cities: ['Kota Tanjung Pinang', 'Kota Batam'],
+          minAge: 18,
+          maxAge: 45,
+          genders: ['Perempuan', 'Laki-laki']
+        },
+        remainingQuota: 25,
+        totalQuota: 50,
+        questions: [
+          {
+            id: 'q1',
+            question: 'Apa keunggulan utama Kopi Susu Rempah Kepri menurut deskripsi iklan?',
+            options: {
+              A: 'Menggunakan pemanis buatan berlebih',
+              B: 'Racikan rempah lokal tanpa pengawet buatan',
+              C: 'Hanya tersedia dalam kemasan kaleng panas',
+              D: 'Mengandung alkohol alami',
+              E: 'Tidak memiliki kemasan botol dingin'
+            },
+            correctAnswer: 'B'
+          },
+          {
+            id: 'q2',
+            question: 'Bagaimana cara mendapatkan paket bundling hemat pada kampanye ini?',
+            options: {
+              A: 'Menghubungi nomor darurat saja',
+              B: 'Membeli secara offline tanpa link',
+              C: 'Mengunjungi link referral resmi produk yang disediakan',
+              D: 'Menunggu hingga kuota iklan habis',
+              E: 'Mengirim surat pos ke kantor pusat'
+            },
+            correctAnswer: 'C'
+          },
+          {
+            id: 'q3',
+            question: 'Kapan review dianggap valid untuk mendapatkan fee Rp 1.200 di goona.my.id?',
+            options: {
+              A: 'Cukup menjawab 1 soal saja',
+              B: 'Asal menekan tombol kirim tanpa memilih jawaban',
+              C: 'Menjawab seluruh 3 pertanyaan pilihan A–E dengan tepat',
+              D: 'Meskipun tidak memenuhi kriteria lokasi/usia',
+              E: 'Saat kuota kampanye sudah 0'
+            },
+            correctAnswer: 'C'
+          }
+        ]
+      },
+      {
+        id: 'cmp-02',
+        brand: 'Glow Botanica Skin',
+        title: 'Serum Niacinamide 5% — Perawatan Kulit Cerah Harian',
+        description: 'Serum ringan cepat menyerap dengan niacinamide 5% untuk membantu meratakan warna kulit dan menjaga kelembapan. Cek katalog promo melalui link referral perusahaan.',
+        referralUrl: 'https://goona.my.id/ref/glow-botanica-serum',
+        criteria: {
+          cities: ['SEMUA KOTA'],
+          minAge: 18,
+          maxAge: 40,
+          genders: ['Perempuan']
+        },
+        remainingQuota: 40,
+        totalQuota: 60,
+        questions: [
+          {
+            id: 'q1',
+            question: 'Berapa kadar niacinamide utama pada serum di iklan ini?',
+            options: {
+              A: '1%',
+              B: '5%',
+              C: '25%',
+              D: '50%',
+              E: '0%'
+            },
+            correctAnswer: 'B'
+          },
+          {
+            id: 'q2',
+            question: 'Apa manfaat utama yang disebutkan pada deskripsi produk?',
+            options: {
+              A: 'Membantu meratakan warna kulit & menjaga kelembapan',
+              B: 'Sebagai pembersih lantai keramik',
+              C: 'Untuk bahan bakar kendaraan',
+              D: 'Mengganti fungsi tabir surya sepenuhnya',
+              E: 'Hanya untuk penggunaan industri'
+            },
+            correctAnswer: 'A'
+          },
+          {
+            id: 'q3',
+            question: 'Di mana pengguna bisa melihat katalog promo produk ini?',
+            options: {
+              A: 'Melalui link referral perusahaan pada iklan',
+              B: 'Di papan pengumuman jalan tol',
+              C: 'Tidak tersedia informasi produk',
+              D: 'Hanya lewat telepon internasional',
+              E: 'Di majalah tahun lalu'
+            },
+            correctAnswer: 'A'
+          }
+        ]
+      },
+      {
+        id: 'cmp-03',
+        brand: 'PayungPensiun FinTech',
+        title: 'Perencanaan Dana Pensiun & Proteksi Keluarga 40+',
+        description: 'Program konsultasi dan tabungan berjangka bagi pekerja senior usia 40 hingga 65 tahun untuk menyiapkan masa pensiun terencana melalui link referral mitra.',
+        referralUrl: 'https://goona.my.id/ref/payung-pensiun-40plus',
+        criteria: {
+          cities: ['SEMUA KOTA'],
+          minAge: 40,
+          maxAge: 65,
+          genders: ['Perempuan', 'Laki-laki']
+        },
+        remainingQuota: 30,
+        totalQuota: 30,
+        questions: [
+          {
+            id: 'q1',
+            question: 'Rentang usia target utama kampanye PayungPensiun FinTech adalah?',
+            options: {
+              A: '10–15 tahun',
+              B: '40–65 tahun',
+              C: '5–10 tahun',
+              D: 'Di bawah 17 tahun',
+              E: '75–90 tahun'
+            },
+            correctAnswer: 'B'
+          },
+          {
+            id: 'q2',
+            question: 'Apa fokus utama layanan pada iklan ini?',
+            options: {
+              A: 'Sewa mobil pengantin',
+              B: 'Perencanaan dana pensiun & proteksi keluarga',
+              C: 'Jual beli perangkat gaming',
+              D: 'Kursus menjahit dasar',
+              E: 'Pengiriman paket ekspres'
+            },
+            correctAnswer: 'B'
+          },
+          {
+            id: 'q3',
+            question: 'Apa yang terjadi jika reviewer menjawab salah 1 dari 3 soal?',
+            options: {
+              A: 'Saldo tetap bertambah Rp 1.200',
+              B: 'Saldo tidak bertambah & kuota iklan tidak berkurang',
+              C: 'Akun langsung terhapus permanen',
+              D: 'Kuota bertambah 10',
+              E: 'Fee naik menjadi Rp 5.000'
+            },
+            correctAnswer: 'B'
+          }
+        ]
+      },
+      {
+        id: 'cmp-04',
+        brand: 'UrbanRoast Jakarta',
+        title: 'Kopi Literan & Croissant — Khusus Area Jakarta Pusat',
+        description: 'Promo pengiriman cepat kopi literan dan pastry hangat khusus wilayah Jakarta Pusat. Akses link referral untuk klaim voucher ongkir spesial.',
+        referralUrl: 'https://goona.my.id/ref/urbanroast-jkt-pusat',
+        criteria: {
+          cities: ['Jakarta Pusat'],
+          minAge: 17,
+          maxAge: 50,
+          genders: ['Perempuan', 'Laki-laki']
+        },
+        remainingQuota: 18,
+        totalQuota: 25,
+        questions: [
+          {
+            id: 'q1',
+            question: 'Wilayah utama yang ditargetkan pada kampanye UrbanRoast ini adalah?',
+            options: {
+              A: 'Jakarta Pusat',
+              B: 'Kota Jayapura',
+              C: 'Kota Palu',
+              D: 'Kab. Rote Ndao',
+              E: 'Kota Ambon'
+            },
+            correctAnswer: 'A'
+          },
+          {
+            id: 'q2',
+            question: 'Produk apa saja yang ditawarkan pada iklan ini?',
+            options: {
+              A: 'Kopi literan & croissant/pastry',
+              B: 'Semen & pasir bangunan',
+              C: 'Ban truk alat berat',
+              D: 'Pupuk cair sawit',
+              E: 'Cat tembok eksterior'
+            },
+            correctAnswer: 'A'
+          },
+          {
+            id: 'q3',
+            question: 'Bagian fee yang diterima reviewer dari tarif dasar Rp 2.000 adalah?',
+            options: {
+              A: '60% (Rp 1.200)',
+              B: '10% (Rp 200)',
+              C: '100% (Rp 2.000)',
+              D: '25% (Rp 500)',
+              E: '0% (Rp 0)'
+            },
+            correctAnswer: 'A'
+          }
+        ]
+      },
+      {
+        id: 'cmp-05',
+        brand: 'Arena Futsal & Sport',
+        title: 'Membership Liga Futsal Malam — Khusus Laki-Laki',
+        description: 'Pendaftaran tim dan member latihan futsal malam hari dengan jadwal rutin mingguan. Kunjungi link referral untuk jadwal lapangan tersedia.',
+        referralUrl: 'https://goona.my.id/ref/arena-futsal-pria',
+        criteria: {
+          cities: ['SEMUA KOTA'],
+          minAge: 17,
+          maxAge: 45,
+          genders: ['Laki-laki']
+        },
+        remainingQuota: 22,
+        totalQuota: 30,
+        questions: [
+          {
+            id: 'q1',
+            question: 'Kriteria jenis kelamin pada kampanye Arena Futsal & Sport adalah?',
+            options: {
+              A: 'Laki-laki',
+              B: 'Hanya bayi',
+              C: 'Tidak disebutkan',
+              D: 'Khusus hewan peliharaan',
+              E: 'Hanya usia di atas 80 tahun'
+            },
+            correctAnswer: 'A'
+          },
+          {
+            id: 'q2',
+            question: 'Aktivitas utama yang dipromosikan pada iklan ini adalah?',
+            options: {
+              A: 'Membership latihan & liga futsal malam',
+              B: 'Jasa cuci karpet masjid',
+              C: 'Les privat biola anak',
+              D: 'Penjualan bibit anggrek',
+              E: 'Jasa notaris tanah'
+            },
+            correctAnswer: 'A'
+          },
+          {
+            id: 'q3',
+            question: 'Bagaimana link referral berperan pada iklan perusahaan?',
+            options: {
+              A: 'Menghubungkan ke halaman produk/promo perusahaan',
+              B: 'Menghapus saldo reviewer',
+              C: 'Mengunci layar HP selamanya',
+              D: 'Mengganti nama rekening reviewer',
+              E: 'Tidak memiliki fungsi apa pun'
+            },
+            correctAnswer: 'A'
+          }
+        ]
+      },
+      {
+        id: 'cmp-06',
+        brand: 'FreshMart Organik',
+        title: 'Paket Sayur Hidroponik Mingguan — Kuota Kampanye Habis',
+        description: 'Paket sayuran hidroponik segar panen pagi. Kuota iklan pada kampanye ini telah habis terpakai seluruhnya oleh reviewer sebelumnya.',
+        referralUrl: 'https://goona.my.id/ref/freshmart-hidroponik',
+        criteria: {
+          cities: ['SEMUA KOTA'],
+          minAge: 17,
+          maxAge: 60,
+          genders: ['Perempuan', 'Laki-laki']
+        },
+        remainingQuota: 0,
+        totalQuota: 20,
+        questions: [
+          {
+            id: 'q1',
+            question: 'Produk utama yang ditawarkan pada FreshMart Organik adalah?',
+            options: {
+              A: 'Paket sayur hidroponik segar',
+              B: 'Onderdil motor bekas',
+              C: 'Kabel serat optik',
+              D: 'Genteng tanah liat',
+              E: 'Lampu sorot stadion'
+            },
+            correctAnswer: 'A'
+          },
+          {
+            id: 'q2',
+            question: 'Apa syarat kuota agar iklan bisa dikerjakan oleh reviewer?',
+            options: {
+              A: 'Sisa kuota lebih dari 0 (> 0)',
+              B: 'Sisa kuota harus 0',
+              C: 'Kuota bebas minus',
+              D: 'Tidak perlu cek kuota',
+              E: 'Hanya saat server mati'
+            },
+            correctAnswer: 'A'
+          },
+          {
+            id: 'q3',
+            question: 'Berapa porsi non-reviewer (perusahaan/sistem) dari Rp 2.000 per review valid?',
+            options: {
+              A: '40% (Rp 800)',
+              B: '60% (Rp 1.200)',
+              C: '90% (Rp 1.800)',
+              D: '5% (Rp 100)',
+              E: '100% (Rp 2.000)'
+            },
+            correctAnswer: 'A'
+          }
+        ]
+      }
+    ];
+
+    // Evaluasi kelayakan kampanye berdasarkan profil reviewer saat ini & sisa kuota
+    function evaluateCampaignEligibility(campaign, profile) {
+      const age = calculateAge(profile.birthDate);
+      const reasons = [];
+
+      const cityMatch =
+        campaign.criteria.cities.includes('SEMUA KOTA') ||
+        campaign.criteria.cities.includes(profile.city);
+
+      const ageMatch =
+        age >= campaign.criteria.minAge &&
+        age <= campaign.criteria.maxAge;
+
+      const genderMatch =
+        campaign.criteria.genders.includes(profile.gender);
+
+      const hasQuota = Number(campaign.remainingQuota) > 0;
+
+      if (!cityMatch) {
+        reasons.push(`Lokasi tidak sesuai (Target: ${campaign.criteria.cities.join(' / ')}, Profil Anda: ${profile.city})`);
+      }
+      if (!ageMatch) {
+        reasons.push(`Usia tidak sesuai (Target: ${campaign.criteria.minAge}–${campaign.criteria.maxAge} thn, Usia Anda: ${age} thn)`);
+      }
+      if (!genderMatch) {
+        reasons.push(`Jenis kelamin tidak sesuai (Target: ${campaign.criteria.genders.join(' / ')}, Profil Anda: ${profile.gender})`);
+      }
+      if (!hasQuota) {
+        reasons.push('Kuota iklan sudah habis (Sisa kuota: 0)');
+      }
+
+      return {
+        isEligible: cityMatch && ageMatch && genderMatch && hasQuota,
+        cityMatch,
+        ageMatch,
+        genderMatch,
+        hasQuota,
+        reasons,
+        age
+      };
+    }
+
+    // Sinkronkan input simulator dengan state profil
+    const simNameInput = document.getElementById('sim-name');
+    const simDobInput = document.getElementById('sim-dob');
+    const simGenderSelect = document.getElementById('sim-gender');
+    const simCitySelect = document.getElementById('sim-city');
+
+    function syncSimulatorInputs() {
+      simNameInput.value = reviewerProfile.fullName;
+      simDobInput.value = reviewerProfile.birthDate;
+      simGenderSelect.value = reviewerProfile.gender;
+      simCitySelect.value = reviewerProfile.city;
+    }
+
+    function persistReviewerProfile() {
+      try {
+        localStorage.setItem(
+          'goona_current_user',
+          JSON.stringify({
+            role: 'reviewer',
+            fullName: reviewerProfile.fullName,
+            birthDate: reviewerProfile.birthDate,
+            gender: reviewerProfile.gender,
+            city: reviewerProfile.city,
+            bank: reviewerProfile.bank,
+            accountNumber: reviewerProfile.accountNumber,
+            walletBalance: reviewerProfile.walletBalance,
+            validReviewsCount: reviewerProfile.validReviewsCount
+          })
+        );
+      } catch (err) {
+        console.warn('Tidak dapat menyimpan ke localStorage:', err);
+      }
+    }
+
+    // Render statistik, info profil, dan grid kampanye
+    function renderAll() {
+      const age = calculateAge(reviewerProfile.birthDate);
+
+      document.getElementById('header-wallet-balance').textContent = formatRupiah(reviewerProfile.walletBalance);
+      document.getElementById('stat-wallet').textContent = formatRupiah(reviewerProfile.walletBalance);
+      document.getElementById('stat-valid-count').textContent = String(reviewerProfile.validReviewsCount);
+
+      document.getElementById('display-prof-name').textContent = reviewerProfile.fullName;
+      document.getElementById('display-prof-age').textContent = `${age} Tahun (${reviewerProfile.birthDate})`;
+      document.getElementById('display-prof-gender').textContent = reviewerProfile.gender;
+      document.getElementById('display-prof-city').textContent = reviewerProfile.city;
+
+      const evaluatedList = campaigns.map((cmp) => ({
+        campaign: cmp,
+        evalResult: evaluateCampaignEligibility(cmp, reviewerProfile)
+      }));
+
+      const eligibleCount = evaluatedList.filter((item) => item.evalResult.isEligible).length;
+      document.getElementById('stat-eligible-count').textContent = String(eligibleCount);
+
+      // Terapkan filter tampilan kartu
+      const filteredList = evaluatedList.filter(({ evalResult }) => {
+        if (activeFilterMode === 'eligible') return evalResult.isEligible;
+        if (activeFilterMode === 'locked') return !evalResult.isEligible;
+        return true;
+      });
+
+      const gridEl = document.getElementById('campaigns-grid');
+      if (filteredList.length === 0) {
+        gridEl.innerHTML = `
+          <div class="col-span-full bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-2">
+            <p class="text-sm font-bold text-slate-800">Tidak ada iklan pada kategori filter ini.</p>
+            <p class="text-xs text-slate-500">Coba ubah filter tampilan atau sesuaikan kriteria pada simulator profil di atas.</p>
+          </div>
+        `;
+        return;
+      }
+
+      gridEl.innerHTML = filteredList
+        .map(({ campaign, evalResult }) => {
+          const { isEligible, cityMatch, ageMatch, genderMatch, hasQuota, reasons } = evalResult;
+          const cityText = campaign.criteria.cities.includes('SEMUA KOTA')
+            ? 'Semua Kota'
+            : campaign.criteria.cities.join(', ');
+          const genderText = campaign.criteria.genders.join(' / ');
+
+          return `
+            <article class="bg-white rounded-2xl border ${isEligible ? 'border-slate-200 hover:border-emerald-300 shadow-sm hover:shadow-md' : 'border-slate-200/90 opacity-95'} p-5 sm:p-6 flex flex-col justify-between transition">
+              <div class="space-y-4">
+                <!-- Header Brand & Kuota -->
+                <div class="flex items-center justify-between gap-2">
+                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-brand-50 text-brand-700 border border-brand-100">
+                    ${campaign.brand}
+                  </span>
+                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${hasQuota ? 'bg-slate-100 text-slate-800' : 'bg-rose-100 text-rose-800'}">
+                    Sisa Kuota: ${campaign.remainingQuota}/${campaign.totalQuota}
+                  </span>
+                </div>
+
+                <!-- Judul & Fee -->
+                <div>
+                  <div class="flex items-center justify-between gap-2 mb-1.5">
+                    <span class="text-xs font-extrabold text-emerald-700">Fee Valid: Rp 1.200 (60%)</span>
+                    <span class="text-[11px] font-medium text-slate-400">3 Soal A–E</span>
+                  </div>
+                  <h3 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                    ${campaign.title}
+                  </h3>
+                  <p class="mt-2 text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                    ${campaign.description}
+                  </p>
+                </div>
+
+                <!-- Indikator Kriteria Lokasi, Usia, Jenis Kelamin -->
+                <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-3 space-y-1.5 text-xs">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-slate-500">Lokasi: <strong class="text-slate-800">${cityText}</strong></span>
+                    <span class="font-bold ${cityMatch ? 'text-emerald-700' : 'text-rose-600'}">${cityMatch ? 'Cocok' : 'Terkunci'}</span>
+                  </div>
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-slate-500">Usia: <strong class="text-slate-800">${campaign.criteria.minAge}–${campaign.criteria.maxAge} thn</strong></span>
+                    <span class="font-bold ${ageMatch ? 'text-emerald-700' : 'text-rose-600'}">${ageMatch ? 'Cocok' : 'Terkunci'}</span>
+                  </div>
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-slate-500">Gender: <strong class="text-slate-800">${genderText}</strong></span>
+                    <span class="font-bold ${genderMatch ? 'text-emerald-700' : 'text-rose-600'}">${genderMatch ? 'Cocok' : 'Terkunci'}</span>
+                  </div>
+                </div>
+
+                <!-- Alasan Terkunci jika tidak memenuhi syarat -->
+                ${
+                  !isEligible
+                    ? `<div class="rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-800 space-y-1">
+                        <p class="font-bold flex items-center gap-1.5">
+                          <i data-lucide="lock" class="w-3.5 h-3.5 shrink-0"></i>
+                          <span>Tidak dapat ditekan karena:</span>
+                        </p>
+                        <ul class="list-disc pl-4 space-y-0.5 text-[11px]">
+                          ${reasons.map((r) => `<li>${r}</li>`).join('')}
+                        </ul>
+                      </div>`
+                    : ''
+                }
+              </div>
+
+              <!-- Tombol Aksi (Terkunci/Disabled jika tidak sesuai kriteria atau kuota 0) -->
+              <div class="mt-5 pt-4 border-t border-slate-100">
+                ${
+                  isEligible
+                    ? `<button
+                        type="button"
+                        data-open-campaign="${campaign.id}"
+                        class="open-campaign-btn w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <i data-lucide="play-circle" class="w-4 h-4"></i>
+                        <span>Kerjakan Review (3 Soal A–E)</span>
+                      </button>`
+                    : `<button
+                        type="button"
+                        disabled
+                        aria-disabled="true"
+                        class="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-slate-400 bg-slate-100 border border-slate-200 cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+                        <span>${!hasQuota ? 'Kuota Habis (Terkunci)' : 'Kriteria Tidak Sesuai (Terkunci)'}</span>
+                      </button>`
+                }
+              </div>
+            </article>
+          `;
+        })
+        .join('');
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // Pasang event listener tombol buka modal kuis
+      document.querySelectorAll('.open-campaign-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const cid = btn.getAttribute('data-open-campaign');
+          openQuizModal(cid);
+        });
+      });
+    }
+
+    // Render riwayat percobaan review
+    function renderSubmissionsLog() {
+      const logContainer = document.getElementById('submissions-log');
+      if (submissionsHistory.length === 0) return;
+
+      logContainer.innerHTML = submissionsHistory
+        .map((item) => {
+          if (item.isAllCorrect) {
+            return `
+              <div class="rounded-xl bg-emerald-50 border border-emerald-200 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <span class="font-bold text-emerald-900">VALID (3/3 Benar) — ${item.campaignTitle}</span>
+                  <p class="text-[11px] text-emerald-700 mt-0.5">
+                    Jawaban: ${item.chosen.join(', ')} • Fee masuk: +Rp 1.200 (60%) • Porsi non-reviewer: Rp 800 (40%) • Sisa kuota iklan: ${item.remainingQuotaAfter}
+                  </p>
+                </div>
+                <span class="text-xs font-extrabold text-emerald-800 shrink-0">+Rp 1.200</span>
+              </div>
+            `;
+          }
+
+          return `
+            <div class="rounded-xl bg-amber-50 border border-amber-200 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="font-bold text-amber-900">BELUM VALID (${item.correctCount}/3 Benar) — ${item.campaignTitle}</span>
+                <p class="text-[11px] text-amber-800 mt-0.5">
+                  Jawaban Anda: ${item.chosen.join(', ')} • Saldo tidak bertambah (+Rp 0) &amp; kuota iklan tidak berkurang (tetap ${item.remainingQuotaAfter})
+                </p>
+              </div>
+              <span class="text-xs font-bold text-amber-900 shrink-0">Rp 0 • Kuota Utuh</span>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    // Event Listener Simulator Profil
+    simNameInput.addEventListener('input', () => {
+      const val = simNameInput.value.trim();
+      reviewerProfile.fullName = val ? val.toUpperCase() : 'REVIEWER';
+      persistReviewerProfile();
+      renderAll();
+    });
+
+    simDobInput.addEventListener('change', () => {
+      if (simDobInput.value) {
+        reviewerProfile.birthDate = simDobInput.value;
+        persistReviewerProfile();
+        renderAll();
+      }
+    });
+
+    simGenderSelect.addEventListener('change', () => {
+      reviewerProfile.gender = simGenderSelect.value;
+      persistReviewerProfile();
+      renderAll();
+    });
+
+    simCitySelect.addEventListener('change', () => {
+      reviewerProfile.city = simCitySelect.value;
+      persistReviewerProfile();
+      renderAll();
+    });
+
+    // Preset Profil Uji Cepat
+    document.getElementById('preset-prof-1').addEventListener('click', () => {
+      reviewerProfile = {
+        ...reviewerProfile,
+        fullName: 'SITI AMINAH',
+        birthDate: '2000-05-15',
+        gender: 'Perempuan',
+        city: 'Kota Tanjung Pinang'
+      };
+      syncSimulatorInputs();
+      persistReviewerProfile();
+      renderAll();
+    });
+
+    document.getElementById('preset-prof-2').addEventListener('click', () => {
+      reviewerProfile = {
+        ...reviewerProfile,
+        fullName: 'RAMA PRATAMA',
+        birthDate: '2007-03-10',
+        gender: 'Laki-laki',
+        city: 'Jakarta Pusat'
+      };
+      syncSimulatorInputs();
+      persistReviewerProfile();
+      renderAll();
+    });
+
+    document.getElementById('preset-prof-3').addEventListener('click', () => {
+      reviewerProfile = {
+        ...reviewerProfile,
+        fullName: 'DEWI KARTIKA',
+        birthDate: '1984-08-20',
+        gender: 'Perempuan',
+        city: 'Kota Bandung'
+      };
+      syncSimulatorInputs();
+      persistReviewerProfile();
+      renderAll();
+    });
+
+    // Filter Tombol Daftar Iklan
+    const filterButtons = {
+      all: document.getElementById('filter-all'),
+      eligible: document.getElementById('filter-eligible'),
+      locked: document.getElementById('filter-locked')
+    };
+
+    function setFilterMode(mode) {
+      activeFilterMode = mode;
+      Object.entries(filterButtons).forEach(([key, btn]) => {
+        if (!btn) return;
+        if (key === mode) {
+          btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white transition';
+        } else {
+          btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition';
+        }
+      });
+      renderAll();
+    }
+
+    filterButtons.all.addEventListener('click', () => setFilterMode('all'));
+    filterButtons.eligible.addEventListener('click', () => setFilterMode('eligible'));
+    filterButtons.locked.addEventListener('click', () => setFilterMode('locked'));
+
+    // ==================== MODAL KUIS 3 SOAL (A–E) ====================
+    const quizModal = document.getElementById('quiz-modal');
+    const quizForm = document.getElementById('quiz-form');
+    const quizResultBox = document.getElementById('quiz-result-box');
+    const referralStatusBadge = document.getElementById('referral-status-badge');
+
+    function openQuizModal(campaignId) {
+      const campaign = campaigns.find((c) => c.id === campaignId);
+      if (!campaign) return;
+
+      // Validasi ulang sebelum membuka modal
+      const check = evaluateCampaignEligibility(campaign, reviewerProfile);
+      if (!check.isEligible) {
+        renderAll();
+        return;
+      }
+
+      currentModalCampaignId = campaignId;
+      referralClickedInModal = false;
+
+      document.getElementById('quiz-badge-brand').textContent = campaign.brand;
+      document.getElementById('quiz-badge-quota').textContent = `Sisa Kuota: ${campaign.remainingQuota}`;
+      document.getElementById('quiz-modal-title').textContent = campaign.title;
+      document.getElementById('quiz-description').textContent = campaign.description;
+
+      const cityText = campaign.criteria.cities.includes('SEMUA KOTA')
+        ? 'Semua Kota'
+        : campaign.criteria.cities.join(', ');
+      document.getElementById('quiz-criteria-info').textContent =
+        `Target: ${cityText} • Usia ${campaign.criteria.minAge}–${campaign.criteria.maxAge} thn • ${campaign.criteria.genders.join(' / ')}`;
+
+      const refLinkEl = document.getElementById('quiz-referral-link');
+      refLinkEl.href = campaign.referralUrl;
+
+      referralStatusBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800';
+      referralStatusBadge.innerHTML = '<i data-lucide="external-link" class="w-3 h-3"></i><span>Link Referral Belum Diklik</span>';
+
+      quizResultBox.classList.add('hidden');
+      quizResultBox.innerHTML = '';
+
+      // Render 3 pertanyaan masing-masing dengan opsi A sampai E
+      const qContainer = document.getElementById('quiz-questions-container');
+      const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+
+      qContainer.innerHTML = campaign.questions
+        .map((q, idx) => {
+          const choicesHtml = optionLetters
+            .map(
+              (letter) => `
+                <label class="cursor-pointer block">
+                  <input
+                    type="radio"
+                    name="answer_${q.id}"
+                    value="${letter}"
+                    class="peer sr-only"
+                  />
+                  <div class="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm text-slate-700 hover:bg-slate-50 peer-checked:border-emerald-600 peer-checked:bg-emerald-50/80 peer-checked:text-emerald-950 transition">
+                    <span class="w-6 h-6 rounded-lg bg-slate-100 text-slate-800 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5 peer-checked:bg-emerald-600">
+                      ${letter}
+                    </span>
+                    <span class="leading-snug">${q.options[letter]}</span>
+                  </div>
+                </label>
+              `
+            )
+            .join('');
+
+          return `
+            <div class="rounded-2xl bg-slate-50/90 border border-slate-200 p-4 space-y-3">
+              <p class="text-xs sm:text-sm font-bold text-slate-900">
+                <span class="text-brand-700">Soal ${idx + 1}/3:</span> ${q.question}
+              </p>
+              <div class="space-y-2">
+                ${choicesHtml}
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+
+      quizModal.classList.remove('hidden');
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    // Track klik link referral perusahaan di dalam modal
+    document.getElementById('quiz-referral-link').addEventListener('click', () => {
+      referralClickedInModal = true;
+      referralStatusBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800';
+      referralStatusBadge.innerHTML = '<i data-lucide="check-circle-2" class="w-3 h-3"></i><span>Link Referral Sudah Diklik</span>';
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    });
+
+    function closeQuizModal() {
+      quizModal.classList.add('hidden');
+      currentModalCampaignId = null;
+    }
+
+    document.getElementById('close-quiz-btn').addEventListener('click', closeQuizModal);
+    document.getElementById('cancel-quiz-btn').addEventListener('click', closeQuizModal);
+
+    // Submit 3 jawaban pilihan A–E dan terapkan aturan validasi ketat
+    quizForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!currentModalCampaignId) return;
+
+      const campaign = campaigns.find((c) => c.id === currentModalCampaignId);
+      if (!campaign) return;
+
+      // Pastikan kriteria & sisa kuota masih valid saat submit
+      const eligibility = evaluateCampaignEligibility(campaign, reviewerProfile);
+      if (!eligibility.isEligible) {
+        quizResultBox.classList.remove('hidden');
+        quizResultBox.className = 'rounded-2xl p-4 border border-rose-200 bg-rose-50 text-rose-900 text-xs sm:text-sm space-y-1';
+        quizResultBox.innerHTML = `
+          <p class="font-bold">Akses Ditolak</p>
+          <p>${eligibility.reasons.join(' • ')}</p>
+        `;
+        renderAll();
+        return;
+      }
+
+      // Ambil jawaban 3 soal
+      const chosenAnswers = [];
+      for (const q of campaign.questions) {
+        const checked = document.querySelector(`input[name="answer_${q.id}"]:checked`);
+        if (!checked) {
+          quizResultBox.classList.remove('hidden');
+          quizResultBox.className = 'rounded-2xl p-4 border border-rose-200 bg-rose-50 text-rose-900 text-xs sm:text-sm space-y-1';
+          quizResultBox.innerHTML = `
+            <p class="font-bold">Jawaban Belum Lengkap</p>
+            <p>Anda wajib memilih jawaban (A–E) untuk seluruh 3 pertanyaan sebelum mengirim review.</p>
+          `;
+          quizResultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          return;
+        }
+        chosenAnswers.push(checked.value);
+      }
+
+      // Hitung jumlah jawaban benar dari 3 soal
+      let correctCount = 0;
+      campaign.questions.forEach((q, idx) => {
+        if (chosenAnswers[idx] === q.correctAnswer) {
+          correctCount++;
+        }
+      });
+
+      const isAllCorrect = correctCount === 3;
+
+      if (isAllCorrect) {
+        // 3/3 benar: kurangi kuota 1 & tambah saldo reviewer Rp 1.200 (60% dari Rp 2.000)
+        campaign.remainingQuota = Math.max(0, campaign.remainingQuota - 1);
+        reviewerProfile.walletBalance += REVIEWER_FEE;
+        reviewerProfile.validReviewsCount += 1;
+        persistReviewerProfile();
+
+        document.getElementById('quiz-badge-quota').textContent = `Sisa Kuota: ${campaign.remainingQuota}`;
+
+        quizResultBox.classList.remove('hidden');
+        quizResultBox.className = 'rounded-2xl p-4 border border-emerald-200 bg-emerald-50 text-emerald-950 text-xs sm:text-sm space-y-1.5';
+        quizResultBox.innerHTML = `
+          <p class="font-extrabold text-emerald-900">Review Valid (3/3 Jawaban Benar)!</p>
+          <p>
+            Fee reviewer sebesar <strong>+Rp 1.200</strong> (60% dari Rp 2.000) telah masuk ke saldo Anda, sedangkan porsi non-reviewer/perusahaan adalah <strong>Rp 800</strong> (40%). Kuota kampanye berkurang 1 menjadi <strong>${campaign.remainingQuota}</strong>${referralClickedInModal ? ' • Klik link referral tercatat.' : '.'}
+          </p>
+        `;
+
+        submissionsHistory.unshift({
+          campaignTitle: campaign.title,
+          chosen: chosenAnswers,
+          correctCount,
+          isAllCorrect: true,
+          remainingQuotaAfter: campaign.remainingQuota
+        });
+      } else {
+        // Minimal 1 jawaban salah: saldo tidak bertambah & kuota tidak berkurang
+        quizResultBox.classList.remove('hidden');
+        quizResultBox.className = 'rounded-2xl p-4 border border-amber-200 bg-amber-50 text-amber-950 text-xs sm:text-sm space-y-1.5';
+        quizResultBox.innerHTML = `
+          <p class="font-extrabold text-amber-900">Jawaban Belum Tepat (${correctCount}/3 Benar)</p>
+          <p>
+            Karena ada jawaban yang belum sesuai kunci perusahaan, <strong>saldo Anda tidak bertambah (+Rp 0)</strong> dan <strong>kuota iklan tidak berkurang</strong> (tetap <strong>${campaign.remainingQuota}</strong>). Silakan tinjau kembali materi iklan dan coba lagi.
+          </p>
+        `;
+
+        submissionsHistory.unshift({
+          campaignTitle: campaign.title,
+          chosen: chosenAnswers,
+          correctCount,
+          isAllCorrect: false,
+          remainingQuotaAfter: campaign.remainingQuota
+        });
+      }
+
+      renderAll();
+      renderSubmissionsLog();
+      quizResultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    // Inisialisasi tampilan pertama
+    syncSimulatorInputs();
+    renderAll();
+  </script>
+</body>
+</html>
