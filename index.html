@@ -1,450 +1,430 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
-  <!-- Metadata dasar & viewport responsif untuk perangkat seluler (HP) dan komputer (PC) -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="goona.my.id — Layanan terverifikasi yang menghubungkan perusahaan dengan audiens nyata untuk melihat iklan produk, mengunjungi tautan resmi, dan memberikan ulasan terstruktur." />
-  <title>goona.my.id — Layanan Audiens Terverifikasi &amp; Ulasan Produk</title>
-
-  <!-- Google Fonts: Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-  <!-- Tailwind CSS -->
+  <title>goona.my.id — Papan Misi &amp; Viewer Terdaftar</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Konfigurasi palet korporat bersih (Slate, Emerald-Teal, dan White)
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-          },
-          colors: {
-            primary: {
-              50: '#f0fdfa',
-              100: '#ccfbf1',
-              600: '#0d9488',
-              700: '#0f766e',
-              800: '#115e59',
-              900: '#134e4a',
-            }
-          }
-        }
-      }
-    };
-  </script>
-
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.45; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.04); }
+    }
+    @keyframes shimmerSweep {
+      0% { transform: translateX(-120%); }
+      100% { transform: translateX(220%); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-float-slow {
+      animation: floatSlow 4.5s ease-in-out infinite;
+    }
+    .animate-pulse-glow {
+      animation: pulseGlow 3.6s ease-in-out infinite;
+    }
+    .animate-fade-up {
+      animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .shimmer-bar {
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer-bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 45%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.55),
+        transparent
+      );
+      animation: shimmerSweep 2.6s ease-in-out infinite;
+    }
+    .mission-card {
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.28s ease;
+    }
+    .mission-card.is-active:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 35px -15px rgba(15, 23, 42, 0.16);
+      border-color: #10b981;
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-white text-slate-800 font-sans antialiased flex flex-col selection:bg-primary-100 selection:text-primary-900">
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-emerald-200 selection:text-slate-950">
+  <!-- Dekorasi Latar Halus -->
+  <div class="pointer-events-none fixed inset-0 overflow-hidden -z-10">
+    <div class="animate-pulse-glow absolute -top-24 -right-24 h-80 w-80 rounded-full bg-emerald-200/50 blur-3xl"></div>
+    <div class="animate-pulse-glow absolute top-1/3 -left-28 h-72 w-72 rounded-full bg-teal-200/40 blur-3xl" style="animation-delay: 1.4s;"></div>
+  </div>
 
-  <!-- ==================== HEADER / NAVIGASI UTAMA ==================== -->
-  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16 gap-4">
-
-        <!-- Logo Brand -->
-        <a href="index.html" class="flex items-center gap-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600">
-          <div class="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-extrabold text-lg">
-            G
-          </div>
-          <div class="leading-tight">
-            <span class="font-extrabold text-lg tracking-tight text-slate-900">goona<span class="text-primary-600">.my.id</span></span>
-            <span class="hidden sm:block text-[11px] font-medium text-slate-500">Verified Audience &amp; Product Review</span>
-          </div>
-        </a>
-
-        <!-- Menu Navigasi Desktop -->
-        <nav class="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Navigasi Utama">
-          <a href="#cara-kerja" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
-            Cara Kerja
-          </a>
-          <a href="#untuk-perusahaan" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
-            Untuk Perusahaan
-          </a>
-          <a href="#untuk-reviewer" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
-            Untuk Reviewer
-          </a>
-        </nav>
-
-        <!-- Tombol Aksi Desktop -->
-        <div class="hidden md:flex items-center gap-2.5">
-          <a href="auth.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-700 border border-slate-300 hover:bg-slate-50 transition">
-            Masuk
-          </a>
-          <a href="auth.html?mode=register" class="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-primary-700 hover:bg-primary-800 shadow-sm transition">
-            Daftar
-          </a>
-        </div>
-
-        <!-- Tombol Menu Mobile -->
-        <button
-          id="mobile-menu-btn"
-          type="button"
-          class="md:hidden p-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-600"
-          aria-label="Buka menu navigasi"
-          aria-expanded="false"
-        >
-          <i data-lucide="menu" id="menu-icon-open" class="w-6 h-6"></i>
-          <i data-lucide="x" id="menu-icon-close" class="w-6 h-6 hidden"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Drawer Navigasi Mobile -->
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-5 space-y-1.5">
-      <a href="#cara-kerja" class="mobile-nav-link block px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">
-        Cara Kerja
+  <!-- Navbar Ringkas -->
+  <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/85 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
+      <a href="index.html" class="group flex items-center gap-2.5">
+        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white font-bold text-lg shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:bg-emerald-600">
+          G
+        </span>
+        <span class="text-lg font-extrabold tracking-tight text-slate-900">
+          goona<span class="text-emerald-600">.my.id</span>
+        </span>
       </a>
-      <a href="#untuk-perusahaan" class="mobile-nav-link block px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">
-        Untuk Perusahaan
-      </a>
-      <a href="#untuk-reviewer" class="mobile-nav-link block px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">
-        Untuk Reviewer
-      </a>
-      <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row gap-2">
-        <a href="auth.html" class="w-full text-center px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 border border-slate-300 hover:bg-slate-50">
+
+      <div id="auth-nav" class="flex items-center gap-2.5">
+        <a href="auth.html" class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">
           Masuk
         </a>
-        <a href="auth.html?mode=register" class="w-full text-center px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary-700 hover:bg-primary-800">
-          Daftar Akun
+        <a href="auth.html?mode=register" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 active:scale-[0.99]">
+          Daftar
         </a>
       </div>
     </div>
   </header>
 
-  <main class="flex-1">
+  <main class="mx-auto max-w-6xl px-4 pt-8 pb-16 sm:px-6 sm:pt-10">
+    <!-- Hero Ringkas + Penghitung Viewer Terdaftar -->
+    <section class="animate-fade-up grid gap-6 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-7 space-y-4">
+        <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/90 px-3.5 py-1 text-xs font-semibold text-emerald-700">
+          <span class="h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
+          <span>Papan Misi Aktif</span>
+        </div>
 
-    <!-- ==================== HERO SECTION ==================== -->
-    <section class="bg-slate-50 border-b border-slate-200 py-12 sm:py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl leading-[1.12]">
+          Pilih Iklan, Jawab Soal, <span class="text-emerald-600">Kumpulkan Hasilnya.</span>
+        </h1>
 
-          <!-- Kolom Kiri: Pesan Utama -->
-          <div class="lg:col-span-7 space-y-6">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium shadow-2xs">
-              <span class="w-2 h-2 rounded-full bg-primary-600"></span>
-              <span>Platform Riset Iklan &amp; Ulasan Audiens Terverifikasi</span>
-            </div>
-
-            <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
-              Perkenalkan Produk Anda kepada <span class="text-primary-700">Audiens Nyata</span> yang Tepat Sasaran.
-            </h1>
-
-            <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
-              <strong>goona.my.id</strong> menghubungkan perusahaan dengan pengguna terverifikasi yang bersedia menyimak materi iklan Anda, mengunjungi tautan produk resmi, dan memberikan ulasan terstruktur sesuai kriteria demografi yang Anda tentukan.
-            </p>
-
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
-              <a
-                href="perusahaan.html"
-                class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-sm transition"
-              >
-                <i data-lucide="building-2" class="w-4 h-4"></i>
-                <span>Pasang Iklan Perusahaan</span>
-              </a>
-              <a
-                href="auth.html?mode=register"
-                class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-primary-800 bg-primary-50 hover:bg-primary-100 border border-primary-200 transition"
-              >
-                <i data-lucide="user-check" class="w-4 h-4"></i>
-                <span>Daftar Sebagai Reviewer</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Kolom Kanan: Kartu Transparansi Data Sistem (Real Counter Mulai dari 0) -->
-          <div class="lg:col-span-5">
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
-              <div class="flex items-start justify-between gap-4 border-b border-slate-100 pb-5">
-                <div>
-                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Transparansi Jaringan</span>
-                  <h2 class="mt-1 text-lg font-bold text-slate-900">Reviewer Terdaftar Aktif</h2>
-                  <p class="mt-1 text-xs text-slate-500">
-                    Menampilkan jumlah akun reviewer terverifikasi yang tercatat di sistem saat ini.
-                  </p>
-                </div>
-                <div class="w-11 h-11 rounded-xl bg-primary-50 text-primary-700 border border-primary-100 flex items-center justify-center shrink-0">
-                  <i data-lucide="users" class="w-5 h-5"></i>
-                </div>
-              </div>
-
-              <!-- Angka Real Reviewer (Default 0, otomatis terbaca saat ada pendaftaran) -->
-              <div class="flex items-baseline gap-3">
-                <span id="registered-reviewer-count" class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-                  0
-                </span>
-                <span class="text-sm font-medium text-slate-500">Orang Terverifikasi</span>
-              </div>
-
-              <!-- Ringkasan Kualitas Verifikasi -->
-              <div class="space-y-3 pt-2 border-t border-slate-100 text-xs sm:text-sm text-slate-600">
-                <div class="flex items-center gap-2.5">
-                  <i data-lucide="check" class="w-4 h-4 text-primary-600 shrink-0"></i>
-                  <span>Terfilter berdasarkan lokasi, rentang usia, dan jenis kelamin</span>
-                </div>
-                <div class="flex items-center gap-2.5">
-                  <i data-lucide="check" class="w-4 h-4 text-primary-600 shrink-0"></i>
-                  <span>Kesesuaian nama profil dengan rekening pencairan dana</span>
-                </div>
-                <div class="flex items-center gap-2.5">
-                  <i data-lucide="check" class="w-4 h-4 text-primary-600 shrink-0"></i>
-                  <span>Bebas pengulangan oleh orang yang sama selama 3 bulan</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        <div class="flex flex-wrap items-center gap-3 pt-1">
+          <a href="#papan-misi" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-500 hover:-translate-y-0.5">
+            <i data-lucide="layout-grid" class="h-4 w-4"></i>
+            <span>Lihat Papan Misi</span>
+          </a>
+          <a href="perusahaan.html" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">
+            <i data-lucide="megaphone" class="h-4 w-4 text-slate-500"></i>
+            <span>Pasang Iklan</span>
+          </a>
         </div>
       </div>
-    </section>
 
-    <!-- ==================== CARA KERJA PLATFORM ==================== -->
-    <section id="cara-kerja" class="py-16 sm:py-24 bg-white border-b border-slate-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-2xl">
-          <span class="text-xs font-bold uppercase tracking-wider text-primary-700">Alur Layanan</span>
-          <h2 class="mt-2 text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Bagaimana goona.my.id Bekerja
-          </h2>
-          <p class="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
-            Proses sederhana dan terukur untuk memastikan materi promosi perusahaan benar-benar disimak oleh target audiens yang relevan.
-          </p>
-        </div>
-
-        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          <!-- Langkah 1 -->
-          <div class="rounded-2xl border border-slate-200 p-6 sm:p-7 bg-white space-y-3">
-            <div class="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
-              01
-            </div>
-            <h3 class="text-lg font-bold text-slate-900">Tentukan Target &amp; Deposit</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">
-              Perusahaan memilih paket deposit sesuai jangkauan audiens yang diinginkan (misalnya deposit Rp 100.000 untuk menjangkau 100 orang nyata), mengatur kriteria lokasi, usia, dan jenis kelamin, serta menyematkan tautan produk.
-            </p>
-          </div>
-
-          <!-- Langkah 2 -->
-          <div class="rounded-2xl border border-slate-200 p-6 sm:p-7 bg-white space-y-3">
-            <div class="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
-              02
-            </div>
-            <h3 class="text-lg font-bold text-slate-900">Penayangan &amp; Ulasan Terstruktur</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">
-              Iklan hanya dapat dibuka oleh reviewer yang memenuhi kriteria target perusahaan. Reviewer menyimak materi iklan, mengunjungi tautan produk yang tersedia, dan menjawab 3 pertanyaan ulasan dari perusahaan dengan tepat.
-            </p>
-          </div>
-
-          <!-- Langkah 3 -->
-          <div class="rounded-2xl border border-slate-200 p-6 sm:p-7 bg-white space-y-3">
-            <div class="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
-              03
-            </div>
-            <h3 class="text-lg font-bold text-slate-900">Distribusi Otomatis &amp; Jeda 3 Bulan</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">
-              Ulasan yang terverifikasi masuk ke laporan perusahaan, imbalan otomatis tercatat ke saldo masing-masing reviewer untuk ditarik setelah mencapai batas minimal Rp 50.000, dan iklan otomatis terkunci selama 3 bulan (90 hari) bagi reviewer yang sudah mengerjakannya.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== DUA PILAR PENGGUNA (PERUSAHAAN & REVIEWER) ==================== -->
-    <section class="py-16 sm:py-24 bg-slate-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-        <!-- Bagian Untuk Perusahaan -->
-        <div id="untuk-perusahaan" class="bg-white rounded-2xl border border-slate-200 p-7 sm:p-9 flex flex-col justify-between space-y-8">
-          <div class="space-y-4">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800">
-              <i data-lucide="briefcase" class="w-3.5 h-3.5 text-slate-700"></i>
-              Solusi Untuk Perusahaan
+      <!-- Kartu Daya Tarik Utama: Jumlah Viewer Terdaftar -->
+      <div class="lg:col-span-5">
+        <div class="animate-float-slow rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xl shadow-slate-900/5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">
+              Viewer Terdaftar
             </span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              Jangkau Konsumen Nyata &amp; Tingkatkan Kunjungan Produk
-            </h2>
-            <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Pilih anggaran kampanye secara fleksibel saat memasang iklan. Kuota penayangan sebanding langsung dengan jumlah orang nyata yang berhasil menyelesaikan ulasan produk Anda.
-            </p>
-
-            <ul class="space-y-3 pt-2 text-sm text-slate-700">
-              <li class="flex items-start gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
-                <span><strong>Pilihan Anggaran Fleksibel:</strong> Deposit Rp 100.000 menjangkau 100 orang terverifikasi; kuota hanya terpakai jika ulasan valid.</span>
-              </li>
-              <li class="flex items-start gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
-                <span><strong>Filter Demografi Ketat:</strong> Iklan tidak dapat diakses oleh pengguna di luar kriteria lokasi, rentang usia, dan jenis kelamin pilihan Anda.</span>
-              </li>
-              <li class="flex items-start gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
-                <span><strong>Tautan Produk &amp; Perlindungan 3 Bulan:</strong> Arahkan pengunjung ke halaman produk Anda, dengan jaminan satu reviewer tidak mengulang iklan yang sama dalam masa 3 bulan.</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="pt-4 border-t border-slate-100">
-            <a href="perusahaan.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 transition">
-              <span>Masuk ke Portal Perusahaan</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Bagian Untuk Reviewer -->
-        <div id="untuk-reviewer" class="bg-white rounded-2xl border border-slate-200 p-7 sm:p-9 flex flex-col justify-between space-y-8">
-          <div class="space-y-4">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-50 text-primary-800">
-              <i data-lucide="user-check" class="w-3.5 h-3.5 text-primary-700"></i>
-              Peluan Untuk Reviewer
+            <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+              <i data-lucide="users" class="h-5 w-5"></i>
             </span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              Berikan Ulasan Iklan yang Sesuai Profil Anda
-            </h2>
-            <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Daftarkan data diri Anda secara jujur dan akurat. Setiap kali ada perusahaan yang membutuhkan opini sesuai lokasi, usia, dan jenis kelamin Anda, iklan akan tersedia untuk dikerjakan.
-            </p>
-
-            <ul class="space-y-3 pt-2 text-sm text-slate-700">
-              <li class="flex items-start gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
-                <span><strong>Verifikasi Identitas &amp; Rekening:</strong> Pendaftaran menggunakan tanggal lahir, jenis kelamin, lokasi domisili, dan nama lengkap yang wajib sesuai dengan rekening bank/e-wallet.</span>
-              </li>
-              <li class="flex items-start gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
-                <span><strong>Ulasan Berbasis Pemahaman:</strong> Simak materi iklan perusahaan dan jawab 3 pertanyaan pilihan dengan benar untuk mencatat ulasan sah.</span>
-              </li>
-              <li class="flex items-start gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5"></i>
-                <span><strong>Penarikan Saldo Terjadwal:</strong> Imbalan otomatis terakumulasi di dompet akun dan dapat ditarik ke rekening Anda setelah mencapai minimal Rp 50.000.</span>
-              </li>
-            </ul>
           </div>
 
-          <div class="pt-4 border-t border-slate-100">
-            <a href="auth.html?mode=register" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white bg-primary-700 hover:bg-primary-800 transition">
-              <span>Daftar Sebagai Reviewer</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
+          <div class="mt-4 flex items-baseline gap-3">
+            <span id="viewer-count" class="text-5xl font-black tracking-tight text-slate-900 sm:text-6xl">
+              0
+            </span>
+            <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
+              Akun Bergabung
+            </span>
+          </div>
+
+          <div class="mt-5 grid grid-cols-3 gap-2 border-t border-slate-100 pt-4 text-center">
+            <div class="rounded-xl bg-slate-50 p-2.5 transition hover:bg-emerald-50/70">
+              <div class="text-xs font-bold text-slate-800">2 Kolom</div>
+              <div class="text-[11px] text-slate-400">Papan Misi</div>
+            </div>
+            <div class="rounded-xl bg-slate-50 p-2.5 transition hover:bg-emerald-50/70">
+              <div class="text-xs font-bold text-slate-800">1 Klik</div>
+              <div class="text-[11px] text-slate-400">Buka Iklan</div>
+            </div>
+            <div class="rounded-xl bg-slate-50 p-2.5 transition hover:bg-emerald-50/70">
+              <div class="text-xs font-bold text-slate-800">3 Soal</div>
+              <div class="text-[11px] text-slate-400">Verifikasi</div>
+            </div>
           </div>
         </div>
-
       </div>
     </section>
 
+    <!-- Grid 2 Papan Berbaris ke Bawah -->
+    <section id="papan-misi" class="mt-12 animate-fade-up" style="animation-delay: 0.12s;">
+      <div class="mb-5 flex items-center justify-between">
+        <h2 class="text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
+          Papan Misi
+        </h2>
+        <span id="mission-status-badge" class="rounded-full bg-slate-200/80 px-3 py-1 text-xs font-semibold text-slate-600">
+          2 Slot Kosong
+        </span>
+      </div>
+
+      <!-- Susunan 2 Kolom Berbaris ke Bawah -->
+      <div id="mission-grid" class="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <!-- Placeholder 1 (Tidak Bisa Diklik) -->
+        <div aria-disabled="true" class="mission-card select-none cursor-not-allowed rounded-3xl border border-dashed border-slate-300 bg-white/80 p-6 shadow-sm">
+          <div class="flex items-center justify-between gap-2">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
+              <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse"></span>
+              Papan #01
+            </span>
+            <span class="text-xs font-medium text-slate-400">Kosong</span>
+          </div>
+
+          <div class="mt-5 space-y-3">
+            <div class="shimmer-bar h-5 w-2/3 rounded-lg bg-slate-200/80"></div>
+            <div class="shimmer-bar h-3.5 w-full rounded-md bg-slate-100"></div>
+            <div class="shimmer-bar h-3.5 w-4/5 rounded-md bg-slate-100"></div>
+          </div>
+
+          <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-400">
+            <span class="inline-flex items-center gap-1.5">
+              <i data-lucide="clock" class="h-3.5 w-3.5 animate-spin" style="animation-duration: 7s;"></i>
+              Menunggu iklan masuk
+            </span>
+            <span>Belum aktif</span>
+          </div>
+        </div>
+
+        <!-- Placeholder 2 (Tidak Bisa Diklik) -->
+        <div aria-disabled="true" class="mission-card select-none cursor-not-allowed rounded-3xl border border-dashed border-slate-300 bg-white/80 p-6 shadow-sm">
+          <div class="flex items-center justify-between gap-2">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
+              <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse" style="animation-delay: 0.6s;"></span>
+              Papan #02
+            </span>
+            <span class="text-xs font-medium text-slate-400">Kosong</span>
+          </div>
+
+          <div class="mt-5 space-y-3">
+            <div class="shimmer-bar h-5 w-3/5 rounded-lg bg-slate-200/80"></div>
+            <div class="shimmer-bar h-3.5 w-11/12 rounded-md bg-slate-100"></div>
+            <div class="shimmer-bar h-3.5 w-3/4 rounded-md bg-slate-100"></div>
+          </div>
+
+          <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-400">
+            <span class="inline-flex items-center gap-1.5">
+              <i data-lucide="clock" class="h-3.5 w-3.5 animate-spin" style="animation-duration: 7s;"></i>
+              Menunggu iklan masuk
+            </span>
+            <span>Belum aktif</span>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="bg-white border-t border-slate-200 pt-12 pb-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-200">
-
-        <!-- Kolom 1: Identitas Website -->
-        <div class="lg:col-span-2 space-y-3">
-          <a href="index.html" class="inline-flex items-center gap-2.5">
-            <span class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-extrabold text-base">G</span>
-            <span class="font-extrabold text-lg text-slate-900">goona<span class="text-primary-600">.my.id</span></span>
-          </a>
-          <p class="text-sm text-slate-600 max-w-md leading-relaxed">
-            Layanan penghubung perusahaan dengan audiens terverifikasi untuk penayangan iklan tepat sasaran dan ulasan produk terstruktur di Indonesia.
-          </p>
-        </div>
-
-        <!-- Kolom 2: Akses Halaman -->
-        <div>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Akses Layanan</h3>
-          <ul class="space-y-2.5 text-sm text-slate-600">
-            <li><a href="auth.html" class="hover:text-primary-700 transition">Masuk / Daftar Akun</a></li>
-            <li><a href="reviewer.html" class="hover:text-primary-700 transition">Dasbor Reviewer</a></li>
-            <li><a href="dompet.html" class="hover:text-primary-700 transition">Dompet &amp; Penarikan</a></li>
-            <li><a href="perusahaan.html" class="hover:text-primary-700 transition">Portal Perusahaan</a></li>
-          </ul>
-        </div>
-
-        <!-- Kolom 3: Legal & Kebijakan -->
-        <div>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Legal &amp; Kebijakan</h3>
-          <ul class="space-y-2.5 text-sm text-slate-600">
-            <li><a href="syarat-ketentuan.html" class="hover:text-primary-700 transition">Syarat &amp; Ketentuan</a></li>
-            <li><a href="kebijakan-privasi.html" class="hover:text-primary-700 transition">Kebijakan Privasi</a></li>
-            <li><a href="kebijakan-dana.html" class="hover:text-primary-700 transition">Kebijakan Dana &amp; Refund</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-        <p>&copy; <span id="year-now">2026</span> www.goona.my.id. Seluruh hak cipta dilindungi undang-undang.</p>
-        <p>Kepatuhan Perlindungan Data Pribadi &amp; Verifikasi Rekening Terpadu</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ==================== JAVASCRIPT ==================== -->
   <script>
-    // Inisialisasi ikon Lucide
-    if (window.lucide) {
-      window.lucide.createIcons();
+    lucide.createIcons();
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      limit,
+      getDocs,
+      getCountFromServer
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAa_EhwILQsTrJBKocpvT8gHTholmCLMTY",
+      authDomain: "goona-app.firebaseapp.com",
+      projectId: "goona-app",
+      storageBucket: "goona-app.firebasestorage.app",
+      messagingSenderId: "315162973072",
+      appId: "1:315162973072:web:bd7244e1bfc13ce1ae1915",
+      measurementId: "G-GXVPP73QCK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+
+    function animateCounter(el, target) {
+      const safeTarget = Math.max(0, Number(target) || 0);
+      if (safeTarget === 0) {
+        el.textContent = "0";
+        return;
+      }
+      const duration = 700;
+      const startTime = performance.now();
+      function step(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * safeTarget).toLocaleString("id-ID");
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
     }
 
-    // Tahun otomatis pada footer
-    const yearEl = document.getElementById('year-now');
-    if (yearEl) {
-      yearEl.textContent = new Date().getFullYear();
+    function escapeHtml(text = "") {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    // Toggle navigasi mobile
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const iconOpen = document.getElementById('menu-icon-open');
-    const iconClose = document.getElementById('menu-icon-close');
-
-    function toggleMobileNav(forceState) {
-      if (!mobileMenu || !mobileMenuBtn) return;
-      const nextState = typeof forceState === 'boolean'
-        ? forceState
-        : mobileMenuBtn.getAttribute('aria-expanded') !== 'true';
-
-      mobileMenu.classList.toggle('hidden', !nextState);
-      mobileMenuBtn.setAttribute('aria-expanded', String(nextState));
-      if (iconOpen) iconOpen.classList.toggle('hidden', nextState);
-      if (iconClose) iconClose.classList.toggle('hidden', !nextState);
+    function buildPlaceholderCard(indexLabel) {
+      return `
+        <div aria-disabled="true" class="mission-card select-none cursor-not-allowed rounded-3xl border border-dashed border-slate-300 bg-white/80 p-6 shadow-sm">
+          <div class="flex items-center justify-between gap-2">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
+              <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse"></span>
+              Papan #${indexLabel}
+            </span>
+            <span class="text-xs font-medium text-slate-400">Kosong</span>
+          </div>
+          <div class="mt-5 space-y-3">
+            <div class="shimmer-bar h-5 w-2/3 rounded-lg bg-slate-200/80"></div>
+            <div class="shimmer-bar h-3.5 w-full rounded-md bg-slate-100"></div>
+            <div class="shimmer-bar h-3.5 w-4/5 rounded-md bg-slate-100"></div>
+          </div>
+          <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-400">
+            <span class="inline-flex items-center gap-1.5">
+              <i data-lucide="clock" class="h-3.5 w-3.5 animate-spin" style="animation-duration: 7s;"></i>
+              Menunggu iklan masuk
+            </span>
+            <span>Belum aktif</span>
+          </div>
+        </div>
+      `;
     }
 
-    if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener('click', () => toggleMobileNav());
+    function buildActiveMissionCard(docItem, idx) {
+      const data = docItem.data() || {};
+      const title = escapeHtml(data.judul || data.title || `Iklan #${idx + 1}`);
+      const summary = escapeHtml(data.ringkasan || data.deskripsi || "Buka halaman iklan, baca penjelasan, lalu jawab soal.");
+      const targetUrl = `misi.html?id=${encodeURIComponent(docItem.id)}`;
+
+      return `
+        <button
+          type="button"
+          data-mission-url="${targetUrl}"
+          class="mission-card is-active group w-full text-left rounded-3xl border border-slate-200 bg-white p-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+              <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+              Misi #${idx + 1}
+            </span>
+            <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 transition-transform group-hover:translate-x-0.5">
+              Buka Iklan &amp; Soal
+              <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+            </span>
+          </div>
+
+          <h3 class="mt-4 text-lg font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">
+            ${title}
+          </h3>
+          <p class="mt-1.5 line-clamp-2 text-sm text-slate-500">
+            ${summary}
+          </p>
+
+          <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-3.5 text-xs font-medium text-slate-500">
+            <span>Iklan + Penjelasan + Soal</span>
+            <span class="rounded-md bg-slate-100 px-2 py-0.5 font-semibold text-slate-700">
+              ${currentUser ? "Klik Masuk" : "Login Dulu"}
+            </span>
+          </div>
+        </button>
+      `;
     }
 
-    document.querySelectorAll('.mobile-nav-link').forEach((link) => {
-      link.addEventListener('click', () => toggleMobileNav(false));
+    async function loadViewerCount() {
+      const countEl = document.getElementById("viewer-count");
+      try {
+        const usersRef = collection(db, "users");
+        const snapshot = await getCountFromServer(usersRef);
+        animateCounter(countEl, snapshot.data().count);
+      } catch {
+        animateCounter(countEl, 0);
+      }
+    }
+
+    async function loadMissions() {
+      const gridEl = document.getElementById("mission-grid");
+      const badgeEl = document.getElementById("mission-status-badge");
+
+      try {
+        const campaignsRef = collection(db, "campaigns");
+        const q = query(campaignsRef, where("status", "==", "active"), limit(10));
+        const snap = await getDocs(q);
+        const docs = snap.docs;
+
+        if (!docs.length) {
+          gridEl.innerHTML = buildPlaceholderCard("01") + buildPlaceholderCard("02");
+          badgeEl.textContent = "2 Slot Kosong";
+          lucide.createIcons();
+          return;
+        }
+
+        badgeEl.textContent = `${docs.length} Misi Tersedia`;
+        gridEl.innerHTML = docs.map((d, i) => buildActiveMissionCard(d, i)).join("");
+        lucide.createIcons();
+
+        gridEl.querySelectorAll("[data-mission-url]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const url = btn.getAttribute("data-mission-url");
+            if (!currentUser) {
+              const nextPath = encodeURIComponent(url);
+              window.location.href = `auth.html?next=${nextPath}`;
+              return;
+            }
+            window.location.href = url;
+          });
+        });
+      } catch {
+        gridEl.innerHTML = buildPlaceholderCard("01") + buildPlaceholderCard("02");
+        badgeEl.textContent = "2 Slot Kosong";
+        lucide.createIcons();
+      }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      const authNav = document.getElementById("auth-nav");
+      if (user) {
+        authNav.innerHTML = `
+          <a href="reviewer.html" class="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50">
+            Akun Saya
+          </a>
+          <a href="dompet.html" class="rounded-xl bg-emerald-600 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-emerald-500">
+            Saldo
+          </a>
+        `;
+      } else {
+        authNav.innerHTML = `
+          <a href="auth.html" class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">
+            Masuk
+          </a>
+          <a href="auth.html?mode=register" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600">
+            Daftar
+          </a>
+        `;
+      }
+      loadMissions();
     });
 
-    // Membaca jumlah reviewer terdaftar secara jujur (default 0 jika belum ada pendaftaran)
-    function renderRegisteredReviewerCount() {
-      const countEl = document.getElementById('registered-reviewer-count');
-      if (!countEl) return;
-
-      let totalRegistered = 0;
-      try {
-        const storedCount = localStorage.getItem('goona_registered_reviewers');
-        if (storedCount !== null) {
-          const parsed = parseInt(storedCount, 10);
-          if (!Number.isNaN(parsed) && parsed >= 0) {
-            totalRegistered = parsed;
-          }
-        }
-      } catch (err) {
-        console.warn('Tidak dapat membaca data penghitung lokal:', err);
-      }
-
-      countEl.textContent = totalRegistered.toLocaleString('id-ID');
-    }
-
-    renderRegisteredReviewerCount();
+    loadViewerCount();
+    loadMissions();
   </script>
 </body>
 </html>
