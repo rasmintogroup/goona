@@ -2,41 +2,34 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>goona.my.id — Papan Misi &amp; Viewer Terdaftar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>goona.my.id — Mulai Langkahmu Sebagai Reviewer</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     @keyframes floatSlow {
       0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
+      50% { transform: translateY(-4px); }
     }
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.45; transform: scale(1); }
-      50% { opacity: 0.85; transform: scale(1.04); }
+    @keyframes pulseSoft {
+      0%, 100% { opacity: 0.45; }
+      50% { opacity: 0.9; }
     }
     @keyframes shimmerSweep {
       0% { transform: translateX(-120%); }
       100% { transform: translateX(220%); }
     }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
     .animate-float-slow {
-      animation: floatSlow 4.5s ease-in-out infinite;
+      animation: floatSlow 4s ease-in-out infinite;
     }
-    .animate-pulse-glow {
-      animation: pulseGlow 3.6s ease-in-out infinite;
+    .animate-pulse-soft {
+      animation: pulseSoft 2.4s ease-in-out infinite;
     }
-    .animate-fade-up {
-      animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-    .shimmer-bar {
+    .shimmer-box {
       position: relative;
       overflow: hidden;
     }
-    .shimmer-bar::after {
+    .shimmer-box::after {
       content: "";
       position: absolute;
       inset: 0;
@@ -47,179 +40,111 @@
         rgba(255, 255, 255, 0.55),
         transparent
       );
-      animation: shimmerSweep 2.6s ease-in-out infinite;
-    }
-    .mission-card {
-      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-                  box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-                  border-color 0.28s ease;
-    }
-    .mission-card.is-active:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 35px -15px rgba(15, 23, 42, 0.16);
-      border-color: #10b981;
+      animation: shimmerSweep 2.4s ease-in-out infinite;
     }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-emerald-200 selection:text-slate-950">
-  <!-- Dekorasi Latar Halus -->
-  <div class="pointer-events-none fixed inset-0 overflow-hidden -z-10">
-    <div class="animate-pulse-glow absolute -top-24 -right-24 h-80 w-80 rounded-full bg-emerald-200/50 blur-3xl"></div>
-    <div class="animate-pulse-glow absolute top-1/3 -left-28 h-72 w-72 rounded-full bg-teal-200/40 blur-3xl" style="animation-delay: 1.4s;"></div>
+<body class="h-dvh w-screen overflow-hidden select-none bg-slate-100 text-slate-900 antialiased flex flex-col">
+  <!-- Latar Segar Halus -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="animate-pulse-soft absolute -top-24 -right-24 h-72 w-72 rounded-full bg-emerald-200/60 blur-3xl"></div>
+    <div class="animate-pulse-soft absolute bottom-16 -left-24 h-72 w-72 rounded-full bg-teal-200/50 blur-3xl"></div>
   </div>
 
-  <!-- Navbar Ringkas -->
-  <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/85 backdrop-blur-md">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
-      <a href="index.html" class="group flex items-center gap-2.5">
-        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white font-bold text-lg shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:bg-emerald-600">
-          G
-        </span>
-        <span class="text-lg font-extrabold tracking-tight text-slate-900">
-          goona<span class="text-emerald-600">.my.id</span>
-        </span>
-      </a>
-
-      <div id="auth-nav" class="flex items-center gap-2.5">
-        <a href="auth.html" class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">
-          Masuk
-        </a>
-        <a href="auth.html?mode=register" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 active:scale-[0.99]">
-          Daftar
-        </a>
+  <!-- Header: Tagline + Sudut Kanan Atas (Icon Orang & Angka Reviewer) -->
+  <header class="shrink-0 z-20 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between gap-2 px-4 py-2.5">
+      <div class="min-w-0">
+        <div class="text-[11px] font-extrabold tracking-tight text-emerald-700">goona.my.id</div>
+        <h1 class="truncate text-sm font-extrabold text-slate-900">
+          Mulai Langkahmu Sebagai Reviewer
+        </h1>
       </div>
+
+      <a
+        href="auth.html"
+        class="animate-float-slow shrink-0 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-emerald-800 shadow-sm transition hover:bg-emerald-100"
+        title="Reviewer Terdaftar"
+      >
+        <i data-lucide="user-check" class="h-4 w-4 text-emerald-600"></i>
+        <span id="reviewer-count" class="text-xs font-black tabular-nums">0</span>
+      </a>
     </div>
   </header>
 
-  <main class="mx-auto max-w-6xl px-4 pt-8 pb-16 sm:px-6 sm:pt-10">
-    <!-- Hero Ringkas + Penghitung Viewer Terdaftar -->
-    <section class="animate-fade-up grid gap-6 lg:grid-cols-12 lg:items-center">
-      <div class="lg:col-span-7 space-y-4">
-        <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/90 px-3.5 py-1 text-xs font-semibold text-emerald-700">
-          <span class="h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
-          <span>Papan Misi Aktif</span>
+  <!-- Area Tengah: 1 Kartu Penuh Ke Bawah (Tanpa Scroll Halaman) -->
+  <main class="relative flex-1 min-h-0 mx-auto w-full max-w-md px-3.5 py-2.5 flex flex-col">
+    <!-- Navigasi Geser Kartu (Jika Ada > 1 Iklan) -->
+    <div id="card-pager" class="hidden shrink-0 mb-2 flex items-center justify-between text-xs font-semibold text-slate-600">
+      <button id="prev-card-btn" type="button" class="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 hover:bg-slate-50">
+        <i data-lucide="chevron-left" class="h-3.5 w-3.5"></i>
+        <span>Prev</span>
+      </button>
+      <span id="card-index-label" class="tabular-nums text-[11px] text-slate-500">1 / 1</span>
+      <button id="next-card-btn" type="button" class="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 hover:bg-slate-50">
+        <span>Next</span>
+        <i data-lucide="chevron-right" class="h-3.5 w-3.5"></i>
+      </button>
+    </div>
+
+    <!-- Wadah 1 Kartu Penuh -->
+    <section id="single-card-stage" class="flex-1 min-h-0 flex flex-col">
+      <!-- Placeholder Kosong Saat Belum Ada Kampanye Aktif -->
+      <div class="flex-1 min-h-0 rounded-3xl border border-dashed border-slate-300 bg-white/85 p-4 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold text-slate-500">
+            <span class="h-2 w-2 rounded-full bg-slate-400 animate-ping"></span>
+            Slot Iklan Kosong
+          </span>
+          <span class="text-[11px] font-semibold text-slate-400">Menunggu Iklan</span>
         </div>
 
-        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl leading-[1.12]">
-          Pilih Iklan, Jawab Soal, <span class="text-emerald-600">Kumpulkan Hasilnya.</span>
-        </h1>
-
-        <div class="flex flex-wrap items-center gap-3 pt-1">
-          <a href="#papan-misi" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-500 hover:-translate-y-0.5">
-            <i data-lucide="layout-grid" class="h-4 w-4"></i>
-            <span>Lihat Papan Misi</span>
-          </a>
-          <a href="perusahaan.html" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">
-            <i data-lucide="megaphone" class="h-4 w-4 text-slate-500"></i>
-            <span>Pasang Iklan</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Kartu Daya Tarik Utama: Jumlah Viewer Terdaftar -->
-      <div class="lg:col-span-5">
-        <div class="animate-float-slow rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xl shadow-slate-900/5">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Viewer Terdaftar
-            </span>
-            <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
-              <i data-lucide="users" class="h-5 w-5"></i>
-            </span>
+        <div class="my-2 flex-1 min-h-0 flex flex-col justify-center gap-3">
+          <div class="shimmer-box h-40 w-full rounded-2xl bg-slate-200/80 flex items-center justify-center text-slate-400">
+            <i data-lucide="image" class="h-8 w-8 animate-pulse"></i>
           </div>
-
-          <div class="mt-4 flex items-baseline gap-3">
-            <span id="viewer-count" class="text-5xl font-black tracking-tight text-slate-900 sm:text-6xl">
-              0
-            </span>
-            <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-              Akun Bergabung
-            </span>
-          </div>
-
-          <div class="mt-5 grid grid-cols-3 gap-2 border-t border-slate-100 pt-4 text-center">
-            <div class="rounded-xl bg-slate-50 p-2.5 transition hover:bg-emerald-50/70">
-              <div class="text-xs font-bold text-slate-800">2 Kolom</div>
-              <div class="text-[11px] text-slate-400">Papan Misi</div>
-            </div>
-            <div class="rounded-xl bg-slate-50 p-2.5 transition hover:bg-emerald-50/70">
-              <div class="text-xs font-bold text-slate-800">1 Klik</div>
-              <div class="text-[11px] text-slate-400">Buka Iklan</div>
-            </div>
-            <div class="rounded-xl bg-slate-50 p-2.5 transition hover:bg-emerald-50/70">
-              <div class="text-xs font-bold text-slate-800">3 Soal</div>
-              <div class="text-[11px] text-slate-400">Verifikasi</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Grid 2 Papan Berbaris ke Bawah -->
-    <section id="papan-misi" class="mt-12 animate-fade-up" style="animation-delay: 0.12s;">
-      <div class="mb-5 flex items-center justify-between">
-        <h2 class="text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
-          Papan Misi
-        </h2>
-        <span id="mission-status-badge" class="rounded-full bg-slate-200/80 px-3 py-1 text-xs font-semibold text-slate-600">
-          2 Slot Kosong
-        </span>
-      </div>
-
-      <!-- Susunan 2 Kolom Berbaris ke Bawah -->
-      <div id="mission-grid" class="grid grid-cols-1 gap-5 md:grid-cols-2">
-        <!-- Placeholder 1 (Tidak Bisa Diklik) -->
-        <div aria-disabled="true" class="mission-card select-none cursor-not-allowed rounded-3xl border border-dashed border-slate-300 bg-white/80 p-6 shadow-sm">
-          <div class="flex items-center justify-between gap-2">
-            <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
-              <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse"></span>
-              Papan #01
-            </span>
-            <span class="text-xs font-medium text-slate-400">Kosong</span>
-          </div>
-
-          <div class="mt-5 space-y-3">
-            <div class="shimmer-bar h-5 w-2/3 rounded-lg bg-slate-200/80"></div>
-            <div class="shimmer-bar h-3.5 w-full rounded-md bg-slate-100"></div>
-            <div class="shimmer-bar h-3.5 w-4/5 rounded-md bg-slate-100"></div>
-          </div>
-
-          <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-400">
-            <span class="inline-flex items-center gap-1.5">
-              <i data-lucide="clock" class="h-3.5 w-3.5 animate-spin" style="animation-duration: 7s;"></i>
-              Menunggu iklan masuk
-            </span>
-            <span>Belum aktif</span>
-          </div>
+          <div class="shimmer-box h-4 w-3/4 rounded-md bg-slate-200/80"></div>
+          <div class="shimmer-box h-3 w-full rounded-md bg-slate-100"></div>
+          <div class="shimmer-box h-3 w-5/6 rounded-md bg-slate-100"></div>
         </div>
 
-        <!-- Placeholder 2 (Tidak Bisa Diklik) -->
-        <div aria-disabled="true" class="mission-card select-none cursor-not-allowed rounded-3xl border border-dashed border-slate-300 bg-white/80 p-6 shadow-sm">
-          <div class="flex items-center justify-between gap-2">
-            <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
-              <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse" style="animation-delay: 0.6s;"></span>
-              Papan #02
-            </span>
-            <span class="text-xs font-medium text-slate-400">Kosong</span>
-          </div>
-
-          <div class="mt-5 space-y-3">
-            <div class="shimmer-bar h-5 w-3/5 rounded-lg bg-slate-200/80"></div>
-            <div class="shimmer-bar h-3.5 w-11/12 rounded-md bg-slate-100"></div>
-            <div class="shimmer-bar h-3.5 w-3/4 rounded-md bg-slate-100"></div>
-          </div>
-
-          <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-400">
-            <span class="inline-flex items-center gap-1.5">
-              <i data-lucide="clock" class="h-3.5 w-3.5 animate-spin" style="animation-duration: 7s;"></i>
-              Menunggu iklan masuk
-            </span>
-            <span>Belum aktif</span>
-          </div>
+        <div class="rounded-2xl border border-slate-100 bg-slate-50 p-3 text-center text-xs font-semibold text-slate-400">
+          Belum ada konten perusahaan aktif saat ini
         </div>
       </div>
     </section>
   </main>
+
+  <!-- Navigasi Ikon Bawah (Hanya Ikon Inti & Sudut Kanan Bawah untuk Profil/Menu) -->
+  <nav class="shrink-0 z-20 border-t border-slate-200/90 bg-white/95 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-around px-4 py-2">
+      <a
+        href="index.html"
+        aria-label="Beranda Iklan"
+        class="flex h-11 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 transition"
+      >
+        <i data-lucide="home" class="h-5 w-5"></i>
+      </a>
+
+      <a
+        href="dompet.html"
+        aria-label="Dompet"
+        class="flex h-11 w-14 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+      >
+        <i data-lucide="wallet" class="h-5 w-5"></i>
+      </a>
+
+      <!-- Sudut Kanan Bawah: Ikon Orang untuk Profil Reviewer / Perusahaan & Halaman Lain -->
+      <a
+        id="profile-nav-link"
+        href="profil.html"
+        aria-label="Profil Reviewer atau Perusahaan"
+        class="flex h-11 w-14 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+      >
+        <i data-lucide="user" class="h-5 w-5"></i>
+      </a>
+    </div>
+  </nav>
 
   <script>
     lucide.createIcons();
@@ -232,11 +157,13 @@
     import {
       getFirestore,
       collection,
+      doc,
+      getDoc,
+      getDocs,
       query,
       where,
       limit,
-      getDocs,
-      getCountFromServer
+      onSnapshot
     } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -254,24 +181,13 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    const MAX_DESC_LENGTH = 150;
     let currentUser = null;
-
-    function animateCounter(el, target) {
-      const safeTarget = Math.max(0, Number(target) || 0);
-      if (safeTarget === 0) {
-        el.textContent = "0";
-        return;
-      }
-      const duration = 700;
-      const startTime = performance.now();
-      function step(now) {
-        const progress = Math.min((now - startTime) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.round(eased * safeTarget).toLocaleString("id-ID");
-        if (progress < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
+    let userProfile = null;
+    let campaigns = [];
+    let currentIndex = 0;
+    let countdownTimer = null;
+    let secondsLeft = 7;
 
     function escapeHtml(text = "") {
       return String(text)
@@ -282,149 +198,340 @@
         .replace(/'/g, "&#039;");
     }
 
-    function buildPlaceholderCard(indexLabel) {
-      return `
-        <div aria-disabled="true" class="mission-card select-none cursor-not-allowed rounded-3xl border border-dashed border-slate-300 bg-white/80 p-6 shadow-sm">
-          <div class="flex items-center justify-between gap-2">
-            <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
-              <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse"></span>
-              Papan #${indexLabel}
-            </span>
-            <span class="text-xs font-medium text-slate-400">Kosong</span>
-          </div>
-          <div class="mt-5 space-y-3">
-            <div class="shimmer-bar h-5 w-2/3 rounded-lg bg-slate-200/80"></div>
-            <div class="shimmer-bar h-3.5 w-full rounded-md bg-slate-100"></div>
-            <div class="shimmer-bar h-3.5 w-4/5 rounded-md bg-slate-100"></div>
-          </div>
-          <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-400">
-            <span class="inline-flex items-center gap-1.5">
-              <i data-lucide="clock" class="h-3.5 w-3.5 animate-spin" style="animation-duration: 7s;"></i>
-              Menunggu iklan masuk
-            </span>
-            <span>Belum aktif</span>
-          </div>
-        </div>
-      `;
-    }
-
-    function buildActiveMissionCard(docItem, idx) {
-      const data = docItem.data() || {};
-      const title = escapeHtml(data.judul || data.title || `Iklan #${idx + 1}`);
-      const summary = escapeHtml(data.ringkasan || data.deskripsi || "Buka halaman iklan, baca penjelasan, lalu jawab soal.");
-      const targetUrl = `misi.html?id=${encodeURIComponent(docItem.id)}`;
-
-      return `
-        <button
-          type="button"
-          data-mission-url="${targetUrl}"
-          class="mission-card is-active group w-full text-left rounded-3xl border border-slate-200 bg-white p-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        >
-          <div class="flex items-center justify-between gap-2">
-            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-              <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-              Misi #${idx + 1}
-            </span>
-            <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 transition-transform group-hover:translate-x-0.5">
-              Buka Iklan &amp; Soal
-              <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
-            </span>
-          </div>
-
-          <h3 class="mt-4 text-lg font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">
-            ${title}
-          </h3>
-          <p class="mt-1.5 line-clamp-2 text-sm text-slate-500">
-            ${summary}
-          </p>
-
-          <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-3.5 text-xs font-medium text-slate-500">
-            <span>Iklan + Penjelasan + Soal</span>
-            <span class="rounded-md bg-slate-100 px-2 py-0.5 font-semibold text-slate-700">
-              ${currentUser ? "Klik Masuk" : "Login Dulu"}
-            </span>
-          </div>
-        </button>
-      `;
-    }
-
-    async function loadViewerCount() {
-      const countEl = document.getElementById("viewer-count");
+    function sanitizeUrl(rawUrl = "") {
       try {
-        const usersRef = collection(db, "users");
-        const snapshot = await getCountFromServer(usersRef);
-        animateCounter(countEl, snapshot.data().count);
-      } catch {
-        animateCounter(countEl, 0);
-      }
-    }
-
-    async function loadMissions() {
-      const gridEl = document.getElementById("mission-grid");
-      const badgeEl = document.getElementById("mission-status-badge");
-
-      try {
-        const campaignsRef = collection(db, "campaigns");
-        const q = query(campaignsRef, where("status", "==", "active"), limit(10));
-        const snap = await getDocs(q);
-        const docs = snap.docs;
-
-        if (!docs.length) {
-          gridEl.innerHTML = buildPlaceholderCard("01") + buildPlaceholderCard("02");
-          badgeEl.textContent = "2 Slot Kosong";
-          lucide.createIcons();
-          return;
+        const parsed = new URL(rawUrl);
+        if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+          return parsed.href;
         }
+      } catch {}
+      return "";
+    }
 
-        badgeEl.textContent = `${docs.length} Misi Tersedia`;
-        gridEl.innerHTML = docs.map((d, i) => buildActiveMissionCard(d, i)).join("");
-        lucide.createIcons();
+    function truncateDesc(text = "") {
+      const clean = String(text).trim();
+      if (!clean) return "Konten promosi perusahaan.";
+      return clean.length > MAX_DESC_LENGTH
+        ? clean.slice(0, MAX_DESC_LENGTH).trimEnd() + "..."
+        : clean;
+    }
 
-        gridEl.querySelectorAll("[data-mission-url]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const url = btn.getAttribute("data-mission-url");
-            if (!currentUser) {
-              const nextPath = encodeURIComponent(url);
-              window.location.href = `auth.html?next=${nextPath}`;
-              return;
+    function checkEligibility(campaign) {
+      if (!currentUser) {
+        return {
+          canReview: false,
+          reason: "Masuk / daftar dulu untuk menekan & menjawab soal"
+        };
+      }
+
+      const targetCategory = (campaign.kategori || campaign.category || "").toString().trim().toLowerCase();
+      if (targetCategory && targetCategory !== "semua" && targetCategory !== "all") {
+        const userCat = (userProfile?.kategori || userProfile?.category || "").toString().trim().toLowerCase();
+        if (!userCat || userCat !== targetCategory) {
+          return {
+            canReview: false,
+            reason: `Kategori tidak sesuai (Butuh: ${campaign.kategori || campaign.category})`
+          };
+        }
+      }
+
+      const targetLocation = (campaign.lokasi || campaign.location || "").toString().trim().toLowerCase();
+      if (targetLocation && targetLocation !== "semua" && targetLocation !== "nasional") {
+        const userLoc = (userProfile?.lokasi || userProfile?.kota || userProfile?.location || "")
+          .toString()
+          .trim()
+          .toLowerCase();
+        if (!userLoc || !userLoc.includes(targetLocation)) {
+          return {
+            canReview: false,
+            reason: `Lokasi belum sesuai target (${campaign.lokasi || campaign.location})`
+          };
+        }
+      }
+
+      return {
+        canReview: true,
+        reason: "Sesuai kategori — siap di-review"
+      };
+    }
+
+    function startSevenSecondTimer(canReview) {
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
+
+      secondsLeft = 7;
+      const timerBadge = document.getElementById("review-timer-badge");
+      const btnA = document.getElementById("opt-a-btn");
+      const btnB = document.getElementById("opt-b-btn");
+
+      const updateButtonsState = () => {
+        const unlocked = canReview && secondsLeft <= 0;
+        if (btnA) {
+          btnA.disabled = !unlocked;
+          btnA.classList.toggle("opacity-50", !unlocked);
+          btnA.classList.toggle("cursor-not-allowed", !unlocked);
+        }
+        if (btnB) {
+          btnB.disabled = !unlocked;
+          btnB.classList.toggle("opacity-50", !unlocked);
+          btnB.classList.toggle("cursor-not-allowed", !unlocked);
+        }
+        if (timerBadge) {
+          if (!canReview) {
+            timerBadge.textContent = "Terkunci";
+            timerBadge.className = "rounded-full bg-rose-100 px-2.5 py-0.5 text-[11px] font-bold text-rose-700";
+          } else if (secondsLeft > 0) {
+            timerBadge.textContent = `Review ${secondsLeft}d`;
+            timerBadge.className = "tabular-nums rounded-full bg-amber-100 px-2.5 py-0.5 text-[11px] font-bold text-amber-800";
+          } else {
+            timerBadge.textContent = "Siap Review";
+            timerBadge.className = "rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700";
+          }
+        }
+      };
+
+      updateButtonsState();
+
+      if (!canReview) return;
+
+      countdownTimer = setInterval(() => {
+        secondsLeft -= 1;
+        updateButtonsState();
+        if (secondsLeft <= 0) {
+          clearInterval(countdownTimer);
+          countdownTimer = null;
+        }
+      }, 1000);
+    }
+
+    function renderActiveCard() {
+      const stage = document.getElementById("single-card-stage");
+      const pager = document.getElementById("card-pager");
+      const indexLabel = document.getElementById("card-index-label");
+
+      if (!campaigns.length) {
+        pager.classList.add("hidden");
+        return;
+      }
+
+      if (currentIndex < 0) currentIndex = 0;
+      if (currentIndex >= campaigns.length) currentIndex = campaigns.length - 1;
+
+      if (campaigns.length > 1) {
+        pager.classList.remove("hidden");
+        indexLabel.textContent = `${currentIndex + 1} / ${campaigns.length}`;
+      } else {
+        pager.classList.add("hidden");
+      }
+
+      const item = campaigns[currentIndex];
+      const data = item.data() || {};
+      const elig = checkEligibility(data);
+
+      const title = escapeHtml(data.judul || data.title || "Konten Perusahaan");
+      const desc = escapeHtml(truncateDesc(data.deskripsi || data.description || ""));
+      const location = escapeHtml(data.lokasi || data.location || "Semua Wilayah");
+      const category = escapeHtml(data.kategori || data.category || "Umum");
+      const safeImg = sanitizeUrl(data.gambarUrl || data.imageUrl || data.gambar || "");
+      const safeLink = sanitizeUrl(data.linkPenjualan || data.salesUrl || data.link || "");
+      const questionText = escapeHtml(data.pertanyaan || data.question || "Apakah informasi iklan ini jelas?");
+      const optionA = escapeHtml(data.opsiA || data.optionA || "A. Ya, jelas");
+      const optionB = escapeHtml(data.opsiB || data.optionB || "B. Kurang jelas");
+
+      const statusPillClass = elig.canReview
+        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+        : "bg-amber-50 text-amber-800 border-amber-200";
+
+      const statusText = elig.canReview
+        ? "Bisa ditekan & di-review"
+        : escapeHtml(elig.reason);
+
+      stage.innerHTML = `
+        <article class="flex-1 min-h-0 rounded-3xl border border-slate-200 bg-white p-3.5 shadow-lg shadow-slate-900/5 flex flex-col justify-between gap-2">
+          <!-- Baris Atas: Kategori & Status Bisa/Tidak Ditekan -->
+          <div class="shrink-0 flex items-center justify-between gap-2">
+            <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold text-slate-700">
+              ${category}
+            </span>
+            <span class="truncate rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${statusPillClass}">
+              ${statusText}
+            </span>
+          </div>
+
+          <!-- Gambar Konten Perusahaan -->
+          <div class="relative shrink-0 h-36 w-full overflow-hidden rounded-2xl bg-slate-100 border border-slate-200/70">
+            ${
+              safeImg
+                ? `<img src="${safeImg}" alt="${title}" class="h-full w-full object-cover" loading="lazy" />`
+                : `<div class="flex h-full w-full items-center justify-center text-slate-400">
+                     <i data-lucide="image" class="h-8 w-8"></i>
+                   </div>`
             }
-            window.location.href = url;
-          });
+          </div>
+
+          <!-- Judul, Deskripsi, Lokasi & Link Penjualan -->
+          <div class="min-h-0 flex-1 flex flex-col justify-center gap-1.5">
+            <h2 class="truncate text-base font-extrabold text-slate-900">${title}</h2>
+            <p class="text-xs leading-snug text-slate-600 line-clamp-2">${desc}</p>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-0.5 text-[11px]">
+              <span class="inline-flex items-center gap-1 font-semibold text-slate-500 truncate">
+                <i data-lucide="map-pin" class="h-3.5 w-3.5 text-emerald-600 shrink-0"></i>
+                <span class="truncate">${location}</span>
+              </span>
+
+              ${
+                safeLink
+                  ? `<a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-bold text-emerald-700 hover:underline shrink-0">
+                       <span>Link Penjualan</span>
+                       <i data-lucide="external-link" class="h-3 w-3"></i>
+                     </a>`
+                  : `<span class="text-slate-400">Tanpa link</span>`
+              }
+            </div>
+          </div>
+
+          <!-- 1 Pertanyaan Pilihan Ganda A atau B + Timer 7 Detik -->
+          <div class="shrink-0 rounded-2xl border border-slate-200/90 bg-slate-50 p-2.5">
+            <div class="flex items-center justify-between gap-2 mb-1.5">
+              <span class="text-[11px] font-extrabold text-slate-800 line-clamp-1">${questionText}</span>
+              <span id="review-timer-badge" class="shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-[11px] font-bold text-amber-800">
+                Review 7d
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <button
+                id="opt-a-btn"
+                type="button"
+                data-answer="A"
+                disabled
+                class="rounded-xl border border-slate-300 bg-white px-2.5 py-2 text-left text-xs font-bold text-slate-800 transition hover:border-emerald-500 hover:bg-emerald-50 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed truncate"
+              >
+                ${optionA}
+              </button>
+              <button
+                id="opt-b-btn"
+                type="button"
+                data-answer="B"
+                disabled
+                class="rounded-xl border border-slate-300 bg-white px-2.5 py-2 text-left text-xs font-bold text-slate-800 transition hover:border-emerald-500 hover:bg-emerald-50 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed truncate"
+              >
+                ${optionB}
+              </button>
+            </div>
+
+            <div id="answer-feedback" class="mt-1.5 min-h-[16px] text-[11px] font-semibold text-slate-500">
+              ${!currentUser ? `<a href="auth.html" class="text-emerald-700 underline">Masuk dulu untuk menjawab</a>` : ""}
+            </div>
+          </div>
+        </article>
+      `;
+
+      lucide.createIcons();
+      startSevenSecondTimer(elig.canReview);
+
+      ["opt-a-btn", "opt-b-btn"].forEach((id) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.addEventListener("click", () => {
+          if (!elig.canReview || secondsLeft > 0) return;
+          const chosen = btn.getAttribute("data-answer");
+          const feedback = document.getElementById("answer-feedback");
+          const kunci = (data.kunciJawaban || data.correctAnswer || "A").toString().trim().toUpperCase();
+
+          btnA = document.getElementById("opt-a-btn");
+          btnB = document.getElementById("opt-b-btn");
+          if (btnA) btnA.disabled = true;
+          if (btnB) btnB.disabled = true;
+
+          if (feedback) {
+            if (chosen === kunci) {
+              feedback.className = "mt-1.5 min-h-[16px] text-[11px] font-bold text-emerald-700";
+              feedback.textContent = `Jawaban ${chosen} tercatat. Review selesai!`;
+            } else {
+              feedback.className = "mt-1.5 min-h-[16px] text-[11px] font-bold text-amber-700";
+              feedback.textContent = `Jawaban ${chosen} tercatat (belum sesuai kunci).`;
+            }
+          }
         });
+      });
+    }
+
+    function listenReviewerCount() {
+      const countEl = document.getElementById("reviewer-count");
+      try {
+        const q = query(collection(db, "users"), where("role", "==", "reviewer"));
+        onSnapshot(
+          q,
+          (snap) => {
+            countEl.textContent = Number(snap.size || 0).toLocaleString("id-ID");
+          },
+          () => {
+            countEl.textContent = "0";
+          }
+        );
       } catch {
-        gridEl.innerHTML = buildPlaceholderCard("01") + buildPlaceholderCard("02");
-        badgeEl.textContent = "2 Slot Kosong";
-        lucide.createIcons();
+        countEl.textContent = "0";
       }
     }
 
-    onAuthStateChanged(auth, (user) => {
-      currentUser = user;
-      const authNav = document.getElementById("auth-nav");
-      if (user) {
-        authNav.innerHTML = `
-          <a href="reviewer.html" class="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50">
-            Akun Saya
-          </a>
-          <a href="dompet.html" class="rounded-xl bg-emerald-600 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-emerald-500">
-            Saldo
-          </a>
-        `;
-      } else {
-        authNav.innerHTML = `
-          <a href="auth.html" class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">
-            Masuk
-          </a>
-          <a href="auth.html?mode=register" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600">
-            Daftar
-          </a>
-        `;
+    async function loadActiveCampaigns() {
+      try {
+        const q = query(collection(db, "campaigns"), where("status", "==", "active"), limit(20));
+        const snap = await getDocs(q);
+        campaigns = snap.docs;
+        if (campaigns.length > 0) {
+          currentIndex = 0;
+          renderActiveCard();
+        }
+      } catch {
+        campaigns = [];
       }
-      loadMissions();
+    }
+
+    document.getElementById("prev-card-btn")?.addEventListener("click", () => {
+      if (!campaigns.length) return;
+      currentIndex = (currentIndex - 1 + campaigns.length) % campaigns.length;
+      renderActiveCard();
     });
 
-    loadViewerCount();
-    loadMissions();
+    document.getElementById("next-card-btn")?.addEventListener("click", () => {
+      if (!campaigns.length) return;
+      currentIndex = (currentIndex + 1) % campaigns.length;
+      renderActiveCard();
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      userProfile = null;
+      const profileLink = document.getElementById("profile-nav-link");
+
+      if (user) {
+        try {
+          const userSnap = await getDoc(doc(db, "users", user.uid));
+          if (userSnap.exists()) {
+            userProfile = userSnap.data();
+          }
+        } catch {}
+
+        const role = (userProfile?.role || "").toLowerCase();
+        if (profileLink) {
+          profileLink.href = role === "perusahaan" ? "profil-perusahaan.html" : "profil-reviewer.html";
+        }
+      } else if (profileLink) {
+        profileLink.href = "auth.html";
+      }
+
+      if (campaigns.length > 0) {
+        renderActiveCard();
+      }
+    });
+
+    listenReviewerCount();
+    loadActiveCampaigns();
   </script>
 </body>
 </html>
