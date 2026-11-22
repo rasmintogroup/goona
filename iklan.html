@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GOONA — Pasang Iklan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Latar belakang ragam ikon pekerjaan bernuansa biru elektrik samar */
+    .work-icons-bg {
+      background-color: #f4f7fc;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(29, 78, 216, 0.05) 0%, transparent 45%),
+        url("data:image/svg+xml,%3Csvg width='140' height='140' viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232563eb' stroke-opacity='0.075' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3C!-- Koper kerja --%3E%3Cg transform='translate(16,18) rotate(-12)'%3E%3Crect x='2' y='7' width='20' height='14' rx='2.5'/%3E%3Cpath d='M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/%3E%3Cpath d='M2 12h20'/%3E%3C/g%3E%3C!-- Catatan / checklist review --%3E%3Cg transform='translate(88,16) rotate(14)'%3E%3Crect x='3' y='3' width='16' height='20' rx='2'/%3E%3Cpath d='M7 8h8M7 12h8M7 16h5'/%3E%3C/g%3E%3C!-- Grafik naik --%3E%3Cg transform='translate(54,56) rotate(-8)'%3E%3Cpath d='M3 19V5M3 19h16'/%3E%3Cpath d='m7 14 4-4 3 2 5-6'/%3E%3C/g%3E%3C!-- Lencana / penghargaan kerja --%3E%3Cg transform='translate(20,94) rotate(10)'%3E%3Ccircle cx='12' cy='9' r='6'/%3E%3Cpath d='m9 14.5-1.5 6.5L12 19l4.5 2L15 14.5'/%3E%3C/g%3E%3C!-- Megafon / promosi --%3E%3Cg transform='translate(92,92) rotate(-14)'%3E%3Cpath d='M4 11v2a2 2 0 0 0 2 2h1l5 4V7l-5 4H6a2 2 0 0 0-2 2z'/%3E%3Cpath d='M16 10a4 4 0 0 1 0 6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-size: 100% 100%, 100% 100%, 140px 140px;
+    }
+  </style>
+</head>
+<body class="work-icons-bg h-dvh w-screen overflow-hidden text-slate-900 antialiased flex flex-col">
+  <!-- Header -->
+  <header class="shrink-0 z-20 border-b border-blue-100/90 bg-white/92 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between gap-2 px-4 py-2.5">
+      <div class="min-w-0">
+        <div class="text-xl font-black leading-none tracking-tight text-blue-600">
+          GOONA
+        </div>
+        <p class="mt-1 truncate text-[11px] font-medium text-slate-500">
+          Pasang &amp; Kelola Layanan Iklan
+        </p>
+      </div>
+
+      <span id="campaign-account-badge" class="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] font-bold text-blue-700">
+        Tamu
+      </span>
+    </div>
+  </header>
+
+  <!-- Area Tengah: Bisa Di-Scroll -->
+  <main class="flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-md px-3.5 py-3 space-y-3">
+    <!-- Form Buat Layanan Iklan Baru -->
+    <section class="rounded-3xl border border-blue-100/90 bg-white/95 p-4 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <h1 class="text-xs font-extrabold text-slate-900">Buat Layanan Iklan</h1>
+        <span class="rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-blue-700">
+          1 Soal A/B
+        </span>
+      </div>
+
+      <form id="campaign-form" class="space-y-2.5">
+        <div>
+          <label for="judul-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+            Judul Layanan / Produk
+          </label>
+          <input
+            id="judul-input"
+            type="text"
+            maxlength="80"
+            placeholder="Contoh: Promo Paket Usaha Kopi"
+            required
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label for="deskripsi-input" class="block text-[11px] font-bold text-slate-700">
+              Deskripsi Singkat
+            </label>
+            <span id="desc-counter" class="text-[10px] font-semibold tabular-nums text-slate-400">
+              0/150
+            </span>
+          </div>
+          <textarea
+            id="deskripsi-input"
+            rows="2"
+            maxlength="150"
+            placeholder="Maksimal 150 karakter agar ringkas di layar."
+            required
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+          ></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label for="kategori-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+              Kategori Target
+            </label>
+            <input
+              id="kategori-input"
+              type="text"
+              placeholder="Contoh: Semua / Kuliner"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label for="lokasi-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+              Lokasi
+            </label>
+            <input
+              id="lokasi-input"
+              type="text"
+              placeholder="Contoh: Indonesia"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label for="gambar-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+              URL Gambar (Ideal &lt;= 1,5 MB)
+            </label>
+            <input
+              id="gambar-input"
+              type="url"
+              placeholder="https://..."
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label for="link-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+              Link Penjualan
+            </label>
+            <input
+              id="link-input"
+              type="url"
+              placeholder="https://..."
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="pertanyaan-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+            1 Pertanyaan Pilihan Ganda
+          </label>
+          <input
+            id="pertanyaan-input"
+            type="text"
+            placeholder="Contoh: Apakah informasi produk ini mudah dipahami?"
+            required
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label for="opsi-a-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+              Opsi A
+            </label>
+            <input
+              id="opsi-a-input"
+              type="text"
+              placeholder="A. Ya, jelas"
+              required
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label for="opsi-b-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+              Opsi B
+            </label>
+            <input
+              id="opsi-b-input"
+              type="text"
+              placeholder="B. Kurang jelas"
+              required
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full rounded-xl bg-blue-600 px-3 py-2.5 text-xs font-extrabold text-white transition hover:bg-blue-700 active:scale-[0.99]"
+        >
+          Simpan Layanan Iklan
+        </button>
+      </form>
+
+      <div id="campaign-feedback" class="min-h-[16px] text-[11px] font-semibold text-slate-500"></div>
+    </section>
+
+    <!-- Daftar Layanan Iklan Saya (Kosong Alami Saat Belum Ada Iklan) -->
+    <section class="rounded-3xl border border-blue-100/90 bg-white/95 p-4 shadow-sm space-y-2.5">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xs font-extrabold text-slate-900">Layanan Terpasang</h2>
+        <span id="my-campaigns-count" class="text-[11px] font-semibold tabular-nums text-slate-400">0</span>
+      </div>
+
+      <div id="my-campaigns-list" class="space-y-2">
+        <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 p-5 text-center space-y-1">
+          <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+            <i data-lucide="megaphone" class="h-4 w-4"></i>
+          </div>
+          <p class="text-xs font-bold text-slate-700">
+            Belum ada layanan iklan yang dibuat.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Navigasi Bawah: 5 Ikon -->
+  <nav class="shrink-0 z-20 border-t border-blue-100 bg-white/95 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between px-3 py-2">
+      <!-- 1. Icon Rumah -> index.html -->
+      <a
+        href="index.html"
+        aria-label="Beranda"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="home" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 2. Icon Dompet -> dompet.html -->
+      <a
+        href="dompet.html"
+        aria-label="Dompet"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="wallet" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 3. Icon Pasang Iklan -> iklan.html (Aktif) -->
+      <a
+        href="iklan.html"
+        aria-label="Pasang Iklan"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm transition"
+      >
+        <i data-lucide="plus-circle" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 4. Icon Riwayat -> riwayat.html -->
+      <a
+        href="riwayat.html"
+        aria-label="Riwayat Review"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="history" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 5. Icon Orang (Sudut Kanan Bawah) -> profil.html -->
+      <a
+        href="profil.html"
+        aria-label="Profil"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="user" class="h-5 w-5"></i>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      query,
+      where,
+      limit,
+      onSnapshot,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAa_EhwILQsTrJBKocpvT8gHTholmCLMTY",
+      authDomain: "goona-app.firebaseapp.com",
+      projectId: "goona-app",
+      storageBucket: "goona-app.firebasestorage.app",
+      messagingSenderId: "315162973072",
+      appId: "1:315162973072:web:bd7244e1bfc13ce1ae1915",
+      measurementId: "G-GXVPP73QCK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+    let unsubCampaigns = null;
+
+    const descInput = document.getElementById("deskripsi-input");
+    const descCounter = document.getElementById("desc-counter");
+
+    descInput?.addEventListener("input", () => {
+      const len = descInput.value.length;
+      if (descCounter) descCounter.textContent = `${len}/150`;
+    });
+
+    function escapeHtml(text = "") {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function sanitizeUrl(rawUrl = "") {
+      const trimmed = (rawUrl || "").trim();
+      if (!trimmed) return "";
+      try {
+        const parsed = new URL(trimmed);
+        if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+          return parsed.href;
+        }
+      } catch {}
+      return "";
+    }
+
+    function renderMyCampaigns(docs = []) {
+      const listEl = document.getElementById("my-campaigns-list");
+      const countEl = document.getElementById("my-campaigns-count");
+      if (countEl) countEl.textContent = String(docs.length);
+
+      if (!docs.length) {
+        listEl.innerHTML = `
+          <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 p-5 text-center space-y-1">
+            <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+              <i data-lucide="megaphone" class="h-4 w-4"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-700">
+              Belum ada layanan iklan yang dibuat.
+            </p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      listEl.innerHTML = docs
+        .map((d) => {
+          const item = d.data() || {};
+          const title = escapeHtml(item.judul || "Layanan Iklan");
+          const cat = escapeHtml(item.kategori || "Semua");
+          const status = escapeHtml(item.status || "active");
+          return `
+            <div class="flex items-center justify-between gap-2 rounded-2xl border border-slate-100 bg-slate-50/80 px-3 py-2.5">
+              <div class="min-w-0">
+                <div class="truncate text-xs font-bold text-slate-800">${title}</div>
+                <div class="truncate text-[10px] font-medium text-slate-500">Kategori: ${cat}</div>
+              </div>
+              <span class="shrink-0 rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-blue-700">
+                ${status}
+              </span>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    document.getElementById("campaign-form")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const feedback = document.getElementById("campaign-feedback");
+
+      if (!currentUser) {
+        feedback.className = "min-h-[16px] text-[11px] font-bold text-rose-600";
+        feedback.innerHTML = 'Silakan masuk akun terlebih dahulu di <a href="profil.html" class="underline">Profil</a>.';
+        return;
+      }
+
+      const judul = (document.getElementById("judul-input")?.value || "").trim().slice(0, 80);
+      const deskripsi = (document.getElementById("deskripsi-input")?.value || "").trim().slice(0, 150);
+      const kategori = (document.getElementById("kategori-input")?.value || "").trim() || "Semua";
+      const lokasi = (document.getElementById("lokasi-input")?.value || "").trim() || "Indonesia";
+      const gambarUrl = sanitizeUrl(document.getElementById("gambar-input")?.value || "");
+      const linkPenjualan = sanitizeUrl(document.getElementById("link-input")?.value || "");
+      const pertanyaan = (document.getElementById("pertanyaan-input")?.value || "").trim();
+      const opsiA = (document.getElementById("opsi-a-input")?.value || "").trim();
+      const opsiB = (document.getElementById("opsi-b-input")?.value || "").trim();
+
+      try {
+        await addDoc(collection(db, "campaigns"), {
+          ownerId: currentUser.uid,
+          judul,
+          deskripsi,
+          kategori,
+          lokasi,
+          gambarUrl,
+          linkPenjualan,
+          pertanyaan,
+          opsiA,
+          opsiB,
+          status: "active",
+          createdAt: serverTimestamp()
+        });
+
+        feedback.className = "min-h-[16px] text-[11px] font-bold text-blue-700";
+        feedback.textContent = "Layanan iklan tersimpan.";
+        document.getElementById("campaign-form").reset();
+        if (descCounter) descCounter.textContent = "0/150";
+      } catch {
+        feedback.className = "min-h-[16px] text-[11px] font-bold text-rose-600";
+        feedback.textContent = "Gagal menyimpan layanan iklan.";
+      }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (unsubCampaigns) {
+        unsubCampaigns();
+        unsubCampaigns = null;
+      }
+
+      currentUser = user;
+      const badge = document.getElementById("campaign-account-badge");
+
+      if (!user) {
+        badge.textContent = "Tamu";
+        renderMyCampaigns([]);
+        return;
+      }
+
+      badge.textContent = "Akun Aktif";
+      const q = query(
+        collection(db, "campaigns"),
+        where("ownerId", "==", user.uid),
+        limit(30)
+      );
+
+      unsubCampaigns = onSnapshot(
+        q,
+        (snap) => renderMyCampaigns(snap.docs),
+        () => renderMyCampaigns([])
+      );
+    });
+  </script>
+</body>
+</html>
