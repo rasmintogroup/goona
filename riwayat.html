@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GOONA — Riwayat Review</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Latar belakang ragam ikon pekerjaan bernuansa biru elektrik samar */
+    .work-icons-bg {
+      background-color: #f4f7fc;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(29, 78, 216, 0.05) 0%, transparent 45%),
+        url("data:image/svg+xml,%3Csvg width='140' height='140' viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232563eb' stroke-opacity='0.075' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3C!-- Koper kerja --%3E%3Cg transform='translate(16,18) rotate(-12)'%3E%3Crect x='2' y='7' width='20' height='14' rx='2.5'/%3E%3Cpath d='M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/%3E%3Cpath d='M2 12h20'/%3E%3C/g%3E%3C!-- Catatan / checklist review --%3E%3Cg transform='translate(88,16) rotate(14)'%3E%3Crect x='3' y='3' width='16' height='20' rx='2'/%3E%3Cpath d='M7 8h8M7 12h8M7 16h5'/%3E%3C/g%3E%3C!-- Grafik naik --%3E%3Cg transform='translate(54,56) rotate(-8)'%3E%3Cpath d='M3 19V5M3 19h16'/%3E%3Cpath d='m7 14 4-4 3 2 5-6'/%3E%3C/g%3E%3C!-- Lencana / penghargaan kerja --%3E%3Cg transform='translate(20,94) rotate(10)'%3E%3Ccircle cx='12' cy='9' r='6'/%3E%3Cpath d='m9 14.5-1.5 6.5L12 19l4.5 2L15 14.5'/%3E%3C/g%3E%3C!-- Megafon / promosi --%3E%3Cg transform='translate(92,92) rotate(-14)'%3E%3Cpath d='M4 11v2a2 2 0 0 0 2 2h1l5 4V7l-5 4H6a2 2 0 0 0-2 2z'/%3E%3Cpath d='M16 10a4 4 0 0 1 0 6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-size: 100% 100%, 100% 100%, 140px 140px;
+    }
+  </style>
+</head>
+<body class="work-icons-bg h-dvh w-screen overflow-hidden text-slate-900 antialiased flex flex-col">
+  <!-- Header -->
+  <header class="shrink-0 z-20 border-b border-blue-100/90 bg-white/92 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between gap-2 px-4 py-2.5">
+      <div class="min-w-0">
+        <div class="text-xl font-black leading-none tracking-tight text-blue-600">
+          GOONA
+        </div>
+        <p class="mt-1 truncate text-[11px] font-medium text-slate-500">
+          Riwayat Review
+        </p>
+      </div>
+
+      <span id="today-quota-badge" class="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] font-bold tabular-nums text-blue-700">
+        Hari ini: 0/15
+      </span>
+    </div>
+  </header>
+
+  <!-- Area Tengah: Bisa Di-Scroll -->
+  <main class="flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-md px-3.5 py-3 space-y-3">
+    <!-- Ringkasan Harian -->
+    <section class="rounded-3xl border border-blue-100/90 bg-white/95 p-4 shadow-sm flex items-center justify-between gap-3">
+      <div>
+        <h1 class="text-xs font-extrabold text-slate-900">Aktivitas Review Anda</h1>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          Batas maksimal 15 review per hari per akun.
+        </p>
+      </div>
+      <div class="shrink-0 rounded-2xl bg-blue-50 px-3 py-2 text-right">
+        <div id="total-reviews-count" class="text-sm font-black tabular-nums text-blue-700">0</div>
+        <div class="text-[10px] font-semibold text-blue-600">Total</div>
+      </div>
+    </section>
+
+    <!-- Daftar Riwayat (Kosong Alami Saat Belum Ada Review) -->
+    <section class="rounded-3xl border border-blue-100/90 bg-white/95 p-4 shadow-sm space-y-2.5">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xs font-extrabold text-slate-900">Catatan Review</h2>
+        <span class="text-[11px] font-medium text-slate-400">Terbaru</span>
+      </div>
+
+      <div id="history-list" class="space-y-2">
+        <div id="empty-history" class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 p-5 text-center space-y-1">
+          <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+            <i data-lucide="history" class="h-4 w-4"></i>
+          </div>
+          <p class="text-xs font-bold text-slate-700">
+            Belum ada riwayat review.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Navigasi Bawah: 5 Ikon -->
+  <nav class="shrink-0 z-20 border-t border-blue-100 bg-white/95 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between px-3 py-2">
+      <!-- 1. Icon Rumah -> index.html -->
+      <a
+        href="index.html"
+        aria-label="Beranda"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="home" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 2. Icon Dompet -> dompet.html -->
+      <a
+        href="dompet.html"
+        aria-label="Dompet"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="wallet" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 3. Icon Pasang Iklan -> iklan.html -->
+      <a
+        href="iklan.html"
+        aria-label="Pasang Iklan"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="plus-circle" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 4. Icon Riwayat -> riwayat.html (Aktif) -->
+      <a
+        href="riwayat.html"
+        aria-label="Riwayat Review"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm transition"
+      >
+        <i data-lucide="history" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 5. Icon Orang (Sudut Kanan Bawah) -> profil.html -->
+      <a
+        href="profil.html"
+        aria-label="Profil"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="user" class="h-5 w-5"></i>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      limit,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAa_EhwILQsTrJBKocpvT8gHTholmCLMTY",
+      authDomain: "goona-app.firebaseapp.com",
+      projectId: "goona-app",
+      storageBucket: "goona-app.firebasestorage.app",
+      messagingSenderId: "315162973072",
+      appId: "1:315162973072:web:bd7244e1bfc13ce1ae1915",
+      measurementId: "G-GXVPP73QCK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const DAILY_REVIEW_LIMIT = 15;
+    let unsubReviews = null;
+
+    function getTodayKey() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function escapeHtml(text = "") {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderHistory(docs = []) {
+      const listEl = document.getElementById("history-list");
+      const totalEl = document.getElementById("total-reviews-count");
+      const quotaBadge = document.getElementById("today-quota-badge");
+
+      const today = getTodayKey();
+      const todayCount = docs.filter((d) => (d.data()?.dateKey || "") === today).length;
+
+      if (totalEl) totalEl.textContent = String(docs.length);
+      if (quotaBadge) quotaBadge.textContent = `Hari ini: ${todayCount}/${DAILY_REVIEW_LIMIT}`;
+
+      if (!docs.length) {
+        listEl.innerHTML = `
+          <div id="empty-history" class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 p-5 text-center space-y-1">
+            <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+              <i data-lucide="history" class="h-4 w-4"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-700">
+              Belum ada riwayat review.
+            </p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      const sorted = [...docs].sort((a, b) => {
+        const ta = a.data()?.createdAt?.toMillis?.() || 0;
+        const tb = b.data()?.createdAt?.toMillis?.() || 0;
+        return tb - ta;
+      });
+
+      listEl.innerHTML = sorted
+        .map((d) => {
+          const item = d.data() || {};
+          const campaignId = escapeHtml(item.campaignId || "Layanan");
+          const answer = escapeHtml(item.answer || "-");
+          const dateKey = escapeHtml(item.dateKey || "");
+
+          return `
+            <div class="flex items-center justify-between gap-2 rounded-2xl border border-slate-100 bg-slate-50/80 px-3 py-2.5">
+              <div class="min-w-0">
+                <div class="truncate text-xs font-bold text-slate-800">ID: ${campaignId}</div>
+                <div class="truncate text-[10px] font-medium text-slate-500">Tanggal: ${dateKey}</div>
+              </div>
+              <span class="shrink-0 rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-blue-700">
+                Pilihan ${answer}
+              </span>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (unsubReviews) {
+        unsubReviews();
+        unsubReviews = null;
+      }
+
+      if (!user) {
+        renderHistory([]);
+        return;
+      }
+
+      const q = query(
+        collection(db, "reviews"),
+        where("reviewerId", "==", user.uid),
+        limit(60)
+      );
+
+      unsubReviews = onSnapshot(
+        q,
+        (snap) => renderHistory(snap.docs),
+        () => renderHistory([])
+      );
+    });
+  </script>
+</body>
+</html>
