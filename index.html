@@ -7,99 +7,80 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    /* Motif batik geometris samar (kontras rendah agar tetap nyaman dipandang) */
-    .batik-pattern {
-      background-color: #f4f7f5;
+    /* Motif batik tradisional Indonesia (pola kawung & kelopak simetris) kontras samar */
+    .batik-indonesia {
+      background-color: #f4f7fc;
       background-image:
-        radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.055) 0%, transparent 45%),
-        radial-gradient(circle at 75% 75%, rgba(15, 118, 110, 0.05) 0%, transparent 45%),
-        url("data:image/svg+xml,%3Csvg width='88' height='88' viewBox='0 0 88 88' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%230f766e' stroke-opacity='0.065' stroke-width='1'%3E%3Ccircle cx='44' cy='44' r='22'/%3E%3Ccircle cx='44' cy='44' r='11'/%3E%3Cpath d='M44 0 A22 22 0 0 1 66 22 A22 22 0 0 1 44 44 A22 22 0 0 1 22 22 A22 22 0 0 1 44 0 Z'/%3E%3Cpath d='M44 44 A22 22 0 0 1 66 66 A22 22 0 0 1 44 88 A22 22 0 0 1 22 66 A22 22 0 0 1 44 44 Z'/%3E%3Cpath d='M0 44 A22 22 0 0 1 22 22 A22 22 0 0 1 44 44 A22 22 0 0 1 22 66 A22 22 0 0 1 0 44 Z'/%3E%3Cpath d='M44 44 A22 22 0 0 1 66 22 A22 22 0 0 1 88 44 A22 22 0 0 1 66 66 A22 22 0 0 1 44 44 Z'/%3E%3C/g%3E%3C/svg%3E");
-      background-size: 100% 100%, 100% 100%, 88px 88px;
-    }
-
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-3px); }
-    }
-
-    @keyframes shimmerSweep {
-      0% { transform: translateX(-120%); }
-      100% { transform: translateX(220%); }
-    }
-
-    .animate-float-slow {
-      animation: floatSlow 4s ease-in-out infinite;
-    }
-
-    .shimmer-box {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .shimmer-box::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      width: 45%;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.55),
-        transparent
-      );
-      animation: shimmerSweep 2.5s ease-in-out infinite;
+        radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(29, 78, 216, 0.05) 0%, transparent 45%),
+        url("data:image/svg+xml,%3Csvg width='96' height='96' viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%231d4ed8' stroke-opacity='0.075' stroke-width='1.1'%3E%3Cellipse cx='24' cy='24' rx='14' ry='9' transform='rotate(-35 24 24)'/%3E%3Cellipse cx='72' cy='24' rx='14' ry='9' transform='rotate(35 72 24)'/%3E%3Cellipse cx='24' cy='72' rx='14' ry='9' transform='rotate(35 24 72)'/%3E%3Cellipse cx='72' cy='72' rx='14' ry='9' transform='rotate(-35 72 72)'/%3E%3Cellipse cx='48' cy='48' rx='15' ry='10'/%3E%3Cellipse cx='48' cy='48' rx='10' ry='15'/%3E%3Ccircle cx='48' cy='48' r='3' fill='%232563eb' fill-opacity='0.07'/%3E%3Ccircle cx='0' cy='0' r='10'/%3E%3Ccircle cx='96' cy='0' r='10'/%3E%3Ccircle cx='0' cy='96' r='10'/%3E%3Ccircle cx='96' cy='96' r='10'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 100% 100%, 100% 100%, 96px 96px;
     }
   </style>
 </head>
-<body class="batik-pattern h-dvh w-screen overflow-hidden text-slate-900 antialiased flex flex-col">
-  <!-- Header: GOONA Proporsional + Tagline Utama + Jumlah Reviewer di Sudut Kanan Atas -->
-  <header class="shrink-0 z-20 border-b border-slate-200/80 bg-white/88 backdrop-blur-md">
-    <div class="mx-auto flex max-w-md items-center justify-between gap-2.5 px-4 py-2.5">
+<body class="batik-indonesia h-dvh w-screen overflow-hidden text-slate-900 antialiased flex flex-col">
+  <!-- Header: GOONA Besar, Tagline Kecil, Lonceng (Kiri) & Jumlah Reviewer (Kanan Atas) -->
+  <header class="shrink-0 z-20 border-b border-blue-100/90 bg-white/92 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between gap-2 px-4 py-2.5">
       <div class="min-w-0">
-        <div class="text-[11px] font-bold tracking-[0.14em] uppercase text-emerald-700">
+        <div class="text-xl font-black leading-none tracking-tight text-blue-600">
           GOONA
         </div>
-        <h1 class="text-base font-extrabold leading-tight tracking-tight text-slate-900">
+        <p class="mt-1 truncate text-[11px] font-medium text-slate-500">
           Mulai Langkahmu Sebagai Reviewer
-        </h1>
+        </p>
       </div>
 
       <div class="shrink-0 flex flex-col items-end gap-1">
-        <a
-          href="profil.html"
-          class="animate-float-slow inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50/95 px-3 py-1.5 text-emerald-800 shadow-sm transition hover:bg-emerald-100"
-          title="Jumlah Reviewer Terdaftar"
-        >
-          <i data-lucide="user-check" class="h-4 w-4 text-emerald-600"></i>
-          <span id="reviewer-count" class="text-xs font-black tabular-nums">0</span>
-        </a>
+        <div class="flex items-center gap-1.5">
+          <!-- Icon Lonceng di Sebelah Kiri Icon Orang -->
+          <a
+            href="notifikasi.html"
+            aria-label="Pemberitahuan"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-blue-50/80 text-blue-600 transition hover:bg-blue-100"
+            title="Pemberitahuan"
+          >
+            <i data-lucide="bell" class="h-4 w-4"></i>
+          </a>
+
+          <!-- Icon Orang + Angka Reviewer Terdaftar (Tanpa Animasi Mengambang) -->
+          <a
+            href="profil.html"
+            aria-label="Jumlah Reviewer Terdaftar"
+            class="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-600 px-3 py-1.5 text-white shadow-sm transition hover:bg-blue-700"
+            title="Reviewer Terdaftar"
+          >
+            <i data-lucide="user-check" class="h-4 w-4 text-blue-100"></i>
+            <span id="reviewer-count" class="text-xs font-extrabold tabular-nums">0</span>
+          </a>
+        </div>
         <span id="daily-quota-label" class="text-[10px] font-semibold tabular-nums text-slate-500">
           Batas: 0/15 hari ini
         </span>
       </div>
     </div>
 
-    <!-- Baris Filter (Muncul Saat Kampanye Sudah Ada) -->
+    <!-- Baris Filter (Muncul Saat Ada Kampanye Aktif) -->
     <div id="filter-bar" class="hidden mx-auto max-w-md px-4 pb-2.5">
-      <div class="grid grid-cols-3 gap-1.5 rounded-xl bg-slate-100/90 p-1">
+      <div class="grid grid-cols-3 gap-1.5 rounded-xl bg-blue-50/90 p-1 border border-blue-100">
         <button
           type="button"
           data-filter="all"
-          class="filter-btn rounded-lg bg-white py-1 text-[11px] font-bold text-slate-900 shadow-sm transition"
+          class="filter-btn rounded-lg bg-blue-600 py-1 text-[11px] font-bold text-white shadow-sm transition"
         >
           Semua
         </button>
         <button
           type="button"
           data-filter="eligible"
-          class="filter-btn rounded-lg py-1 text-[11px] font-semibold text-slate-600 transition hover:text-slate-900"
+          class="filter-btn rounded-lg py-1 text-[11px] font-semibold text-slate-600 transition hover:text-blue-700"
         >
           Bisa Di-Review
         </button>
         <button
           type="button"
           data-filter="ineligible"
-          class="filter-btn rounded-lg py-1 text-[11px] font-semibold text-slate-600 transition hover:text-slate-900"
+          class="filter-btn rounded-lg py-1 text-[11px] font-semibold text-slate-600 transition hover:text-blue-700"
         >
           Tidak Bisa
         </button>
@@ -107,65 +88,29 @@
     </div>
   </header>
 
-  <!-- Area Tengah: Kontainer Terkunci Tanpa Scroll Halaman Utama; Isi Di Dalam Bisa Di-Scroll -->
+  <!-- Area Tengah: Bisa Di-Scroll Saat Ada Layanan; Pesan Kosong Otomatis Muncul/Hilang -->
   <main id="feed-container" class="flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-md px-3.5 py-3 space-y-3">
-    <!-- Keadaan Awal Formal Saat Belum Ada Layanan Untuk Di-Review -->
-    <div class="rounded-3xl border border-slate-200/90 bg-white/90 p-4 shadow-sm text-center space-y-1.5">
-      <div class="mx-auto flex h-9 w-9 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
-        <i data-lucide="inbox" class="h-4 w-4"></i>
+    <div id="empty-state-box" class="rounded-3xl border border-blue-100 bg-white/92 p-5 text-center shadow-sm space-y-1.5">
+      <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+        <i data-lucide="inbox" class="h-5 w-5"></i>
       </div>
       <p class="text-xs font-bold text-slate-800">
         Belum ada layanan yang tersedia untuk di-review.
       </p>
       <p class="text-[11px] text-slate-500">
-        Maksimal 15 review per hari untuk setiap akun.
+        Maksimal 15 review per hari per akun.
       </p>
-    </div>
-
-    <!-- Placeholder Kosong Yang Bisa Di-Scroll Ke Bawah -->
-    <div class="rounded-3xl border border-dashed border-slate-300/90 bg-white/80 p-4 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold text-slate-500">
-          Slot #01
-        </span>
-        <span class="text-[11px] font-medium text-slate-400">Menunggu</span>
-      </div>
-      <div class="shimmer-box h-36 w-full rounded-2xl bg-slate-200/75 flex items-center justify-center text-slate-400">
-        <i data-lucide="image" class="h-7 w-7"></i>
-      </div>
-      <div class="space-y-2">
-        <div class="shimmer-box h-3.5 w-2/3 rounded bg-slate-200/75"></div>
-        <div class="shimmer-box h-3 w-full rounded bg-slate-100"></div>
-        <div class="shimmer-box h-3 w-4/5 rounded bg-slate-100"></div>
-      </div>
-    </div>
-
-    <div class="rounded-3xl border border-dashed border-slate-300/90 bg-white/80 p-4 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold text-slate-500">
-          Slot #02
-        </span>
-        <span class="text-[11px] font-medium text-slate-400">Menunggu</span>
-      </div>
-      <div class="shimmer-box h-36 w-full rounded-2xl bg-slate-200/75 flex items-center justify-center text-slate-400">
-        <i data-lucide="image" class="h-7 w-7"></i>
-      </div>
-      <div class="space-y-2">
-        <div class="shimmer-box h-3.5 w-3/5 rounded bg-slate-200/75"></div>
-        <div class="shimmer-box h-3 w-full rounded bg-slate-100"></div>
-        <div class="shimmer-box h-3 w-3/4 rounded bg-slate-100"></div>
-      </div>
     </div>
   </main>
 
   <!-- Navigasi Bawah: 5 Ikon -->
-  <nav class="shrink-0 z-20 border-t border-slate-200/90 bg-white/95 backdrop-blur-md">
+  <nav class="shrink-0 z-20 border-t border-blue-100 bg-white/95 backdrop-blur-md">
     <div class="mx-auto flex max-w-md items-center justify-between px-3 py-2">
       <!-- 1. Icon Rumah -> index.html -->
       <a
         href="index.html"
         aria-label="Beranda"
-        class="flex h-11 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 transition"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm transition"
       >
         <i data-lucide="home" class="h-5 w-5"></i>
       </a>
@@ -174,7 +119,7 @@
       <a
         href="dompet.html"
         aria-label="Dompet"
-        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
       >
         <i data-lucide="wallet" class="h-5 w-5"></i>
       </a>
@@ -183,7 +128,7 @@
       <a
         href="iklan.html"
         aria-label="Pasang Iklan"
-        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
       >
         <i data-lucide="plus-circle" class="h-5 w-5"></i>
       </a>
@@ -192,7 +137,7 @@
       <a
         href="riwayat.html"
         aria-label="Riwayat Review"
-        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
       >
         <i data-lucide="history" class="h-5 w-5"></i>
       </a>
@@ -201,7 +146,7 @@
       <a
         href="profil.html"
         aria-label="Profil"
-        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
       >
         <i data-lucide="user" class="h-5 w-5"></i>
       </a>
@@ -354,13 +299,32 @@
       activeTimers.clear();
     }
 
+    function renderEmptyMessage() {
+      clearAllTimers();
+      document.getElementById("filter-bar").classList.add("hidden");
+      document.getElementById("feed-container").innerHTML = `
+        <div id="empty-state-box" class="rounded-3xl border border-blue-100 bg-white/92 p-5 text-center shadow-sm space-y-1.5">
+          <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+            <i data-lucide="inbox" class="h-5 w-5"></i>
+          </div>
+          <p class="text-xs font-bold text-slate-800">
+            Belum ada layanan yang tersedia untuk di-review.
+          </p>
+          <p class="text-[11px] text-slate-500">
+            Maksimal 15 review per hari per akun.
+          </p>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
     function renderCampaigns() {
       clearAllTimers();
       const container = document.getElementById("feed-container");
       const filterBar = document.getElementById("filter-bar");
 
       if (!campaigns.length) {
-        filterBar.classList.add("hidden");
+        renderEmptyMessage();
         return;
       }
 
@@ -383,7 +347,7 @@
 
       if (!filtered.length) {
         container.innerHTML = `
-          <div class="rounded-3xl border border-slate-200 bg-white/90 p-5 text-center shadow-sm">
+          <div class="rounded-3xl border border-blue-100 bg-white/92 p-5 text-center shadow-sm">
             <p class="text-xs font-bold text-slate-700">
               Tidak ada layanan pada filter ini.
             </p>
@@ -405,13 +369,13 @@
           const optB = escapeHtml(data.opsiB || data.optionB || "B. Kurang jelas");
 
           const badgeClass = elig.eligible
-            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+            ? "bg-blue-50 text-blue-700 border-blue-200"
             : "bg-slate-100 text-slate-600 border-slate-200";
 
           return `
-            <article data-card-id="${escapeHtml(id)}" class="rounded-3xl border border-slate-200/90 bg-white/95 p-3.5 shadow-sm space-y-2.5">
+            <article data-card-id="${escapeHtml(id)}" class="rounded-3xl border border-blue-100/90 bg-white/95 p-3.5 shadow-sm space-y-2.5">
               <div class="flex items-center justify-between gap-2">
-                <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold text-slate-700">
+                <span class="rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-700">
                   ${category}
                 </span>
                 <span class="truncate rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${badgeClass}">
@@ -432,12 +396,12 @@
                 <p class="text-xs leading-relaxed text-slate-600">${desc}</p>
                 <div class="flex items-center justify-between gap-2 pt-1 text-[11px]">
                   <span class="inline-flex items-center gap-1 font-medium text-slate-500 truncate">
-                    <i data-lucide="map-pin" class="h-3.5 w-3.5 text-emerald-600 shrink-0"></i>
+                    <i data-lucide="map-pin" class="h-3.5 w-3.5 text-blue-600 shrink-0"></i>
                     <span class="truncate">${location}</span>
                   </span>
                   ${
                     safeLink
-                      ? `<a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-bold text-emerald-700 hover:underline shrink-0">
+                      ? `<a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-bold text-blue-600 hover:underline shrink-0">
                            <span>Link Penjualan</span>
                            <i data-lucide="external-link" class="h-3 w-3"></i>
                          </a>`
@@ -458,7 +422,7 @@
                     type="button"
                     data-choice="A"
                     disabled
-                    class="choice-btn rounded-xl border border-slate-300 bg-white px-2.5 py-2 text-left text-xs font-bold text-slate-800 transition hover:border-emerald-500 hover:bg-emerald-50 disabled:opacity-50 disabled:cursor-not-allowed truncate"
+                    class="choice-btn rounded-xl border border-slate-300 bg-white px-2.5 py-2 text-left text-xs font-bold text-slate-800 transition hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed truncate"
                   >
                     ${optA}
                   </button>
@@ -466,7 +430,7 @@
                     type="button"
                     data-choice="B"
                     disabled
-                    class="choice-btn rounded-xl border border-slate-300 bg-white px-2.5 py-2 text-left text-xs font-bold text-slate-800 transition hover:border-emerald-500 hover:bg-emerald-50 disabled:opacity-50 disabled:cursor-not-allowed truncate"
+                    class="choice-btn rounded-xl border border-slate-300 bg-white px-2.5 py-2 text-left text-xs font-bold text-slate-800 transition hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed truncate"
                   >
                     ${optB}
                   </button>
@@ -495,7 +459,7 @@
           if (badge) {
             badge.textContent = remaining > 0 ? `${remaining}d` : "Siap";
             if (remaining <= 0) {
-              badge.className = "shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700";
+              badge.className = "shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700";
             }
           }
           if (remaining <= 0) {
@@ -526,7 +490,7 @@
               dailyReviewCount += 1;
               updateDailyQuotaUi();
               if (statusMsg) {
-                statusMsg.className = "min-h-[15px] text-[11px] font-bold text-emerald-700";
+                statusMsg.className = "min-h-[15px] text-[11px] font-bold text-blue-700";
                 statusMsg.textContent = `Pilihan ${choice} tersimpan (${dailyReviewCount}/${DAILY_REVIEW_LIMIT} hari ini).`;
               }
             } catch {
@@ -546,8 +510,8 @@
         document.querySelectorAll(".filter-btn").forEach((b) => {
           const isActive = b === btn;
           b.className = isActive
-            ? "filter-btn rounded-lg bg-white py-1 text-[11px] font-bold text-slate-900 shadow-sm transition"
-            : "filter-btn rounded-lg py-1 text-[11px] font-semibold text-slate-600 transition hover:text-slate-900";
+            ? "filter-btn rounded-lg bg-blue-600 py-1 text-[11px] font-bold text-white shadow-sm transition"
+            : "filter-btn rounded-lg py-1 text-[11px] font-semibold text-slate-600 transition hover:text-blue-700";
         });
         renderCampaigns();
       });
@@ -571,16 +535,23 @@
       }
     }
 
-    async function loadCampaigns() {
+    function listenActiveCampaigns() {
       try {
         const q = query(collection(db, "campaigns"), where("status", "==", "active"), limit(30));
-        const snap = await getDocs(q);
-        campaigns = snap.docs;
-        if (campaigns.length > 0) {
-          renderCampaigns();
-        }
+        onSnapshot(
+          q,
+          (snap) => {
+            campaigns = snap.docs;
+            renderCampaigns();
+          },
+          () => {
+            campaigns = [];
+            renderEmptyMessage();
+          }
+        );
       } catch {
         campaigns = [];
+        renderEmptyMessage();
       }
     }
 
@@ -597,13 +568,11 @@
         dailyReviewCount = 0;
         updateDailyQuotaUi();
       }
-      if (campaigns.length > 0) {
-        renderCampaigns();
-      }
+      renderCampaigns();
     });
 
     listenReviewerCount();
-    loadCampaigns();
+    listenActiveCampaigns();
   </script>
 </body>
 </html>
