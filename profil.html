@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GOONA — Profil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Latar belakang ragam ikon pekerjaan bernuansa biru elektrik samar */
+    .work-icons-bg {
+      background-color: #f4f7fc;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(29, 78, 216, 0.05) 0%, transparent 45%),
+        url("data:image/svg+xml,%3Csvg width='140' height='140' viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232563eb' stroke-opacity='0.075' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3C!-- Koper kerja --%3E%3Cg transform='translate(16,18) rotate(-12)'%3E%3Crect x='2' y='7' width='20' height='14' rx='2.5'/%3E%3Cpath d='M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/%3E%3Cpath d='M2 12h20'/%3E%3C/g%3E%3C!-- Catatan / checklist review --%3E%3Cg transform='translate(88,16) rotate(14)'%3E%3Crect x='3' y='3' width='16' height='20' rx='2'/%3E%3Cpath d='M7 8h8M7 12h8M7 16h5'/%3E%3C/g%3E%3C!-- Grafik naik --%3E%3Cg transform='translate(54,56) rotate(-8)'%3E%3Cpath d='M3 19V5M3 19h16'/%3E%3Cpath d='m7 14 4-4 3 2 5-6'/%3E%3C/g%3E%3C!-- Lencana / penghargaan kerja --%3E%3Cg transform='translate(20,94) rotate(10)'%3E%3Ccircle cx='12' cy='9' r='6'/%3E%3Cpath d='m9 14.5-1.5 6.5L12 19l4.5 2L15 14.5'/%3E%3C/g%3E%3C!-- Megafon / promosi --%3E%3Cg transform='translate(92,92) rotate(-14)'%3E%3Cpath d='M4 11v2a2 2 0 0 0 2 2h1l5 4V7l-5 4H6a2 2 0 0 0-2 2z'/%3E%3Cpath d='M16 10a4 4 0 0 1 0 6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-size: 100% 100%, 100% 100%, 140px 140px;
+    }
+  </style>
+</head>
+<body class="work-icons-bg h-dvh w-screen overflow-hidden text-slate-900 antialiased flex flex-col">
+  <!-- Header -->
+  <header class="shrink-0 z-20 border-b border-blue-100/90 bg-white/92 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between gap-2 px-4 py-2.5">
+      <div class="min-w-0">
+        <div class="text-xl font-black leading-none tracking-tight text-blue-600">
+          GOONA
+        </div>
+        <p class="mt-1 truncate text-[11px] font-medium text-slate-500">
+          Profil Reviewer &amp; Perusahaan
+        </p>
+      </div>
+
+      <span id="profile-role-badge" class="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] font-bold text-blue-700">
+        Tamu
+      </span>
+    </div>
+  </header>
+
+  <!-- Area Tengah: Bisa Di-Scroll -->
+  <main class="flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-md px-3.5 py-3 space-y-3">
+    <!-- Tampilan Saat Belum Masuk (Form Masuk / Daftar) -->
+    <section id="auth-section" class="rounded-3xl border border-blue-100/90 bg-white/95 p-4 shadow-sm space-y-3">
+      <div class="grid grid-cols-2 gap-1.5 rounded-xl bg-blue-50/90 p-1 border border-blue-100">
+        <button
+          id="tab-login-btn"
+          type="button"
+          class="rounded-lg bg-blue-600 py-1.5 text-xs font-bold text-white shadow-sm transition"
+        >
+          Masuk
+        </button>
+        <button
+          id="tab-register-btn"
+          type="button"
+          class="rounded-lg py-1.5 text-xs font-semibold text-slate-600 transition hover:text-blue-700"
+        >
+          Daftar Baru
+        </button>
+      </div>
+
+      <form id="auth-form" class="space-y-2.5">
+        <!-- Field Khusus Daftar Baru -->
+        <div id="register-fields" class="hidden space-y-2.5">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Daftar Sebagai</label>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-800 cursor-pointer">
+                <input type="radio" name="role" value="reviewer" checked class="accent-blue-600" />
+                <span>Reviewer</span>
+              </label>
+              <label class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-800 cursor-pointer">
+                <input type="radio" name="role" value="perusahaan" class="accent-blue-600" />
+                <span>Perusahaan</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label for="name-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+              Nama Lengkap / Usaha
+            </label>
+            <input
+              id="name-input"
+              type="text"
+              placeholder="Nama Anda atau nama usaha"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label for="user-category-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+                Kategori Minat
+              </label>
+              <input
+                id="user-category-input"
+                type="text"
+                placeholder="Contoh: Kuliner / Umum"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label for="user-city-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+                Kota / Wilayah
+              </label>
+              <input
+                id="user-city-input"
+                type="text"
+                placeholder="Contoh: Jakarta"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="email-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+            Email
+          </label>
+          <input
+            id="email-input"
+            type="email"
+            placeholder="nama@email.com"
+            required
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label for="password-input" class="block text-[11px] font-bold text-slate-700 mb-1">
+            Kata Sandi
+          </label>
+          <input
+            id="password-input"
+            type="password"
+            minlength="6"
+            placeholder="Minimal 6 karakter"
+            required
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+          />
+        </div>
+
+        <button
+          id="auth-submit-btn"
+          type="submit"
+          class="w-full rounded-xl bg-blue-600 px-3 py-2.5 text-xs font-extrabold text-white transition hover:bg-blue-700 active:scale-[0.99]"
+        >
+          Masuk Akun
+        </button>
+      </form>
+
+      <div id="auth-feedback" class="min-h-[16px] text-[11px] font-semibold text-slate-500"></div>
+    </section>
+
+    <!-- Tampilan Saat Sudah Masuk (Profil Aktif & Menu Lainnya) -->
+    <section id="profile-section" class="hidden space-y-3">
+      <div class="rounded-3xl border border-blue-100/90 bg-white/95 p-4 shadow-sm space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-white">
+            <i data-lucide="user" class="h-5 w-5"></i>
+          </div>
+          <div class="min-w-0">
+            <h1 id="profile-name" class="truncate text-sm font-extrabold text-slate-900">Pengguna GOONA</h1>
+            <p id="profile-email" class="truncate text-[11px] text-slate-500">-</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 rounded-2xl bg-slate-50 p-3 text-xs">
+          <div>
+            <div class="text-[10px] font-semibold text-slate-400">Kategori</div>
+            <div id="profile-category" class="font-bold text-slate-800 truncate">Umum</div>
+          </div>
+          <div>
+            <div class="text-[10px] font-semibold text-slate-400">Wilayah</div>
+            <div id="profile-city" class="font-bold text-slate-800 truncate">Indonesia</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu Halaman Tambahan -->
+      <div class="rounded-3xl border border-blue-100/90 bg-white/95 p-2 shadow-sm divide-y divide-slate-100">
+        <a href="notifikasi.html" class="flex items-center justify-between px-3 py-2.5 text-xs font-bold text-slate-700 hover:text-blue-600">
+          <span class="inline-flex items-center gap-2">
+            <i data-lucide="bell" class="h-4 w-4 text-blue-600"></i>
+            <span>Pemberitahuan</span>
+          </span>
+          <i data-lucide="chevron-right" class="h-4 w-4 text-slate-400"></i>
+        </a>
+
+        <a href="dompet.html" class="flex items-center justify-between px-3 py-2.5 text-xs font-bold text-slate-700 hover:text-blue-600">
+          <span class="inline-flex items-center gap-2">
+            <i data-lucide="wallet" class="h-4 w-4 text-blue-600"></i>
+            <span>Dompet &amp; Saldo</span>
+          </span>
+          <i data-lucide="chevron-right" class="h-4 w-4 text-slate-400"></i>
+        </a>
+
+        <a href="iklan.html" class="flex items-center justify-between px-3 py-2.5 text-xs font-bold text-slate-700 hover:text-blue-600">
+          <span class="inline-flex items-center gap-2">
+            <i data-lucide="plus-circle" class="h-4 w-4 text-blue-600"></i>
+            <span>Pasang Layanan Iklan</span>
+          </span>
+          <i data-lucide="chevron-right" class="h-4 w-4 text-slate-400"></i>
+        </a>
+      </div>
+
+      <button
+        id="logout-btn"
+        type="button"
+        class="w-full rounded-2xl border border-rose-200 bg-white px-4 py-2.5 text-xs font-extrabold text-rose-600 shadow-sm transition hover:bg-rose-50"
+      >
+        Keluar Akun
+      </button>
+    </section>
+  </main>
+
+  <!-- Navigasi Bawah: 5 Ikon -->
+  <nav class="shrink-0 z-20 border-t border-blue-100 bg-white/95 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between px-3 py-2">
+      <!-- 1. Icon Rumah -> index.html -->
+      <a
+        href="index.html"
+        aria-label="Beranda"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="home" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 2. Icon Dompet -> dompet.html -->
+      <a
+        href="dompet.html"
+        aria-label="Dompet"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="wallet" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 3. Icon Pasang Iklan -> iklan.html -->
+      <a
+        href="iklan.html"
+        aria-label="Pasang Iklan"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="plus-circle" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 4. Icon Riwayat -> riwayat.html -->
+      <a
+        href="riwayat.html"
+        aria-label="Riwayat Review"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+      >
+        <i data-lucide="history" class="h-5 w-5"></i>
+      </a>
+
+      <!-- 5. Icon Orang (Sudut Kanan Bawah) -> profil.html (Aktif) -->
+      <a
+        href="profil.html"
+        aria-label="Profil"
+        class="flex h-11 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm transition"
+      >
+        <i data-lucide="user" class="h-5 w-5"></i>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAa_EhwILQsTrJBKocpvT8gHTholmCLMTY",
+      authDomain: "goona-app.firebaseapp.com",
+      projectId: "goona-app",
+      storageBucket: "goona-app.firebasestorage.app",
+      messagingSenderId: "315162973072",
+      appId: "1:315162973072:web:bd7244e1bfc13ce1ae1915",
+      measurementId: "G-GXVPP73QCK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let authMode = "login";
+
+    const tabLoginBtn = document.getElementById("tab-login-btn");
+    const tabRegisterBtn = document.getElementById("tab-register-btn");
+    const registerFields = document.getElementById("register-fields");
+    const submitBtn = document.getElementById("auth-submit-btn");
+    const feedbackEl = document.getElementById("auth-feedback");
+
+    function setAuthMode(nextMode) {
+      authMode = nextMode;
+      feedbackEl.textContent = "";
+      if (authMode === "login") {
+        tabLoginBtn.className = "rounded-lg bg-blue-600 py-1.5 text-xs font-bold text-white shadow-sm transition";
+        tabRegisterBtn.className = "rounded-lg py-1.5 text-xs font-semibold text-slate-600 transition hover:text-blue-700";
+        registerFields.classList.add("hidden");
+        submitBtn.textContent = "Masuk Akun";
+      } else {
+        tabRegisterBtn.className = "rounded-lg bg-blue-600 py-1.5 text-xs font-bold text-white shadow-sm transition";
+        tabLoginBtn.className = "rounded-lg py-1.5 text-xs font-semibold text-slate-600 transition hover:text-blue-700";
+        registerFields.classList.remove("hidden");
+        submitBtn.textContent = "Daftar Sekarang";
+      }
+    }
+
+    tabLoginBtn?.addEventListener("click", () => setAuthMode("login"));
+    tabRegisterBtn?.addEventListener("click", () => setAuthMode("register"));
+
+    document.getElementById("auth-form")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      feedbackEl.className = "min-h-[16px] text-[11px] font-semibold text-slate-500";
+      feedbackEl.textContent = "Memproses...";
+
+      const email = (document.getElementById("email-input")?.value || "").trim();
+      const password = document.getElementById("password-input")?.value || "";
+
+      try {
+        if (authMode === "login") {
+          await signInWithEmailAndPassword(auth, email, password);
+          feedbackEl.className = "min-h-[16px] text-[11px] font-bold text-blue-700";
+          feedbackEl.textContent = "Berhasil masuk.";
+        } else {
+          const role = document.querySelector('input[name="role"]:checked')?.value || "reviewer";
+          const nama = (document.getElementById("name-input")?.value || "").trim() || email.split("@")[0];
+          const kategori = (document.getElementById("user-category-input")?.value || "").trim() || "Umum";
+          const lokasi = (document.getElementById("user-city-input")?.value || "").trim() || "Indonesia";
+
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          await setDoc(doc(db, "users", cred.user.uid), {
+            uid: cred.user.uid,
+            email,
+            nama,
+            role,
+            kategori,
+            lokasi,
+            balance: 0,
+            createdAt: serverTimestamp()
+          });
+
+          feedbackEl.className = "min-h-[16px] text-[11px] font-bold text-blue-700";
+          feedbackEl.textContent = "Pendaftaran berhasil.";
+        }
+      } catch (err) {
+        feedbackEl.className = "min-h-[16px] text-[11px] font-bold text-rose-600";
+        feedbackEl.textContent = err?.message || "Gagal memproses akun.";
+      }
+    });
+
+    document.getElementById("logout-btn")?.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+      } catch {}
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      const authSection = document.getElementById("auth-section");
+      const profileSection = document.getElementById("profile-section");
+      const roleBadge = document.getElementById("profile-role-badge");
+
+      if (!user) {
+        authSection.classList.remove("hidden");
+        profileSection.classList.add("hidden");
+        roleBadge.textContent = "Tamu";
+        return;
+      }
+
+      authSection.classList.add("hidden");
+      profileSection.classList.remove("hidden");
+
+      let data = {};
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) data = snap.data() || {};
+      } catch {}
+
+      const roleText = (data.role || "reviewer").toLowerCase() === "perusahaan" ? "Perusahaan" : "Reviewer";
+      roleBadge.textContent = roleText;
+      document.getElementById("profile-name").textContent = data.nama || user.email || "Pengguna GOONA";
+      document.getElementById("profile-email").textContent = user.email || "-";
+      document.getElementById("profile-category").textContent = data.kategori || "Umum";
+      document.getElementById("profile-city").textContent = data.lokasi || "Indonesia";
+    });
+  </script>
+</body>
+</html>
