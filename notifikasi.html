@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GOONA — Pemberitahuan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Latar belakang ragam ikon pekerjaan bernuansa biru elektrik samar */
+    .work-icons-bg {
+      background-color: #f4f7fc;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(29, 78, 216, 0.05) 0%, transparent 45%),
+        url("data:image/svg+xml,%3Csvg width='140' height='140' viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232563eb' stroke-opacity='0.075' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'%3E%3C!-- Koper kerja --%3E%3Cg transform='translate(16,18) rotate(-12)'%3E%3Crect x='2' y='7' width='20' height='14' rx='2.5'/%3E%3Cpath d='M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/%3E%3Cpath d='M2 12h20'/%3E%3C/g%3E%3C!-- Catatan / checklist review --%3E%3Cg transform='translate(88,16) rotate(14)'%3E%3Crect x='3' y='3' width='16' height='20' rx='2'/%3E%3Cpath d='M7 8h8M7 12h8M7 16h5'/%3E%3C/g%3E%3C!-- Grafik naik --%3E%3Cg transform='translate(54,56) rotate(-8)'%3E%3Cpath d='M3 19V5M3 19h16'/%3E%3Cpath d='m7 14 4-4 3 2 5-6'/%3E%3C/g%3E%3C!-- Lencana / penghargaan kerja --%3E%3Cg transform='translate(20,94) rotate(10)'%3E%3Ccircle cx='12' cy='9' r='6'/%3E%3Cpath d='m9 14.5-1.5 6.5L12 19l4.5 2L15 14.5'/%3E%3C/g%3E%3C!-- Megafon / promosi --%3E%3Cg transform='translate(92,92) rotate(-14)'%3E%3Cpath d='M4 11v2a2 2 0 0 0 2 2h1l5 4V7l-5 4H6a2 2 0 0 0-2 2z'/%3E%3Cpath d='M16 10a4 4 0 0 1 0 6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-size: 100% 100%, 100% 100%, 140px 140px;
+    }
+  </style>
+</head>
+<body class="work-icons-bg h-dvh w-screen overflow-hidden text-slate-900 antialiased flex flex-col">
+  <!-- Header -->
+  <header class="shrink-0 z-20 border-b border-blue-100/90 bg-white/92 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between gap-2 px-4 py-2.5">
+      <div class="min-w-0">
+        <div class="text-xl font-black leading-none tracking-tight text-blue-600">
+          GOONA
+        </div>
+        <p class="mt-1 truncate text-[11px] font-medium text-slate-500">
+          Pemberitahuan
+        </p>
+      </div>
+
+      <a
+        href="index.html"
+        class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-blue-50 text-blue-600 transition hover:bg-blue-100"
+        title="Kembali"
+      >
+        <i data-lucide="arrow-left" class="h-4 w-4"></i>
+      </a>
+    </div>
+  </header>
+
+  <!-- Area Tengah -->
+  <main id="notif-list" class="flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-md px-3.5 py-3 space-y-2.5">
+    <div class="rounded-3xl border border-blue-100 bg-white/95 p-5 text-center shadow-sm space-y-1.5">
+      <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+        <i data-lucide="bell-off" class="h-5 w-5"></i>
+      </div>
+      <p class="text-xs font-bold text-slate-800">
+        Belum ada pemberitahuan.
+      </p>
+    </div>
+  </main>
+
+  <!-- Navigasi Bawah: 5 Ikon -->
+  <nav class="shrink-0 z-20 border-t border-blue-100 bg-white/95 backdrop-blur-md">
+    <div class="mx-auto flex max-w-md items-center justify-between px-3 py-2">
+      <a href="index.html" aria-label="Beranda" class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600">
+        <i data-lucide="home" class="h-5 w-5"></i>
+      </a>
+      <a href="dompet.html" aria-label="Dompet" class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600">
+        <i data-lucide="wallet" class="h-5 w-5"></i>
+      </a>
+      <a href="iklan.html" aria-label="Pasang Iklan" class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600">
+        <i data-lucide="plus-circle" class="h-5 w-5"></i>
+      </a>
+      <a href="riwayat.html" aria-label="Riwayat Review" class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600">
+        <i data-lucide="history" class="h-5 w-5"></i>
+      </a>
+      <a href="profil.html" aria-label="Profil" class="flex h-11 w-12 items-center justify-center rounded-2xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-600">
+        <i data-lucide="user" class="h-5 w-5"></i>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      limit,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAa_EhwILQsTrJBKocpvT8gHTholmCLMTY",
+      authDomain: "goona-app.firebaseapp.com",
+      projectId: "goona-app",
+      storageBucket: "goona-app.firebasestorage.app",
+      messagingSenderId: "315162973072",
+      appId: "1:315162973072:web:bd7244e1bfc13ce1ae1915",
+      measurementId: "G-GXVPP73QCK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let unsubNotif = null;
+
+    function escapeHtml(text = "") {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderNotifications(docs = []) {
+      const container = document.getElementById("notif-list");
+      if (!docs.length) {
+        container.innerHTML = `
+          <div class="rounded-3xl border border-blue-100 bg-white/95 p-5 text-center shadow-sm space-y-1.5">
+            <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+              <i data-lucide="bell-off" class="h-5 w-5"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-800">
+              Belum ada pemberitahuan.
+            </p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = docs
+        .map((d) => {
+          const item = d.data() || {};
+          const title = escapeHtml(item.title || "Info GOONA");
+          const body = escapeHtml(item.message || "");
+          return `
+            <div class="rounded-3xl border border-blue-100 bg-white/95 p-4 shadow-sm space-y-1">
+              <div class="text-xs font-extrabold text-slate-900">${title}</div>
+              <p class="text-xs text-slate-600">${body}</p>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (unsubNotif) {
+        unsubNotif();
+        unsubNotif = null;
+      }
+
+      if (!user) {
+        renderNotifications([]);
+        return;
+      }
+
+      const q = query(
+        collection(db, "notifications"),
+        where("userId", "==", user.uid),
+        limit(30)
+      );
+
+      unsubNotif = onSnapshot(
+        q,
+        (snap) => renderNotifications(snap.docs),
+        () => renderNotifications([])
+      );
+    });
+  </script>
+</body>
+</html>
